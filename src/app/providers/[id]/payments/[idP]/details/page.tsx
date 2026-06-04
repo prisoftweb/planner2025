@@ -2,11 +2,12 @@ import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import { getProviderMin, getProviders } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { DetailExpensesTableProvider, Provider, ProviderMin } from "@/interfaces/Providers";
+import { DetailExpensesTableProvider, ProviderMin } from "@/interfaces/Providers";
 import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableDetailsExpenseProvider from "@/components/providers/ContainerTableDetailsExpenseProvider";
 import { getCostsPayment, getPayment } from "@/app/api/routePayments";
 import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string, idP: string }}){
   
@@ -29,7 +30,8 @@ export default async function Page({ params }: { params: { id: string, idP: stri
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{arrProvider}provedor</h1>
+        {/* <h1 className="text-center text-red-500">{arrProvider}provedor</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={arrProvider} />
       </>
     )
   }
@@ -41,7 +43,8 @@ export default async function Page({ params }: { params: { id: string, idP: stri
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{providers} provedores</h1>
+        {/* <h1 className="text-center text-red-500">{providers} provedores</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={providers} />
       </>
     )
   }
@@ -50,7 +53,8 @@ export default async function Page({ params }: { params: { id: string, idP: stri
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{costs} costos</h1>
+        {/* <h1 className="text-center text-red-500">{costs} costos</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={costs} />
       </>
     )
   }
@@ -59,7 +63,8 @@ export default async function Page({ params }: { params: { id: string, idP: stri
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{payment} one payment</h1>
+        {/* <h1 className="text-center text-red-500">{payment} one payment</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={payment} />
       </>
     )
   }
@@ -68,7 +73,8 @@ export default async function Page({ params }: { params: { id: string, idP: stri
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{pending}</h1>
+        {/* <h1 className="text-center text-red-500">{pending}</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={pending} />
       </>
     )
   }
@@ -77,7 +83,8 @@ export default async function Page({ params }: { params: { id: string, idP: stri
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+        {/* <h1 className="text-center text-red-500">Error al obtener proveedores...</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message="Error al obtener proveedores..." />
       </>
     )
   }

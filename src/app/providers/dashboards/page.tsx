@@ -5,6 +5,7 @@ import DashboardContainer from "@/components/providers/dashboard/DashboardContai
 import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getTotalPayments, getTotalPendingPaymentsProvider, 
   getTotalCostPendingPaymentByProviderEstatusMIN, getTotalCostPendingPaymentByProvidersMIN, 
   getTotalCostApplyPaymentByProvidersTradelineMIN } from "@/app/api/routeDashboardProviders";
+import ComponentError from "@/components/ComponentError";
 
 export default async function page() {
 
@@ -28,7 +29,8 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{totalCost}totalCost</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{totalCost}totalCost</h1> */}
+        <ComponentError page="/providers/dashboard" message={totalCost} />
       </>
     )
   }
@@ -37,7 +39,8 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{providersTradeLine} providersTradeLine</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{providersTradeLine} providersTradeLine</h1> */}
+        <ComponentError page="/providers/dashboard" message={providersTradeLine} />
       </>
     )
   }
@@ -46,7 +49,8 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}costsProviderWithTradeLine</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}costsProviderWithTradeLine</h1> */}
+        <ComponentError page="/providers/dashboard" message={costsProviderWithTradeLine} />
       </>
     )
   }
@@ -55,7 +59,8 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{costsProvider}costsprovider</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{costsProvider}costsprovider</h1> */}
+        <ComponentError page="/providers/dashboard" message={costsProvider} />
       </>
     )
   }
@@ -64,7 +69,8 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{totalPayments}totalPayments</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{totalPayments}totalPayments</h1> */}
+        <ComponentError page="/providers/dashboard" message={totalPayments} />
       </>
     )
   }
@@ -73,7 +79,8 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{penddingPayment}</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{penddingPayment}</h1> */}
+        <ComponentError page="/providers/dashboard" message={penddingPayment} />
       </>
     )
   }
@@ -82,7 +89,8 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{penddingPayment}</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{penddingPayment}</h1> */}
+        <ComponentError page="/providers/dashboard" message={pendingPaymentProv} />
       </>
     )
   }

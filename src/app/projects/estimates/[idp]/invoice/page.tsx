@@ -6,6 +6,7 @@ import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumenByProject } from "@/app/api/routeInvoices";
 import ContainerInvoicesProject from "@/components/projects/estimates/ContainerInvoicesProject";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params, searchParams }: 
   { params: { idp: string }, searchParams: { page: string }}){
@@ -24,27 +25,69 @@ export default async function Page({ params, searchParams }:
   ]);
   
   if(typeof(project) === "string"){
-    return <h1 className="text-center text-red-500">{project}</h1>
+    // return <h1 className="text-center text-red-500">{project}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{project}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={project} />
+      </>
+    )
   }
 
   if(typeof(invoices) === "string"){
-    return <h1 className="text-center text-red-500">{invoices}</h1>
+    // return <h1 className="text-center text-red-500">{invoices}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{invoices}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={invoices} />
+      </>
+    )
   }
   
   if(typeof(totalInvoicesProject) === "string"){
-    return <h1 className="text-center text-red-500">{totalInvoicesProject}</h1>
+    // return <h1 className="text-center text-red-500">{totalInvoicesProject}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{totalInvoicesProject}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={totalInvoicesProject} />
+      </>
+    )
   }
 
   if(typeof(totalInvoicesResumen) === "string"){
-    return <h1 className="text-center text-red-500">{totalInvoicesResumen}</h1>
+    // return <h1 className="text-center text-red-500">{totalInvoicesResumen}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{totalInvoicesResumen}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={totalInvoicesResumen} />
+      </>
+    )
   }
 
   if(typeof(projects) === "string"){
-    return <h1 className="text-center text-red-500">{projects}</h1>
+    // return <h1 className="text-center text-red-500">{projects}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{projects}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={projects} />
+      </>
+    )
   }
 
   if(typeof(catalogs)==='string'){
-    return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    // return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-red-500 text-center text-lg">{catalogs}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={catalogs} />
+      </>
+    )
   }
 
   const optConditions: Options[] = [{

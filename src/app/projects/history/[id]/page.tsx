@@ -11,6 +11,7 @@ import Header from "@/components/HeaderPage";
 import ProjectHistoryCli from "@/components/projects/ProjectHistoryCli";
 
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -29,7 +30,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{project}</h1>
+        {/* <h1 className="text-center text-red-500">{project}</h1> */}
+        <ComponentError page={`/projects/history/${params.id}`} message={project} />
       </>
     )
   }
@@ -38,7 +40,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{options}</h1>
+        {/* <h1 className="text-center text-red-500">{options}</h1> */}
+        <ComponentError page={`/projects/history/${params.id}`} message={options} />
       </>
     )
   }
@@ -47,7 +50,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{clients}</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{clients}</h1> */}
+        <ComponentError page={`/projects/history/${params.id}`} message={clients} />
       </>
     )
   }
@@ -56,7 +60,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{catalogs}</h1> */}
+        <ComponentError page={`/projects/history/${params.id}`} message={catalogs} />
       </>
     )
   }

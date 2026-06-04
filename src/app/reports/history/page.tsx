@@ -10,6 +10,7 @@ import { ReportTable } from "@/interfaces/Reports";
 import { ReportParseDataToTableData } from "../../functions/ReportsFunctions";
 import { getCatalogsByName } from "../../api/routeCatalogs";
 import ContainerClient from "@/components/reports/ContainerClient";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page() {
   
@@ -35,7 +36,8 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-lg text-center text-red-500">{reports}</h1>
+        {/* <h1 className="text-lg text-center text-red-500">{reports}</h1> */}
+        <ComponentError page="/reports/history" message={reports} />
       </>
     )
   }
@@ -44,7 +46,8 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+        {/* <h1 className="text-center text-lg text-red-500">{optProjects}</h1> */}
+        <ComponentError page="/reports/history" message={optProjects} />
       </>
     )
   }
@@ -62,7 +65,8 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{catalogs}</h1> */}
+        <ComponentError page="/reports/history" message={catalogs} />
       </>
     )
   }

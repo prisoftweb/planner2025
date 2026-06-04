@@ -8,7 +8,8 @@ import { Options } from "@/interfaces/Common";
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import ContainerTablePendinginvoices from "@/components/providers/ContainerTablePendingInvoices";
-import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
+// import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -28,7 +29,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{provider} provider</h1>
+        {/* <h1 className="text-center text-red-500">{provider} provider</h1> */}
+        <ComponentError page={`/providers/${params.id}/pendinginvoices`} message={provider} />
       </>
     )
   }
@@ -36,7 +38,9 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(providers) === "string"){
     return(
       <>
-        <h1 className="text-center text-red-500">{providers} providers</h1>
+        {/* <h1 className="text-center text-red-500">{providers} providers</h1> */}
+        <Navigation user={user} token={token} />
+        <ComponentError page={`/providers/${params.id}/pendinginvoices`} message={providers} />
       </>
     )
   }
@@ -45,7 +49,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{costs} costs</h1>
+        {/* <h1 className="text-center text-red-500">{costs} costs</h1> */}
+        <ComponentError page={`/providers/${params.id}/pendinginvoices`} message={costs} />
       </>
     )
   }
@@ -54,19 +59,11 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{optTypes} types</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{optTypes} types</h1> */}
+        <ComponentError page={`/providers/${params.id}/pendinginvoices`} message={optTypes} />
       </>
     )
   }
-
-  // if(typeof(pending) === "string"){
-  //   return(
-  //     <>
-  //       <Navigation user={user} token={token} />
-  //       <h1 className="text-center text-red-500">{pending}</h1>
-  //     </>
-  //   )
-  // }
 
   let options: Options[] = [];
 

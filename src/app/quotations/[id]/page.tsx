@@ -5,6 +5,7 @@ import { getQuotationMin, getQuotationsLV } from "@/app/api/routeQuotations";
 import Selectize from "@/components/Selectize";
 import Header from "@/components/HeaderPage";
 import ContainerQuatationProfile from "@/components/quotations/ContainerQuatationProfile";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({params}: {params:{id:string}}){
   const cookieStore = cookies();
@@ -20,9 +21,10 @@ export default async function Page({params}: {params:{id:string}}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div>
+        {/* <div>
           <h1 className="text-center text-red-500">{quotation}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/quotations/${params.id}`} message={quotation} />
       </>
     )
   }
@@ -31,9 +33,10 @@ export default async function Page({params}: {params:{id:string}}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div>
+        {/* <div>
           <h1 className="text-center text-red-500">{quotations}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/quotations/${params.id}`} message={quotations} />
       </>
     )
   }

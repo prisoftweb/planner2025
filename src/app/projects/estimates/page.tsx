@@ -7,6 +7,7 @@ import { getProjectsWithEstimatesMin, getProjectsForEstimatedByUser } from "@/ap
 import { ProjectEstimateDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerEstimatesClient from "@/components/projects/estimates/ContainerEstimatesClient";
 import { Options } from "@/interfaces/Common";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -24,9 +25,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{projects}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/estimates" message={projects} />
       </>
     )
   
@@ -34,9 +36,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/estimates" message={catalogs} />
       </>
     )
 

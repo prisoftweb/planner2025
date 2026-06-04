@@ -5,6 +5,7 @@ import { ProjectMin } from "@/interfaces/Projects";
 import { getActiveProjectsMin } from "@/app/api/routeProjects";
 import DragAndDropProjects from "@/components/projects/DragAndDropProjects";
 import Header from "@/components/HeaderPage";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -17,9 +18,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">{projects}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/board" message={projects} />
       </>
     )
   }

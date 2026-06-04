@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { ResponsiveHeader } from "@/components/Header";
 import ContainerConceptscomponent from "@/components/expenses/concepts/ContainerConceptscomponent";
 import { getAllConceptsLV } from "@/app/api/routeCostCenter";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -16,9 +17,10 @@ export default async function Page(){
     return (
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <p>{concepts}</p>
-        </div>
+        </div> */}
+        <ComponentError page="/expenses/concepts" message={concepts} />
       </>
     )
   }

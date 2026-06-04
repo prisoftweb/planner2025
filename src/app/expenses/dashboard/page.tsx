@@ -5,6 +5,7 @@ import DashBoardContainer from "@/components/expenses/dashboard/DashBoardContain
 import { GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject, GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject, 
   GetAllCostsGroupByDAYAndProject, GetAllCostsGroupByRESUMEN, GetAllCostsGroupByTYPERESUMEN } from "@/app/api/routeCost"
 import { getProjectsLV, getAllCostoCentersCategorysLV } from "@/app/api/routeProjects";
+import ComponentError from "@/components/ComponentError";
 
 interface OptionsDashboard {
   label: string,
@@ -31,9 +32,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsCategory} cost cat</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/expenses/dashboard" message={costsCategory} />
       </>
     )
   }
@@ -42,9 +44,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsConcept} cost con</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/expenses/dashboard" message={costsConcept} />
       </>
     )
   }
@@ -53,9 +56,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsDays} cost days</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/expenses/dashboard" message={costsDays} />
       </>
     )
   }
@@ -64,9 +68,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsResumen} cost res</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/expenses/dashboard" message={costsResumen} />
       </>
     )
   }
@@ -75,9 +80,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsResumenType} cost res type</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/expenses/dashboard" message={costsResumenType} />
       </>
     )
   }
@@ -86,9 +92,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{projects} projects</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/expenses/dashboard" message={projects} />
       </>
     )
   }

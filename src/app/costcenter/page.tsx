@@ -2,7 +2,6 @@ import WithOut from "@/components/WithOut";
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-// import Header from "@/components/Header";
 import { ResponsiveHeader } from "@/components/Header";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "../api/routeCatalogs";
@@ -10,6 +9,7 @@ import ButtonNew from "@/components/costcenter/ButtonNew";
 import { CostCenterTable } from "@/interfaces/CostCenter";
 import { getCostoCenters } from "../api/routeCostCenter";
 import TableCostCenter from "@/components/costcenter/TableCostCenter";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   
@@ -26,9 +26,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/costcenter" message={catalogs} />
       </>
     )
   }
@@ -45,9 +46,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{costs}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/costcenter" message={costs} />
       </>
     )
   }

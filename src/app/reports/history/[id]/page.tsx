@@ -3,6 +3,7 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import { GetReport, GetReportsLV, GetAllCostByReportWithDateMINAndMAX } from "@/app/api/routeReports";
 import ReportHistoryClient from "@/components/reports/ReportHistoryClient";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -20,7 +21,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-lg text-red-500">{report}</h1>
+        {/* <h1 className="text-center text-lg text-red-500">{report}</h1> */}
+        <ComponentError page={`/reports/history/${params.id}`} message={report} />
       </>
     )
   }
@@ -29,7 +31,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
+        {/* <h1 className="text-center text-lg text-red-500">{dateReport}</h1> */}
+        <ComponentError page={`/reports/history/${params.id}`} message={dateReport} />
       </>
     )
   }
@@ -38,7 +41,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-lg text-center text-red-500">{optReports}</h1>
+        {/* <h1 className="text-lg text-center text-red-500">{optReports}</h1> */}
+        <ComponentError page={`/reports/history/${params.id}`} message={optReports} />
       </>
     )
   }

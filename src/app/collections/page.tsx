@@ -5,6 +5,7 @@ import TableCollectionsComponent from "@/components/collections/TableCollections
 import { getAllTotalAmountRecoveredCollection, 
   getAllTOTAmountRecoveredByDateAndCondition, getAllCollectionsMINByDateAndCondition } from "../api/routeCollections";
 import { getDate } from "@/libs/dates";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
 
@@ -32,9 +33,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{res}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections" message={res} />
       </>
     )
 
@@ -42,9 +44,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{rest}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections" message={rest} />
       </>
     )
 
@@ -52,9 +55,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{restt}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections" message={restt} />
       </>
     )
 

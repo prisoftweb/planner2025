@@ -8,6 +8,7 @@ import { ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/prov
 import ContainerTableExpensesProvider from "@/components/providers/ContainerTableExpensesProvider";
 import { getPaymentsProvider } from "@/app/api/routePayments";
 import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -27,7 +28,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{provider} provedor</h1>
+        {/* <h1 className="text-center text-red-500">{provider} provedor</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments`} message={provider} />
       </>
     )
   }
@@ -36,7 +38,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{providers} provedores</h1>
+        {/* <h1 className="text-center text-red-500">{providers} provedores</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments`} message={providers} />
       </>
     )
   } 
@@ -45,7 +48,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{costs} cp</h1>
+        {/* <h1 className="text-center text-red-500">{costs} cp</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments`} message={costs} />
       </>
     )
   }
@@ -54,7 +58,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+        {/* <h1 className="text-center text-red-500">Error al obtener proveedores...</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments`} message="Error al obtener proveedores..." />
       </>
     )
   }
@@ -63,7 +68,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{pending}</h1>
+        {/* <h1 className="text-center text-red-500">{pending}</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments`} message={pending} />
       </>
     )
   }

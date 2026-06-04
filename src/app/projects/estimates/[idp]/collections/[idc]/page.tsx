@@ -4,6 +4,7 @@ import { UsrBack } from "@/interfaces/User";
 import { getCollectionMin, getInvoicesByCollectionMin } from "@/app/api/routeCollections";
 import ContainerCollectionProfile from "@/components/projects/estimates/collections/ContainerCollectionProfile";
 import Header from "@/components/HeaderPage";
+import ComponentError from "@/components/ComponentError";
 
 export default async function page({ params, searchParams }: 
   { params: { idp: string, idc:string }, searchParams: { page: string }}) {
@@ -21,9 +22,10 @@ export default async function page({ params, searchParams }:
     return (
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">{collection}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/collections/${params.idc}`} message={collection} />
       </>
     )
   }
@@ -32,9 +34,10 @@ export default async function page({ params, searchParams }:
     return (
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">{invoices}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/collections/${params.idc}`} message={invoices} />
       </>
     )
   }

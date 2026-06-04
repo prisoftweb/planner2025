@@ -5,6 +5,7 @@ import { GetProjectMin } from "@/app/api/routeProjects";
 import { getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin, 
   getEstimate } from "@/app/api/routeEstimates";
 import ContainerDetailEstimate from "@/components/projects/estimates/ContainerDetailEstimate";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params, searchParams }: 
   { params: { idp: string, ide:string }, searchParams: { page: string }}){
@@ -23,7 +24,8 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{project}</h1>
+        {/* <h1 className="text-center text-red-500">{project}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/${params.ide}`} message={project} />
       </>
     )
   }
@@ -32,7 +34,8 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{estimate}</h1>
+        {/* <h1 className="text-center text-red-500">{estimate}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/${params.ide}`} message={estimate} />
       </>
     )
   }
@@ -41,7 +44,8 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
+        {/* <h1 className="text-center text-red-500">{totalEstimatedProject}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/${params.ide}`} message={totalEstimatedProject} />
       </>
     )
   }
@@ -50,7 +54,8 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{concepts}</h1>
+        {/* <h1 className="text-center text-red-500">{concepts}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/${params.ide}`} message={concepts} />
       </>
     )
   }

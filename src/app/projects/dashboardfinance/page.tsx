@@ -8,6 +8,7 @@ import { getDashboardProjectsAmount,
   getDashboardProjectTotalCost, getConfigMin, getProjectsBudgeted, 
   getProjectsControlBudgeted, getProjectsSpent, getProjectsLV, getAllPaymentsProjects } 
 from "@/app/api/routeProjects";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page() {
   
@@ -33,9 +34,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{allPaymentsProjects}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboardfinance" message={allPaymentsProjects} />
       </>
     )
   }
@@ -44,9 +46,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{amountProjects} amount</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboardfinance" message={amountProjects} />
       </>
     )
   }
@@ -55,9 +58,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsTotalCost} list</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboardfinance" message={projectsTotalCost} />
       </>
     )
   }
@@ -66,9 +70,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{configMin}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboardfinance" message={configMin} />
       </>
     )
   }
@@ -77,9 +82,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsBudgeted}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboardfinance" message={projectsBudgeted} />
       </>
     )
   }
@@ -88,9 +94,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsSpent}</h1>
-        </div>        
+        </div>         */}
+        <ComponentError page="/projects/dashboardfinance" message={projectsSpent} />
       </>
     )
   }
@@ -99,9 +106,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsControlBudgeted}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboardfinance" message={projectsControlBudgeted} />
       </>
     )
   }
@@ -110,9 +118,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projects}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboardfinance" message={projects} />
       </>
     )
   }

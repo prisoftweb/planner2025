@@ -1,11 +1,11 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import TableInvoicesComponent from "@/components/invoices/TableInvoicesComponent";
 import { getSatMotivosCancelacion } from "../api/routeSatInvoices";
 import { Options } from "@/interfaces/Common";
 import { IMethodPayment } from "@/components/invoices/sat/SatInvoicesConditionsStepper";
 import TableReferralsInvoicesComponent from "../../components/invoices/referrals/TableReferralsInvoicesComponent";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   
@@ -21,6 +21,13 @@ export default async function Page(){
               value: m.id,
               label: m.description,
             }));
+  }else{
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/referrals" message={res} />
+      </>
+    )
   }
 
   return (

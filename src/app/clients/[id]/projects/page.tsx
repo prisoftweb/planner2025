@@ -8,6 +8,7 @@ import { getClient, getClients, getProjectsByClient } from "@/app/api/routeClien
 import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
 import TableProjectsClient from "@/components/clients/projects/TableProjectsClient"
+import ComponentError from "@/components/ComponentError"
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -30,9 +31,10 @@ export default async function Page({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{client}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/clients/${params.id}/projects`} message={client} />
       </>
     )
 
@@ -40,9 +42,10 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{clients}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/clients" message={clients} />
       </>
     )
 
@@ -50,9 +53,10 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{projects}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/clients/${params.id}/projects`} message={projects} />
       </>
     )
 
@@ -84,40 +88,3 @@ export default async function Page({ params }: { params: { id: string }}){
     </>
   )
 }
-
-// function ProjectsClientDataToTableDataMin(projects:ProjectMin[]){
-//   const table: ProjectsTable[] = [];
-//   projects.map((project) => {
-//     let p: string;
-//     if(project.progress){
-//       p = project.progress.toString() + '%';
-//     }else{
-//       p = '0%';
-//     }
-    
-//     let cond: string;
-
-//     if(project?.category){
-//       cond = project.category.color || '#f00';
-//     }else{
-//       cond = '#f00';
-//     }
-
-//     table.push({
-//       amount: project.amount,
-//       category: project?.category?.name ?? 'NA',
-//       client: 'Sin cliente',
-//       code: 'codigo',
-//       date: 'fecha',
-//       id: project._id,
-//       project:project.title,
-//       condition: cond,
-//       percentage: p,
-//       imgProject: '/img/projects/default.svg',
-//       account: project.account,
-//       total: project.amountotal
-//     })
-//   });
-
-//   return table;
-// }

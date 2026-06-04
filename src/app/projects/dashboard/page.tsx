@@ -2,6 +2,7 @@ import Navigation from "@/components/navigation/Navigation"
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import DashBoardContainer from "@/components/projects/dashboard/DashboardContainer";
+import ComponentError from "@/components/ComponentError";
 
 import { getDashboardProjectsAmount, 
   getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
@@ -44,9 +45,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{amountProjects} amountprojects</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={amountProjects} />
       </>
     )
   }
@@ -55,9 +57,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{listProjectsdate} list</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={listProjectsdate} />
       </>
     )
   }
@@ -66,9 +69,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsClient} cleint</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={projectsClient} />
       </>
     )
   }
@@ -77,9 +81,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsSegment} segment</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={projectsSegment} />
       </>
     )
   }
@@ -88,9 +93,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsStatus} status</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={projectsStatus} />
       </>
     )
   }
@@ -99,9 +105,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsProgress} progress</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={projectsProgress} />
       </>
     )
   }
@@ -110,9 +117,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{listProjectsnotCompleted} list not completed</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={listProjectsnotCompleted} />
       </>
     )
   }
@@ -121,9 +129,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsandTypes} list</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={projectsandTypes} />
       </>
     )
   }
@@ -132,9 +141,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsTop10} list</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={projectsTop10} />
       </>
     )
   }
@@ -143,9 +153,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsTotalCost} list</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={projectsTotalCost} />
       </>
     )
   }
@@ -154,9 +165,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{configMin}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={configMin} />
       </>
     )
   }
@@ -165,9 +177,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projects}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={projects} />
       </>
     )
   }
@@ -176,9 +189,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totGuaranteeFund}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={totGuaranteeFund} />
       </>
     )
   }
@@ -187,9 +201,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totAmountCharge}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={totAmountCharge} />
       </>
     )
   }
@@ -198,9 +213,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totTaxes}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/dashboard" message={totTaxes} />
       </>
     )
   }

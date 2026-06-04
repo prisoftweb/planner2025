@@ -6,6 +6,7 @@ import ContainerAssignedCodes from "@/components/codes/ContainerAssignedCodes";
 import Header from "@/components/HeaderPage";
 import { getAllProvidersWithTradeLine } from "@/app/api/routeDashboardProviders";
 import { getAllCostsMINByDateANDProvider } from "@/app/api/routeCost";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page() {
 
@@ -27,9 +28,10 @@ export default async function Page() {
     return (
       <div>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md:p-5">
+        {/* <div className="p-2 sm:p-3 md:p-5">
           <h1 className="text-red-500 text-center text-lg">{codes}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/codes" message={codes} />
       </div>
     )
   }
@@ -38,9 +40,10 @@ export default async function Page() {
     return (
       <div>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md:p-5">
+        {/* <div className="p-2 sm:p-3 md:p-5">
           <h1 className="text-red-500 text-center text-lg">{providers}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/codes" message={providers} />
       </div>
     )
   }

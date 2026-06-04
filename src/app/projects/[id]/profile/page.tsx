@@ -10,7 +10,7 @@ import NavTabProject from "@/components/projects/NavTabProject";
 import ProjectCli from "@/components/projects/ProjectClient";
 import Header from "@/components/HeaderPage";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { ResponsiveHeader } from "@/components/Header";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: 
   { params: { id: string }}){
@@ -32,9 +32,10 @@ export default async function Page({ params }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{project}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/${params.id}/profile`} message={project} />
       </>
     )
   
@@ -42,9 +43,10 @@ export default async function Page({ params }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{options}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/${params.id}/profile`} message={options} />
       </>
     )
   
@@ -52,9 +54,10 @@ export default async function Page({ params }:
     return (
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{clients}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/${params.id}/profile`} message={clients} />
       </>
     )
 
@@ -62,9 +65,10 @@ export default async function Page({ params }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/${params.id}/profile`} message={catalogs} />
       </>
     )
  

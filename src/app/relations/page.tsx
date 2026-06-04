@@ -2,7 +2,6 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
-// import Header from "@/components/Header";
 import { ResponsiveHeader as Header } from "@/components/Header";
 import { Options } from "@/interfaces/Common";
 import { getGlossaries } from "../api/routeGlossary";
@@ -10,7 +9,8 @@ import { getRelations } from "../api/routeRelations";
 import ButtonNewRelation from "@/components/relations/ButtonNewRelation";
 import { getNodes } from "../api/routeNodes";
 import TableRelations from "@/components/relations/TableRelation";
-import { RelationTable, Relation } from "@/interfaces/Relation";
+import { RelationTable } from "@/interfaces/Relation";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -27,9 +27,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-xl text-center">{relations}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/relations" message={relations} />
       </>
     )
   }
@@ -38,9 +39,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/relations" message={glossaries} />
       </>
     )
   }
@@ -49,9 +51,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/relations" message={nodes} />
       </>
     )
   }

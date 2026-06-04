@@ -8,6 +8,7 @@ import { getProvider, getProviders, getCostTOTALPendingPAYGroupByPROVIDER } from
 import { UsrBack } from "@/interfaces/User";
 import ArrowReturn from "@/components/ArrowReturn";
 import { Options } from "@/interfaces/Common";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -25,7 +26,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{provider}</h1>
+        {/* <h1 className="text-center text-red-500">{provider}</h1> */}
+        <ComponentError page={`/providers/${params.id}/profile`} message={provider} />
       </>
     )
   }
@@ -34,7 +36,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{providers}</h1>
+        {/* <h1 className="text-center text-red-500">{providers}</h1> */}
+        <ComponentError page={`/providers/${params.id}/profile`} message={providers} />
       </>
     )
   }
@@ -43,7 +46,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{costPayment}</h1>
+        {/* <h1 className="text-center text-red-500">{costPayment}</h1> */}
+        <ComponentError page={`/providers/${params.id}/profile`} message={costPayment} />
       </>
     )
   }
@@ -54,7 +58,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+        {/* <h1 className="text-center text-red-500">Error al obtener proveedores...</h1> */}
+        <ComponentError page={`/providers/${params.id}/profile`} message="Error al obtener proveedores..." />
       </>
     )
   }

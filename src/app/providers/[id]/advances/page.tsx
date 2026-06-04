@@ -8,6 +8,7 @@ import { UsrBack } from "@/interfaces/User";
 import ArrowReturn from "@/components/ArrowReturn";
 import { Options } from "@/interfaces/Common";
 import ContainerAdvances from "@/components/providers/advances/containerAdvances";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -26,7 +27,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{provider}</h1>
+        {/* <h1 className="text-center text-red-500">{provider}</h1> */}
+        <ComponentError page={`/providers/${params.id}/advances`} message={provider} />
       </>
     )
   }
@@ -35,7 +37,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{providers}</h1>
+        {/* <h1 className="text-center text-red-500">{providers}</h1> */}
+        <ComponentError page={`/providers/${params.id}/advances`} message={providers} />
       </>
     )
   }
@@ -44,7 +47,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{advances}</h1>
+        {/* <h1 className="text-center text-red-500">{advances}</h1> */}
+        <ComponentError page={`/providers/${params.id}/advances`} message={advances} />
       </>
     )
   }
@@ -55,7 +59,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+        {/* <h1 className="text-center text-red-500">Error al obtener proveedores...</h1> */}
+        <ComponentError page={`/providers/${params.id}/advances`} message="Error al obtener proveedores..." />
       </>
     )
   }

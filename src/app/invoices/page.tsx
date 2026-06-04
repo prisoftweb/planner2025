@@ -5,6 +5,7 @@ import TableInvoicesComponent from "@/components/invoices/TableInvoicesComponent
 import { getSatMotivosCancelacion } from "../api/routeSatInvoices";
 import { Options } from "@/interfaces/Common";
 import { IMethodPayment } from "@/components/invoices/sat/SatInvoicesConditionsStepper";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   
@@ -20,6 +21,16 @@ export default async function Page(){
               value: m.id,
               label: m.description,
             }));
+  }else{
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-center text-red-500">{res}</h1>
+        </div> */}
+        <ComponentError page="/invoices" message={res} />
+      </>
+    )
   }
 
   return (

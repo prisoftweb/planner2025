@@ -8,6 +8,7 @@ import { getClient, getClients, getAllTOTALPENDINGPaymentsOFClientANDBYProjectMI
 import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
 import ClientCollectionCli from "@/components/clients/ClientCollectionCLi"
+import ComponentError from "@/components/ComponentError"
 
 export default async function Wallet({ params }: { params: { id: string }}){
 
@@ -27,7 +28,8 @@ export default async function Wallet({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{client}</h1>
+        {/* <h1 className="text-center text-red-500">{client}</h1> */}
+        <ComponentError page={`/clients/${params.id}/wallet`} message={client} />
       </>
     )
   }
@@ -38,7 +40,8 @@ export default async function Wallet({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{clients}</h1>
+        {/* <h1 className="text-center text-red-500">{clients}</h1> */}
+        <ComponentError page={`/clients/${params.id}/wallet`} message={clients} />
       </>
     )
   }
@@ -47,7 +50,8 @@ export default async function Wallet({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{pendindInvoices}</h1>
+        {/* <h1 className="text-center text-red-500">{pendindInvoices}</h1> */}
+        <ComponentError page={`/clients/${params.id}/wallet`} message={pendindInvoices} />
       </>
     )
   }
@@ -56,7 +60,8 @@ export default async function Wallet({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>
+        {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1> */}
+        <ComponentError page={`/clients/${params.id}/wallet`} message="Ocurrio un error al obtener datos de los clientes!!" />
       </>
     )
   }

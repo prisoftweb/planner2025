@@ -6,6 +6,7 @@ import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getProjectsMin } from "@/app/api/routeProjects";
 import ContainerBudgetClient from "@/components/projects/budget/ContainerBudgetClient";
 import { getBudgetsMin } from "@/app/api/routeBudget";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -22,9 +23,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{projects}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/budget" message={projects} />
       </>
     )
   
@@ -32,9 +34,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{budgets}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/projects/budget" message={budgets} />
       </>
     )
 
@@ -42,9 +45,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </div>        
+        </div>         */}
+        <ComponentError page="/projects/budget" message={catalogs} />
       </>
     )
 

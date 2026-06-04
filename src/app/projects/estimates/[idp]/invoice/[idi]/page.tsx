@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { GetProjectMin } from "@/app/api/routeProjects";
 import { getInvoiceMinFull, getTotalInvoicesByProject, getCollectionsByInvoice } from "@/app/api/routeInvoices";
 import ContainerDetailInvoice from "@/components/projects/estimates/ContainerDetailInvoice";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params, searchParams }: 
   { params: { idp: string, idi:string }, searchParams: { page: string }}){
@@ -19,19 +20,47 @@ export default async function Page({ params, searchParams }:
   ]);
 
   if(typeof(project) === "string"){
-    return <h1 className="text-center text-red-500">{project}</h1>
+    // return <h1 className="text-center text-red-500">{project}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{project}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice/${params.idi}`} message={project} />
+      </>
+    )
   }      
 
   if(typeof(invoice) === "string"){
-    return <h1 className="text-center text-red-500">{invoice}</h1>
+    // return <h1 className="text-center text-red-500">{invoice}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{invoice}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice/${params.idi}`} message={invoice} />
+      </>
+    )
   }
 
   if(typeof(totalInvoiceProject) === "string"){
-    return <h1 className="text-center text-red-500">{totalInvoiceProject}</h1>
+    // return <h1 className="text-center text-red-500">{totalInvoiceProject}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{totalInvoiceProject}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice/${params.idi}`} message={totalInvoiceProject} />
+      </>
+    )
   }
   
   if(typeof(collections) === "string"){
-    return <h1 className="text-center text-red-500">{collections}</h1>
+    // return <h1 className="text-center text-red-500">{collections}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{collections}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/invoice/${params.idi}`} message={collections} />
+      </>
+    )
   }
 
   return (

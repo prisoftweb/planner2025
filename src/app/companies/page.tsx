@@ -4,11 +4,11 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import CompanyClient from "@/components/companies/CompanyClient";
 import ButtonNew from "@/components/companies/ButttonNew";
-// import Header from "@/components/Header";
 import { ResponsiveHeader } from "@/components/Header";
 import { getCompanies } from "../api/routeCompany";
 import { Company, CompanyTable } from "@/interfaces/Companies";
 import TableCompany from "@/components/companies/TableCompany";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -20,17 +20,21 @@ export default async function Page(){
     companies = await getCompanies(token);
     if(typeof(companies)=== 'string'){
       return(
-        <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">
+        <>
           <Navigation user={user} token={token} />
-          <h1 className="text-center text-red-500 text-lg">{companies}</h1>
-        </div>
+          {/* <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">
+            <h1 className="text-center text-red-500 text-lg">{companies}</h1>
+          </div> */}
+          <ComponentError page="/companies" message={companies} />
+        </>
       )
     }
   } catch (error) {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500 text-lg">Error al consultar compañias!!</h1>
+        {/* <h1 className="text-center text-red-500 text-lg">Error al consultar compañias!!</h1> */}
+        <ComponentError page="/companies" message="Error al consultar compañias!!" />
       </>
     )
   } 

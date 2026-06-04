@@ -8,6 +8,7 @@ import Link from "next/link";
 import SearchInTable from "@/components/SearchInTable";
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -21,14 +22,16 @@ export default async function Page(){
       return(
         <>
           <Navigation user={user} token={token} />
-          <h1 className="text-center text-red-500">{estimates}</h1>
+          {/* <h1 className="text-center text-red-500">{estimates}</h1> */}
+          <ComponentError page="/projects/estimates/withoutinvoice" message={estimates} />
         </>
       )
   } catch (error) {
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones sin factura!!</h1>
+        {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones sin factura!!</h1> */}
+        <ComponentError page="/projects/estimates/withoutinvoice" message="Ocurrio un error al obtener las estimaciones sin factura!!" />
       </>
     )
   }

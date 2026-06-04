@@ -7,6 +7,7 @@ import { GetCostMIN, GetCostsLVByCond } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params, searchParams }: 
     { params: { id: string }, searchParams: { prov: string, status:string, project:string }}){
@@ -27,9 +28,10 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{cost}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/expenses/${params.id}/profile`} message={cost} />
       </>
     )
   
@@ -37,9 +39,10 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{options}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/expenses/${params.id}/profile`} message={options} />
       </>
     )
 

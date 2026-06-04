@@ -2,7 +2,6 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
-// import Header from "@/components/Header";
 import { ResponsiveHeader as Header } from "@/components/Header";
 import { getNodes } from "../api/routeNodes";
 import { Options } from "@/interfaces/Common";
@@ -13,6 +12,7 @@ import ButtonNewNode from "@/components/nodes/ButtonNewNode";
 import TableNode from "@/components/nodes/TableNode";
 import { NodeTable } from "@/interfaces/Nodes";
 import { getRelations } from "../api/routeRelations";
+import ComponentError from "@/components/ComponentError";
 
 export default async function page() {
   const cookieStore = cookies();
@@ -31,9 +31,10 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/nodes" message={nodes} />
       </>
     )
   }
@@ -42,9 +43,10 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{optDepartments}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/nodes" message={optDepartments} />
       </>
     )
   }
@@ -53,9 +55,10 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/nodes" message={glossaries} />
       </>
     )
   }
@@ -64,9 +67,10 @@ export default async function page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/nodes" message={workflows} />
       </>
     )
   }

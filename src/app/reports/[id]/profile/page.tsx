@@ -6,6 +6,7 @@ import { GetReport, GetReportsLV, GetAllCostByReportWithDateMINAndMAX,
   updateReport, insertConditionInReportViewer  } from "@/app/api/routeReports";
 import { getNodesByDepto } from "@/app/api/routeNodes";
 import { Node } from "@/interfaces/Nodes";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -24,7 +25,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-lg text-red-500">{report}</h1>
+        {/* <h1 className="text-center text-lg text-red-500">{report}</h1> */}
+        <ComponentError page={`/reports/${params.id}/profile`} message={report} />
       </>
     )
   }
@@ -33,7 +35,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
+        {/* <h1 className="text-center text-lg text-red-500">{dateReport}</h1> */}
+        <ComponentError page={`/reports/${params.id}/profile`} message={dateReport} />
       </>
     )
   }
@@ -42,7 +45,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-lg text-center text-red-500">{optReports}</h1>
+        {/* <h1 className="text-lg text-center text-red-500">{optReports}</h1> */}
+        <ComponentError page={`/reports/${params.id}/profile`} message={optReports} />
       </>
     )
   }
@@ -53,7 +57,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-lg text-red-500 text-center-500">{nodes}</h1>
+        {/* <h1 className="text-lg text-red-500 text-center-500">{nodes}</h1> */}
+        <ComponentError page={`/reports/${params.id}/profile`} message={nodes} />
       </>
     )
   }
@@ -62,7 +67,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
+        {/* <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1> */}
+        <ComponentError page={`/reports/${params.id}/profile`} message="Error al consultar posicion en el flujo de trabajo del informe!!!" />
       </>
     )
   }
@@ -79,7 +85,8 @@ export default async function Page({ params }: { params: { id: string }}){
         return(
           <>
             <Navigation user={user} token={token} />
-            <h1 className="text-center text-lg text-red-500">{res}</h1>
+            {/* <h1 className="text-center text-lg text-red-500">{res}</h1> */}
+            <ComponentError page={`/reports/${params.id}/profile`} message={res} />
           </>
         )
       }
@@ -87,7 +94,8 @@ export default async function Page({ params }: { params: { id: string }}){
       return(
         <>
           <Navigation user={user} token={token} />
-          <h1 className="text-center text-lg text-red-500">Ocurrio un problema al actualizar estatus del informe</h1>
+          {/* <h1 className="text-center text-lg text-red-500">Ocurrio un problema al actualizar estatus del informe</h1> */}
+          <ComponentError page={`/reports/${params.id}/profile`} message="Ocurrio un problema al actualizar estatus del informe" />
         </>
       )
     }
@@ -108,7 +116,8 @@ export default async function Page({ params }: { params: { id: string }}){
         return(
           <>
             <Navigation user={user} token={token} />
-            <h1 className="text-center text-lg text-red-500">{res}</h1>
+            {/* <h1 className="text-center text-lg text-red-500">{res}</h1> */}
+            <ComponentError page={`/reports/${params.id}/profile`} message={`Ocurrio un problema al actualizar el flujo del informe: ${res}`} />
           </>
         )
       }
@@ -116,7 +125,8 @@ export default async function Page({ params }: { params: { id: string }}){
       return(
         <>
           <Navigation user={user} token={token} />
-          <h1 className="text-center text-lg text-red-500">Ocurrio un error al actualizar estatus del flujo informes </h1>
+          {/* <h1 className="text-center text-lg text-red-500">Ocurrio un error al actualizar estatus del flujo informes </h1> */}
+          <ComponentError page={`/reports/${params.id}/profile`} message="Ocurrio un error al actualizar estatus del flujo informes" />
         </>
       )
     }

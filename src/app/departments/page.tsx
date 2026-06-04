@@ -5,6 +5,7 @@ import { getDepartments } from "../api/routeDepartments";
 import { Options } from "@/interfaces/Common";
 import { getCompanies } from "../api/routeCompany";
 import ContainerDepartment from "@/components/departments/ContainerDepartment";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -20,9 +21,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md:p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md:p-5 lg:p-10">
           <h1 className=" text-center text-lg text-red-500">{companies}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/departments" message={companies} />
       </>
     )
   }
@@ -31,9 +33,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md:p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md:p-5 lg:p-10">
           <h1 className=" text-center text-lg text-red-500">{'Ocurrio un error al consultar compañias!!!'}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/departments" message={'Ocurrio un error al consultar compañias!!!'} />
       </>
     )
   }
@@ -50,9 +53,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md:p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md:p-5 lg:p-10">
           <h1 className="text-center text-red-500 text-lg">{departments}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/departments" message={departments} />
       </>
     )
   } 

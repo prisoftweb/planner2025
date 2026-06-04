@@ -6,6 +6,7 @@ import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getTotalInvoicesByProject } from "@/app/api/routeInvoices";
 import { getCollectionsByProjectMin } from "@/app/api/routeCollections";
+import ComponentError from "@/components/ComponentError";
 
 import { getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
 import ContainerCollectionsProject from "@/components/projects/estimates/collections/ContainerCollectionsProject";
@@ -30,9 +31,10 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">project min{project}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/collections`} message={project} />
       </>
     )
   }
@@ -41,9 +43,10 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">collections{collections}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/collections`} message={collections} />
       </>
     )
   }  
@@ -52,9 +55,10 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">total invoice{totalInvoicesProject}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/collections`} message={totalInvoicesProject} />
       </>
     )
   }
@@ -63,9 +67,10 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">total payments resumen{totalPaymentsResumen}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/collections`} message={totalPaymentsResumen} />
       </>
     )
   }
@@ -74,9 +79,10 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">opt pro{projects}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/collections`} message={projects} />
       </>
     )
   }
@@ -85,9 +91,10 @@ export default async function Page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">catalogs{catalogs}</h1>
-        </div>
+        </div> */}
+        <ComponentError page={`/projects/estimates/${params.idp}/collections`} message={catalogs} />
       </>
     )
   }

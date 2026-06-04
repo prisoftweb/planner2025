@@ -5,6 +5,7 @@ import { IQuotationMin } from "@/interfaces/Quotations";
 import { getQuotationsMin } from "@/app/api/routeQuotations";
 import DragAndDropQuotations from "@/components/quotations/DragAndDropQuatations";
 import Header from "@/components/HeaderPage";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -17,7 +18,8 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{quotations}</h1>
+        {/* <h1 className="text-center text-red-500">{quotations}</h1> */}
+        <ComponentError page="/quotations/status" message={quotations} />
       </>
     )
   }

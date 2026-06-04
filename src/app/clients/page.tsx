@@ -11,6 +11,7 @@ import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
 import { ClientDataToTableClient } from "../functions/ClientFunctions";
 // import { Resource2 } from "@/interfaces/Roles";
+import ComponentError from "@/components/ComponentError";
 
 export default async function clients(){
   
@@ -52,7 +53,8 @@ export default async function clients(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-2xl text-center">{tags}</h1>
+        {/* <h1 className="text-red-500 text-2xl text-center">{tags}</h1> */}
+        <ComponentError page="/clients" message={tags} />
       </>
     )
   }
@@ -95,7 +97,8 @@ export default async function clients(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-2xl text-center">{clients}</h1>
+        {/* <h1 className="text-red-500 text-2xl text-center">{clients}</h1> */}
+        <ComponentError page="/clients" message={clients} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <WithOut img="/img/clientes.svg" subtitle="Clientes" 
             text={clients} 

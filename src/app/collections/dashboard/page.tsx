@@ -10,6 +10,7 @@ import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient
 import DashboardCollectionsContainer from "@/components/collections/dashboard/DashboardCollectionsContainer";
 import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
 import { getDate } from "@/libs/dates";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page() {
   
@@ -35,9 +36,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalProjects} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={totalProjects} />
       </>
     )
   }
@@ -46,9 +48,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalClients} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={totalClients} />
       </>
     )
   }
@@ -57,9 +60,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalPaymentByDate} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={totalPaymentByDate} />
       </>
     )
   }
@@ -68,9 +72,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalPending} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={totalPending} />
       </>
     )
   }
@@ -79,9 +84,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{resCobrar} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={resCobrar} />
       </>
     )
   }
@@ -90,9 +96,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalPrjRes} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={totalPrjRes} />
       </>
     )
   }
@@ -101,9 +108,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalCliRes} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={totalCliRes} />
       </>
     )
   }
@@ -112,9 +120,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalEstiatesPen} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={totalEstiatesPen} />
       </>
     )
   }
@@ -123,9 +132,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalPendEstimatesCli} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={totalPendEstimatesCli} />
       </>
     )
   }
@@ -134,9 +144,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{pendingBilling} </h1>
-        </div>
+        </div> */}
+        <ComponentError page="/collections/dashboard" message={pendingBilling} />
       </>
     )
   }
@@ -155,15 +166,3 @@ export default async function Page() {
     </>
   )
 }
-
-// function getDate(date: Date){
-//   let day = date.getDate()
-//   let month = date.getMonth() + 1
-//   let year = date.getFullYear()
-
-//   if(month < 10){
-//     return `${year}-0${month}-${day}`;
-//   }else{
-//     return `${year}-${month}-${day}`;
-//   }
-// }

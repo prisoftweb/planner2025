@@ -4,6 +4,7 @@ import { Provider } from "@/interfaces/Providers";
 import { UsrBack } from "@/interfaces/User";
 import ContainerProvider from "@/components/providers/ContainerProvider";
 import Navigation from "@/components/navigation/Navigation";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Providers(){
   
@@ -19,9 +20,19 @@ export default async function Providers(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-5xl text-center text-red-500 font-semibold">Error al consultar proveedores!!</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/providers" message="Error al consultar proveedores!!" />
+      </>
+    )
+  }  
+
+  if(typeof(providers) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/providers" message={providers} />
       </>
     )
   }  

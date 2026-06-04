@@ -4,6 +4,7 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import BudgetCli from "@/components/projects/budget/BudgetClient";
 import { getCostoCenters } from "@/app/api/routeCostCenter";
+import ComponentError from "@/components/ComponentError";
 
 export default async function page({ params, searchParams }: 
   { params: { id: string }, searchParams: { project: string }}) {
@@ -22,7 +23,8 @@ export default async function page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center">{budget}</h1>
+        {/* <h1 className="text-red-500 text-center">{budget}</h1> */}
+        <ComponentError page={`/projects/budget/${params.id}`} message={budget} />
       </>
     )
   }
@@ -31,7 +33,8 @@ export default async function page({ params, searchParams }:
     return(
       <>
         <Navigation user={user} token={token} />
-        <p>{costoCenters}</p>
+        {/* <p>{costoCenters}</p> */}
+        <ComponentError page={`/projects/budget/${params.id}`} message={costoCenters} />
       </>
     )
   }

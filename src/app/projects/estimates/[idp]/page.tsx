@@ -6,6 +6,7 @@ import { GetProjectMin, getProjectsLVNoCompleted } from "@/app/api/routeProjects
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getEstimatesByProject, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params, searchParams }: 
   { params: { idp: string }, searchParams: { page: string }}){
@@ -22,23 +23,58 @@ export default async function Page({ params, searchParams }:
   ]);
   
   if(typeof(project) === "string"){
-    return <h1 className="text-center text-red-500">{project}</h1>
+    // return <h1 className="text-center text-red-500">{project}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{project}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}`} message={project} />
+      </>
+    )
   }
   
   if(typeof(estimates) === "string"){
-    return <h1 className="text-center text-red-500">{estimates}</h1>
+    // return <h1 className="text-center text-red-500">{estimates}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{estimates}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}`} message={estimates} />
+      </>
+    )
   }
 
   if(typeof(totalEstimatedProject) === "string"){
-    return <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
+    // return <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{totalEstimatedProject}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}`} message={totalEstimatedProject} />
+      </>
+    )
   }
 
   if(typeof(projects) === "string"){
-    return <h1 className="text-center text-red-500">{projects}</h1>
+    // return <h1 className="text-center text-red-500">{projects}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-center text-red-500">{projects}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}`} message={projects} />
+      </>
+    )
   }
 
   if(typeof(catalogs)==='string'){
-    return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    // return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-red-500 text-center text-lg">{catalogs}</h1> */}
+        <ComponentError page={`/projects/estimates/${params.idp}`} message={catalogs} />
+      </>
+    )
   }
 
   const optConditions: Options[] = [{

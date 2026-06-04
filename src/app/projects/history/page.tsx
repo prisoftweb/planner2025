@@ -7,6 +7,7 @@ import { getProjectsMin } from "@/app/api/routeProjects";
 import { ProjectsTable } from "@/interfaces/Projects";
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerHistoryClient from "@/components/projects/ContainerHistoryClient";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -22,7 +23,8 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{projects}</h1> */}
+        <ComponentError page="/projects/history" message={projects} />
       </>
     )
   }
@@ -31,7 +33,8 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        {/* <h1 className="text-red-500 text-center text-lg">{catalogs}</h1> */}
+        <ComponentError page="/projects/history" message={catalogs} />
       </>
     )
   }

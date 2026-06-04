@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { getQuotationsByUserMin } from "@/app/api/routeQuotations";
 import { IQuotationMin } from "@/interfaces/Quotations";
 import ContainerQuotations from "@/components/quotations/ContainerQuotations";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -16,9 +17,10 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{quotations}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/quotations/byuser" message={quotations} />
       </>
     )
   }
