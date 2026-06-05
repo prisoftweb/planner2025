@@ -298,6 +298,10 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
         <NavItem name="Proyectos" link="/projects" items={[]}/>
         <NavItem name="Costos" link="" items={[
             {
+              name: 'Conceptos',
+              link: '/expenses/concepts'
+            },
+            {
               name: 'Gastos',
               link: '/expenses'
             },

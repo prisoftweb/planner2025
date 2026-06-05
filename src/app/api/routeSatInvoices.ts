@@ -194,3 +194,17 @@ export async function getSatXML(id:string) {
     return "Error al obtener xml de la factura";
   }
 }
+
+export async function getSatBanks() {
+  try {
+    // console.log("KEY:", process.env.NEXT_PUBLIC_API_KEY_DEV);
+    // console.log("TENANT:", process.env.NEXT_PUBLIC_TENANT_DEV);
+    // console.log("URL:", process.env.NEXT_PUBLIC_FISCAL_API_URL);
+    const res = await fiscalApi.get("/api/v4/catalogs/SatBanks");
+    // console.log("Response:", res.data.data);
+    return res.data.data;
+  } catch (error) {
+    // console.error("Error al solicitar uso de cfdi:", error);
+    return "Error al obtener catálogo SAT";
+  }
+}

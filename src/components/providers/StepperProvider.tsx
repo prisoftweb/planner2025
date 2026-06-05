@@ -16,9 +16,12 @@ const reducer = (state:any, action:any) => {
     case 'SET_CONTACTS': {
       return { ...state, contacts: action.data };
     }
-    case 'SET_MORE': {
-      return { ...state, more: action.data };
-    }
+    // case 'SET_BANK': {
+    //   return { ...state, bank: action.data };
+    // }
+    // case 'SET_MORE': {
+    //   return { ...state, more: action.data };
+    // }
     case 'INDEX_STEPPER': {
       return { ...state, indexstepper: action.data };
     }

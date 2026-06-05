@@ -12,6 +12,7 @@ export interface Provider {
   "phone"?:string,
   "suppliercredit":boolean,
   // 
+  bankdetails:boolean,
   "tradeline": Tradeline,
   "contact"?:Contact[],
   "user"?:string,

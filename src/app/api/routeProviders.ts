@@ -99,6 +99,8 @@ export async function getProviderMin(id:string, auth_token:string) {
 export async function updateProvider(id:string, auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/${id}`;
 
+  console.log('url => ', url);
+  console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       'headers': {
@@ -106,6 +108,7 @@ export async function updateProvider(id:string, auth_token:string, data:Object) 
         'Content-Type': 'application/json',
       }
     });    
+    console.log('res => ', res);
     if(res.status===200) return res.data.data.data;
       return res.statusText;
   } catch (error) {
@@ -369,6 +372,54 @@ export async function getAllPaymentsByProviderAndDateMIN(id:string, auth_token:s
       return error.message;
     }else{
       return 'Ocurrio un error al obtener pagos del proveedor';
+    }
+  }
+}
+
+export async function createAccount(data:Object, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/accounts`;
+  console.log('url => ', url);
+  console.log('data => ', JSON.stringify(data));
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'Application/json',
+      }
+    })
+    console.log('res => ', res);
+    if(res.status===201) return res.data.data;
+      return res.statusText;
+  } catch (error) {
+    console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al crear cuenta!!';
+    }
+  }
+}
+
+export async function updateAccount(id:string, auth_token:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/accounts/${id}`;
+
+  console.log('url => ', url);
+  console.log('data => ', JSON.stringify(data));
+  try {
+    const res = await axios.patch(url, JSON.stringify(data), {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });    
+    console.log('res => ', res);
+    if(res.status===200) return res.data.data.data;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al actualizar cuenta';
     }
   }
 }
