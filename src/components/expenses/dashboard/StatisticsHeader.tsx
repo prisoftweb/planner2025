@@ -118,7 +118,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             </div>
             <div className='w-5'>
               <Label></Label>
-              {dataCostsCatagory && dataCostsCatagory.length > 0 && satCompany && (
+              {dataCostsCatagory && dataCostsCatagory.length >= 0 && satCompany && (
                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content='categoria'
                   className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
@@ -137,7 +137,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             </div>
             <div className='w-5'>
               <Label></Label>
-              {dataCostsConcept && dataCostsConcept.length > 0 && satCompany && (
+              {dataCostsConcept && dataCostsConcept.length >= 0 && satCompany && (
                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                     content='concepto' 
                     className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">

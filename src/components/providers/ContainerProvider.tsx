@@ -28,6 +28,7 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
 
   const {providerStore, updateProviderStore} = useProviderStore();
   const [isCreditLine, setIsCreditLine]=useState<boolean>(true);
+  const [isBankData, setIsBankData]=useState<boolean>(true);
 
   useEffect(() => {
     updateProviderStore(providers);
@@ -64,12 +65,13 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
         account: prov.account,
         suppliercredit: prov.suppliercredit,
         contacts: nc,
-        tradename: prov.tradename || ' '
+        tradename: prov.tradename || ' ',
+        bankdetails: prov.bankdetails
       })
     })
   }
 
-  const dataFilter=data.filter(p => p.suppliercredit==isCreditLine);
+  const dataFilter=data.filter(p => p.suppliercredit==isCreditLine && p.bankdetails==isBankData);
   
   return(
     <>
@@ -117,6 +119,23 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
             </div>
           </div>
           <div className="flex md:flex-1 gap-x-3 justify-end w-full items-center">
+            <div className="inline-flex items-center">
+              <Label>Datos bancarios</Label>  
+              <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+                <input checked={isBankData} 
+                  onClick={() => setIsBankData(!isBankData)} id="bank" type="checkbox"
+                  // onChange={() => console.log('')}
+                  className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                    appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                    peer-checked:border-green-500 peer-checked:before:bg-green-500
+                    border border-slate-300" />
+                <label htmlFor="bank"
+                  className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                  <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                    data-ripple-dark="true"></div>
+                </label>
+              </div>
+            </div>
             <SearchInTable placeH="Buscar proveedor.." />
             <div className="w-60 sm:w-auto">
               <div className="flex items-center gap-x-4">

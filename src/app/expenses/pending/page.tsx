@@ -13,9 +13,11 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const isViewReports = false;
+  // const isViewReports = false;
   
   const role = user.rol?.name || '';
+
+  const isViewReports = role.toLowerCase().includes('residente')? false: true;
   
   let expenses: Expense[] = [];
   if(role.toLowerCase().includes('admin')){

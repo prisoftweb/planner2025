@@ -234,7 +234,7 @@ export default function InvoicesConditionsStepper({token, nextStep, handleFormPa
 
   const [catalogPaymentMethod, setCatalogPaymentMethod]=useState<Options[]>([]);
   // const [satMethodPayment, setSatMethodPayment]=useState<IMethodPayment[]>([]);
-  const [catalogCFDI, setCatalogCFDI]=useState<Options[]>([]);
+  // const [catalogCFDI, setCatalogCFDI]=useState<Options[]>([]);
   const [catalogFormPayment, setCatalogFormPayment]=useState<Options[]>([]);
   const [optCondicionesPayment, setoptCondicionesPayment]=useState<Options[]>([]);
 

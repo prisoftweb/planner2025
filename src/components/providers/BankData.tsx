@@ -63,12 +63,12 @@ export default function BankData({token, id, provider, company, user}:
       benefit: benefitI
     }, 
     validationSchema: Yup.object({
-      clabe: Yup.string()
-                  .required('La clabe es obligatoria'),
-      account: Yup.string()
-                  .required('La cuenta es obligatoria'),
-      numberCard: Yup.string()
-                  .required('El numero de tarjeta no puede ir vacio'),
+      // clabe: Yup.string()
+      //             .required('La clabe es obligatoria'),
+      // account: Yup.string()
+      //             .required('La cuenta es obligatoria'),
+      // numberCard: Yup.string()
+      //             .required('El numero de tarjeta no puede ir vacio'),
       // benefit: Yup.string()
       //             .required('El beneficiario es obligatorio')
     }),

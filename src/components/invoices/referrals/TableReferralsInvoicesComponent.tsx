@@ -431,7 +431,8 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
   //               </div>
       
   // let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 xl:order-1">
-  let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 flex-wrap 2xl:flex-nowrap">
+  // let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 flex-wrap 2xl:flex-nowrap">
+  let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 flex-wrap min-[1700px]:flex-nowrap">
                           <div className="flex gap-x-4 gap-y-2 justify-end items-center flex-wrap sm:flex-nowrap">
                             <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
                             <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
@@ -554,7 +555,7 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
           <p className="text-xl ml-4 font-medium">Facturas</p>
         </div>
         <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
-          <div className="">
+          <div className="flex items-center">
             <SearchInTable placeH={"Buscar factura.."} />
           </div>
           <div className={''}>

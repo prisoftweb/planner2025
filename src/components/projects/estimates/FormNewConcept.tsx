@@ -31,6 +31,8 @@ export default function FormNewConcept({token, setShowForm, addConcept, company,
   
   const [unit, setUnit] = useState<string>();
   const [optionsUnit, setOptionsUnit] = useState<Options[]>([]);
+  const [optsUnit, setOptsUnit] = useState<Options[]>([]);
+  const [unitlocal, setUnitlocal] = useState<string>('');
 
   const handleUnit = (value: string) => {
     setUnit(value);
@@ -43,6 +45,10 @@ export default function FormNewConcept({token, setShowForm, addConcept, company,
     setProductSat(p);
   }
 
+  const handleUnitLocal = (value: string) => {
+    setUnitlocal(value);
+  }
+
   useEffect(() => {
     const fetchUnits = async () => {
       // const res = await getCatalogsByNameAndType(token, 'conceptestimate');
@@ -53,9 +59,10 @@ export default function FormNewConcept({token, setShowForm, addConcept, company,
       //   setUnit(res[0]);
       // }
       // const res: ISatCatalog[]|string = await getSatUnitMeasurements();
-      const [res, resproduct]= await Promise.all([
+      const [res, resproduct, resunit]= await Promise.all([
         getSatUnitMeasurements(),
-        getSatProductCodes()
+        getSatProductCodes(),
+        getCatalogsByNameAndType(token, 'conceptestimate')
       ]);
 
       if(typeof(res)==='string'){
@@ -79,6 +86,13 @@ export default function FormNewConcept({token, setShowForm, addConcept, company,
         }));
         setProductsSat(options);
         setProductSat(options[0]);
+      }
+
+      if(typeof(resunit)==='string'){
+        showToastMessageError(resunit);
+      }else{
+        setOptsUnit(resunit);
+        setUnitlocal(resunit[0].value);
       }
       // setOptionsUnit([]);
       // setUnit('');
@@ -162,7 +176,8 @@ export default function FormNewConcept({token, setShowForm, addConcept, company,
           real:u?.label
         },
         codesat: productSat?.value,
-        descriptionsat: productSat?.label
+        descriptionsat: productSat?.label,
+        unit: unitlocal
       }
       try {
         const res = await createConceptEstimate(token, data);
@@ -212,6 +227,14 @@ export default function FormNewConcept({token, setShowForm, addConcept, company,
             <p className="text-red-500">El nombre es obligatorio!!!</p>
           )}
         </div>
+        {
+          optsUnit.length > 0 && (
+            <div className="">
+              <Label htmlFor="unit"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Unidad</p></Label>
+              <SelectReact index={0} opts={optsUnit} setValue={handleUnitLocal} />
+            </div>
+          )
+        }
         {
           productsSat.length > 0 && (
             <div className="">

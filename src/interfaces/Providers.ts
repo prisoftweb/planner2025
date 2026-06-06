@@ -77,6 +77,7 @@ export interface TableProvider{
   "account"?:string,
   "currentbalance"?: string,
   'contacts': number,
+  bankdetails?: boolean
 }
 
 export interface Tradeline{

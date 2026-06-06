@@ -667,7 +667,7 @@ export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLY(auth_token:string
 
 export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string, categories:string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERONLY/${getDate(new Date(dateStart))}/${getDate(new Date(dateEnd))}/${project}`;
-  // console.log('URL => ', url);
+  console.log('URL => ', url);
   // console.log('auth_token => ', auth_token);
   try {
     const res = await axios.post(url, {
@@ -677,7 +677,7 @@ export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(auth_to
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    console.log('res => ', res);
+    console.log('res concepts => ', res);
     if(res.status===200) {
       return res.data.data.stats;
     }
@@ -748,7 +748,7 @@ export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:str
     });
     
     if(res.status===200) {
-      console.log('res resumen => ', res.data.data.stats);
+      // console.log('res resumen => ', res.data.data.stats);
       return res.data.data.stats;
     }
     return res.statusText

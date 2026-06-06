@@ -9,89 +9,97 @@ import Button from "@/components/Button";
 import { getAllProjectsWithConditionLV, getAllProjectsWithClientAndConditionLV } from "@/app/api/routeProjects";
 import { getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
 import { getAllClientsTaxProfileLV } from "@/app/api/routeClients";
+import { getSatPaymentForms } from "@/app/api/routeSatInvoices";
 
-const catalogFormPayment: Options[] = [
-  {
-    label: 'EFECTIVO',
-    value: 'EFECTIVO 01'
-  },
-  {
-    label: 'CHEQUE_NOMINATIVO',
-    value: 'CHEQUE_NOMINATIVO 02'
-  },
-  {
-    label: 'TRANSFERENCIA_ELECTRONICA',
-    value: 'TRANSFERENCIA_ELECTRONICA 03'
-  },
-  {
-    label: 'TARJETA_DE_CREDITO',
-    value: 'TARJETA_DE_CREDITO 04'
-  },
-  {
-    label: 'MONEDERO_ELECTRONICO',
-    value: 'MONEDERO_ELECTRONICO 05'
-  },
-  {
-    label: 'DINERO_ELECTRONICO',
-    value: 'DINERO_ELECTRONICO 06'
-  },
-  {
-    label: 'VALES_DE_DESPENSA',
-    value: 'VALES_DE_DESPENSA 08'
-  },
-  {
-    label: 'DACION_EN_PAGO',
-    value: 'DACION_EN_PAGO 12'
-  },
-  {
-    label: 'SUBROGACION',
-    value: 'SUBROGACION 13'
-  },
-  {
-    label: 'CONSIGNACION',
-    value: 'CONSIGNACION 14'
-  },
-  {
-    label: 'CONDONACION',
-    value: 'CONDONACION 15'
-  },
-  {
-    label: 'COMPENSACION',
-    value: 'COMPENSACION 17'
-  },
-  {
-    label: 'NOVACION',
-    value: 'NOVACION 23'
-  },
-  {
-    label: 'CONFUSION',
-    value: 'CONFUSION 24'
-  },
-  {
-    label: 'REMISION_DE_DEUDA',
-    value: 'REMISION_DE_DEUDA 25'
-  },
-  {
-    label: 'PRESCRIPCION_O_CADUCIDAD',
-    value: 'PRESCRIPCION_O_CADUCIDAD 26'
-  },
-  {
-    label: 'A_SATISFACCION_DEL_ACREEDOR',
-    value: 'A_SATISFACCION_DEL_ACREEDOR 27'
-  },
-  {
-    label: 'TARJETA_DE_DEBITO',
-    value: 'TARJETA_DE_DEBITO 28'
-  },
-  {
-    label: 'TARJETA_DE_SERVICIOS',
-    value: 'TARJETA_DE_SERVICIOS 29'
-  },
-  {
-    label: 'POR_DEFINIR',
-    value: 'POR_DEFINIR 99'
-  },
-];
+// const catalogFormPayment: Options[] = [
+//   {
+//     label: 'EFECTIVO',
+//     value: 'EFECTIVO 01'
+//   },
+//   {
+//     label: 'CHEQUE_NOMINATIVO',
+//     value: 'CHEQUE_NOMINATIVO 02'
+//   },
+//   {
+//     label: 'TRANSFERENCIA_ELECTRONICA',
+//     value: 'TRANSFERENCIA_ELECTRONICA 03'
+//   },
+//   {
+//     label: 'TARJETA_DE_CREDITO',
+//     value: 'TARJETA_DE_CREDITO 04'
+//   },
+//   {
+//     label: 'MONEDERO_ELECTRONICO',
+//     value: 'MONEDERO_ELECTRONICO 05'
+//   },
+//   {
+//     label: 'DINERO_ELECTRONICO',
+//     value: 'DINERO_ELECTRONICO 06'
+//   },
+//   {
+//     label: 'VALES_DE_DESPENSA',
+//     value: 'VALES_DE_DESPENSA 08'
+//   },
+//   {
+//     label: 'DACION_EN_PAGO',
+//     value: 'DACION_EN_PAGO 12'
+//   },
+//   {
+//     label: 'SUBROGACION',
+//     value: 'SUBROGACION 13'
+//   },
+//   {
+//     label: 'CONSIGNACION',
+//     value: 'CONSIGNACION 14'
+//   },
+//   {
+//     label: 'CONDONACION',
+//     value: 'CONDONACION 15'
+//   },
+//   {
+//     label: 'COMPENSACION',
+//     value: 'COMPENSACION 17'
+//   },
+//   {
+//     label: 'NOVACION',
+//     value: 'NOVACION 23'
+//   },
+//   {
+//     label: 'CONFUSION',
+//     value: 'CONFUSION 24'
+//   },
+//   {
+//     label: 'REMISION_DE_DEUDA',
+//     value: 'REMISION_DE_DEUDA 25'
+//   },
+//   {
+//     label: 'PRESCRIPCION_O_CADUCIDAD',
+//     value: 'PRESCRIPCION_O_CADUCIDAD 26'
+//   },
+//   {
+//     label: 'A_SATISFACCION_DEL_ACREEDOR',
+//     value: 'A_SATISFACCION_DEL_ACREEDOR 27'
+//   },
+//   {
+//     label: 'TARJETA_DE_DEBITO',
+//     value: 'TARJETA_DE_DEBITO 28'
+//   },
+//   {
+//     label: 'TARJETA_DE_SERVICIOS',
+//     value: 'TARJETA_DE_SERVICIOS 29'
+//   },
+//   {
+//     label: 'POR_DEFINIR',
+//     value: 'POR_DEFINIR 99'
+//   },
+// ];
+
+export interface IMethodPayment {
+  id: string
+  description: string
+  createdAt: string
+  updatedAt: any
+}
 
 type DataBasicProps={
   token:string,
@@ -124,7 +132,7 @@ export default function DataBasicReferralStepper({token, client, date, setDate, 
   const [optProjects, setOptProjects]=useState<Options[]>([]);
 
   const [optConditionsPayment, setoptConditionsPayment]=useState<Options[]>([]);
-  
+  const [catalogFormPayment, setCatalogFormPayment]=useState<Options[]>([]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -150,9 +158,10 @@ export default function DataBasicReferralStepper({token, client, date, setDate, 
     const fetch = async () => {
       // const clients = await getClientsLV(token);
 
-      const [clients] = await Promise.all([
+      const [clients, satPayForm,] = await Promise.all([
         // getAllClientsTaxProfileLV(token),
-        getClientsLV(token)
+        getClientsLV(token),
+        getSatPaymentForms(),
       ]);
       
       if(typeof(clients)==='string'){
@@ -167,6 +176,17 @@ export default function DataBasicReferralStepper({token, client, date, setDate, 
         {
           handleChangeClient(!client || client ===''? clients[0].value: client);
         }
+      }
+
+      if(typeof(satPayForm)==='string'){
+        showToastMessageError(satPayForm);
+      }else{
+        const auxPayForm:Options[]=satPayForm.map( (m: IMethodPayment) => ({
+          value: m.id,
+          label: m.description,
+        }));
+        setCatalogFormPayment(auxPayForm);
+        handleFormPaid(auxPayForm[0].value);
       }
 
       // const projs = await getAllProjectsWithConditionLV(token);
@@ -286,6 +306,12 @@ export default function DataBasicReferralStepper({token, client, date, setDate, 
           </div>
         )}
 
+        {/* {catalogFormPayment && (
+          <div className=" ">
+            <Label htmlFor="formPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Forma de pago</p></Label>
+            <SelectReact index={0} opts={catalogFormPayment} setValue={handleFormPaid} />
+          </div>
+        )} */}
         {catalogFormPayment && (
           <div className=" ">
             <Label htmlFor="formPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Forma de pago</p></Label>
