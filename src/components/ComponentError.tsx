@@ -1,4 +1,5 @@
 import Link from "next/link";
+// import Button from "./Button";
 
 interface ErrorStateProps {
   title?: string;
@@ -44,6 +45,17 @@ export default function ComponentError({
           Reintentar
         </button>
       )}
+      {/* <button
+        onClick={() => window.location.replace('/login')}
+        className="mt-6 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+      >
+        Reintentar
+      </button> */}
+      <Link href={'/login'}>
+        <div className="text-white font-normal text-sm bg-black rounded-xl w-36 h-9 py-2 hover:bg-slate-600 print:hidden mt-3">
+          Iniciar
+        </div>
+      </Link>
     </div>
   );
 }

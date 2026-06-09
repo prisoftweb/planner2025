@@ -144,7 +144,6 @@ export default function ContainerNewCode({token, user, company}: {token: string,
   const filteredProjects = search==''? projects: projects.filter((p) => p.title.toString().toLowerCase().includes(search.toLowerCase()));
 
   return (
-    // <div className={`grid ${widthPage < 500? 'grid-cols-1': 'grid-cols-2'} gap-x-3`}>
     <div className={`grid grid-cols-1 md:grid-cols-2 gap-x-3 max-w-[1500px]`}>
       <div>
         <div className="flex items-center gap-x-2">
@@ -204,14 +203,12 @@ export default function ContainerNewCode({token, user, company}: {token: string,
             ))}
           </nav>
         </div>
-        {/* {widthPage < 500 && viewComponent} */}
         <div className=" block md:hidden">
           {viewComponent}
         </div>
       </div>
 
       <div className=" hidden md:block">
-        {/* {widthPage > 500 && viewComponent} */}
         {viewComponent}
       </div>
     </div>

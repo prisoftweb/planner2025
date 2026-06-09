@@ -143,9 +143,9 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
     handleFilter(dateI, dateF, statuses);  
   }
 
-  const filteredCodes = search==''? codesState: codesState.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
+  const filteredCodes = search==''? codesState: codesState.filter((p) => p?.code?.toString()?.toLowerCase()?.includes(search.toLowerCase()));
 
-  const filteredCosts = searchCost==''? costsState: costsState.filter((p) => p.folio?.toString()?.toLowerCase()?.includes(searchCost.toLowerCase())); 
+  const filteredCosts = searchCost==''? costsState: costsState?.filter((p) => p.folio?.toString()?.toLowerCase()?.includes(searchCost.toLowerCase())); 
   
   return (
     <>

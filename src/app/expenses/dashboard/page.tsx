@@ -16,6 +16,7 @@ export default async function Page() {
   
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
+  // const token='';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
   const [costsCategory, costsConcept, costsDays, costsResumen, costsResumenType, projects, categories] = await Promise.all([

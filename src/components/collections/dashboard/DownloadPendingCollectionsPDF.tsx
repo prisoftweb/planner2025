@@ -8,12 +8,11 @@ export default function DownloadPendingCollectionsPDF({collections, token, pendi
   {collections: IAllTOTALPENDINGPAYMENTSByProject[], token:string, pendingBilling?: number, 
     pendingPayment?: number, totalProjects?: number, date?: string, satCompany:Company}) {
 
-  const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const orderCollections=collections?.sort((a, b) => new Date(a?.date).getTime() - new Date(b?.date).getTime());
 
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
   const currentDate = new Date();
   const formattedDate = `${currentDate.getDate()} de ${months[currentDate.getMonth()]} de ${currentDate.getFullYear()}`;
-  // este ya
 
   return(
     <Document>
@@ -24,8 +23,6 @@ export default function DownloadPendingCollectionsPDF({collections, token, pendi
 
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
-                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
                 <Image source={satCompany?.isologo?? satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
@@ -34,7 +31,7 @@ export default function DownloadPendingCollectionsPDF({collections, token, pendi
                   </View>
                 </View>
               </View>
-{/* <View style={{marginTop:'5px', display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px', justifyContent:'flex-start', alignItems:'center'}}></View> */}
+
               <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
                 <Text style={{color:'gray', margin: '2px'}}>Antes del:</Text>
                 <Text style={{margin: '2px'}}>{date}</Text>

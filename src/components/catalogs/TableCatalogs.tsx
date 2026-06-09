@@ -108,8 +108,6 @@ export default function TableCatalogs({data, token}: {data:CatalogTable[], token
 const ListData = ({data, token, delReport}: 
   {data: CatalogTable[], token:string, delReport: (id: string) => Promise<void>}) => {
 
-  // const [dataReports, setDataReports] = useState(data);
-
   const {search} = useTableStates();
 
   const filterData = useMemo(() => {
@@ -143,7 +141,6 @@ const CardCatalog = ({company, token, delReport}:
   return(
     <div role="button"
       key={company.id}
-      // onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
       className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
         outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
         focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
@@ -168,14 +165,6 @@ const CardCatalog = ({company, token, delReport}:
                 {company.collection}
               </p>
             </div>
-            {/* <div className="text-right">
-              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
-                
-              </p>
-              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
-                {company.email}
-              </p>
-            </div> */}
           </div>
         </div>
       </div>

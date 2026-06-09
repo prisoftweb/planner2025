@@ -46,7 +46,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
     fetch();
   }, []);
 
-  const filteredInvoices = search==''? invoices: invoices.filter((i) => i.folio.toString().includes(search));
+  const filteredInvoices = search==''? invoices: invoices?.filter((i) => i?.folio?.toString()?.includes(search));
 
   const addNewDispersion = () => {
     if(selected){
@@ -58,7 +58,6 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
           title: selected.project.title
         },
         total: Number(amount),
-        // totalPending: Number(amountPending),
         totalPending: selected.totalPending,
         previousAmount: selected.previousAmount,
         concepts: selected.concepts
@@ -74,18 +73,17 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
 
   const view = showAddDispersion? 
     <>
-      {invoicesDisp.map((inv) => (
+      {Array.isArray(invoicesDisp) && invoicesDisp.map((inv) => (
         <div className="border border-slate-600 grid grid-cols-2 gap-x-2 gap-y-2 p-3" key={inv.id}>
-          <p className="text-xs text-slate-400">Factura No. {inv.folio}</p>
+          <p className="text-xs text-slate-400">Factura No. {inv?.folio}</p>
           <p className="text-xs text-slate-600">Monto de factura: {CurrencyFormatter({
             currency: 'MXN',
-            // value: inv.total || 0
-            value: invoices.find((i) => i.id===inv.id)?.total || 0
+            value: invoices?.find((i) => i?.id===inv?.id)?.total || 0
           })}</p>
-          <p className="text-xs text-slate-400">Proyecto: {inv.project.title}</p>
+          <p className="text-xs text-slate-400">Proyecto: {inv?.project?.title}</p>
           <p className="text-xs text-slate-600">Monto abonado: {CurrencyFormatter({
             currency: 'MXN',
-            value: inv.total || 0
+            value: inv?.total || 0
           })} </p>
         </div>
       ))}
@@ -104,7 +102,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
           <Label>Cobrado / Abonado</Label>
           <CurrencyInput
             prefix="$"
-            value={amount.replace(/[$,]/g, "")}
+            value={amount?.replace(/[$,]/g, "")}
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                       focus:border-slate-700 outline-0"
             onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
@@ -142,7 +140,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
-          {filteredInvoices.map((invoice) => (
+          {Array.isArray(filteredInvoices) && filteredInvoices.map((invoice) => (
             <div role="button"
               key={invoice.id}
               className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
@@ -177,9 +175,6 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
                     </h6>
                     <p className="text-slate-500 text-sm">{invoice.concepts}</p>
                   </div>
-                  {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                    {invoice.notes}
-                  </p> */}
                 </div>
               </div>
             </div>
@@ -222,9 +217,6 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
                     </h6>
                     <p className="text-slate-500 text-sm">{invoice.concepts}</p>
                   </div>
-                  {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                    {invoice.notes}
-                  </p> */}
                 </div>
               </div>
             </div>
@@ -257,10 +249,10 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
 
 function transformTypes(invoiceFrom: IInvoiceMin[]){
   const invoiceTo: TInvoiceStepper[]=[];
-  invoiceFrom.map((i) => {
+  Array.isArray(invoiceFrom) && invoiceFrom.map((i) => {
     invoiceTo.push({
-      total: i?.accountreceivables?.length > 0? i.accountreceivables[0]?.charged : 0,
-      totalPending: i?.accountreceivables?.length > 0? i.accountreceivables[0]?.unchargedbalanceamount : 0,
+      total: Array.isArray(i?.accountreceivables) && i?.accountreceivables?.length > 0? i.accountreceivables[0]?.charged : 0,
+      totalPending: Array.isArray(i?.accountreceivables) && i?.accountreceivables?.length > 0? i.accountreceivables[0]?.unchargedbalanceamount : 0,
       id:i._id,
       project: {
         id: typeof(i.project)==='string'? i.project: i.project._id,

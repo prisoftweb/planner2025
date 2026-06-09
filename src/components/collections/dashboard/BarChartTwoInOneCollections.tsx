@@ -21,7 +21,6 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) return null;
 
   const title = payload[0].payload.client;
-  // const st = payload[0].dataKey;
   const data = payload.map((item:any) => ({
       status: item.dataKey,
       value: CurrencyFormatter({
@@ -50,10 +49,6 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
         {data.map((item: any, index:number) => (
           <div key={index} className="flex items-center space-x-2.5">
             <span
-                // className={cx(
-                //     status[item.status],
-                //     "size-2.5 shrink-0 rounded-sm"
-                // )}
                 aria-hidden={true}
             />
             <div className="flex w-full justify-between">
@@ -77,7 +72,6 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
 };
 
 export function BarChartTwoInOneCollections({data}:{data: DataCollectionsByType[]}) {
-  // Transform data into a format suitable for BarChart
   const formattedArray = data.map((entry) => {
     return {
         client: entry.client,

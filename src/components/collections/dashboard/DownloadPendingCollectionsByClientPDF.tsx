@@ -11,7 +11,6 @@ export default function DownloadPendingCollectionsByClientPDF({collections, toke
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
   const currentDate = new Date(date || '');
   const formattedDate = `${currentDate.getDate()} de ${months[currentDate.getMonth()]} de ${currentDate.getFullYear()}`;
-  // este ya
 
   return(
     <Document>
@@ -22,8 +21,6 @@ export default function DownloadPendingCollectionsByClientPDF({collections, toke
 
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
-                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
                 <Image source={satCompany?.isologo?? satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
@@ -32,7 +29,7 @@ export default function DownloadPendingCollectionsByClientPDF({collections, toke
                   </View>
                 </View>
               </View>
-{/* <View style={{marginTop:'5px', display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px', justifyContent:'flex-start', alignItems:'center'}}></View> */}
+
               <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
                 <Text style={{color:'gray', margin: '2px'}}>Antes del:</Text>
                 <Text style={{margin: '2px'}}>{date}</Text>
@@ -101,7 +98,7 @@ export default function DownloadPendingCollectionsByClientPDF({collections, toke
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{10}% </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
-                value: c.pendingPayment || 0
+                value: c?.pendingPayment || 0
               })}</Text>
             </View>
           ))}

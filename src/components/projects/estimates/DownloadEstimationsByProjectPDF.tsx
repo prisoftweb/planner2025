@@ -136,6 +136,7 @@ export default function DownloadEstimatesByProjectPDF({estimates, project, token
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Amortizacion {project.amountChargeOff?.porcentage || 0}%</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fondo {project.guaranteefund.porcentage}% </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Monto a pagar </Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Monto a pagar total </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Condicion</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Orden</Text>
@@ -159,6 +160,10 @@ export default function DownloadEstimatesByProjectPDF({estimates, project, token
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
                 value: e.amountPayable || 0
+              })}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+                currency: 'MXN',
+                value: e.amountPayableVAT || 0
               })}</Text>
               <View style={{flex: 1}}>
                 <View style={{borderRadius: '3px', backgroundColor: e.condition.color, textAlign: 'center'}}>

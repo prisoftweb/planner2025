@@ -20,8 +20,6 @@ export default function ContainerCodes({codes, providers, token}:
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date(),
   });
-
-  console.log('impresion de ayuda...');
   
   const addStatus = (status:string) => {
     const newStatus = [...statuses, status];
@@ -44,7 +42,6 @@ export default function ContainerCodes({codes, providers, token}:
   }
 
   const handleFilter = async (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-    // updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
     const res = await getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses, 'TODOS');
     if(typeof(res)==='string'){
       showToastMessageError(res);

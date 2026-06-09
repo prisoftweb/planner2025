@@ -4,8 +4,8 @@ import { CostsByConceptAndCategory } from '@/interfaces/DashboardsCosts';
 import { DateRangePickerValue } from '@tremor/react';
 import { Company } from "@/interfaces/Companies"
 
-export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate, projectTitle, satCompany}: 
-  {data: CostsByConceptAndCategory[], type:boolean, rangeDate: DateRangePickerValue, projectTitle:string, satCompany:Company}) {
+export default function ReportCostsCategoryAndConceptPDF({data, type, endDate, startDate, projectTitle, satCompany}: 
+  {data: CostsByConceptAndCategory[], type:boolean, startDate: string, endDate: string, projectTitle:string, satCompany:Company}) {
   
   const style = StyleSheet.create({
     table: {
@@ -40,6 +40,10 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate,
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const currentDate = new Date();
+
+  const [yearS, monthS, dayS] = startDate.split('-');
+  const [yearE, monthE, dayE] = endDate.split('-');
+  
   return(
     <Document>
       <Page>
@@ -56,8 +60,13 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate,
               </Text>
             </View>
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
-              <Text style={[style.subTitle, {textAlign:'right', marginTop:'17px'}]}>
+              {/* <Text style={[style.subTitle, {textAlign:'right', marginTop:'17px'}]}>
                 Del {rangeDate.from?.getDate()} de {months[rangeDate.from?.getMonth() || 0]} de {rangeDate.from?.getFullYear()} {' '}  al {rangeDate.to?.getDate()} de {months[rangeDate.to?.getMonth() || 0]} de {rangeDate.to?.getFullYear()}  
+              </Text> */}
+              <Text style={[style.subTitle, {textAlign:'right', marginTop:'17px'}]}>
+                Del {dayS} de {months[Number(monthS) - 1]} de {yearS}
+                {' '}
+                al {dayE} de {months[Number(monthE) - 1]} de {yearE}
               </Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>
               {currentDate.getDate()} de {months[currentDate.getMonth() || 0]} de {currentDate.getFullYear()}

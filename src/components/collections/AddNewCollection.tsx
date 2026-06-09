@@ -282,11 +282,11 @@ export default function AddNewCollectionComponent({showForm, user, token, update
 
 function transformTypes(invoiceFrom: TInvoiceStepper[]){
   const invoiceTo: TInvoiceSend[]=[];
-  invoiceFrom.map((i) => {
+  Array.isArray(invoiceFrom) && invoiceFrom.map((i) => {
     invoiceTo.push({
-      amountcharged:i.total,
-      invoice:i.id,
-      project: i.project.id
+      amountcharged:i?.total?? 0,
+      invoice:i?.id?? '',
+      project: i?.project?.id?? ''
     });
   });
   return invoiceTo;

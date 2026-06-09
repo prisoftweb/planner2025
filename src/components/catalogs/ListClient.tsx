@@ -4,7 +4,6 @@ import { useEffect } from "react"
 import { useListsStore } from "@/app/store/listStore"
 import { Catalog, CatalogTable } from "@/interfaces/Catalogs"
 import CompanyClient from "../companies/CompanyClient"
-// import Header from "@/components/Header";
 import { ResponsiveHeader as Header } from "@/components/Header";
 import TableCatalogs from "./TableCatalogs"
 import ButtonNew from "./ButtonNew"

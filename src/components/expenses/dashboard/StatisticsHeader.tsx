@@ -86,6 +86,10 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
     }
   };
 
+  // useEffect(() => {
+  //   console.log('rangeDate state => ', rangeDate);
+  // }, [rangeDate]);
+
   return (
     <div>
       <div>
@@ -95,11 +99,30 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             <DateRangePicker 
               className='mt-2'
               placeholder='Seleccione un rango de fechas'
+              // onValueChange={(e) => {
+              //   setRangeDate(e);
+              //   if(e.from && e.to){
+              //     // handleDate(e.from.toDateString(), e.to.toDateString(), project);
+              //     handleDate(getDate(e.from), getDate(e.to), project, arrCategories);
+              //   }
+              // }}
               onValueChange={(e) => {
+                // console.log('picker value', e);
+                // console.log('from', e.from);
+                // console.log('to', e.to);
+                // console.log('toISOString', e.to?.toISOString());
+
+                // console.log(JSON.stringify(e));
+
                 setRangeDate(e);
-                if(e.from && e.to){
-                  // handleDate(e.from.toDateString(), e.to.toDateString(), project);
-                  handleDate(getDate(e.from), getDate(e.to), project, arrCategories);
+
+                if (e.from && e.to) {
+                  handleDate(
+                    getDate(e.from),
+                    getDate(e.to),
+                    project,
+                    arrCategories
+                  );
                 }
               }}
               value={rangeDate}
@@ -123,7 +146,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                   content='categoria'
                   className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                   <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} satCompany={satCompany}
-                                                type={true} rangeDate={rangeDate} projectTitle={titleProject} />} 
+                                                type={true} startDate={getDate(rangeDate.from?? new Date())} endDate={getDate(rangeDate.to?? new Date())} projectTitle={titleProject} />} 
                       fileName={`InformeCostosAgrupadosPorCategoria`} >
                     {({loading, url, error, blob}) => 
                       loading? (
@@ -142,7 +165,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                     content='concepto' 
                     className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                     <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} satCompany={satCompany} 
-                                                  type={false} rangeDate={rangeDate} projectTitle={titleProject} />} 
+                                                  type={false} startDate={getDate(rangeDate.from?? new Date())} endDate={getDate(rangeDate.to?? new Date())} projectTitle={titleProject} />} 
                       fileName={`InformeCostosAgrupadosPorConcepto`} >
                     {({loading, url, error, blob}) => 
                       loading? (

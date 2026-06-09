@@ -64,7 +64,7 @@ export default function SelectProviderCode({token, returnProject, handleProvSel,
           <></>
         </div>;
 
-  const filteredProviders= search==''? providers: providers.filter((p) => p.tradename.toString().toLowerCase().includes(search.toLowerCase()));
+  const filteredProviders= search==''? providers: providers.filter((p) => p?.tradename?.toString()?.toLowerCase()?.includes(search.toLowerCase()));
 
   return (
     <div className={`${size < 500? 'z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0': ''} `}
@@ -106,17 +106,17 @@ export default function SelectProviderCode({token, returnProject, handleProvSel,
             >
               <div className="flex items-center w-full ">
                 <div className="grid mr-4 place-items-center">
-                  <IconText size='h-12 w-12' sizeText='' text={prov.name} />
+                  <IconText size='h-12 w-12' sizeText='' text={prov?.name} />
                 </div>
                 <div className="w-full">
                   <div className="flex gap-x-3 justify-between items-center w-full">
                     <h6
                       className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
-                      {prov.tradename}
+                      {prov?.tradename}
                     </h6>
                   </div>
                   <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                    {prov.name}
+                    {prov?.name}
                   </p>
                 </div>
               </div>

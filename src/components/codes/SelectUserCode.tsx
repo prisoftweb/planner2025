@@ -111,7 +111,7 @@ export default function SelectUserCode({token, handleUserSel, returnProvider, si
                   <div className="flex gap-x-3 justify-between items-center w-full">
                     <h6
                       className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
-                      {us.name}
+                      {us?.name}
                     </h6>
                   </div>
                 </div>

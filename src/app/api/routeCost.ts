@@ -618,7 +618,7 @@ export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(auth_token:strin
 }
 
 export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string, categories:string[]) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERCATEGORYONLY/${dateStart}/${dateEnd}/${project}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERCATEGORYONLY/${dateStart}/${dateEnd}/${project}?full=true`;
   console.log('URL category => ', url);
   console.log('categories => ', categories);
   try {
@@ -666,8 +666,9 @@ export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLY(auth_token:string
 }
 
 export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string, categories:string[]) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERONLY/${getDate(new Date(dateStart))}/${getDate(new Date(dateEnd))}/${project}`;
-  console.log('URL => ', url);
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERONLY/${getDate(new Date(dateStart))}/${getDate(new Date(dateEnd))}/${project}?full=true`;
+  console.log('URL concepts => ', url);
+  console.log('categories => ', categories);
   // console.log('auth_token => ', auth_token);
   try {
     const res = await axios.post(url, {

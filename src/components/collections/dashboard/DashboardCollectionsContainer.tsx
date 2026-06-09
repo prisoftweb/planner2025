@@ -31,6 +31,7 @@ import DownloadPendingCollectionsByClientPDF from "./DownloadPendingCollectionsB
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
+import { getDate } from "@/libs/dates";
 
 export interface DataProjectsByType {
   client: string
@@ -60,17 +61,19 @@ function transformProjectsTypesToDataChart(dataCollections: ITotalAccountReceiva
 
   dataCollections.map((arrData) => {
     const r: Issue[] = [];
-    arrData.map((prj) => {
-      r.push({
-        percentage: 22,
-        status: prj.type,
-        value: prj.pendingPayment
+    if(Array.isArray(arrData) && arrData.length > 0){
+      arrData.map((prj) => {
+        r.push({
+          percentage: 22,
+          status: prj?.type,
+          value: prj?.pendingPayment?? 0
+        });
       });
-    });
-    res.push({
-      client: arrData[0].client,
-      issues: r,
-    });
+      res.push({
+        client: arrData[0].client,
+        issues: r,
+      });
+    }
   });
 
   return res;
@@ -218,7 +221,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const titles:string[]=[];
   const values: number[] = [];
 
-  totalCollectionsClients.map((prj) => {
+  Array.isArray(totalCollectionsClients) && totalCollectionsClients?.map((prj) => {
     titles.push(prj.client);
     values.push(prj.fullyCharged);
   });
@@ -244,7 +247,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
 
   const dataCollectionProjects: OptionsDashboard[] = [];
   
-  totalCollectionsProjects.map((prj) => {
+  Array.isArray(totalCollectionsProjects) && totalCollectionsProjects.map((prj) => {
     dataCollectionProjects.push({
       cobro: prj.fullyCharged,
       label: prj.project
@@ -252,7 +255,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   });
 
   const dataPendingProyect: DataPendingProject[] = [];
-  totalAccountByPrjRes.map((prj) => {
+  Array.isArray(totalAccountByPrjRes) && totalAccountByPrjRes.map((prj) => {
     dataPendingProyect.push({
       label: prj.project,
       "POR COBRAR": prj.pendingPayment || 0,
@@ -260,7 +263,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     });    
   });
 
-  const groupedByClient = totalAccountByCliRes.reduce((acc: any, prj) => {
+  const groupedByClient = totalAccountByCliRes?.reduce((acc: any, prj) => {
         const client = prj.client;
         (acc[client] = acc[client] || []).push(prj);
         return acc;
@@ -325,13 +328,13 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-3 mt-3">
-        <Card amount={ totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0 } title="TOTAL PAGADO">
+        <Card amount={ Array.isArray(totalPaymentByDate) && totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0 } title="TOTAL PAGADO">
           <BsCash className="w-6 h-6 text-slate-600" />
         </Card>
-        <Card amount={ totalPending.length > 0? totalPending[0].total: 0 } title="POR COBRAR">
+        <Card amount={ Array.isArray(totalPending) && totalPending.length > 0? totalPending[0]?.total?? 0: 0 } title="POR COBRAR">
           <BsCash className="w-6 h-6 text-slate-600" />
         </Card>
-        <Card amount={ totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0 } title="POR FACTURAR">
+        <Card amount={ Array.isArray(totalPendingBillingByPrj) && totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0]?.acumPendingBilling?? 0: 0 } title="POR FACTURAR">
           <BsCash className="w-6 h-6 text-slate-600" />
         </Card>
       </div> 
@@ -392,16 +395,4 @@ export const Card = ({amount, title, children}: {title:string, amount:number, ch
       </div>
     </div>
   )
-}
-
-function getDate(date: Date){
-  let day = date.getDate()
-  let month = date.getMonth() + 1
-  let year = date.getFullYear()
-
-  if(month < 10){
-    return `${year}-0${month}-${day}`;
-  }else{
-    return `${year}-${month}-${day}`;
-  }
 }
