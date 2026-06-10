@@ -53,14 +53,14 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
             />
             <div className="flex w-full justify-between">
               <span className=" text-gray-700 dark:text-gray-300">
-                {item.status}
+                {item?.status}
               </span>
               <div className="flex items-center space-x-1">
                 <span className="font-medium text-gray-900 dark:text-gray-50">
-                  {item.value}
+                  {item?.value}
                 </span>
                 <span className="text-gray-500 dark:text-gray-500">
-                  ({item.percentage}&#37;)
+                  ({item?.percentage}&#37;)
                 </span>
               </div>
             </div>

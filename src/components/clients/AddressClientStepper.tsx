@@ -171,8 +171,8 @@ export default function AddressClientStepper({token, company}:{token:string, com
         regime,
         location: {
           stret,
-          // cp: parseInt(cp),
-          cp,
+          cp: parseInt(cp),
+          // cp,
           municipy, 
           country,
           community,

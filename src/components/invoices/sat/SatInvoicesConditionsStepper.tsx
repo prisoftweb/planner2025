@@ -100,11 +100,12 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
         console.log('indexT => ', indexT);
         console.log('sat types:', auxTypes[indexT].value);
         handleType(auxTypes[indexT?? 0].value);
-        handleLabelType(auxTypes[0].label);
+        handleLabelType(auxTypes[indexT?? 0].label);
+        // handleLabelType(auxTypes[0].label);
         // handleConditionPayment(auxTypes[0].value)
       }
 
-      console.log('sat pay form => ', satPayForm);
+      // console.log('sat pay form => ', satPayForm);
       if(typeof(satPayForm)==='string'){
         showToastMessageError(satPayForm);
       }else{
@@ -118,7 +119,7 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
         // handleConditionPayment(auxTypes[0].value)
       }
 
-      console.log('condicionesP => ', condicionesP);
+      // console.log('condicionesP => ', condicionesP);
       if(typeof(condicionesP)==='string'){
         showToastMessageError(condicionesP);
       }else{

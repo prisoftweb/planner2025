@@ -63,7 +63,7 @@ export default function SelectUserCode({token, handleUserSel, returnProvider, si
           <></>
         </div>;
 
-  const filteredUsers= search==''? users: users.filter((p) => p.name.toString().toLowerCase().includes(search.toLowerCase()));
+  const filteredUsers= search==''? users: users.filter((p) => p?.name?.toString()?.toLowerCase()?.includes(search.toLowerCase()));
 
   return (
     <div className={`${size < 500? 'z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0': ''} `}

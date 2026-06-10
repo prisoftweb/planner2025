@@ -918,7 +918,9 @@ const abrirDialogo = async (token:string, id:string, user:string,
     const [error, setError] = useState(false);
     const [flash, setFlash] = useState(false);
     const [cfdireplace, setCfdireplace]=useState<string>();
-    const [cancelmotive, setCancelMotive]=useState<string>(cancelOptions[0].value);
+    const [cancelmotive, setCancelMotive]=useState<string>(Array.isArray(cancelOptions) && cancelOptions.length>0? cancelOptions[0].value: '');
+
+    const firstMotive=Array.isArray(cancelOptions) && cancelOptions.length>0? cancelOptions[0].value: '';
     // const [uuid, setUuid]=useState<string>();
     // const [company, setCompany] = useState<ISatCompany>();
 
@@ -1021,8 +1023,12 @@ const abrirDialogo = async (token:string, id:string, user:string,
         <p className="text-left">Motivo de cancelacion</p>
         <SelectReact index={0} opts={cancelOptions} setValue={handleMotive} />
 
-        <p className="text-left mt-4">CFDI de reemplazo</p>
-        <Input value={cfdireplace} onChange={(e) => setCfdireplace(e.target.value)} />
+        {cancelmotive===firstMotive && (
+          <>
+            <p className="text-left mt-4">CFDI de reemplazo</p>
+            <Input value={cfdireplace} onChange={(e) => setCfdireplace(e.target.value)} />
+          </>
+        )}
 
         <div>
           <button className="yes" onClick={handleEliminar}>Sí</button>

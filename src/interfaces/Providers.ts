@@ -7,7 +7,19 @@ export interface Provider {
   "name":string,
   "tradename"?: string,
   "rfc":string,
-  "account":string,
+  // "account":string,
+  account: {
+    _id: string;
+    id: string;
+    alias: string;
+    bank: string;
+    bankAccount: string;
+    cardNumber: string;
+    datets: string; // o Date si lo conviertes al recibirlo
+    interbankCode: string;
+    recipient: string;
+    status: boolean;
+  }
   "email"?:string,
   "phone"?:string,
   "suppliercredit":boolean,

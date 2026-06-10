@@ -171,7 +171,8 @@ export default function DataBasicStepper({token, id, tags, company}:
       const location = {
         community,
         country,
-        cp: cp,
+        // cp: cp,
+        cp: parseInt(cp),
         municipy,
         state: stateS,
         stret
@@ -252,7 +253,8 @@ export default function DataBasicStepper({token, id, tags, company}:
           photo,
           location: {
             stret,
-            cp,
+            // cp,
+            cp: parseInt(cp),
             municipy, 
             country,
             community,

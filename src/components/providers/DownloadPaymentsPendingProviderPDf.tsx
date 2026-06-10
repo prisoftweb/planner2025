@@ -67,7 +67,7 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
 
                 <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                   <Text style={{fontSize:'10px', color:'gray'}}>Cuenta: </Text>
-                  <Text style={{fontSize:'10px'}}>{provider.account}</Text>
+                  <Text style={{fontSize:'10px'}}>{provider?.account?.bankAccount?? ''}</Text>
                 </View>
 
                 <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>

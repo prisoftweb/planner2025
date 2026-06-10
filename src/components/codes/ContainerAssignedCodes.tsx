@@ -17,6 +17,7 @@ import Button from "../Button";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { getAllCostsMINByDateANDProvider, UpdateCost } from "@/app/api/routeCost";
 import { updateCode } from "@/app/api/routeCode";
+import { getDate } from "@/libs/dates";
 
 export default function ContainerAssignedCodes({codes, providers, token, costs}: 
   {codes:ICodeMin[], providers: ProviderWithTradeLine[], token:string, costs: ICostWithoutCode[]}) {
@@ -110,8 +111,10 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
 
   const handleFilter = async (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
     const [codesfetch, costsfetch] = await Promise.all([
-      getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses, 'SIN ASIGNAR'), 
-      getAllCostsMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses)
+      // getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses, 'SIN ASIGNAR'), 
+      // getAllCostsMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses)
+      getAllCodesMINByDateANDProvider(token, getDate(dateS), getDate(dateE), arrStatuses, 'SIN ASIGNAR'), 
+      getAllCostsMINByDateANDProvider(token, getDate(dateS), getDate(dateE), arrStatuses)
     ])
     
     if (typeof(codesfetch) === 'string') {
@@ -129,10 +132,10 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
   }
 
   const deleteCodeAndCost = (idcode:string, idcost:string) => {
-    const newCodes = codesState.filter((c) => c._id !== idcode);
+    const newCodes = codesState?.filter((c) => c._id !== idcode);
     setCodesState(newCodes);
 
-    const newCosts = costsState.filter((c) => c._id !== idcost);
+    const newCosts = costsState?.filter((c) => c._id !== idcost);
     setCostsState(newCosts);
     
     handleDesSelectCode();
@@ -143,7 +146,7 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
     handleFilter(dateI, dateF, statuses);  
   }
 
-  const filteredCodes = search==''? codesState: codesState.filter((p) => p?.code?.toString()?.toLowerCase()?.includes(search.toLowerCase()));
+  const filteredCodes = search==''? codesState: codesState?.filter((p) => p?.code?.toString()?.toLowerCase()?.includes(search.toLowerCase()));
 
   const filteredCosts = searchCost==''? costsState: costsState?.filter((p) => p.folio?.toString()?.toLowerCase()?.includes(searchCost.toLowerCase())); 
   
@@ -216,18 +219,18 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
                           <div>
                             <h6
                               className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
-                              {code.project.title}
+                              {code?.project?.title}
                             </h6>
                             <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                              {code.provider.tradename}
+                              {code?.provider?.tradename}
                             </p>
                           </div>
                           <div className="text-right">
                             <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
-                              {code.code}
+                              {code?.code}
                             </p>
                             <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                              {code.date.substring(0, 10) + ' ' + code.date.substring(11, 19)}
+                              {code?.date?.substring(0, 10) + ' ' + code?.date?.substring(11, 19)}
                             </p>
                           </div>
                         </div>
@@ -304,23 +307,23 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
                       <div className="grid mr-4 w-24 place-items-center">
                         <Chip darktext={cost.estatus.darktext?? false} width="w-10" label={cost.estatus.name.substring(0, 3)} color={cost.estatus.color} />
                         <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                          {cost.folio}
+                          {cost?.folio}
                         </p>
                         <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                          {cost.date.substring(0, 10)}
+                          {cost?.date?.substring(0, 10)}
                         </p>
                       </div>
                       <div className="w-full">
                         <div className="flex gap-x-3 w-full justify-between items-center p-3">
                           <h6
                             className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
-                            {cost.project.title}
+                            {cost?.project?.title}
                           </h6>
                           <div className="text-right">
                             <p className="block font-sans text-2xl antialiased font-normal leading-normal text-orange-600">
                               {CurrencyFormatter({
                                 currency: 'MXN',
-                                value: cost.cost?.total?? 0
+                                value: cost?.cost?.total?? 0
                               })}
                             </p>
                           </div>
@@ -329,7 +332,7 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
                         <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content={cost.description} 
                           placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                             <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                              {cost.description.substring(0, 100)}
+                              {cost?.description?.substring(0, 100)}
                             </p>
                         </Tooltip>
                       </div>

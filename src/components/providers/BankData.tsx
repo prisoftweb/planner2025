@@ -28,12 +28,14 @@ export default function BankData({token, id, provider, company, user}:
 
   const refRequest = useRef(true);
 
-  let clabeI = '';
-  let accountI = '';
-  let numberCardI = '';
-  let benefitI = '';
+  let clabeI = provider?.account?.interbankCode?? '';
+  let accountI = provider?.account?.bankAccount?? '';
+  let numberCardI = provider?.account?.cardNumber?? '';
+  let benefitI = provider?.account?.alias?? '';
 
   console.log('provider => ', provider);
+
+  console.log('json => ', JSON.stringify(provider));
 
   useEffect(() => {
     const fetch = async () => {
@@ -83,7 +85,8 @@ export default function BankData({token, id, provider, company, user}:
         interbankCode: clabe,
         bankAccount: account,
         recipient: provider.name,
-        alias:provider.tradename,
+        // alias:provider.tradename,
+        alias: benefit,
         user,
         company,
         type:"Proveedor"
@@ -97,12 +100,13 @@ export default function BankData({token, id, provider, company, user}:
           bankAccount: account,
           // recipient: provider.name,
           // alias:provider.tradename,
+          alias:benefit,
           user,
           // company,
           // type:"Proveedor"
         }
 
-        const resaccount=await updateAccount(provider.account, token, data);
+        const resaccount=await updateAccount(provider.account._id, token, data);
         console.log('res update => ', resaccount);
         if(typeof(resaccount)==='string'){
           showToastMessageError(resaccount);

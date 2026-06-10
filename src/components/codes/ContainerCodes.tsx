@@ -8,6 +8,7 @@ import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { showToastMessageError } from "../Alert";
 import { getAllCodesMINByDateANDProvider } from "@/app/api/routeCode";
+import { getDate } from "@/libs/dates";
 
 export default function ContainerCodes({codes, providers, token}: 
   {codes:ICodeMin[], providers: ProviderWithTradeLine[], token:string}) {
@@ -42,7 +43,8 @@ export default function ContainerCodes({codes, providers, token}:
   }
 
   const handleFilter = async (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-    const res = await getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses, 'TODOS');
+    // const res = await getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses, 'TODOS');
+    const res = await getAllCodesMINByDateANDProvider(token, getDate(dateS), getDate(dateE), arrStatuses, 'TODOS');
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{
@@ -54,7 +56,7 @@ export default function ContainerCodes({codes, providers, token}:
     handleFilter(dateI, dateF, statuses);  
   }
 
-  const filteredCodes = search==''? codesState: codesState.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
+  const filteredCodes = search==''? codesState: codesState?.filter((p) => p?.code?.toString()?.toLowerCase()?.includes(search.toLowerCase()));
   
   return (
     <>
@@ -122,18 +124,18 @@ export default function ContainerCodes({codes, providers, token}:
                         <div>
                           <h6
                             className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
-                            {code.project.title}
+                            {code?.project?.title}
                           </h6>
                           <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                            {code.provider.tradename}
+                            {code?.provider?.tradename}
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
-                            {code.code}
+                            {code?.code}
                           </p>
                           <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                            {code.date.substring(0, 10) + ' ' + code.date.substring(11, 19)}
+                            {code?.date?.substring(0, 10) + ' ' + code?.date?.substring(11, 19)}
                           </p>
                         </div>
                       </div>

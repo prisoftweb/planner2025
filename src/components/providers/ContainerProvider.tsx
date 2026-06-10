@@ -28,7 +28,7 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
 
   const {providerStore, updateProviderStore} = useProviderStore();
   const [isCreditLine, setIsCreditLine]=useState<boolean>(true);
-  const [isBankData, setIsBankData]=useState<boolean>(true);
+  const [isBankData, setIsBankData]=useState<boolean>(false);
 
   useEffect(() => {
     updateProviderStore(providers);
@@ -62,7 +62,8 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
         'name': prov.name,
         rfc: prov.rfc,
         currentbalance: dollar,
-        account: prov.account,
+        // account: prov.account,
+        account: prov?.account?._id?? '',
         suppliercredit: prov.suppliercredit,
         contacts: nc,
         tradename: prov.tradename || ' ',
@@ -119,6 +120,7 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
             </div>
           </div>
           <div className="flex md:flex-1 gap-x-3 justify-end w-full items-center">
+            <SearchInTable placeH="Buscar proveedor.." />
             <div className="inline-flex items-center">
               <Label>Datos bancarios</Label>  
               <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
@@ -136,7 +138,6 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
                 </label>
               </div>
             </div>
-            <SearchInTable placeH="Buscar proveedor.." />
             <div className="w-60 sm:w-auto">
               <div className="flex items-center gap-x-4">
                 <div className="inline-flex items-center">

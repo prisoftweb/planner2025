@@ -54,7 +54,8 @@ export default function ContactsStepper({id, token, company}: {id:string, token:
       const location = {
         community,
         country,
-        cp: cp,
+        // cp: cp,
+        cp: parseInt(cp),
         municipy,
         state: stateS,
         stret
@@ -123,7 +124,8 @@ export default function ContactsStepper({id, token, company}: {id:string, token:
         regime,
         location: {
           stret,
-          cp,
+          // cp,
+          cp: parseInt(cp),
           municipy, 
           country,
           community,

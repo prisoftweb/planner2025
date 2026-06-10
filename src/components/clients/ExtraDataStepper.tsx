@@ -54,7 +54,8 @@ export default function ExtraDataStepper({token, company}: {token:string, compan
       const location = {
         community,
         country,
-        cp: cp,
+        // cp: cp,
+        cp: parseInt(cp),
         municipy,
         state: stateS,
         stret
@@ -129,7 +130,8 @@ export default function ExtraDataStepper({token, company}: {token:string, compan
         regime,
         location: {
           stret,
-          cp,
+          // cp,
+          cp:parseInt(cp),
           municipy, 
           country,
           community,

@@ -62,7 +62,7 @@ export default function NewCode({closeForm, returnForm, code, title, size}: Prop
 
         <div className="p-5 text-right">
           <p className="text-xl font-bold">FECHA</p>
-          <p className="text-lg text-slate-500">{code.date.substring(0, 10)}</p>
+          <p className="text-lg text-slate-500">{code?.date?.substring(0, 10)}</p>
         </div>
       </div>
       <div className="bg-slate-600 w-full text-center p-5 cursor-pointer" onClick={() => closeForm(code._id)}>

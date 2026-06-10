@@ -141,7 +141,7 @@ export default function ContainerNewCode({token, user, company}: {token: string,
                   )
                 ))
   
-  const filteredProjects = search==''? projects: projects.filter((p) => p.title.toString().toLowerCase().includes(search.toLowerCase()));
+  const filteredProjects = search==''? projects: projects?.filter((p) => p?.title?.toString()?.toLowerCase()?.includes(search.toLowerCase()));
 
   return (
     <div className={`grid grid-cols-1 md:grid-cols-2 gap-x-3 max-w-[1500px]`}>
@@ -181,21 +181,21 @@ export default function ContainerNewCode({token, user, company}: {token: string,
               >
                 <div className="flex items-center w-full ">
                   <div className="grid mr-4 place-items-center">
-                    <img alt="responsable" src={ prj.photo? prj.photo : '/img/projects/default.svg'}
+                    <img alt="responsable" src={ prj?.photo? prj?.photo : '/img/projects/default.svg'}
                       className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                   </div>
                   <div className="w-full">
                     <div className="flex gap-x-3 justify-between items-center w-full">
                       <h6
                         className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
-                        {prj.title}
+                        {prj?.title}
                       </h6>
                       <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                        {prj.category.name}
+                        {prj?.category?.name}
                       </p>
                     </div>
                     <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                      {prj.description}
+                      {prj?.description}
                     </p>
                   </div>
                 </div>

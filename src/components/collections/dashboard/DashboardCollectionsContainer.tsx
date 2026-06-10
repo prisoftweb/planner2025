@@ -290,8 +290,8 @@ export default function DashboardCollectionsContainer({token, user, totalClients
           {filterElemnts}
           {satCompany && (
             <PDFDownloadLink document={<DownloadPendingCollectionsPDF collections={totalAccountByPrjRes} token={token} 
-                  pendingBilling={totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0} 
-                  pendingPayment={totalPending.length > 0? totalPending[0].total: 0} 
+                  pendingBilling={Array.isArray(totalPendingBillingPjr) && totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0]?.acumPendingBilling: 0} 
+                  pendingPayment={Array.isArray(totalPending) && totalPending.length > 0? totalPending[0].total: 0} 
                   date={rangeDate?.to?.toISOString().substring(0, 10) || ''} satCompany={satCompany} 
                   totalProjects={totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0} />} 
                 fileName={`Cobranza pendiente por proyecto ${rangeDate.from?.toISOString().substring(0, 10)}-${rangeDate.to?.toISOString().substring(0, 10)}`} >

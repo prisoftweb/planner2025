@@ -18,7 +18,7 @@ export default function ProfileProvider({costPayment}: {costPayment:ICostTOTALPe
           <p className="text-xl text-gray-800 text-center">{oneProviderStore?.name}</p>
           <p className="text-sm text-gray-500 leading-5 md:leading-6">{oneProviderStore?.tradename}</p>
           <p className="text-sm text-gray-500 leading-5 md:leading-6">{oneProviderStore?.rfc}</p>
-          <p className="text-sm text-gray-500 leading-5 md:leading-6">{oneProviderStore?.account}</p>
+          <p className="text-sm text-gray-500 leading-5 md:leading-6">{oneProviderStore?.account?.bankAccount?? ''}</p>
         </div>
         <div className="flex justify-center bg-white p-3 rounded-lg shadow-md mt-3">
           <div className="flex pl-4 text-center">

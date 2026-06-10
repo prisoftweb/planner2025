@@ -22,6 +22,8 @@ export default function ProviderClient({provider, token, id, costPayment, user, 
 
   const [open, setOpen] = useState<boolean>(false);
 
+  console.log('prov => ', provider);
+
   const view = (
     opt===2? (<div className="w-full h-full flex flex-wrap lg:flex-nowrap gap-x-3">
                 <DataBasic id={id} provider={provider} token={token} user={user} />
