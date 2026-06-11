@@ -40,28 +40,40 @@ export default function FilteringCollectionsComponent({showForm, FilterData, max
 
   useEffect(() => {
     const fetch = async () => {
-      const r1 = await getClientsLV(token);
-      const r2 = await getCatalogsByNameAndCondition(token, 'collection');
+      // const r1 = await getClientsLV(token);
+      // const r2 = await getCatalogsByNameAndCondition(token, 'collection');
 
-      const [res, res2] = await Promise.all([r1, r2]); 
+      // const [res, res2] = await Promise.all([r1, r2]);
+      
+      // const r1 = await getClientsLV(token);
+      // const r2 = await getCatalogsByNameAndCondition(token, 'collection');
+
+      const [res, res2] = await Promise.all([
+        getClientsLV(token), 
+        getCatalogsByNameAndCondition(token, 'collection')
+      ]);
 
       if(typeof(res)=='string'){
         showToastMessageError(res);
       }else{
-        setOptClients([{
-          label: 'TODOS',
-          value: 'all'
-        }, ...res]);
+        if(Array.isArray(res) && res.length>0){
+          setOptClients([{
+            label: 'TODOS',
+            value: 'all'
+          }, ...res]);
+        }
         setClients(['all']);
       }
 
       if(typeof(res2)=='string'){
         showToastMessageError(res2);
       }else{
-        setOptConditions([{
-          label: 'TODOS',
-          value: 'all'
-        }, ...res2]);
+        if(Array.isArray(res2) && res2.length>0){
+          setOptConditions([{
+            label: 'TODOS',
+            value: 'all'
+          }, ...res2]);
+        }
         setConditions(['all']);
       }
     }
@@ -106,7 +118,7 @@ export default function FilteringCollectionsComponent({showForm, FilterData, max
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
-        {optClients.length > 0 && optConditions.length > 0 ? (
+        {Array.isArray(optClients) && Array.isArray(optConditions) && optClients.length > 0 && optConditions.length > 0 ? (
           <>
             <div className="">
               <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>

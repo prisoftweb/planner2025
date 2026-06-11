@@ -29,15 +29,15 @@ import DownloadCollectionPDF from "./DownloadCollectionPDF";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
+import { getDate } from "@/libs/dates";
 
 export default function TableCollectionsComponent({token, user, collectionsParam, totalParam, totalRecoveredP, company}: 
   {token:string, user:string, collectionsParam:ICollectionMin[], totalParam:ITotalAmountCollections, 
     totalRecoveredP:ITotalAmountRecoveredCollections, company:string}) {
 
   const [collections, setCollections] = useState<ICollectionMin[]>(collectionsParam);
-  // const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
   const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
-  const [isFilter, setIsFilter]=useState<boolean>(false);
+  // const [isFilter, setIsFilter]=useState<boolean>(false);
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>(totalParam);
   const [totalRecovered, setTotalRecovered]=useState<ITotalAmountRecoveredCollections>(totalRecoveredP);
   const [statuses, setStatuses]=useState<string[]>([]);
@@ -46,7 +46,7 @@ export default function TableCollectionsComponent({token, user, collectionsParam
 
   const {search} = useTableStates();
   
-  const [widthPage, setWidthPage] = useState<number>(900);
+  // const [widthPage, setWidthPage] = useState<number>(900);
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
@@ -56,14 +56,12 @@ export default function TableCollectionsComponent({token, user, collectionsParam
   useEffect(() => {
     const fetch = async () => {
       const [rescomp] = await Promise.all([
-        // getCompanyTAXDATAFULL(res.company, token),
         getCompany(token, company),
       ]);
       
       if(typeof(rescomp)==='string'){
         showToastMessageError(rescomp);
       }else{
-        // console.log('res comp => ', rescomp);
         setSatCompany(rescomp);
       }
     }
@@ -71,23 +69,23 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     fetch();
   }, []);
 
-  const handleResize = () => {
-    setWidthPage(Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
-    ));
-  }
+  // const handleResize = () => {
+  //   setWidthPage(Math.max(
+  //     document.body.scrollHeight, document.documentElement.scrollHeight,
+  //     document.body.offsetHeight, document.documentElement.offsetHeight,
+  //     document.body.clientHeight, document.documentElement.clientHeight
+  //   ));
+  // }
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize, false);
-    setWidthPage(Math.max(
-      document.body.scrollWidth, document.documentElement.scrollWidth,
-      document.body.offsetWidth, document.documentElement.offsetWidth,
-      document.body.clientWidth, document.documentElement.clientWidth
-    ));
-    return () => window.removeEventListener('scroll', handleResize);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("resize", handleResize, false);
+  //   setWidthPage(Math.max(
+  //     document.body.scrollWidth, document.documentElement.scrollWidth,
+  //     document.body.offsetWidth, document.documentElement.offsetWidth,
+  //     document.body.clientWidth, document.documentElement.clientWidth
+  //   ));
+  //   return () => window.removeEventListener('scroll', handleResize);
+  // }, []);
 
   useEffect(() => {
     handleFilter(rangeDate.from!, rangeDate.to!, statuses);
@@ -99,7 +97,7 @@ export default function TableCollectionsComponent({token, user, collectionsParam
       showToastMessageError(res);
     }else{
       setCollections(res);
-      setIsFilter(false);
+      // setIsFilter(false);
     }
   }
 
@@ -151,7 +149,9 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     if(typeof(col)==='string'){
       showToastMessageError(col);
     }else{
-      setCollections(col);
+      if(Array.isArray(col)){
+        setCollections(col);
+      }
     }
 
     if(typeof(rest)==='string'){
@@ -163,7 +163,9 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     if(typeof(restt)==='string'){
       showToastMessageError(restt);
     }else{
-      setTotalRecovered(restt[0]);
+      if(Array.isArray(restt) && restt.length>0){
+        setTotalRecovered(restt[0]);
+      }
     }
   }
 
@@ -334,62 +336,6 @@ export default function TableCollectionsComponent({token, user, collectionsParam
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-317px)]
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
           {data.map((col, index) => (
-            // <div role="button"
-            //   key={index}
-            //   className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
-            //     outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
-            //     focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
-            //     active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
-            //     bg-white`}
-            //   // onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
-            // >
-            //   <div className="flex items-center w-full ">
-            //     <div className="grid mr-4 place-items-center gap-x-1 gap-y-2">
-            //       <div className="flex gap-x-1 items-end">
-            //         <img alt="responsable" src={ '/img/projects/default.svg'}
-            //           className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-            //         <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
-            //           removeElement={delCollection} token={token} />
-            //       </div>
-            //       <Chip label={col.condition.name} color={col.condition.color} darktext={col?.condition?.darktext?? false} />
-            //       {col.condition.name.toLowerCase().includes('depositado')? (
-            //         <Toogle value={col.condition.name.toLowerCase().includes('confirmado')} id={col._id} onClick={confirmCollection} />
-            //       ): <></>}
-            //     </div>
-            //     <div className="w-full"
-            //       onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
-            //     >
-            //       <div className="flex gap-x-3 justify-between items-center">
-            //         <div>
-            //           <h6
-            //             className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
-            //             {col.reference}
-            //           </h6>
-            //           <h6
-            //             className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-slate-600">
-            //             {/* Factura # */}
-            //           </h6>
-            //         </div>
-            //         <div>
-            //           <h6
-            //             className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
-            //             {CurrencyFormatter({
-            //               currency: 'MXN',
-            //               value: col.amount
-            //             })}
-            //           </h6>
-            //           <h6
-            //             className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-slate-600">
-            //             {col.date.substring(0, 10)}
-            //           </h6>
-            //         </div>
-            //       </div>
-            //       <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-            //         {col.concept}
-            //       </p>
-            //     </div>
-            //   </div>
-            // </div>
             <div role="button"
               key={index}
               className={`flex flex-col w-full p-3 leading-tight transition-all rounded-lg 
@@ -422,7 +368,6 @@ export default function TableCollectionsComponent({token, user, collectionsParam
                       </h6>
                       <h6
                         className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-slate-600">
-                        {/* Factura # */} {" "}
                       </h6>
                     </div>
                     <div>
@@ -439,9 +384,6 @@ export default function TableCollectionsComponent({token, user, collectionsParam
                       </h6>
                     </div>
                   </div>
-                  {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                    {col.concept}
-                  </p> */}
                 </div>
               </div>
 
@@ -453,12 +395,7 @@ export default function TableCollectionsComponent({token, user, collectionsParam
           ))}
         </nav>
       </div>
-      {/* {showNewCollection && (
-        <ContainerSideNav width="w-full max-w-xl">
-          <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
-                                user={user} updateCollections={updateCollections} />
-        </ContainerSideNav>
-      )} */}
+      
       <ContainerSideNav width="w-full max-w-xl" open={showNewCollection}>
         <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
             user={user} updateCollections={updateCollections} company={company} />
@@ -503,18 +440,6 @@ const Toogle = ({value, onClick, id}:
       </label>
     </div>
   )
-}
-
-function getDate(date: Date){
-  let day = date.getDate()
-  let month = date.getMonth() + 1
-  let year = date.getFullYear()
-
-  if(month < 10){
-    return `${year}-0${month}-${day}`;
-  }else{
-    return `${year}-${month}-${day}`;
-  }
 }
 
 const ChipStatus = ({ addStatus, id, removeStatus, title}: 

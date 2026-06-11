@@ -6,9 +6,8 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect, useRef } from "react"
+import { useRef } from "react"
 import { CreateDepartment, UpdateDepartment } from "@/app/api/routeDepartments"
-import Select from 'react-select'
 import { Options } from "@/interfaces/Common"
 import { DepartmentTable } from "@/interfaces/Departments"
 import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
@@ -23,31 +22,8 @@ type NewDepartmentProps = {
 
 export default function NewDepartment({showForm, token, OptionsCompany, dept, company}: NewDepartmentProps ){
 
-  // const [company, setCompany] = useState(OptionsCompany[0].value);
-  // const [optCompany, setOptCompany] = useState<Options>(OptionsCompany[0]);
   const refRequest = useRef(true);
 
-  // const [heightPage, setHeightPage] = useState<number>(900);
-  
-  // const handleResize = () => {
-  //   setHeightPage(document.body.offsetHeight);
-  // }
-  
-  // useEffect (() => {
-  //   // window.addEventListener("resize", handleResize, false);
-  //   // setHeightPage(document.body.offsetHeight - 70);
-    
-  //   if(typeof(dept) !== 'string'){
-  //     OptionsCompany.map((optC) => {
-  //       if(optC.value === dept.company.id){
-  //         // setCompany(optC.value);
-  //         setOptCompany(optC);
-  //       }
-  //     })
-  //   }
-  //   // return () => window.removeEventListener('scroll', handleResize);
-  // }, [])
-  
   const formik = useFormik({
     initialValues: {
       name: (typeof(dept)==='string')? '': dept.name,
@@ -151,15 +127,6 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept, co
             </div>
           ) : null}
         </div>
-        {/* <div>
-          <Label htmlFor="companies"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Compañias</p></Label>
-          <Select
-            name="companies"
-            options={OptionsCompany}
-            value={optCompany}
-            onChange={(e:any) => {setCompany(e.value); setOptCompany(e)}}
-          />
-        </div> */}
         <div className="flex justify-center mt-2">
           <Button type="submit">Guardar</Button>
         </div>

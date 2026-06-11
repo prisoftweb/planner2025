@@ -19,12 +19,6 @@ export default function ButtonNew({token, optionsCompany, dept, company}: Button
   return(
     <>
       <Button type="button" onClick={() => setNewCompany(true)}>Nuevo</Button>
-          {/* {newCompany && (
-            <ContainerSideNav width="w-full max-w-sm">
-              <NewDepartment showForm={setNewCompany} token={token} 
-                            OptionsCompany={optionsCompany} dept={dept} />
-            </ContainerSideNav>
-          )} */}
       <ContainerSideNav width="w-full max-w-sm" open={newCompany}>
         <NewDepartment showForm={setNewCompany} token={token} 
                       OptionsCompany={optionsCompany} dept={dept} company={company} />

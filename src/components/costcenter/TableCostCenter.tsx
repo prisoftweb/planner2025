@@ -11,6 +11,7 @@ import {Tooltip} from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
 import ContainerSideNav from "../ContainerSideNav";
 import { useTableStates } from "@/app/store/tableStates";
+import CardListComponent from "../CardListComponent";
 
 export default function TableCostCenter({data, token, company}: 
   {data:CostCenterTable[], token:string, company:string}){
@@ -110,7 +111,6 @@ export default function TableCostCenter({data, token, company}:
 
   return(
     <>
-      {/* {editCostCenter && <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} /> } */}
       {editCostCenter && (
         <ContainerSideNav width="w-full max-w-md">
           <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} company={company} />
@@ -130,7 +130,6 @@ const ListData = ({data, token, handleCostCenter, handleEditCostCenter }:
   {data: CostCenterTable[], token:string, handleCostCenter: (costCenter: CostCenterTable) => void, 
     handleEditCostCenter: (value: boolean) => void }) => {
 
-  // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
 
   const filterData = useMemo(() => {
@@ -149,72 +148,74 @@ const ListData = ({data, token, handleCostCenter, handleEditCostCenter }:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData.map((c) => (
-            <CardCostcenter costcenter={c} key={c.id} token={token} handleCostCenter={handleCostCenter} handleEditCostCenter={handleEditCostCenter} />
+            // <CardCostcenter costcenter={c} key={c.id} token={token} handleCostCenter={handleCostCenter} handleEditCostCenter={handleEditCostCenter} />
+            <CardListComponent element={c} keyID={c.id} token={token} handleElement={handleCostCenter} handleEdit={handleEditCostCenter}
+              code={c?.code?.toString()} title={c?.category} subtitle={c?.concept} nameElement={c?.category} removeElement={RemoveCostoCenter}
+              key={c.id} />
           ))}
-
         </nav>
       </div>
     </div>
   )
 }
 
-const CardCostcenter = ({costcenter, token, handleCostCenter, handleEditCostCenter }: 
-  {costcenter:CostCenterTable, token:string, handleCostCenter: (costCenter: CostCenterTable) => void, 
-    handleEditCostCenter: (value: boolean) => void }) => {
+// const CardCostcenter = ({costcenter, token, handleCostCenter, handleEditCostCenter }: 
+//   {costcenter:CostCenterTable, token:string, handleCostCenter: (costCenter: CostCenterTable) => void, 
+//     handleEditCostCenter: (value: boolean) => void }) => {
   
-  return(
-    <div role="button"
-      key={costcenter.id}
-      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
-        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
-        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
-        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
-        bg-white`}
-    >
-      <div className="flex items-center w-full ">
-        <div className="grid mr-4 place-items-center gap-y-1">
-          {/* <img alt="responsable" src={ costcenter.Responsable?.photo ?? '/img/users/default.jpg'}
-            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
-          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
-              remove={RemoveGlossary} removeElement={delGlossary} /> */}
-            <div 
-              className={`rounded-md text-white bg-gray-600 text-center
-              uppercase w-6 h-6 flex items-center justify-center`}>
-              <p className={`text-xs uppercase `} >{costcenter.code.toString()}</p>
-            </div>
+//   return(
+//     <div role="button"
+//       key={costcenter.id}
+//       className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+//         outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+//         focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+//         active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+//         bg-white`}
+//     >
+//       <div className="flex items-center w-full ">
+//         <div className="grid mr-4 place-items-center gap-y-1">
+//           {/* <img alt="responsable" src={ costcenter.Responsable?.photo ?? '/img/users/default.jpg'}
+//             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
+//           {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
+//               remove={RemoveGlossary} removeElement={delGlossary} /> */}
+//             <div 
+//               className={`rounded-md text-white bg-gray-600 text-center
+//               uppercase w-6 h-6 flex items-center justify-center`}>
+//               <p className={`text-xs uppercase `} >{costcenter.code.toString()}</p>
+//             </div>
 
-            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
-                placement="right" className="text-black bg-white rounded-md border border-slate-400">
-              <PencilIcon className="w-6 h-6 text-slate-600 cursor-pointer hover:bg-slate-100" 
-                onClick={() => {
-                  handleCostCenter(costcenter);
-                  handleEditCostCenter(true);
-                }} />
-            </Tooltip>
+//             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
+//                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
+//               <PencilIcon className="w-6 h-6 text-slate-600 cursor-pointer hover:bg-slate-100" 
+//                 onClick={() => {
+//                   handleCostCenter(costcenter);
+//                   handleEditCostCenter(true);
+//                 }} />
+//             </Tooltip>
 
-            <DeleteElement remove={RemoveCostoCenter} id={costcenter.id} 
-              token={token} name={costcenter.category} />
-        </div>
-        <div className="w-full">
-          <div className="flex gap-x-3 w-full justify-between items-center p-3">
-            <div>
-              <h6
-                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
-                {costcenter.category}
-              </h6>
-              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                {costcenter.concept}
-              </p>
-            </div>
-            {/* <div className="text-right">
-              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
-              </p>
-              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
-              </p>
-            </div> */}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+//             <DeleteElement remove={RemoveCostoCenter} id={costcenter.id} 
+//               token={token} name={costcenter.category} />
+//         </div>
+//         <div className="w-full">
+//           <div className="flex gap-x-3 w-full justify-between items-center p-3">
+//             <div>
+//               <h6
+//                 className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+//                 {costcenter.category}
+//               </h6>
+//               <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+//                 {costcenter.concept}
+//               </p>
+//             </div>
+//             {/* <div className="text-right">
+//               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+//               </p>
+//               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+//               </p>
+//             </div> */}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }

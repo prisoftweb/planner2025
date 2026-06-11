@@ -21,11 +21,6 @@ export default function ButtonNew({token, id, company}: {token:string, id:string
         <PlusCircleIcon onClick={() => setVarNew(true)} className={`w-6 h-6 text-slate-700 cursor-pointer`} />
         <span className="text-xs">Nuevo</span>
       </div>
-        {/* {varNew && (
-          <ContainerSideNav width="w-full max-w-lg">
-            <NewCostCenter showForm={handleNew} token={token} costCenter={''} />
-          </ContainerSideNav>
-        )} */}
         <ContainerSideNav width="w-full max-w-lg" open={varNew}>
           <NewCostCenter showForm={handleNew} token={token} costCenter={''} company={company} />
         </ContainerSideNav>

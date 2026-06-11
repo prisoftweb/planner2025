@@ -13,6 +13,7 @@ import ContainerSideNav from "../ContainerSideNav";
 import { propsTooltip } from "@/libs/animations";
 import { useTableStates } from "@/app/store/tableStates";
 import { useMemo } from "react";
+import CardListComponent from "../CardListComponent";
 
 type DeptProps={
   data:DepartmentTable[], 
@@ -112,7 +113,6 @@ export default function TableDepartments({data, token, optionsCompany, company}:
 
 const ListData = ({data, token}: {data: DepartmentTable[], token:string}) => {
 
-  // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
 
   const filterData = useMemo(() => {
@@ -131,7 +131,10 @@ const ListData = ({data, token}: {data: DepartmentTable[], token:string}) => {
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData.map((d) => (
-            <CardDepartment department={d} key={d.id} token={token} />
+            // <CardDepartment department={d} key={d.id} token={token} />
+            <CardListComponent element={d} keyID={d.id} token={token} image={ d?.company?.logo ?? '/img/users/default.jpg'}
+              title={d.name} subtitle={d?.abbreviation} nameElement={d?.name} removeElement={RemoveDepartment}
+              key={d.id} />
           ))}
 
         </nav>
@@ -140,47 +143,47 @@ const ListData = ({data, token}: {data: DepartmentTable[], token:string}) => {
   )
 }
 
-const CardDepartment = ({department, token}: 
-  {department:DepartmentTable, token:string}) => {
+// const CardDepartment = ({department, token}: 
+//   {department:DepartmentTable, token:string}) => {
   
-  return(
-    <div role="button"
-      key={department.id}
-      // onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
-      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
-        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
-        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
-        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
-        bg-white`}
-    >
-      <div className="flex items-center w-full ">
-        <div className="grid mr-4 place-items-center">
-          <img alt="responsable" src={ department.company.logo ?? '/img/users/default.jpg'}
-            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-          <DeleteElement id={department.id} name={department.name} remove={RemoveDepartment} token={token} />
-        </div>
-        <div className="w-full">
-          <div className="flex gap-x-3 w-full justify-between items-center p-3">
-            <div>
-              <h6
-                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
-                {department.name}
-              </h6>
-              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                {department.abbreviation}
-              </p>
-            </div>
-            {/* <div className="text-right">
-              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+//   return(
+//     <div role="button"
+//       key={department.id}
+//       // onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
+//       className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+//         outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+//         focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+//         active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+//         bg-white`}
+//     >
+//       <div className="flex items-center w-full ">
+//         <div className="grid mr-4 place-items-center">
+//           <img alt="responsable" src={ department.company.logo ?? '/img/users/default.jpg'}
+//             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+//           <DeleteElement id={department.id} name={department.name} remove={RemoveDepartment} token={token} />
+//         </div>
+//         <div className="w-full">
+//           <div className="flex gap-x-3 w-full justify-between items-center p-3">
+//             <div>
+//               <h6
+//                 className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+//                 {department.name}
+//               </h6>
+//               <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+//                 {department.abbreviation}
+//               </p>
+//             </div>
+//             {/* <div className="text-right">
+//               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 
-              </p>
-              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+//               </p>
+//               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 
-              </p>
-            </div> */}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+//               </p>
+//             </div> */}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }

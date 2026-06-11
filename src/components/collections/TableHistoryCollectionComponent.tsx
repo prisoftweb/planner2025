@@ -14,6 +14,7 @@ import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
 import { useTableStates } from "@/app/store/tableStates";
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
+import { getDate } from "@/libs/dates";
 
 export default function TableHistoryCollectionsComponent({token, user}: {token:string, user:string}) {
 
@@ -23,7 +24,7 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
   const [statuses, setStatuses]=useState<string[]>([]);
   
-  const [widthPage, setWidthPage] = useState<number>(900);
+  // const [widthPage, setWidthPage] = useState<number>(900);
   const {search} = useTableStates();
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
@@ -31,23 +32,23 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
     to: new Date('2024-10-30'),
   });
 
-  const handleResize = () => {
-    setWidthPage(Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
-    ));
-  }
+  // const handleResize = () => {
+  //   setWidthPage(Math.max(
+  //     document.body.scrollHeight, document.documentElement.scrollHeight,
+  //     document.body.offsetHeight, document.documentElement.offsetHeight,
+  //     document.body.clientHeight, document.documentElement.clientHeight
+  //   ));
+  // }
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize, false);
-    setWidthPage(Math.max(
-      document.body.scrollWidth, document.documentElement.scrollWidth,
-      document.body.offsetWidth, document.documentElement.offsetWidth,
-      document.body.clientWidth, document.documentElement.clientWidth
-    ));
-    return () => window.removeEventListener('scroll', handleResize);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("resize", handleResize, false);
+  //   setWidthPage(Math.max(
+  //     document.body.scrollWidth, document.documentElement.scrollWidth,
+  //     document.body.offsetWidth, document.documentElement.offsetWidth,
+  //     document.body.clientWidth, document.documentElement.clientWidth
+  //   ));
+  //   return () => window.removeEventListener('scroll', handleResize);
+  // }, []);
 
   useEffect(() => {
     const fetch = async() => {
@@ -65,8 +66,10 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        setCollections(res);
-        setFilteredCollections(res);
+        if(Array.isArray(res)){
+          setCollections(res);
+          setFilteredCollections(res);
+        }
       }
       
       if(typeof(rest)==='string'){
@@ -167,26 +170,6 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
     }
   }
   
-  // let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
-  //               <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
-  //               <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
-  //               <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
-  //               <div>
-  //                 <DateRangePicker 
-  //                   className='mt-2'
-  //                   placeholder='Seleccione un rango de fechas'
-  //                   onValueChange={(e) => {
-  //                     setRangeDate(e);
-  //                     if(e.from && e.to){
-  //                       handleDate(e.from, e.to);
-  //                     }
-  //                   }}
-  //                   value={rangeDate}
-  //                   locale={es}
-  //                 />
-  //               </div>
-  //             </div>
-
   let filterElemnts =<div className="md:flex gap-x-4 justify-end items-center mt-3 md:mt-0 xl:order-1">
                           <div className="flex gap-x-4 justify-end items-center">
                             <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
@@ -241,8 +224,7 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
           </div>
         </div>
       </div>
-      {/* {widthPage > 1080 && filterElemnts} */}
-
+  
       <div className="relative mt-5 flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
@@ -289,9 +271,6 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
                       </h6>
                     </div>
                   </div>
-                  {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                    {col.concept}
-                  </p> */}
                 </div>
               </div>
               
@@ -319,18 +298,6 @@ export const Card = ({amount, title}: {title:string, amount:number}) => {
       </div>
     </div>
   )
-}
-
-function getDate(date: Date){
-  let day = date.getDate()
-  let month = date.getMonth() + 1
-  let year = date.getFullYear()
-
-  if(month < 10){
-    return `${year}-0${month}-${day}`;
-  }else{
-    return `${year}-${month}-${day}`;
-  }
 }
 
 const ChipStatus = ({ addStatus, id, removeStatus, title}: 

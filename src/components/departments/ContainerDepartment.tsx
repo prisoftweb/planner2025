@@ -8,7 +8,6 @@ import WithOut from "../WithOut";
 import ButtonNew from "./ButtonNew";
 import { Options } from "@/interfaces/Common";
 import TableDepartments from "./TableDepartments";
-// import Header from "@/components/Header";
 import { ResponsiveHeader as Header } from "@/components/Header";
 
 type DeptProps={

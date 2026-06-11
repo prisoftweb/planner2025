@@ -23,8 +23,7 @@ export default function DownloadCollectionsByProjectPDF({collections, project, t
     fetch();
   }, []);
 
-  const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  // este ya
+  const orderCollections = Array.isArray(collections)? collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()): [];
 
   return(
     <Document>
@@ -35,8 +34,6 @@ export default function DownloadCollectionsByProjectPDF({collections, project, t
 
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
-                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
                 <Image source={satCompany?.isologo?? satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
