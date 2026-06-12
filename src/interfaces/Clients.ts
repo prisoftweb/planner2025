@@ -52,7 +52,8 @@ export interface ClientBack{
     id:string,
     regime:string,
   },
-  capitalregime?: string
+  capitalregime?: string,
+  hasfulltaxprofile: boolean
 }
 
 export interface Location{

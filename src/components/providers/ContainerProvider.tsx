@@ -17,14 +17,19 @@ import Link from "next/link"
 import { Tooltip } from "@nextui-org/react"
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import { propsTooltip } from "@/libs/animations"
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import DownloadProvidersReportPDF from "./DownloadProvidersReportPDF"
+import { Company } from "@/interfaces/Companies"
 
 type ContainerProps={
   providers: Provider[], 
   user:UsrBack, 
-  token:string
+  token:string,
+  company:Company
 }
 
-export default function ContainerProvider({providers, user, token}: ContainerProps ){
+export default function ContainerProvider({providers, user, token, company}: ContainerProps ){
 
   const {providerStore, updateProviderStore} = useProviderStore();
   const [isCreditLine, setIsCreditLine]=useState<boolean>(true);
@@ -33,6 +38,8 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
   useEffect(() => {
     updateProviderStore(providers);
   }, []);
+
+  console.log('providers data => ', providers);
   
   if(providerStore.length <= 0 && (providers.length === 0 || !providers)){
     return (
@@ -169,6 +176,23 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
           </div>
         </div>
 
+        <div className="flex justify-end">
+          <PDFDownloadLink document={<DownloadProvidersReportPDF providers={providers} satCompany={company} />} fileName={'Proveedores'} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </Tooltip>
+              ) : (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                </Tooltip>
+              ) }
+          </PDFDownloadLink>
+        </div>
+
         <div className="mt-5">
           <TableProviders data={dataFilter} token={token} />
         </div>
@@ -177,30 +201,30 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
   )
 }
 
-const HeaderProvider = ({children, placeHolder, title}: 
-    {placeHolder:string, children: JSX.Element, title:string}) => {
+// const HeaderProvider = ({children, placeHolder, title}: 
+//     {placeHolder:string, children: JSX.Element, title:string}) => {
 
-  return (
-    <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap sm:flex-nowrap">
-      <div className="flex items-center gap-x-3 w-full max-w-96">
-        <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
-          <Link href={'/'}>
-            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
-                placement="right" className="text-black bg-white rounded-md border border-slate-400">
-              <span>
-                <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
-              </span>
-            </Tooltip>
-          </Link>
-        </div>
-        <p className="text-xl ml-4 font-medium">{title}</p>
-      </div>
-      <div className="flex gap-x-3 justify-end w-full">
-        <SearchInTable placeH={placeHolder} />
-        <div className="w-60">
-          {children}
-        </div>
-      </div>
-    </div>
-  )
-}
+//   return (
+//     <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap sm:flex-nowrap">
+//       <div className="flex items-center gap-x-3 w-full max-w-96">
+//         <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+//           <Link href={'/'}>
+//             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
+//                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
+//               <span>
+//                 <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+//               </span>
+//             </Tooltip>
+//           </Link>
+//         </div>
+//         <p className="text-xl ml-4 font-medium">{title}</p>
+//       </div>
+//       <div className="flex gap-x-3 justify-end w-full">
+//         <SearchInTable placeH={placeHolder} />
+//         <div className="w-60">
+//           {children}
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }

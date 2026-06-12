@@ -12,6 +12,7 @@ import { Options } from "@/interfaces/Common";
 import { ClientDataToTableClient } from "../functions/ClientFunctions";
 // import { Resource2 } from "@/interfaces/Roles";
 import ComponentError from "@/components/ComponentError";
+import { getCompany } from "../api/routeCompany";
 
 export default async function clients(){
   
@@ -44,9 +45,10 @@ export default async function clients(){
   // tags = await getTags(token);
   // clients = await getClients(token);
 
-  const [tags, clients]=await Promise.all([
+  const [tags, clients, company]=await Promise.all([
     getTags(token),
-    getClients(token)
+    getClients(token),
+    getCompany(token, user.profile)
   ]);
   
   if(typeof(tags)==='string'){
@@ -108,6 +110,21 @@ export default async function clients(){
     )
   }
 
+  if(typeof(company)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        {/* <h1 className="text-red-500 text-2xl text-center">{clients}</h1> */}
+        <ComponentError page="/clients" message={company} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+            text={clients} 
+            title="Clientes"><></></WithOut>
+        </div> */}
+      </>
+    )
+  }
+
   // let permission = false;
 
   // if(!permission){
@@ -152,11 +169,12 @@ export default async function clients(){
           <ButtonNewClient id={user._id} token={token} tags={arrTags} company={user.profile} />
         </ResponsiveHeader>
         <div className="mt-5">
-          <TableClients data={data} token={token} 
+          <TableClients data={data} token={token} clientsData={clients} 
             // deletePermission={permisionsClient.permission.delete}
             // selectPermission={permisionsClient.permission.select}
             selectPermission={true}
             deletePermission={true}
+            company={company}
           />
         </div>
       </div>

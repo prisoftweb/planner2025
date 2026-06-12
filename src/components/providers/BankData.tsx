@@ -31,7 +31,8 @@ export default function BankData({token, id, provider, company, user}:
   let clabeI = provider?.account?.interbankCode?? '';
   let accountI = provider?.account?.bankAccount?? '';
   let numberCardI = provider?.account?.cardNumber?? '';
-  let benefitI = provider?.account?.alias?? '';
+  let aliasI = provider?.account?.alias?? '';
+  let benefitI = provider?.account?.recipient?? '';
 
   console.log('provider => ', provider);
 
@@ -62,7 +63,8 @@ export default function BankData({token, id, provider, company, user}:
       clabe:clabeI,
       account: accountI,
       numberCard: numberCardI,
-      benefit: benefitI
+      benefit: benefitI,
+      alias:aliasI
     }, 
     validationSchema: Yup.object({
       // clabe: Yup.string()
@@ -75,7 +77,7 @@ export default function BankData({token, id, provider, company, user}:
       //             .required('El beneficiario es obligatorio')
     }),
     onSubmit: async (valores) => {            
-      const {account, benefit, clabe, numberCard} = valores;
+      const {account, benefit, clabe, numberCard, alias} = valores;
       // const data= {
       //   account, benefit, clabe, numberCard
       // }
@@ -84,9 +86,9 @@ export default function BankData({token, id, provider, company, user}:
         cardNumber:numberCard,
         interbankCode: clabe,
         bankAccount: account,
-        recipient: provider.name,
-        // alias:provider.tradename,
-        alias: benefit,
+        // recipient: provider.name,
+        alias:alias,
+        recipient: benefit,
         user,
         company,
         type:"Proveedor"
@@ -100,7 +102,8 @@ export default function BankData({token, id, provider, company, user}:
           bankAccount: account,
           // recipient: provider.name,
           // alias:provider.tradename,
-          alias:benefit,
+          alias:alias,
+          recipient:benefit,
           user,
           // company,
           // type:"Proveedor"
@@ -136,6 +139,8 @@ export default function BankData({token, id, provider, company, user}:
   const handleBank = (value:string) => {
     handleBank(value);
   }
+
+  const indexBank=optBanks.findIndex((b) => b.value===provider?.account?.bank);
  
   return (
     <div className="w-full">
@@ -183,9 +188,22 @@ export default function BankData({token, id, provider, company, user}:
           {optBanks.length > 0 && (
             <div className=" ">
               <Label htmlFor="bank"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Banco</p></Label>
-              <SelectReact index={0} opts={optBanks} setValue={handleBank} />
+              <SelectReact index={indexBank>=0?  indexBank: 0} opts={optBanks} setValue={handleBank} />
             </div>
           )}
+        </div>
+        <div>
+          <Label htmlFor="alias"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Alias</p></Label>
+          <Input type="text" name="alias" 
+            value={formik.values.alias}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.alias && formik.errors.alias ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.alias}</p>
+            </div>
+          ) : null}
         </div>
         <div>
           <Label htmlFor="benefit"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Beneficiario</p></Label>

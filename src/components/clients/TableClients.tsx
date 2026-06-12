@@ -1,7 +1,6 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-// import NumberContacts from "../providers/NumberContacts";
 import { TableClient } from "@/interfaces/Clients";
 import { useClientStore } from "@/app/store/clientStore";
 import { useEffect, useMemo } from "react";
@@ -9,15 +8,25 @@ import RemoveElement from "../RemoveElement";
 import { removeClient } from "@/app/api/routeClients";
 import { Badge } from "@mui/material";
 import { useTableStates } from "@/app/store/tableStates";
+import DownloadClientsReportPDF from "./DownloadClientsReportPDF";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { Tooltip } from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import CardListComponent from "../CardListComponent";
+import { ClientBack } from "@/interfaces/Clients";
+import { Company } from "@/interfaces/Companies";
 
 type TableClientsProps = {
   data:TableClient[], 
   token:string, 
   selectPermission:boolean, 
-  deletePermission: boolean
+  deletePermission: boolean,
+  clientsData:ClientBack[],
+  company:Company
 }
 
-export default function TableClients({data, token, deletePermission, selectPermission}: TableClientsProps){
+export default function TableClients({data, token, deletePermission, selectPermission, clientsData, company}: TableClientsProps){
   
   const columnHelper = createColumnHelper<TableClient>();
   const {clients, setClients, deleteClient} = useClientStore();
@@ -25,6 +34,8 @@ export default function TableClients({data, token, deletePermission, selectPermi
   useEffect(() => {
     setClients(data);
   }, []);
+
+  console.log('clients data => ', clientsData);
 
   const delClient = (id:string) => {
     deleteClient(id);
@@ -151,6 +162,22 @@ export default function TableClients({data, token, deletePermission, selectPermi
   
   return(
     <>
+      <div className="flex justify-end">
+        <PDFDownloadLink document={<DownloadClientsReportPDF clients={clientsData} satCompany={company} />} fileName={'Clientes'} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </Tooltip>
+            ) : (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+              </Tooltip>
+            ) }
+        </PDFDownloadLink>
+      </div>
       {table}
     </>
   )
@@ -179,6 +206,9 @@ const ListData = ({data, token, delClient }:
 
           {filterData.map((c) => (
             <CardClient client={c} key={c.id} token={token} delClient={delClient} />
+            // <CardListComponent element={c} keyID={c.id} token={token} image={ c?.logo ?? '/img/users/default.jpg'}
+            //   title={c.name} subtitle={c?.abbreviation} nameElement={d?.name} removeElement={removeClient}
+            //   key={c.id} />
           ))}
 
         </nav>
