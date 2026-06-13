@@ -9,7 +9,7 @@ import { removeClient } from "@/app/api/routeClients";
 import { Badge } from "@mui/material";
 import { useTableStates } from "@/app/store/tableStates";
 import DownloadClientsReportPDF from "./DownloadClientsReportPDF";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import { Tooltip } from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
 import { BsFileEarmarkPdf } from "react-icons/bs";
@@ -36,6 +36,24 @@ export default function TableClients({data, token, deletePermission, selectPermi
   }, []);
 
   console.log('clients data => ', clientsData);
+
+  const handleDownload = async () => {
+    const blob = await pdf(
+      <DownloadClientsReportPDF
+        clients={clientsData}
+        satCompany={company}
+      />
+    ).toBlob();
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Clientes.pdf';
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
 
   const delClient = (id:string) => {
     deleteClient(id);
@@ -115,22 +133,49 @@ export default function TableClients({data, token, deletePermission, selectPermi
         >{row.original.rfc}</p>
       )
     }),
-    columnHelper.accessor('account', {
-      header: 'Cuenta',
-      id: 'cuenta',
+    columnHelper.accessor('taxregime', {
+      header: 'Regimen / Persona',
+      id: 'regimen',
       cell: ({row}) => (
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
-        >{row.original.account}</p>
+        >{row.original?.taxregime?? ''} {' / '} {row.original?.regime?? ''}</p>
       )
     }),
-    // columnHelper.accessor('currentbalance', {
-    //   header: 'Saldo actual',
-    //   id: 'saldo',
+    columnHelper.accessor('taxprofile', {
+      header: 'Perfil fiscal',
+      id: 'perfil',
+      cell: ({row}) => (
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
+        >{row.original?.taxprofile}</p>
+      )
+    }),
+    columnHelper.accessor('location', {
+      header: 'Direccion',
+      id: 'direccion',
+      cell: ({row}) => (
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
+        >{row.original?.location}</p>
+      )
+    }),
+    columnHelper.accessor('phone', {
+      header: 'Telefono',
+      id: 'telefono',
+      cell: ({row}) => (
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
+        >{row.original?.phone}</p>
+      )
+    }),
+    // columnHelper.accessor('account', {
+    //   header: 'Cuenta',
+    //   id: 'cuenta',
     //   cell: ({row}) => (
     //     <p className="py-2 cursor-pointer"
     //       onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
-    //     >{row.original.currentbalance}</p>
+    //     >{row.original.account}</p>
     //   )
     // }),
   ]
@@ -163,7 +208,7 @@ export default function TableClients({data, token, deletePermission, selectPermi
   return(
     <>
       <div className="flex justify-end">
-        <PDFDownloadLink document={<DownloadClientsReportPDF clients={clientsData} satCompany={company} />} fileName={'Clientes'} >
+        {/* <PDFDownloadLink document={<DownloadClientsReportPDF clients={clientsData} satCompany={company} />} fileName={'Clientes'} >
           {({loading, url, error, blob}) => 
             loading? (
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
@@ -176,7 +221,20 @@ export default function TableClients({data, token, deletePermission, selectPermi
                 <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
               </Tooltip>
             ) }
-        </PDFDownloadLink>
+        </PDFDownloadLink> */}
+
+        <Tooltip
+          closeDelay={0}
+          delay={100}
+          motionProps={propsTooltip}
+          content="Informe"
+          placement="right"
+          className="text-blue-500 bg-white rounded-md border border-slate-400"
+        >
+          <button onClick={handleDownload}>
+            <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+          </button>
+        </Tooltip>
       </div>
       {table}
     </>

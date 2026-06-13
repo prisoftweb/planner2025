@@ -58,7 +58,8 @@ export default function CreditLineStepper({token, id, user, company}:
         creditdays: parseInt(creditdays? creditdays: '0'), 
         creditlimit: parseInt(creditlimit? creditlimit.replace(/[$,%,]/g, ""): '0'),
         currentbalance: parseInt(currentbalance? currentbalance.replace(/[$,%,]/g, ""): '0'),
-        percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0')
+        percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0'),
+        category
       }
       dispatch({ type: 'SET_CREDIT_DATA', data: tradeline });
       dispatch({type: 'INDEX_STEPPER', data: 2})
@@ -86,7 +87,7 @@ export default function CreditLineStepper({token, id, user, company}:
     if(refRequest.current){
       refRequest.current = false;
       const {creditdays, creditlimit, currentbalance, percentoverduedebt} = formik.values;
-      const {name, rfc, suppliercredit, tradename} = state.databasic;
+      const {name, rfc, suppliercredit, tradename, type} = state.databasic;
       
       let contact = [];
       if(state.contacts){
@@ -110,7 +111,9 @@ export default function CreditLineStepper({token, id, user, company}:
           tradename,
           suppliercredit,
           tradeline,
-          user: id,
+          user: user,
+          type,
+          category,
           company,
           contact,
           condition: [{

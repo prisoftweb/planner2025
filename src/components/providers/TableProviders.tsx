@@ -14,7 +14,7 @@ import { useTableStates } from "@/app/store/tableStates";
 export default function TableProviders({data, token}:
           {data:TableProvider[], token:string}){
   
-  const columnHelper = createColumnHelper<any>();
+  const columnHelper = createColumnHelper<TableProvider>();
 
   const {updateProviderStore, providerStore} = useProviderStore();
 
@@ -100,24 +100,52 @@ export default function TableProviders({data, token}:
         >{row.original.rfc}</p>
       )
     }),
-    columnHelper.accessor('account', {
-      header: 'Cuenta',
-      id: 'cuenta',
-      cell: ({row}) => (
-        <p className="py-2 cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
-        >{row.original.account}</p>
-      )
-    }),
-    // columnHelper.accessor('currentbalance', {
-    //   header: 'Saldo actual',
-    //   id: 'saldo',
+    // columnHelper.accessor('account', {
+    //   header: 'Cuenta',
+    //   id: 'cuenta',
     //   cell: ({row}) => (
     //     <p className="py-2 cursor-pointer"
     //       onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
-    //     >{row.original.currentbalance}</p>
+    //     >{row.original.account}</p>
     //   )
     // }),
+    columnHelper.accessor('type', {
+      header: 'Tipo',
+      id: 'tipo',
+      cell: ({row}) => (
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
+        >{row.original.type}</p>
+      )
+    }),
+    columnHelper.accessor('suppliercredit', {
+      header: 'Linea de credito',
+      id: 'credito',
+      cell: ({row}) => (
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
+        >{row.original?.suppliercredit? 'Si': 'No'}</p>
+      )
+    }),
+    columnHelper.accessor('bankdetails', {
+      header: 'Datos bancarios',
+      id: 'bancarios',
+      cell: ({row}) => (
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
+        >{row.original?.bankdetails? 'Si':'No'}</p>
+      )
+    }),
+    columnHelper.accessor('phone', {
+      header: 'Telefono / Email',
+      id: 'telefono',
+      cell: ({row}) => (
+        <>
+          <p className="py-2 cursor-pointer">{row.original.phone}</p>
+          <p className="py-2 cursor-pointer">{row.original.email}</p>
+        </>
+      )
+    }),
   ]
   
   return(

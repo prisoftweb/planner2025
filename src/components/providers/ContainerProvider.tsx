@@ -69,12 +69,15 @@ export default function ContainerProvider({providers, user, token, company}: Con
         'name': prov.name,
         rfc: prov.rfc,
         currentbalance: dollar,
-        // account: prov.account,
-        account: prov?.account?._id?? '',
+        account: prov.account,
+        // account: prov?.account?._id?? '',
         suppliercredit: prov.suppliercredit,
         contacts: nc,
         tradename: prov.tradename || ' ',
-        bankdetails: prov.bankdetails
+        bankdetails: prov.bankdetails,
+        email: prov?.email?? '',
+        phone: prov?.phone?? '',
+        type: 'tipo'
       })
     })
   }

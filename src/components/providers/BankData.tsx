@@ -5,7 +5,7 @@ import { Options } from "@/interfaces/Common";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import SelectReact from "../SelectReact";
 import Label from "../Label";
-import { useRegFormContext } from "./StepperProvider";
+// import { useRegFormContext } from "./StepperProvider";
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
@@ -26,13 +26,19 @@ export default function BankData({token, id, provider, company, user}:
   const [optBanks, setoptBanks]=useState<Options[]>([]);
   const [bank, setBank]=useState<string>();
 
-  const refRequest = useRef(true);
+  // const refRequest = useRef(true);
 
-  let clabeI = provider?.account?.interbankCode?? '';
-  let accountI = provider?.account?.bankAccount?? '';
-  let numberCardI = provider?.account?.cardNumber?? '';
-  let aliasI = provider?.account?.alias?? '';
-  let benefitI = provider?.account?.recipient?? '';
+  // let clabeI = provider?.account?.interbankCode?? '';
+  // let accountI = provider?.account?.bankAccount?? '';
+  // let numberCardI = provider?.account?.cardNumber?? '';
+  // let aliasI = provider?.account?.alias?? '';
+  // let benefitI = provider?.account?.recipient?? '';
+
+  let clabeI = provider?.accountBank?.interbankCode?? '';
+  let accountI = provider?.accountBank?.bankAccount?? '';
+  let numberCardI = provider?.accountBank?.cardNumber?? '';
+  let aliasI = provider?.accountBank?.alias?? '';
+  let benefitI = provider?.accountBank?.recipient?? '';
 
   console.log('provider => ', provider);
 
@@ -94,7 +100,8 @@ export default function BankData({token, id, provider, company, user}:
         type:"Proveedor"
       }
 
-      if(provider.bankdetails){
+      const band=false;
+      if(provider.bankdetails && band){
         const data={
           bank:bank,
           cardNumber:numberCard,
@@ -109,7 +116,7 @@ export default function BankData({token, id, provider, company, user}:
           // type:"Proveedor"
         }
 
-        const resaccount=await updateAccount(provider.account._id, token, data);
+        const resaccount=await updateAccount(provider.accountBank._id, token, data);
         console.log('res update => ', resaccount);
         if(typeof(resaccount)==='string'){
           showToastMessageError(resaccount);
@@ -120,7 +127,8 @@ export default function BankData({token, id, provider, company, user}:
         const res=await createAccount(data, token);
         const dataUpdate={
           bankdetails: true,
-          account: res
+          // account: res
+          accountBank:res
         }
 
         console.log('update provider => ', dataUpdate);
@@ -137,10 +145,10 @@ export default function BankData({token, id, provider, company, user}:
   });
 
   const handleBank = (value:string) => {
-    handleBank(value);
+    setBank(value);
   }
 
-  const indexBank=optBanks.findIndex((b) => b.value===provider?.account?.bank);
+  const indexBank=optBanks.findIndex((b) => b.value===provider?.accountBank?.bank);
  
   return (
     <div className="w-full">

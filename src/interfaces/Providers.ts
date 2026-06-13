@@ -7,8 +7,20 @@ export interface Provider {
   "name":string,
   "tradename"?: string,
   "rfc":string,
-  // "account":string,
-  account: {
+  "account":string,
+  // account: {
+  //   _id: string;
+  //   id: string;
+  //   alias: string;
+  //   bank: string;
+  //   bankAccount: string;
+  //   cardNumber: string;
+  //   datets: string; // o Date si lo conviertes al recibirlo
+  //   interbankCode: string;
+  //   recipient: string;
+  //   status: boolean;
+  // }
+  accountBank: {
     _id: string;
     id: string;
     alias: string;
@@ -89,7 +101,10 @@ export interface TableProvider{
   "account"?:string,
   "currentbalance"?: string,
   'contacts': number,
-  bankdetails?: boolean
+  bankdetails?: boolean,
+  type: string,
+  phone:string
+  email:string
 }
 
 export interface Tradeline{

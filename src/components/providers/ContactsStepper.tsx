@@ -18,17 +18,19 @@ export default function ContactsStepper({id, token, user, company}:
   const onClickSave = async () => {
     if(refRequest.current){
       refRequest.current = false;
-      const {name, rfc, suppliercredit, tradename} = state.databasic;
+      const {name, rfc, suppliercredit, tradename, type} = state.databasic;
       let tradeline = {};
+      let cat;
 
       if(suppliercredit){
-        const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
+        const {creditdays, creditlimit, currentbalance, percentoverduedebt, category} = state.creditline;
         tradeline = {
           creditdays: parseInt(creditdays),
           creditlimit: parseInt(creditlimit),
           currentbalance: parseInt(currentbalance),
           percentoverduedebt: parseInt(percentoverduedebt)
         }
+        cat=category;
       }
       
       try {
@@ -41,7 +43,9 @@ export default function ContactsStepper({id, token, user, company}:
             suppliercredit,
             tradeline,
             contact: contacts,
-            user: id,
+            user: user,
+            type,
+            category:cat,
             company,
             condition: [{
               glossary: '663d2fe61d1c43ae98d77bc3',

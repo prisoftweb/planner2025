@@ -58,7 +58,12 @@ const initialState: TableClient = {
   contacts: 0,
   currentbalance: 0,
   id: '',
-  logo: ''
+  logo: '',
+  location: '',
+  phone: '',
+  regime: '',
+  taxprofile: '',
+  taxregime: ''
 }
 
 interface ArrClients {

@@ -87,6 +87,11 @@ export interface TableClient{
   "account":string,
   "currentbalance": number,
   "logo": string,
+  taxregime:string,
+  regime:string,
+  taxprofile:string,
+  location:string,
+  phone:string
 }
 
 export interface Tag{

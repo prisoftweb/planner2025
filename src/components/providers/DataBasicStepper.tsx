@@ -61,7 +61,8 @@ export default function DataBasicStepper({token, id, user, company}:
         name, 
         tradename,
         rfc,
-        "suppliercredit": suppliercredit
+        "suppliercredit": suppliercredit,
+        type
       }
 
       dispatch({ type: 'SET_BASIC_DATA', data: data });
@@ -83,8 +84,10 @@ export default function DataBasicStepper({token, id, user, company}:
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        setOptTypes(res);
-        setType(res[0]);
+        if(Array.isArray(res) && res.length>0){
+          setOptTypes(res);
+          setType(res[0]);
+        }
       }
 
       // if(typeof(resc)==='string'){
@@ -104,8 +107,11 @@ export default function DataBasicStepper({token, id, user, company}:
     
       let tradeline = {};
 
+      let cat;
+
       if(suppliercredit && state.creditline){
-        const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
+        const {creditdays, creditlimit, currentbalance, percentoverduedebt, category} = state.creditline;
+        cat=category;
         tradeline = {
           creditdays: parseInt(creditdays),
           creditlimit: parseInt(creditlimit),
@@ -126,10 +132,12 @@ export default function DataBasicStepper({token, id, user, company}:
           rfc,
           tradename,
           suppliercredit,
-          user: id,
+          user: user,
           company,
           tradeline,
           contact,
+          type,
+          category:cat,
           condition: [{
             glossary: '663d2fe61d1c43ae98d77bc3',
             user
@@ -172,6 +180,10 @@ export default function DataBasicStepper({token, id, user, company}:
   // const handleCategory=(value:Options) => {
   //   setCategory(value);
   // }
+
+  useEffect(() => {
+    console.log('suppliercredit:', suppliercredit);
+  }, [suppliercredit]);
 
   return(
     <div className="w-full">
@@ -230,12 +242,18 @@ export default function DataBasicStepper({token, id, user, company}:
             <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
           )}
         </div> */}
+        {/* <pre>{JSON.stringify({ suppliercredit }, null, 2)}</pre>
         <div className="inline-flex items-center">
           <Label>Linea de credito</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={suppliercredit} 
-              onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
-              onChange={() => console.log('')}
+              // onClick={() => setSuppliercredit(!suppliercredit)} 
+              id="switch-3" type="checkbox"
+              onChange={(e) => {
+                console.log('--');
+                console.log('checked:', e.target.checked);
+                setSuppliercredit(e.target.checked);
+              }}
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                 appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                 peer-checked:border-green-500 peer-checked:before:bg-green-500
@@ -246,7 +264,47 @@ export default function DataBasicStepper({token, id, user, company}:
                 data-ripple-dark="true"></div>
             </label>
           </div>
+        </div> */}
+        
+        {/*<div
+          onClick={() => setSuppliercredit(!suppliercredit)}
+          className={`
+            relative w-10 h-6 rounded-full cursor-pointer transition-colors
+            ${suppliercredit ? 'bg-green-500' : 'bg-gray-300'}
+          `}
+        >
+          <div
+            className={`
+              absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow
+              transition-transform
+              ${suppliercredit ? 'translate-x-4' : ''}
+            `}
+          />
+        </div>*/}
+
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium">
+            Línea de crédito
+          </span>
+
+          <div
+            onClick={() => setSuppliercredit(!suppliercredit)}
+            className={`
+              relative w-10 h-6 rounded-full cursor-pointer transition-colors
+              ${suppliercredit ? 'bg-green-500' : 'bg-gray-300'}
+            `}
+          >
+            <div
+              className={`
+                absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow
+                transition-transform
+                ${suppliercredit ? 'translate-x-4' : ''}
+              `}
+            />
+          </div>
+
         </div>
+
         <div className="flex justify-end mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
           <button type="submit"
