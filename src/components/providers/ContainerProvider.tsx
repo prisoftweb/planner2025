@@ -17,7 +17,7 @@ import Link from "next/link"
 import { Tooltip } from "@nextui-org/react"
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import { propsTooltip } from "@/libs/animations"
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadProvidersReportPDF from "./DownloadProvidersReportPDF"
 import { Company } from "@/interfaces/Companies"
@@ -77,12 +77,27 @@ export default function ContainerProvider({providers, user, token, company}: Con
         bankdetails: prov.bankdetails,
         email: prov?.email?? '',
         phone: prov?.phone?? '',
-        type: 'tipo'
+        type: prov?.type?? ''
       })
     })
   }
 
   const dataFilter=data.filter(p => p.suppliercredit==isCreditLine && p.bankdetails==isBankData);
+
+  const handleDownload = async () => {
+    const blob = await pdf(
+      <DownloadProvidersReportPDF providers={providers} satCompany={company} />
+    ).toBlob();
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Proveedores.pdf';
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
   
   return(
     <>
@@ -179,7 +194,7 @@ export default function ContainerProvider({providers, user, token, company}: Con
           </div>
         </div>
 
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <PDFDownloadLink document={<DownloadProvidersReportPDF providers={providers} satCompany={company} />} fileName={'Proveedores'} >
             {({loading, url, error, blob}) => 
               loading? (
@@ -194,6 +209,21 @@ export default function ContainerProvider({providers, user, token, company}: Con
                 </Tooltip>
               ) }
           </PDFDownloadLink>
+        </div> */}
+
+        <div className="flex justify-end">
+          <Tooltip
+            closeDelay={0}
+            delay={100}
+            motionProps={propsTooltip}
+            content="Informe"
+            placement="right"
+            className="text-blue-500 bg-white rounded-md border border-slate-400"
+          >
+            <button onClick={handleDownload}>
+              <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+            </button>
+          </Tooltip>
         </div>
 
         <div className="mt-5">

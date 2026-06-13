@@ -48,7 +48,8 @@ export interface Provider {
     _id: string
     id: string
   }],
-  company?: string
+  company?: string,
+  type?: string
 }
 
 export interface ProviderMin {

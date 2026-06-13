@@ -3,12 +3,22 @@ import { UsrBack } from "@/interfaces/User"
 import { cookies } from "next/headers"
 import HeaderImage from "@/components/HeaderImage";
 import ContainerReportsPage from "@/components/expenses/ContainerReportsPage";
+import ComponentError from "@/components/ComponentError";
 
 export default function Page(){
   
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+
+  if(!token || token===''){
+    return (
+      <>
+        <Navigation user={user} token={''} />
+        <ComponentError page="/guarantee" message="No estas logueado" />
+      </>
+    )
+  }
   
   return(
     <>

@@ -77,7 +77,7 @@ export default function CreditLineStepper({token, id, user, company}:
           showToastMessageError(resc);
         }else{
           setOptCategories(resc);
-          setCategory(resc[0]);
+          setCategory(resc[0].value);
         }
       }
       fetch();

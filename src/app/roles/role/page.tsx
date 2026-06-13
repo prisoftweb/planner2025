@@ -16,20 +16,31 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let roles: Role[];
-  try {
-    roles = await getRoles(token);
-  } catch (error) {
-    // return <h1>Ocurrio un error al obtener roles!!</h1>
-    return(
+  // let roles: Role[];
+  // try {
+  //   roles = await getRoles(token);
+  // } catch (error) {
+  //   // return <h1>Ocurrio un error al obtener roles!!</h1>
+  //   return(
+  //     <>
+  //       <Navigation user={user} token={token} />
+  //       <ComponentError page="/roles/role" message="Ocurrio un error al obtener roles!!" />
+  //     </>
+  //   )
+  // }
+
+  const roles: Role[] = await getRoles(token);
+
+  if(typeof(roles)==='string'){
+    return (
       <>
         <Navigation user={user} token={token} />
-        <ComponentError page="/roles/role" message="Ocurrio un error al obtener roles!!" />
+        <ComponentError page="/guarantee" message={roles} />
       </>
     )
   }
 
-  if(!roles || roles.length <= 0){
+  if(!roles || roles?.length <= 0){
     return (
       <div>
         <Navigation user={user} token={token} />

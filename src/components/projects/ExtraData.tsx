@@ -65,6 +65,10 @@ export default function ExtraData({token, optClients, optCategories,
                 oneProjectStore?.date?.substring(0,10) : 
                     project.date? project.date.substring(0,10): new Date().toISOString().substring(0, 10));
 
+  const [endDate, setEndDate] = useState<string>(oneProjectStore?.endDate? 
+                oneProjectStore?.endDate?.substring(0,10) : 
+                    project.endDate? project.endDate.substring(0,10): new Date().toISOString().substring(0, 10));
+
   const formik = useFormik({
     initialValues: {
       amount: oneProjectStore?.amount || project.amount,
@@ -87,7 +91,8 @@ export default function ExtraData({token, optClients, optCategories,
             client,
             hasguaranteefund: guarantee,
             amountotal: Number((Number(amount.toString().replace(/[$,]/g, "")) * 1.16).toFixed(2)),
-            includesTaxes: includeVat
+            includesTaxes: includeVat,
+            endDate
           }
         }else{
           data= {
@@ -98,7 +103,8 @@ export default function ExtraData({token, optClients, optCategories,
             glossary: type,
             client,
             hasguaranteefund: guarantee,
-            includesTaxes: includeVat
+            includesTaxes: includeVat,
+            endDate
           }
         }
         try {
@@ -168,13 +174,23 @@ export default function ExtraData({token, optClients, optCategories,
           <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
           <SelectReact opts={optTypes} setValue={setType} index={idType} />
         </div>
-        <div>
-          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-          <DatePicker
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            focus:border-slate-700 outline-0 outline-none" 
-            selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
-          />
+        <div className=" flex gap-x-3 justify-between flex-wrap">
+          <div className="max-w-40">
+            <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
+            <DatePicker
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              focus:border-slate-700 outline-0 outline-none" 
+              selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
+            />
+          </div>
+          <div className="max-w-40">
+            <Label htmlFor="dateend"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha termino</p></Label>
+            <DatePicker
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              focus:border-slate-700 outline-0 outline-none" 
+              selected={new Date(endDate)} onChange={(date:Date) => setEndDate(date.toDateString())} 
+            />
+          </div>
         </div>
         <div className=" flex gap-x-3 justify-between">
           <div>

@@ -28,12 +28,13 @@ type Props = {
   paymentPlugin:string, 
   datePayment:string, 
   commentsPayment:string,
-  company:string
+  company:string,
+  handleIndexStepper: (value: number) => void
 }
 
 export default function PaidExpensesHistory({token, id, user, costs, maxDate, 
   minDate, showForm, updateTable, condition, optTypes, costsPayment, commentsPayment, 
-  datePayment, paymentPlugin, company}: Props) {
+  datePayment, paymentPlugin, company, handleIndexStepper}: Props) {
 
   let a = 0;
   costsPayment.map((c) => {
@@ -204,7 +205,21 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         showToastMessageError(res);
       }else{ 
         showToastMessage('Costos pagados exitosamente!!!');
-        updateTable();
+        handleIndexStepper(0);
+        updateTable();        
+        // setAmount('0');
+        // setReference('');
+        // setDate('');
+        // setComments('');
+        // setPre(undefined);
+
+        // setAmountLabel('');
+        // setReferenceLabel('');
+        // const [dateLabel, setDateLabel] = useState<string>('');
+        // const [commentsLabel, setCommentsLabel] = useState<string>('');
+
+        // const [pending, setPending] = useState<number>(-1);
+
         showForm(false);
       }
     }

@@ -2,12 +2,22 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import TableHistoryCollectionsComponent from "@/components/collections/TableHistoryCollectionComponent";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
 
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+
+  if(!token || token===''){
+    return (
+      <>
+        <Navigation user={user} token={''} />
+        <ComponentError page="/guarantee" message="No estas logueado" />
+      </>
+    )
+  }
 
   return (
     <>

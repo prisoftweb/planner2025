@@ -128,7 +128,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
       (indexStepper==2? <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
           user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} 
           commentsPayment={comments} datePayment={date} paymentPlugin={paymentPlugin} 
-          optTypes={optTypes} costsPayment={costsInPayment} company={company} />: 
+          optTypes={optTypes} costsPayment={costsInPayment} company={company} handleIndexStepper={handleIndexStepper} />: 
         <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />);
   
   return(

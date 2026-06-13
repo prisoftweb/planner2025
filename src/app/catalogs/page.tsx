@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { getCatalogs } from "../api/routeCatalogs";
 import { Catalog } from "@/interfaces/Catalogs";
 import ListClient from "@/components/catalogs/ListClient";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -15,9 +16,10 @@ export default async function Page(){
     return (
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500 text-lg">{catalogs}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/catalogs" message={catalogs} />
       </>
     )
   } 
