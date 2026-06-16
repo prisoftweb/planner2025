@@ -1,12 +1,12 @@
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
-import { ProviderMin } from "@/interfaces/Providers";
+import { IProviderMin } from "@/interfaces/Providers";
 import { OneExpense } from '@/interfaces/Expenses';
 import { ICostRelAdvanceInv } from '@/interfaces/Expenses';
 import { Company } from "@/interfaces/Companies"
 
 export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, satCompany}: 
-  {provider:ProviderMin, advance:OneExpense, costsRelAdvance:ICostRelAdvanceInv[], satCompany:Company}) {
+  {provider:IProviderMin, advance:OneExpense, costsRelAdvance:ICostRelAdvanceInv[], satCompany:Company}) {
 
   // const appAdvance=costsRelAdvance.reduce((accum, item) => accum+= item.cost.total>0? item.cost.total: 0, 0);
   const appAdvance=costsRelAdvance.reduce((accum, item) => accum+=item.invoiceUUID.cost.total, 0);

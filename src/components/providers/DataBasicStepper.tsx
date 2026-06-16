@@ -11,7 +11,7 @@ import BasicBarStepper from "./BasicBarStepper";
 import { useProviderStore } from "@/app/store/providerStore";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { getCatalogsByNameAndType, getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs";
+import { getCatalogsByNameAndType, getCatalogsByNameAndCondition, getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
 
 export default function DataBasicStepper({token, id, user, company}: 
   {token:string, id:string, user: string, company:string}){
@@ -37,6 +37,9 @@ export default function DataBasicStepper({token, id, user, company}:
 
   const [type, setType]=useState<Options>();
   const [optTypes, setOptTypes] = useState<Options[]>([]);
+
+  // const [category, setCategory]=useState<Options>();
+  // const [optCategories, setOptCategories] = useState<Options[]>([]);
 
   // const [category, setCategory]=useState<Options>();
   // const [optCategories, setOptCategories] = useState<Options[]>([]);
@@ -78,7 +81,8 @@ export default function DataBasicStepper({token, id, user, company}:
     const fetch = async () => {
       const [res] = await Promise.all([
         getCatalogsByNameAndType(token, 'Providers'),
-        // getCatalogsByNameAndCondition(token, 'Providers')
+        // // getCatalogsByNameAndCondition(token, 'Providers')
+        // getCatalogsByNameAndCategory(token, 'Providers'),
       ]) 
       
       if(typeof(res)==='string'){
@@ -94,7 +98,7 @@ export default function DataBasicStepper({token, id, user, company}:
       //   showToastMessageError(resc);
       // }else{
       //   setOptCategories(resc);
-      //   setCategory(resc[0]);
+      //   setCategory(resc[0].value);
       // }
     }
     fetch();
@@ -237,50 +241,11 @@ export default function DataBasicStepper({token, id, user, company}:
           )}
         </div>
         {/* <div>
-          <Label>Estatus</Label>
+          <Label>Categoria</Label>
           {optCategories.length>0 && (
             <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
           )}
         </div> */}
-        {/* <pre>{JSON.stringify({ suppliercredit }, null, 2)}</pre>
-        <div className="inline-flex items-center">
-          <Label>Linea de credito</Label>
-          <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-            <input checked={suppliercredit} 
-              // onClick={() => setSuppliercredit(!suppliercredit)} 
-              id="switch-3" type="checkbox"
-              onChange={(e) => {
-                console.log('--');
-                console.log('checked:', e.target.checked);
-                setSuppliercredit(e.target.checked);
-              }}
-              className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-                appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-                peer-checked:border-green-500 peer-checked:before:bg-green-500
-                border border-slate-300" />
-            <label htmlFor="switch-3"
-              className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-              <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-                data-ripple-dark="true"></div>
-            </label>
-          </div>
-        </div> */}
-        
-        {/*<div
-          onClick={() => setSuppliercredit(!suppliercredit)}
-          className={`
-            relative w-10 h-6 rounded-full cursor-pointer transition-colors
-            ${suppliercredit ? 'bg-green-500' : 'bg-gray-300'}
-          `}
-        >
-          <div
-            className={`
-              absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow
-              transition-transform
-              ${suppliercredit ? 'translate-x-4' : ''}
-            `}
-          />
-        </div>*/}
 
         <div className="flex items-center gap-3">
           <span className="text-sm font-medium">

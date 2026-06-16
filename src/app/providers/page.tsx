@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-import {getProviders} from "../api/routeProviders";
+import {getProviders, getAllProvidersMin} from "../api/routeProviders";
 import { Provider } from "@/interfaces/Providers";
 import { UsrBack } from "@/interfaces/User";
 import ContainerProvider from "@/components/providers/ContainerProvider";
@@ -31,7 +31,8 @@ export default async function Providers(){
   // }
   
   const [providers, company]=await Promise.all([
-    getProviders(token),
+    // getProviders(token),
+    getAllProvidersMin(token),
     getCompany(token, user.profile)
   ])
 

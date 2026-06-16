@@ -2,7 +2,7 @@ import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import { getProviderMin, getProviders } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { DetailExpensesTableProvider, ProviderMin } from "@/interfaces/Providers";
+import { DetailExpensesTableProvider, IProviderMin } from "@/interfaces/Providers";
 import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableDetailsExpenseProvider from "@/components/providers/ContainerTableDetailsExpenseProvider";
 import { getCostsPayment, getPayment } from "@/app/api/routePayments";
@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let provider: ProviderMin;
+  let provider: IProviderMin;
 
   const [arrProvider, providers, costs, payment, pending] = await Promise.all([
     getProviderMin(params.id, token),

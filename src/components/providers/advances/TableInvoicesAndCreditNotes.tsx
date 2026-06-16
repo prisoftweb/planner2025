@@ -2,7 +2,7 @@ import Button from "@/components/Button"
 import ContainerSideNav from "@/components/ContainerSideNav"
 import { useState, useEffect } from "react"
 import AddInvoicesToAdvance from "./AddInvoicesToAdvance";
-import { ProviderMin } from "@/interfaces/Providers";
+import { IProviderMin } from "@/interfaces/Providers";
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
@@ -22,7 +22,7 @@ import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
 
 export default function TableInvoicesAndCreditNotes({provider, user, token, ida, pending, advance, company}: 
-  {provider:ProviderMin, user:string, token:string, ida:string, pending:number, advance:OneExpense, company:string}) {
+  {provider:IProviderMin, user:string, token:string, ida:string, pending:number, advance:OneExpense, company:string}) {
 
   const [isAddInvoices, setIsAddInvoices]=useState<boolean>(false);
   const [costsRelAdvance, setCostsRelAdvance]=useState<ICostRelAdvanceInv[]>([]);

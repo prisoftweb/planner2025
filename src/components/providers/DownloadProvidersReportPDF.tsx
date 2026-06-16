@@ -6,10 +6,10 @@ import { useState, useEffect } from 'react';
 import { ITotalResumentPayment } from '@/interfaces/Collections';
 import { getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
 import { Company } from '@/interfaces/Companies';
-import { Provider } from '@/interfaces/Providers';
+import { Provider, IProviderMin } from '@/interfaces/Providers';
 
 export default function DownloadProvidersReportPDF({providers, satCompany}:
-  {providers:Provider[], satCompany:Company}) {
+  {providers:IProviderMin[], satCompany:Company}) {
 
   // const [resumenPayment, setResumenPayment] = useState<ITotalResumentPayment>();
 
@@ -112,9 +112,9 @@ export default function DownloadProvidersReportPDF({providers, satCompany}:
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.name}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.tradename}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.rfc}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.type?? ''} </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.type?.name?? ''} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.suppliercredit? 'SI':'NO'}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.bankdetails? 'SI':'NO'}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.accountBank?._id? 'SI':'NO'}</Text>
               <View style={{flex:1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>
                 <Text>{c?.phone}</Text>
                 <Text>{c?.email}</Text>

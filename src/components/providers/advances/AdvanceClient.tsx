@@ -13,10 +13,10 @@ import { useNewExpense } from "@/app/store/newExpense"
 // import AddCFDIRelations from "./AddCFDIRelations";
 import SumaryAdvanceProvider from "./SumaryAdvanceProvider";
 import TableInvoicesAndCreditNotes from "./TableInvoicesAndCreditNotes"
-import { ProviderMin } from "@/interfaces/Providers"
+import { IProviderMin } from "@/interfaces/Providers"
 
 export default function AdvanceClient({token, user, id, provider, advance, company}: 
-  { token:string, id:string, user:string, provider:ProviderMin, advance:OneExpense, company:string }) {
+  { token:string, id:string, user:string, provider:IProviderMin, advance:OneExpense, company:string }) {
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {

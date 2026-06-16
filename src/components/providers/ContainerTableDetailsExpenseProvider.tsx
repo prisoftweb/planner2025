@@ -18,7 +18,7 @@ import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs"
 import ReportPaymentPDF from "./ReportPaymentPDF"
 import { UsrBack } from "@/interfaces/User"
-import { ProviderMin } from "@/interfaces/Providers"
+import { IProviderMin } from "@/interfaces/Providers"
 import { propsTooltip } from "@/libs/animations"
 import {ITotalAcumulatedPendingPaymentResumeProviderPDF} from "@/interfaces/Payments"
 import { Company } from "@/interfaces/Companies";
@@ -31,7 +31,7 @@ type Props = {
   token:string, 
   expenses:CostPayment[], 
   user: UsrBack, 
-  provider: ProviderMin, 
+  provider: IProviderMin, 
   payment: OnePayment, 
   pending:ITotalAcumulatedPendingPaymentResumeProviderPDF[]
 }

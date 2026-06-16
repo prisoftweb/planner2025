@@ -111,12 +111,15 @@ export async function getProjectsLV(auth_token:string) {
 
 export async function getAllCostoCentersCategorysLV(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costocenters/getAllCostoCentersCategorysLV`;
+  console.log('url cats => ', url);
+  
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     })
+    console.log('res cats => ', res);
     if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {

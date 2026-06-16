@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { GiSettingsKnobs } from "react-icons/gi";
 import { HistoryExpensesTable } from "@/interfaces/Providers";
 // import HeaderPaidHistoryExpenses from "../HeaderPaidHistoryExpenses";
-import { Provider, ProviderMin } from "@/interfaces/Providers";
+import { Provider, IProviderMin } from "@/interfaces/Providers";
 import TableListExpensesPaid from "../TableListsExpensesPaid";
 import PaidExpensesHistory from "../PaidExpensesHistory";
 import { Options } from "@/interfaces/Common";
@@ -18,7 +18,7 @@ import { OneExpense } from "@/interfaces/Expenses";
 
 type Props = {
   showForm: (value: boolean) => void, 
-  provider: ProviderMin, 
+  provider: IProviderMin, 
   token:string, 
   user: string, 
   open: boolean,

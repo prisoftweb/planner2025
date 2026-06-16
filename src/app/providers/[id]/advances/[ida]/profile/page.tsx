@@ -6,7 +6,7 @@ import { getProviderMin } from "@/app/api/routeProviders";
 import ArrowReturn from "@/components/ArrowReturn";
 import IconText from "@/components/providers/IconText";
 import AdvanceClient from "@/components/providers/advances/AdvanceClient";
-import { ProviderMin } from "@/interfaces/Providers";
+import { IProviderMin } from "@/interfaces/Providers";
 import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string, ida:string }}){
@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { id: string, ida:strin
       </>
     )
 
-  let provider: ProviderMin;
+  let provider: IProviderMin;
 
   if(typeof(prov) === "string")
     return(

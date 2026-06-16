@@ -1,6 +1,6 @@
 import IconText from "../IconText";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { Provider, ProviderMin } from "@/interfaces/Providers";
+import { Provider, IProviderMin } from "@/interfaces/Providers";
 import { getPendingPaymentProvider } from "@/app/api/routePayments";
 import { useState, useEffect } from "react";
 import { pendingPaymentProvider } from "@/interfaces/Payments";
@@ -11,7 +11,7 @@ import { ICostRelAdvanceInv } from "@/interfaces/Expenses";
 type HeaderProps={
   // expensesTable: CostsPaymentTable[], 
   // provider: Provider,
-  provider: ProviderMin, 
+  provider: IProviderMin, 
   // token: string
   costs:ICostRelAdvanceInv[],
   pending:number

@@ -1,14 +1,14 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { DetailExpensesTableProvider } from '@/interfaces/Providers'
-import { ProviderMin } from "@/interfaces/Providers"
+import { IProviderMin } from "@/interfaces/Providers"
 import { OnePayment } from '@/interfaces/Payments'
 import { UsrBack } from '@/interfaces/User'
 import { ITotalAcumulatedPendingPaymentResumeProviderPDF } from '@/interfaces/Payments'
 import { Company } from "@/interfaces/Companies"
 
 export default function ReportPaymentPDF({costs, provider, payment, user, pending, satCompany}: 
-    {costs: DetailExpensesTableProvider[], provider: ProviderMin, user: UsrBack, 
+    {costs: DetailExpensesTableProvider[], provider: IProviderMin, user: UsrBack, 
       payment: OnePayment, pending:ITotalAcumulatedPendingPaymentResumeProviderPDF[], satCompany:Company}){
   
   const style = StyleSheet.create({
@@ -140,7 +140,7 @@ export default function ReportPaymentPDF({costs, provider, payment, user, pendin
             </View>
             <View style={style.inLineText}>
               <Text style={style.textLeft}>CUENTA:</Text>
-              <Text style={style.textRight}>{provider.account}</Text>
+              <Text style={style.textRight}>{provider?.account?? ''}</Text>
             </View>
             <View style={style.inLineText}>
               <Text style={style.textLeft}>Por pagar:</Text>

@@ -51,7 +51,12 @@ export default function CreditLine({provider, id, token}:
             currentbalance: parseInt(currentbalance? currentbalance.replace(/[$,%,]/g, ""): '0'),
             percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0')
           }
-          const res = await updateProvider(id, token, {tradeline});
+          const data={
+            tradeline,
+            category
+          }
+          // const res = await updateProvider(id, token, {tradeline});
+          const res = await updateProvider(id, token, data);
           if(typeof(res)!=='string'){
             refRequest.current = true;
             showToastMessage('Los datos han sido actualizados!!!');
@@ -90,6 +95,13 @@ export default function CreditLine({provider, id, token}:
   const handleCategory=(value:Options) => {
     setCategory(value);
   }
+
+  // console.log('categories => ', optCategories);
+  // console.log('category => ', provider.category);
+
+  const indexCategory=optCategories.findIndex(c => c.value===provider.category)
+
+  // console.log('index cat => ', indexCategory);
   
   return(
     <div className="w-full">
@@ -185,7 +197,7 @@ export default function CreditLine({provider, id, token}:
         <div>
           <Label>Categoria</Label>
           {optCategories.length>0 && (
-            <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
+            <SelectReact index={indexCategory>=0? indexCategory: 0} opts={optCategories} setValue={handleCategory} />
           )}
         </div>
         <div className="flex justify-center mt-4">

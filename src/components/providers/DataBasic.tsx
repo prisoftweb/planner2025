@@ -134,6 +134,9 @@ export default function DataBasic({id, token, provider, user}:{id:string, token:
   //   })
   // }
 
+  const indexType=optTypes.findIndex(t => t.value===provider?.type)
+  const indexStatus= Array.isArray(provider.condition) && provider.condition.length>0 ? optCategories.findIndex(c => c.value===provider.condition[0].glossary): 0;
+
   return(
     <div className="w-full md:max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
       <HeaderForm img="/img/provider.svg" subtitle="Datos esenciales del proveedor" 
@@ -185,13 +188,13 @@ export default function DataBasic({id, token, provider, user}:{id:string, token:
         <div>
           <Label>Tipo</Label>
           {optTypes.length>0 && (
-            <SelectReact index={0} opts={optTypes} setValue={handleType} />
+            <SelectReact index={indexType>=0? indexType: 0} opts={optTypes} setValue={handleType} />
           )}
         </div>
         <div>
           <Label>Estatus</Label>
           {optCategories.length>0 && (
-            <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
+            <SelectReact index={indexStatus>=0? indexStatus: 0} opts={optCategories} setValue={handleCategory} />
           )}
         </div>
         <div className="inline-flex items-center">

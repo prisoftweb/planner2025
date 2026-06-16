@@ -1,6 +1,6 @@
 'use client'
 
-import { Provider } from "@/interfaces/Providers"
+import { Provider, IProviderMin } from "@/interfaces/Providers"
 import Navigation from "../navigation/Navigation"
 import { UsrBack } from "@/interfaces/User"
 import WithOutProvider from "./WithoutProvider"
@@ -23,7 +23,7 @@ import DownloadProvidersReportPDF from "./DownloadProvidersReportPDF"
 import { Company } from "@/interfaces/Companies"
 
 type ContainerProps={
-  providers: Provider[], 
+  providers: IProviderMin[], 
   user:UsrBack, 
   token:string,
   company:Company
@@ -40,6 +40,8 @@ export default function ContainerProvider({providers, user, token, company}: Con
   }, []);
 
   console.log('providers data => ', providers);
+
+  console.log('providers store => ', providerStore);
   
   if(providerStore.length <= 0 && (providers.length === 0 || !providers)){
     return (
@@ -54,7 +56,7 @@ export default function ContainerProvider({providers, user, token, company}: Con
 
   let data:TableProvider[] = [];
   if(Array.isArray(providerStore)){
-    providerStore.map((prov:Provider) => {
+    providerStore.map((prov:IProviderMin) => {
 
       let nc = 0;
       if(prov.contact) nc = prov.contact.length;
@@ -69,24 +71,36 @@ export default function ContainerProvider({providers, user, token, company}: Con
         'name': prov.name,
         rfc: prov.rfc,
         currentbalance: dollar,
-        account: prov.account,
+        account: '',
         // account: prov?.account?._id?? '',
         suppliercredit: prov.suppliercredit,
         contacts: nc,
         tradename: prov.tradename || ' ',
-        bankdetails: prov.bankdetails,
+        bankdetails: prov?.accountBank?._id? true:false,
         email: prov?.email?? '',
         phone: prov?.phone?? '',
-        type: prov?.type?? ''
+        type: prov?.type?.name?? ''
       })
     })
   }
 
+  console.log('data data => ', data);
+
   const dataFilter=data.filter(p => p.suppliercredit==isCreditLine && p.bankdetails==isBankData);
+
+  console.log('data filter => ', dataFilter);
+
+  // const dataReport=providers.filter(p => p.suppliercredit==isCreditLine && p.bankdetails==isBankData);
+  const dataReport = providers.filter(
+    p =>
+      p.suppliercredit === isCreditLine &&
+      (!!p.accountBank?._id) === isBankData
+  );
 
   const handleDownload = async () => {
     const blob = await pdf(
-      <DownloadProvidersReportPDF providers={providers} satCompany={company} />
+      // <DownloadProvidersReportPDF providers={providers} satCompany={company} />
+      <DownloadProvidersReportPDF providers={dataReport} satCompany={company} />
     ).toBlob();
 
     const url = URL.createObjectURL(blob);

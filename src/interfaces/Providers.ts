@@ -50,19 +50,68 @@ export interface Provider {
   }],
   company?: string,
   type?: string
+  category?:string
 }
 
-export interface ProviderMin {
+// export interface ProviderMin {
+//   _id: string
+//   name: string
+//   tradename: string
+//   rfc: string
+//   suppliercredit: boolean
+//   tradeline: Tradeline
+//   user: UsrBack
+//   account: string
+//   estatus: Glossary
+// }
+
+export interface IProviderMin {
   _id: string
   name: string
   tradename: string
   rfc: string
+  account?:string
   suppliercredit: boolean
   tradeline: Tradeline
   user: UsrBack
-  account: string
-  estatus: Glossary
+  accountBank: {
+    _id: string
+    bank: string
+    cardNumber: string
+    interbankCode: string
+    bankAccount: string
+    recipient: string
+    alias: string
+    type: string
+  }
+  category: {
+    _id: string
+    name: string
+    color: string
+    darktext: boolean
+  }
+  type: {
+    _id: string
+    name: string
+    color: string
+    darktext: boolean
+  }
+  estatus: {
+    _id: string
+    name: string
+    color: string
+    darktext: boolean
+  }
+  contact?:Contact[],
+  email?:string,
+  phone?:string,
 }
+
+// export interface Tradeline {
+//   overduedebt: boolean
+//   date: string
+// }
+
 
 // export interface Root {
 //   _id: string
