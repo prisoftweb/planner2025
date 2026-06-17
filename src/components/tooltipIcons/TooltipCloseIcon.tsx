@@ -27,8 +27,21 @@ export default function TooltipCloseIcon({handleClose}: Params) {
   return (
     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cerrar' 
         placement="right" className="text-black bg-white rounded-md border border-slate-400">
-      <XMarkIcon className="w-6 h-6 bg-black text-white hover:bg-red-500 rounded-full hover:text-white cursor-pointer" 
+      {/* <XMarkIcon className="w-6 h-6 bg-black text-white hover:bg-red-500 rounded-full hover:text-white cursor-pointer" 
         onClick={() => {handleClose(false);}}
+      /> */}
+      <XMarkIcon
+        className="
+          w-6 h-6
+          text-gray-500
+          hover:text-gray-700
+          hover:bg-gray-100
+          rounded-md
+          p-1
+          cursor-pointer
+          transition-colors
+        "
+        onClick={() => handleClose(false)}
       />
     </Tooltip>
   )

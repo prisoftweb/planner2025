@@ -21,10 +21,10 @@ export default function DataBasic({id, token, provider, user}:{id:string, token:
 
   const {updateOneProviderStore, oneProviderStore} = useOneProviderStore();
 
-  const [type, setType]=useState<Options>();
+  const [type, setType]=useState<string>();
   const [optTypes, setOptTypes] = useState<Options[]>([]);
 
-  const [category, setCategory]=useState<Options>();
+  const [category, setCategory]=useState<string>();
   const [optCategories, setOptCategories] = useState<Options[]>([]);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function DataBasic({id, token, provider, user}:{id:string, token:
         showToastMessageError(resc);
       }else{
         setOptCategories(resc);
-        setCategory(resc[0]);
+        setCategory(resc[0].value);
       }
     }
     fetch();
@@ -75,7 +75,12 @@ export default function DataBasic({id, token, provider, user}:{id:string, token:
           name, 
           tradename,
           rfc,
-          suppliercredit: suppliercredit
+          suppliercredit: suppliercredit,
+          type,
+          condition: [{
+            glossary: category,
+            user
+          }]
         }
 
         try {
@@ -118,11 +123,11 @@ export default function DataBasic({id, token, provider, user}:{id:string, token:
     }
   }
 
-  const handleType=(value:Options) => {
+  const handleType=(value:string) => {
     setType(value);
   }
 
-  const handleCategory=(value:Options) => {
+  const handleCategory=(value:string) => {
     setCategory(value);
   }
   

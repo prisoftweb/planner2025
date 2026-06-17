@@ -77,10 +77,10 @@ export default function NewSubPath({showForm, token, route}:
   return(
     <>
     {/* top-16 */}
-      <form className="z-10 fixed bg-white space-y-5 p-5 right-0 h-full"
+      <form className="z-10 fixed bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0 h-full"
         onSubmit={formik.handleSubmit}
       >
-        <div className="flex justify-between">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <HeaderForm img="/img/route.svg" subtitle="Agregar nueva ruta de hoja de segmento" 
             title="Agregar nueva ruta"
           />

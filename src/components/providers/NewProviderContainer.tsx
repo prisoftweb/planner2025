@@ -41,8 +41,6 @@ export default function NewProviderContainer({token, id, showForm, user, open, c
         {
           label: 'Si',
           onClick: () => {
-            //let res = undefined;
-  
             switch('user'){
               case 'user':
                 showForm(false);
@@ -84,10 +82,10 @@ export default function NewProviderContainer({token, id, showForm, user, open, c
     //                 ${open ? "translate-x-0" : "translate-x-full"}`}
     //   style={{height: `${heightPage}px`}}
     // >
-    <div className={`z-10 w-full sm:max-w-lg absolute bg-white p-5 right-0 h-screen`}
+    <div className={`z-10 w-full sm:max-w-lg absolute bg-white px-2 py-2 sm:py-5 sm:px-7 right-0 h-screen`}
       style={{height: `${heightPage}px`}}
     >
-      <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
+      <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
         <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
           title="Nuevo proveedor"
         />

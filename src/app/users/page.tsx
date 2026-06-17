@@ -27,9 +27,6 @@ export default async function Users() {
       <>
         <Navigation user={user} token={token} />
         <ComponentError page="/users" message={users} />
-        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1 className="text-center text-red-500">{users}</h1>
-        </div> */}
       </>
     )
   }
@@ -39,9 +36,6 @@ export default async function Users() {
       <>
         <Navigation user={user} token={token} />
         <ComponentError page="/users" message={optionsRoles} />
-        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1 className="text-center text-red-500">{optionsRoles}</h1>
-        </div> */}
       </>
     )
   }
@@ -51,9 +45,6 @@ export default async function Users() {
       <>
         <Navigation user={user} token={token} />
         <ComponentError page="/users" message={departments} />
-        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1 className="text-center text-red-500">{departments}</h1>
-        </div> */}
       </>
     )
   }

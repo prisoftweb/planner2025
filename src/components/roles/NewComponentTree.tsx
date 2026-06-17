@@ -148,10 +148,10 @@ export default function NewComponentTree({showForm, token, optResources, optRout
   return(
     <>
     {/* top-16 */}
-      <div className="z-10 absolute bg-white space-y-5 p-5 right-0"
+      <div className="z-10 absolute bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0"
         style={{height: `${heightPage}px`}}
       >
-      <div className="flex justify-between">
+      <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
         <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando componentes" 
           title="Agregar componente a nuevo arbol"
         />

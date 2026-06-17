@@ -117,16 +117,14 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
     <>
       {/* <div className="fixed inset-0 bg-black bg-opacity-40  z-40"> */}
         {/* <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0" */}
-        <form className="z-10 absolute bg-white space-y-5 p-5 right-0"
+        <form className="z-10 absolute bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0"
           onSubmit={formik.handleSubmit}
           style={{height: `${heightPage}px`}}
         >
-          <div className="flex justify-between">
+          <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
             <HeaderForm img="/nuevoIcono.jpg" subtitle="Creacion de nueva cuenta de usuario" 
               title="Nueva cuenta"
             />
-            {/* <XMarkIcon className="w-6 h-6 text-slate-500
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
             <TooltipCloseIcon handleClose={showForm} />
           </div>
           

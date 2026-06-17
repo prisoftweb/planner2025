@@ -68,10 +68,10 @@ export default function NewRole({showForm, token}:
   return(
     <>
       {/* top-16 */}
-      <form className="z-10 fixed bg-white space-y-5 p-5 right-0 h-screen"
+      <form className="z-10 fixed bg-white space-y-5 p-5 px-2 py-2 sm:py-5 sm:px-7 right-0 h-screen"
         onSubmit={formik.handleSubmit}
       >
-        <div className="flex justify-between">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <HeaderForm img="/img/role.svg" subtitle="Ingresa nuevo rol para usuarios" 
             title="Nuevo rol"
           />

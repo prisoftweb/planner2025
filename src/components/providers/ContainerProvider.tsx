@@ -39,9 +39,9 @@ export default function ContainerProvider({providers, user, token, company}: Con
     updateProviderStore(providers);
   }, []);
 
-  console.log('providers data => ', providers);
+  // console.log('providers data => ', providers);
 
-  console.log('providers store => ', providerStore);
+  // console.log('providers store => ', providerStore);
   
   if(providerStore.length <= 0 && (providers.length === 0 || !providers)){
     return (
@@ -84,11 +84,11 @@ export default function ContainerProvider({providers, user, token, company}: Con
     })
   }
 
-  console.log('data data => ', data);
+  // console.log('data data => ', data);
 
   const dataFilter=data.filter(p => p.suppliercredit==isCreditLine && p.bankdetails==isBankData);
 
-  console.log('data filter => ', dataFilter);
+  // console.log('data filter => ', dataFilter);
 
   // const dataReport=providers.filter(p => p.suppliercredit==isCreditLine && p.bankdetails==isBankData);
   const dataReport = providers.filter(
