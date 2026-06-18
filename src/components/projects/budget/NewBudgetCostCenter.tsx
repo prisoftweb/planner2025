@@ -204,15 +204,13 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   });
   
   return (//top-16
-    <div className="z-10 w-full sm:max-w-5xl absolute bg-white p-5 right-0"
+    <div className="z-10 w-full sm:max-w-5xl absolute bg-white px-2 py-2 sm:py-5 sm:px-7 right-0"
       style={{height: `${heightPage}px`}}
     >
-      <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
+      <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
         <HeaderForm img="/img/projects.jpg" subtitle="Selecciona el centro de costos y el monto del presupuesto" 
           title="Nuevo presupuesto"
         />
-        {/* <XMarkIcon className="w-6 h-6 text-slate-500
-          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => closeForm(false)} /> */}
         <TooltipCloseIcon handleClose={closeForm} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-2">

@@ -53,10 +53,14 @@ export default function DataConceptStepperComponent({previousStep, price, concep
           user: price?.user._id
       },
       quantity: Number(quantity),
-      amount: Number(pu.replace(/[$,]/g, "")),
+      // amount: Number(pu.replace(/[$,]/g, "")),
+      amount: (price?.cost || 0),
       date: new Date(),
       user: user
     }
+    // console.log('quantity => ', quantity);
+    // console.log('pu => ', pu);
+    // console.log('data => ', data);
     updateConcepts(data);
     showForm(false);
   }

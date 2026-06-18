@@ -20,6 +20,7 @@ import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdOutlineSavings } from "react-icons/md";
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 import { useTableStates } from "@/app/store/tableStates";
+import ContainerSideNav from "../ContainerSideNav";
 
 type Props= {
   data:ProjectsTable[], 
@@ -40,7 +41,6 @@ export default function TableProjects({data, token, projects, optCategories,
   
   const columnHelper = createColumnHelper<ProjectsTable>();
 
-  // const [filter, setFilter] = useState<boolean>(false);
   const [dataProjects, setDataProjects] = useState(data);
   const [filteredProjects, setFilteredProjects] = useState<ProjectMin[]>(projects);
 
@@ -726,6 +726,10 @@ export default function TableProjects({data, token, projects, optCategories,
                           FilterData={filterData} maxAmount={maxAmount}  />
           </div>
         )}
+        {/*<ContainerSideNav width="w-full max-w-md" open={isFilter}>
+          <Filtering showForm={setIsFilter} optCategories={optCategories} 
+            optTypes={optTypes} optConditions={optConditions} FilterData={filterData} maxAmount={maxAmount}  />
+        </ContainerSideNav>*/}
       </div>
       <div className="hidden xl:block">
         {view}

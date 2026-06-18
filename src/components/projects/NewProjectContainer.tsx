@@ -85,11 +85,11 @@ export default function NewProjectContainer({token, showForm, optClients,
   }
 
   return(//top-16
-    <div className="z-10 w-full max-w-xl absolute bg-white p-4 right-0"
+    <div className="z-10 w-full max-w-xl absolute bg-white px-2 py-2 sm:py-5 sm:px-7 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">
-        <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del nuevo proyecto" 
             title="Nuevo proyecto"
           />

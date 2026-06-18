@@ -263,9 +263,9 @@ export default function AddNewCollectionComponent({showForm, user, token, update
 
   return(
     <>
-      <form className="z-10 absolute w-full max-w-xl bg-white space-y-5 p-5 right-0"
+      <form className="z-10 absolute w-full max-w-xl bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0"
           style={{height: `${heightPage}px`}}>
-        <div className="flex justify-between">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <HeaderForm img="/img/estimates/invoices.svg" subtitle={'Recuperacion de cartera, pagos de facturas '} 
             title={'Nuevo cobro'}
           />

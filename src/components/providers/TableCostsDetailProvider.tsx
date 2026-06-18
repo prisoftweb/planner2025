@@ -11,6 +11,7 @@ import { DetailExpensesTableProvider } from "@/interfaces/Providers";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 import { CostPayment } from "@/interfaces/Payments";
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import ContainerSideNav from "../ContainerSideNav";
 
 type Props = {
   data:DetailExpensesTableProvider[], 
@@ -241,11 +242,17 @@ export default function TableCostsDetailProvider({data, token, expenses,
 
   return(
     <>
-      <div className="flex justify-end my-5">
+      {/* <div className="flex justify-end my-5">
         {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} token={token} showPaidValidation={false} />}
-      </div>
+      </div> */}
+
+      <ContainerSideNav width="w-full max-w-md" open={isFilter}>
+        <FilteringExpensesProvider showForm={handleIsFilter}  
+                          FilterData={filterData} maxAmount={maxAmount} 
+                          minAmount={minAmount} token={token} showPaidValidation={false} />
+      </ContainerSideNav>
       
       <div className="hidden xl:block w-full">
         {view}
@@ -258,19 +265,6 @@ export default function TableCostsDetailProvider({data, token, expenses,
 }
 
 const ListData = ({data}: {data: DetailExpensesTableProvider[]}) => {
-
-  // const [dataReports, setDataReports] = useState(data);
-
-  // const {search} = useTableStates();
-
-  // const filterData = useMemo(() => {
-  //   if(search.trim() === ''){
-  //     return data;
-  //   }else{
-  //     const d = data.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
-  //     return d;
-  //   }
-  // }, [search]);
 
   return(
     <div>

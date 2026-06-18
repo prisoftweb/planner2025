@@ -30,33 +30,33 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
   // const [dataTable, setDataTable] = useState<ProjectsTable[]>(data);
-  const [widthPage, setWidthPage]=useState<number>(500);
+  // const [widthPage, setWidthPage]=useState<number>(500);
 
   const handleFilter = (value:boolean) => {
     setIsFilter(value);
   }
 
-  const handleResize = () => {
-    const w = Math.max(
-      document.body.scrollWidth, document.documentElement.scrollWidth,
-      document.body.offsetWidth, document.documentElement.offsetWidth,
-      document.body.clientWidth, document.documentElement.clientWidth
-    )
-    setWidthPage(w);
-    if(w <= 500) setIsTable(false);
-  }
+  // const handleResize = () => {
+  //   const w = Math.max(
+  //     document.body.scrollWidth, document.documentElement.scrollWidth,
+  //     document.body.offsetWidth, document.documentElement.offsetWidth,
+  //     document.body.clientWidth, document.documentElement.clientWidth
+  //   )
+  //   setWidthPage(w);
+  //   if(w <= 500) setIsTable(false);
+  // }
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize, false);
-    const w = Math.max(
-      document.body.scrollWidth, document.documentElement.scrollWidth,
-      document.body.offsetWidth, document.documentElement.offsetWidth,
-      document.body.clientWidth, document.documentElement.clientWidth
-    );
-    setWidthPage(w);
-    if(w <= 500) setIsTable(false);
-    return () => window.removeEventListener('scroll', handleResize);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("resize", handleResize, false);
+  //   const w = Math.max(
+  //     document.body.scrollWidth, document.documentElement.scrollWidth,
+  //     document.body.offsetWidth, document.documentElement.offsetWidth,
+  //     document.body.clientWidth, document.documentElement.clientWidth
+  //   );
+  //   setWidthPage(w);
+  //   if(w <= 500) setIsTable(false);
+  //   return () => window.removeEventListener('scroll', handleResize);
+  // }, []);
 
   if(projects.length <= 0){
     return (

@@ -249,8 +249,8 @@ export default function NewQuotation({showForm, token, usr, updateQuotations, sh
   return(//top-16
     <>
       <ContainerSideNav width="w-full max-w-md" open={showSideNav}>
-        <div style={{height: `${heightPage}px`}}>
-          <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
+        <div className="bg-white px-2 py-2 sm:py-5 sm:px-7 right-0" style={{height: `${heightPage}px`}}>
+          <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
             <div className="flex mt-2 items-center">
               <img src={"/img/role.svg"} alt="logo" className="rounded-full w-8 h-auto" />
               <div className="ml-3">

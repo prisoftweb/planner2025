@@ -189,6 +189,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, com
     // setConceptsInvoice((prev) => [...prev, concept]);
     // setShowNewConcept(false);
     fetchConcepts();
+    // console.log('concept => ', concept);
     handleAddConcept(concept);
   }
 

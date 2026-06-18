@@ -70,8 +70,8 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount }:
   return(//top-16
     <>
       <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-        <form className="z-10 fixed bg-white space-y-5 p-5 right-0 h-screen">
-          <div className="flex justify-between">
+        <form className="z-10 fixed bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0 h-screen">
+          <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
             <div className="flex mt-2 items-center">
               <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
               <div className="ml-3">
