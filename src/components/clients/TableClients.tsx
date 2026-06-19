@@ -3,7 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { TableClient } from "@/interfaces/Clients";
 import { useClientStore } from "@/app/store/clientStore";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import RemoveElement from "../RemoveElement";
 import { removeClient } from "@/app/api/routeClients";
 import { Badge } from "@mui/material";
@@ -16,6 +16,10 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import CardListComponent from "../CardListComponent";
 import { ClientBack } from "@/interfaces/Clients";
 import { Company } from "@/interfaces/Companies";
+import { ResponsiveHeaderClient } from "../Header";
+import ButtonNewClient from "./ButtonNewClient";
+import { Options } from "@/interfaces/Common";
+import Label from "../Label";
 
 type TableClientsProps = {
   data:TableClient[], 
@@ -23,13 +27,17 @@ type TableClientsProps = {
   selectPermission:boolean, 
   deletePermission: boolean,
   clientsData:ClientBack[],
-  company:Company
+  company:Company,
+  user:string,
+  tags:Options[]
 }
 
-export default function TableClients({data, token, deletePermission, selectPermission, clientsData, company}: TableClientsProps){
+export default function TableClients({data, token, deletePermission, selectPermission, clientsData, company, tags, user}: 
+  TableClientsProps){
   
   const columnHelper = createColumnHelper<TableClient>();
   const {clients, setClients, deleteClient} = useClientStore();
+  const [isActive, setIsActive]=useState<boolean>(true);
 
   useEffect(() => {
     setClients(data);
@@ -38,9 +46,11 @@ export default function TableClients({data, token, deletePermission, selectPermi
   console.log('clients data => ', clientsData);
 
   const handleDownload = async () => {
+    const dataActive=clientsData.filter(c => c.status===isActive);
     const blob = await pdf(
       <DownloadClientsReportPDF
-        clients={clientsData}
+        // clients={clientsData}
+        clients={dataActive}
         satCompany={company}
       />
     ).toBlob();
@@ -182,24 +192,30 @@ export default function TableClients({data, token, deletePermission, selectPermi
 
   let table: JSX.Element = <></>;
   if(clients.length > 0){
+    const dataActive=clients.filter(c => c.status===isActive);
     table = (
       <>
         <div className="hidden md:block w-full">
-          <Table columns={columns} data={clients} placeH="Buscar cliente.." />
+          {/* <Table columns={columns} data={clients} placeH="Buscar cliente.." /> */}
+          <Table columns={columns} data={dataActive} placeH="Buscar cliente.." />
         </div>
         <div className="block md:hidden w-full">
-          <ListData data={clients} token={token} delClient={delClient} />
+          {/* <ListData data={clients} token={token} delClient={delClient} /> */}
+          <ListData data={dataActive} token={token} delClient={delClient} />
         </div>
       </>
     )
   }else{
+    const dataActive=data.filter(c => c.status===isActive);
     table = (
       <>
         <div className="hidden md:block w-full">
-          <Table columns={columns} data={data} placeH="Buscar cliente.." />
+          {/* <Table columns={columns} data={data} placeH="Buscar cliente.." /> */}
+          <Table columns={columns} data={dataActive} placeH="Buscar cliente.." />
         </div>
         <div className="block md:hidden w-full">
-          <ListData data={data} token={token} delClient={delClient} />
+          {/* <ListData data={data} token={token} delClient={delClient} /> */}
+          <ListData data={dataActive} token={token} delClient={delClient} />
         </div>
       </>
     )
@@ -207,36 +223,43 @@ export default function TableClients({data, token, deletePermission, selectPermi
   
   return(
     <>
-      <div className="flex justify-end">
-        {/* <PDFDownloadLink document={<DownloadClientsReportPDF clients={clientsData} satCompany={company} />} fileName={'Clientes'} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </Tooltip>
-            ) : (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-              </Tooltip>
-            ) }
-        </PDFDownloadLink> */}
-
-        <Tooltip
-          closeDelay={0}
-          delay={100}
-          motionProps={propsTooltip}
-          content="Informe"
-          placement="right"
-          className="text-blue-500 bg-white rounded-md border border-slate-400"
-        >
-          <button onClick={handleDownload}>
-            <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-          </button>
-        </Tooltip>
+      <ResponsiveHeaderClient title="Clientes" placeHolder="Buscar cliente.." >
+        <div className="flex items-center gap-x-5 justify-end">
+          <div className="inline-flex items-center">
+            <Label>Activos</Label>  
+            <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+              <input checked={isActive} 
+                onClick={() => setIsActive(!isActive)} id="active" type="checkbox"
+                // onChange={() => console.log('')}
+                className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                  appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                  peer-checked:border-green-500 peer-checked:before:bg-green-500
+                  border border-slate-300" />
+              <label htmlFor="active"
+                className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                  data-ripple-dark="true"></div>
+              </label>
+            </div>
+          </div>
+          <Tooltip
+            closeDelay={0}
+            delay={100}
+            motionProps={propsTooltip}
+            content="Informe"
+            placement="right"
+            className="text-blue-500 bg-white rounded-md border border-slate-400"
+          >
+            <button onClick={handleDownload}>
+              <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+            </button>
+          </Tooltip>
+          <ButtonNewClient id={user} token={token} tags={tags} company={company._id} />
+        </div>
+      </ResponsiveHeaderClient>
+      <div className="mt-5">
+        {table}
       </div>
-      {table}
     </>
   )
 }

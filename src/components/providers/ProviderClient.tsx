@@ -12,6 +12,7 @@ import { useOneProviderStore } from "@/app/store/providerStore"
 import { ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers"
 import ShowContactasProv from "./ShowContactsProv"
 import BankData from "./BankData"
+import ConfigProvider from "./ConfigProvider"
 
 export default function ProviderClient({provider, token, id, costPayment, user, company}: 
   {provider:Provider, token:string, id:string, costPayment:ICostTOTALPendingPAYGroupByPROVIDER, 
@@ -43,21 +44,27 @@ export default function ProviderClient({provider, token, id, costPayment, user, 
               style={{borderColor:'#F8FAFC'}}>
                 <BankData id={id} provider={provider} token={token} company={company} user={user} />
               </div>): 
-        (<div>
-          {provider.tradeline?.creditlimit ? 
-            <div className="w-full h-full flex flex-wrap lg:flex-nowrap gap-x-3">
-              <Sumary provider={provider} token={token} costPayment={costPayment} />
-              <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
-                <ShowContactasProv provider={provider} token={token} />
-              </div>
-            </div>
-            : <div className="w-full h-full flex flex-wrap lg:flex-nowrap gap-x-3">
-                <DataBasic id={id} provider={provider} token={token} user={user} />
-                <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
-                  <ShowContactasProv provider={provider} token={token} />
-                </div>
-              </div> }
-        </div>) )))
+        (opt===6? (<>
+                    <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                      style={{borderColor:'#F8FAFC'}}>
+                        <ConfigProvider provider={provider} status={provider?.status?? false} token={token} />
+                    </div>
+                  </>):
+                    (<div>
+                      {provider.tradeline?.creditlimit ? 
+                        <div className="w-full h-full flex flex-wrap lg:flex-nowrap gap-x-3">
+                          <Sumary provider={provider} token={token} costPayment={costPayment} />
+                          <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
+                            <ShowContactasProv provider={provider} token={token} />
+                          </div>
+                        </div>
+                        : <div className="w-full h-full flex flex-wrap lg:flex-nowrap gap-x-3">
+                            <DataBasic id={id} provider={provider} token={token} user={user} />
+                            <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
+                              <ShowContactasProv provider={provider} token={token} />
+                            </div>
+                          </div> }
+                    </div>) ))))
       
   );
 

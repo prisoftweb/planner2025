@@ -8,6 +8,7 @@ import { FaAddressCard } from "react-icons/fa";
 import { MdContactPhone } from "react-icons/md";
 import { Resource2 } from "@/interfaces/Roles";
 import { propsTooltip } from "@/libs/animations";
+import {Cog8ToothIcon} from "@heroicons/react/24/solid";
 
 type NavResponsiveProps = {
   open:boolean, 
@@ -32,6 +33,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
   const resumeData = permissionProfile?.components.find((comp) => comp.component.name.toLowerCase() === 'resume');
   const contactData = permissionProfile?.components.find((comp) => comp.component.name.toLowerCase() === 'contact');
   const aditionalData = permissionProfile?.components.find((comp) => comp.component.name.toLowerCase() === 'aditionaldata');
+  const configClient = true;
 
   let nav: JSX.Element = <></>;
   if(!open){
@@ -109,6 +111,19 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
                   onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
                   style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
                     color: isHover===5 || option===5 ? 'white' : '',}}
+                />
+              </div>              
+          </Tooltip>
+        )}
+        {configClient && (
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Configuracion' 
+            placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+              <div className="p-1" style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': '')}}>
+                <Cog8ToothIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                        text-slate-500 my-1 bg-white rounded-md ${option===6? 'bg-blue-500': ''}`} onClick={() => changeOption(6)} 
+                  onMouseEnter={() => {setIsHover(6)} } onMouseLeave={() => setIsHover(-1)}
+                  style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': ''), 
+                    color: isHover===6 || option===6 ? 'white' : '',}}
                 />
               </div>              
           </Tooltip>
@@ -230,6 +245,12 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
         <div onClick={() => changeOption(5)} className="flex flex-col items-center">
           <MdContactPhone className={`w-6 h-6 ${option===5 ? 'text-green-500' : 'text-slate-500'}`} />
           <span className="text-xs">Contactos</span>
+        </div>)}
+
+      {configClient && (
+        <div onClick={() => changeOption(6)} className="flex flex-col items-center">
+          <Cog8ToothIcon className={`w-6 h-6 ${option===6 ? 'text-green-500' : 'text-slate-500'}`} />
+          <span className="text-xs">Configuracion</span>
         </div>)}
     </div>
   )

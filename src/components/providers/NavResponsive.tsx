@@ -1,5 +1,5 @@
 import { ArrowDownTrayIcon} from "@heroicons/react/24/solid"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 
 import { PiPresentationChartLight } from "react-icons/pi";
@@ -8,6 +8,7 @@ import { FaMoneyCheckDollar } from "react-icons/fa6";
 import { RiContactsBook3Line } from "react-icons/ri";
 import { propsTooltip } from "@/libs/animations";
 import { PiBankThin } from "react-icons/pi";
+import {Cog8ToothIcon} from "@heroicons/react/24/solid";
 
 export default function NavResponsive({open, setOpen, option, changeOption, tradeline}: 
   {open:boolean, setOpen:Function, option:number, changeOption:Function, tradeline: boolean}){
@@ -84,8 +85,20 @@ export default function NavResponsive({open, setOpen, option, changeOption, trad
                 className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                       text-slate-500 my-1 bg-white rounded-md ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
                 onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
-                style={{backgroundColor: isHover===5 ? '#0075c9' : (option===4? '#178DE1': ''), 
+                style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
                   color: isHover===5 || option===5 ? 'white' : '',}}
+              />
+            </div>              
+        </Tooltip>
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Configuracion' 
+          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+            <div className="p-1" style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': '')}}>
+              <Cog8ToothIcon 
+                className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                      text-slate-500 my-1 bg-white rounded-md ${option===6? 'bg-blue-500': ''}`} onClick={() => changeOption(6)} 
+                onMouseEnter={() => {setIsHover(6)} } onMouseLeave={() => setIsHover(-1)}
+                style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': ''), 
+                  color: isHover===6 || option===6 ? 'white' : '',}}
               />
             </div>              
         </Tooltip>
@@ -166,6 +179,19 @@ export default function NavResponsive({open, setOpen, option, changeOption, trad
           />
           Datos bancarios
         </div>
+        <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer pl-2
+          flex py-2 items-center ${option===5? 'bg-slate-200': ''}`}
+          onClick={() => changeOption(5)}
+        >
+          <Cog8ToothIcon
+            style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': ''), 
+              color: isHover===6 || option===6 ? 'white' : '',}}
+            className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+              text-slate-500 my-1 bg-white rounded-md mr-2
+              ${option===6? 'bg-blue-500': ''}`}
+          />
+          Configuracion
+        </div>
       </div>
     )
   }
@@ -204,6 +230,13 @@ export default function NavResponsive({open, setOpen, option, changeOption, trad
                       className={`w-6 h-6 cursor-pointer ${option===5 ? 'text-green-500' : 'text-slate-500'}`}
                     />
                     <span className="text-xs">Datos bancarios</span>
+                  </div>
+
+                  <div onClick={() => changeOption(5)} className="flex flex-col items-center">
+                    <Cog8ToothIcon
+                      className={`w-6 h-6 cursor-pointer ${option===5 ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                    <span className="text-xs">Configuracion</span>
                   </div>
 
                 </div>

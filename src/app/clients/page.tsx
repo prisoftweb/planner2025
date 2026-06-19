@@ -160,21 +160,16 @@ export default async function clients(){
     <>
       <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
-        <ResponsiveHeader title="Clientes" placeHolder="Buscar cliente.." >
-          {/* {permisionsClient.permission.create? (
-            <ButtonNewClient id={user._id} token={token} tags={arrTags} />
-          ): (
-            <></>
-          )} */}
+        {/* <ResponsiveHeader title="Clientes" placeHolder="Buscar cliente.." >
           <ButtonNewClient id={user._id} token={token} tags={arrTags} company={user.profile} />
-        </ResponsiveHeader>
+        </ResponsiveHeader> */}
         <div className="mt-5">
           <TableClients data={data} token={token} clientsData={clients} 
             // deletePermission={permisionsClient.permission.delete}
             // selectPermission={permisionsClient.permission.select}
             selectPermission={true}
             deletePermission={true}
-            company={company}
+            company={company} tags={arrTags} user={user._id}
           />
         </div>
       </div>

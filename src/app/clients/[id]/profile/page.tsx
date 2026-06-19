@@ -15,6 +15,7 @@ import NavTab from "@/components/clients/NavTab";
 import HeaderImage from "@/components/HeaderImage";
 import WithOut from "@/components/WithOut";
 import { Resource2 } from "@/interfaces/Roles";
+import ConfigClient from "@/components/clients/ConfigClient";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();

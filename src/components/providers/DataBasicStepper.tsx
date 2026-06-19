@@ -90,7 +90,9 @@ export default function DataBasicStepper({token, id, user, company}:
       }else{
         if(Array.isArray(res) && res.length>0){
           setOptTypes(res);
-          setType(res[0]);
+          if(Array.isArray(res) && res.length>0){
+            setType(res[0].value);
+          }
         }
       }
 

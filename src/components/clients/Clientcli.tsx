@@ -14,6 +14,7 @@ import NavResponsive from "./NavResponsive"
 import { Resource2 } from "@/interfaces/Roles"
 import { useClientProfileStore } from "@/app/store/clientStore"
 import ShowContactasClicComponent from "./ShowContactasClicComponent"
+import ConfigClient from "./ConfigClient"
 
 type ClientCliProps = {
   client:ClientBack, 
@@ -62,7 +63,11 @@ export default function ClientCli({client, token, id, tags, clientPermissions,
                         style={{borderColor:'#F8FAFC'}}>
                   <Contacts id={id} contacts={client.contact || []} token={token}
                     editInfo={true} company={company} />
-                </div>):  (<div className="mt-3 w-full md:p-2" 
+                </div>):  (
+        opt===6? (<div className="mt-3 w-full sm:max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                          style={{borderColor:'#F8FAFC'}}>
+                    <ConfigClient client={client} status={client.status} token={token} />
+                  </div>):(<div className="mt-3 w-full md:p-2" 
                                     style={{borderColor:'#F8FAFC'}}>
                               <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
                                 <Sumary totalprj={totalprj} totalColl={totalColl} 
@@ -71,7 +76,7 @@ export default function ClientCli({client, token, id, tags, clientPermissions,
                                   <ShowContactasClicComponent client={client} token={token} idCli={id} />
                                 </div>
                               </div>
-                          </div>)) ))
+                          </div>))) ))
   
   const [open, setOpen] = useState<boolean>(false);
 

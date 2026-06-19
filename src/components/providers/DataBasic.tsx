@@ -38,14 +38,18 @@ export default function DataBasic({id, token, provider, user}:{id:string, token:
         showToastMessageError(res);
       }else{
         setOptTypes(res);
-        setType(res[0]);
+        if(Array.isArray(res) && res.length>0){
+          setType(res[0].value);
+        }
       }
 
       if(typeof(resc)==='string'){
         showToastMessageError(resc);
       }else{
         setOptCategories(resc);
-        setCategory(resc[0].value);
+        if(Array.isArray(resc) && resc.length>0){
+          setCategory(resc[0].value);
+        }
       }
     }
     fetch();
