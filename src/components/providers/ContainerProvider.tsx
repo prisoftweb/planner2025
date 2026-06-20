@@ -34,6 +34,7 @@ export default function ContainerProvider({providers, user, token, company}: Con
   const {providerStore, updateProviderStore} = useProviderStore();
   const [isCreditLine, setIsCreditLine]=useState<boolean>(true);
   const [isBankData, setIsBankData]=useState<boolean>(false);
+  const [isActive, setIsActive]=useState<boolean>(true);
 
   useEffect(() => {
     updateProviderStore(providers);
@@ -66,6 +67,8 @@ export default function ContainerProvider({providers, user, token, company}: Con
         value: prov.tradeline.currentbalance || 0
       })
 
+      const status=prov.status==undefined? true: prov.status;
+
       data.push({
         'id': prov._id,
         'name': prov.name,
@@ -79,14 +82,17 @@ export default function ContainerProvider({providers, user, token, company}: Con
         bankdetails: prov?.accountBank?._id? true:false,
         email: prov?.email?? '',
         phone: prov?.phone?? '',
-        type: prov?.type?.name?? ''
+        type: prov?.type?.name?? '',
+        status: status,
+        statusGlosary: prov.estatus
       })
     })
   }
 
-  // console.log('data data => ', data);
+  console.log('providers => ', providerStore);
+  console.log('data table => ', data);
 
-  const dataFilter=data.filter(p => p.suppliercredit==isCreditLine && p.bankdetails==isBankData);
+  const dataFilter=data.filter(p => p.suppliercredit==isCreditLine && p.bankdetails==isBankData && p.status==isActive);
 
   // console.log('data filter => ', dataFilter);
 
@@ -98,6 +104,7 @@ export default function ContainerProvider({providers, user, token, company}: Con
   );
 
   const handleDownload = async () => {
+    // const dataActive=dataReport.filter(d => d.status===isActive);
     const blob = await pdf(
       // <DownloadProvidersReportPDF providers={providers} satCompany={company} />
       <DownloadProvidersReportPDF providers={dataReport} satCompany={company} />
@@ -163,6 +170,23 @@ export default function ContainerProvider({providers, user, token, company}: Con
               <SearchInTable placeH="Buscar proveedor.." />
             </div>
             <div className="flex items-center gap-x-3 mt-3 md:mt-0">
+              <div className="inline-flex items-center mr-1">
+                <Label>Activos</Label>  
+                <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+                  <input checked={isActive} 
+                    onClick={() => setIsActive(!isActive)} id="active" type="checkbox"
+                    // onChange={() => console.log('')}
+                    className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                      appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                      peer-checked:border-green-500 peer-checked:before:bg-green-500
+                      border border-slate-300" />
+                  <label htmlFor="active"
+                    className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                    <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                      data-ripple-dark="true"></div>
+                  </label>
+                </div>
+              </div>
               <div className="inline-flex items-center">
                 <Label>Datos bancarios</Label>  
                 <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">

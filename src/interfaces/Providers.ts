@@ -105,6 +105,7 @@ export interface IProviderMin {
   contact?:Contact[],
   email?:string,
   phone?:string,
+  status?:boolean
 }
 
 // export interface Tradeline {
@@ -155,6 +156,13 @@ export interface TableProvider{
   type: string,
   phone:string
   email:string
+  status?:boolean
+  statusGlosary:{
+    _id: string
+    name: string
+    color: string
+    darktext: boolean
+  }
 }
 
 export interface Tradeline{

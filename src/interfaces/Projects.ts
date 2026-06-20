@@ -142,7 +142,8 @@ export interface ProjectMin {
     porcentage: number,
     amount: number
   },
-  user?: UsrBack
+  user?: UsrBack,
+  endDate?:string
 }
 
 export interface Location {

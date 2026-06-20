@@ -10,6 +10,7 @@ import { useProviderStore } from "@/app/store/providerStore";
 import { showToastMessageError } from "../Alert";
 import { Badge } from "@mui/material";
 import { useTableStates } from "@/app/store/tableStates";
+import Chip from "./Chip";
 
 export default function TableProviders({data, token}:
           {data:TableProvider[], token:string}){
@@ -116,6 +117,17 @@ export default function TableProviders({data, token}:
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
         >{row.original.type}</p>
+      )
+    }),
+    columnHelper.accessor('statusGlosary._id', {
+      header: 'Estatus',
+      id: 'estatus',
+      cell: ({row}) => (
+        // <p className="py-2 cursor-pointer"
+        //   onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
+        // >{row.original.type}</p>
+        <Chip darktext={row.original.statusGlosary.darktext} label={row.original.statusGlosary.name}
+            color={row.original.statusGlosary.color} />
       )
     }),
     columnHelper.accessor('suppliercredit', {
