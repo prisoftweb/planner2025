@@ -257,7 +257,10 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
           <Button onClick={() => handleIsAddInvoices(true)}>Agregar a anticipo</Button>
         )}
       </div>
-      <div className="flex justify-end mr-3 mt-3">
+      <div className="flex justify-end gap-x-5 mr-3 mt-3">
+        {dataTable.length <= 0 && (
+          <p className="text-red-500 w-full">No hay facturas pendientes de aplicacion</p>
+        ) }
         <div>
           {satCompany && (
             <PDFDownloadLink document={<DownloadAdvancePDF provider={provider} advance={advance} costsRelAdvance={costsAdvance} satCompany={satCompany} />} fileName={'Anticipo'} >

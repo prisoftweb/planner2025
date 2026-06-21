@@ -21,12 +21,14 @@ export default function LogoCompanyStepper({handleIndex, file, fileIsologo, hand
       <div className='flex justify-between gap-x-3 items-center'>
         <div className='w-1/2'>
           <Label>Logotipo</Label>
-          {file && (<img src={URL.createObjectURL(file)} alt="Logo Company" className="w-20 h-20 object-contain mb-2"/> )}
+          {/* {file && (<img src={URL.createObjectURL(file)} alt="Logo Company" className="w-20 h-20 object-contain mb-2"/> )} */}
+          {file && (<img src={URL.createObjectURL(file)} alt="Logo Company" className="w-auto h-auto object-contain mb-2"/> )}
           <UploadImage setFile={handleFile} />
         </div>
         <div className='w-1/2'>
           <Label>Isologo</Label>
-          {fileIsologo && (<img src={URL.createObjectURL(fileIsologo)} alt="IsoLogo Company" className="w-20 h-20 object-contain mb-2"/> )}
+          {/* {fileIsologo && (<img src={URL.createObjectURL(fileIsologo)} alt="IsoLogo Company" className="w-20 h-20 object-contain mb-2"/> )} */}
+          {fileIsologo && (<img src={URL.createObjectURL(fileIsologo)} alt="IsoLogo Company" className="w-auto h-auto object-contain mb-2"/> )}
           <UploadImage setFile={handleFileIsologo} />
         </div>
       </div>

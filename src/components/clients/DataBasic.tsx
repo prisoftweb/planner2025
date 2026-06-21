@@ -96,7 +96,8 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
           rfc,
           tradename,
           taxregime,
-          ...(capitalregime && { capitalregime }),
+          // ...(capitalregime && { capitalregime }),
+          capitalregime,
           phone,
           source,
           tags:tagsSelected,
@@ -143,7 +144,7 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
       <form id="basicdata" onSubmit={formik.handleSubmit} className="mt-4 w-full">
         <div className="grid grid-cols-1 gap-4">
           <div className="">
-            <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+            <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Razon social</p></Label>
             <Input type="text" name="name" autoFocus 
               value={formik.values.name}
               onChange={formik.handleChange}
