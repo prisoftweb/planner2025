@@ -260,7 +260,7 @@ export default function AddNewCollectionComponent({showForm, user, token, update
                                     <DispersionCollectionStepper NextStep={handleStep} token={token}
                                         user={user} invoicesDisp={invoicesDisp} saveCollection={saveCollection}
                                         updateAmount={handleUpdateAmount} />))
-
+// console.log('');
   return(
     <>
       <form className="z-10 absolute w-full max-w-xl bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0"

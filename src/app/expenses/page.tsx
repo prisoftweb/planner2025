@@ -22,9 +22,6 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
-        </div> */}
         <ComponentError page="/expenses" message={expenses} />
       </>
     )

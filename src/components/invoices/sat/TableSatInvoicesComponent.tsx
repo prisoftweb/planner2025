@@ -608,7 +608,94 @@ const ListData = ({data, token, delInvoice, updateView, user, optionsCancel, com
   if(search.trim() === ''){
     filterData=data;
   }else{
-    const d = data.filter(item => item.folio.toLowerCase().includes(search.toLowerCase()));
+    // const d = data.filter(item => item.folio.toLowerCase().includes(search.toLowerCase()) || item.client?.toLowerCase().includes(search.toLowerCase())
+    //                 || item.project?.toLowerCase().includes(search.toLowerCase()) || item.estimate?.toLowerCase().includes(search.toLowerCase())
+    //               || item.fecha?.toLowerCase().includes(search.toLowerCase()) || item.amount?.toString().includes(search) || item.subtotal?.toString().includes(search));
+    // const term = search.toLowerCase();
+    const term = search.trim().toLowerCase();
+
+    // const d = data.filter(item =>
+    //   item.folio?.toString().toLowerCase().includes(term) ||
+    //   item.client?.toLowerCase().includes(term) ||
+    //   item.project?.toLowerCase().includes(term) ||
+    //   item.estimate?.toLowerCase().includes(term) ||
+    //   item.fecha?.toLowerCase().includes(term) ||
+    //   item.amount?.toString().includes(search) ||
+    //   item.subtotal?.toString().includes(search)
+    // );
+    // const d = data.filter(item =>
+    //   item.folio?.toString().toLowerCase().includes(term) ||
+    //   item.client?.toLowerCase().includes(term) ||
+    //   item.nameProject?.toLowerCase().includes(term) ||
+    //   item.estimate?.toLowerCase().includes(term) ||
+    //   item.fecha?.toLowerCase().includes(term) ||
+    //   item.amount?.toString().includes(search) ||
+    //   item.subtotal?.toString().includes(search)
+    // );
+
+    // const d = data.filter(item =>
+    //   [
+    //     item.folio,
+    //     item.client,
+    //     item.nameProject,
+    //     item.estimate,
+    //     item.fecha,
+    //     item.amount,
+    //     item.subtotal
+    //   ].filter(Boolean)
+    //     .some(value =>
+    //       value.toString().toLowerCase().includes(term)
+    //     )
+    // );
+    const d = data.filter(item =>
+      [
+        item.folio,
+        item.client,
+        item.nameProject,
+        item.estimate,
+        item.fecha,
+        item.amount,
+        item.subtotal
+      ]
+        .some(value =>
+          String(value ?? '')
+            .toLowerCase()
+            .includes(term)
+        )
+    );
+
+    // data.slice(0, 5).forEach(item => {
+    //   console.log({
+    //     folio: item.folio?.toString().toLowerCase().includes(term),
+    //     client: item.client?.toLowerCase().includes(term),
+    //     project: item.project?.toLowerCase().includes(term),
+    //     estimate: item.estimate?.toLowerCase().includes(term),
+    //     fecha: item.fecha?.toLowerCase().includes(term),
+    //     amount: item.amount?.toString().includes(search),
+    //     subtotal: item.subtotal?.toString().includes(search),
+    //     item
+    //   });
+
+    //   console.log(JSON.stringify({
+    //     folio: item.folio?.toString().toLowerCase().includes(term),
+    //     client: item.client?.toLowerCase().includes(term),
+    //     project: item.project?.toLowerCase().includes(term),
+    //     estimate: item.estimate?.toLowerCase().includes(term),
+    //     fecha: item.fecha?.toLowerCase().includes(term),
+    //     amount: item.amount?.toString().includes(search),
+    //     subtotal: item.subtotal?.toString().includes(search),
+    //     item
+    //   }));
+    // });
+    // console.table(
+    //   data.slice(0, 10).map(item => ({
+    //     project: item.project,
+    //     nameProject: item.nameProject,
+    //     client: item.client,
+    //     matchProject: item.project?.toLowerCase().includes("orl"),
+    //     matchNameProject: item.nameProject?.toLowerCase().includes("orl")
+    //   }))
+    // );
     filterData=d;
   }
 

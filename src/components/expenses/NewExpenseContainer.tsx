@@ -162,24 +162,27 @@ export default function NewExpenseContainer({token, showForm, user, company }:
   }
 
   return(
-    <div className="z-10 w-full sm:max-w-3xl absolute bg-white p-5 right-0"
+    <div className="z-10 w-full sm:max-w-3xl absolute bg-white px-2 py-2 sm:py-5 sm:px-7 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full p-1 sm:p-3">
-        <div className="flex justify-end">
-          <TooltipCloseIcons handleClose={closeForm} />
-        </div>
-        <div className="flex justify-between items-center flex-wrap sm:flex-nowrap gap-x-3 gap-y-3">
-          <HeaderForm img="/img/gastos.svg" subtitle="Ingresa los gastos del informe" 
-            title="Nuevo gasto"
-          />
-          { report!=='' && viewSelectProject}
-          {indexStepper==0 && categories.length > 0 && (
-            <div className="w-48">
-              <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-              <SelectReact index={indexCate} opts={categories} setValue={handleCategory} />
-            </div>
-          )}
+        <div className="p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
+          <div className="flex justify-end">
+            <TooltipCloseIcons handleClose={closeForm} />
+          </div>
+          <div className="flex justify-between items-center flex-wrap sm:flex-nowrap gap-x-3 gap-y-3">
+          {/* <div className="flex justify-between p-2 rounded-md items-center flex-wrap sm:flex-nowrap gap-x-3 gap-y-3" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}> */}
+            <HeaderForm img="/img/gastos.svg" subtitle="Ingresa los gastos del informe" 
+              title="Nuevo gasto"
+            />
+            { report!=='' && viewSelectProject}
+            {indexStepper==0 && categories.length > 0 && (
+              <div className="w-48">
+                <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+                <SelectReact index={indexCate} opts={categories} setValue={handleCategory} />
+              </div>
+            )}
+          </div>
         </div>
         <TabDeductible />
         {stepform}

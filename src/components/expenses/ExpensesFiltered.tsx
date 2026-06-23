@@ -173,10 +173,10 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
 
   return(
     <>
-      <form className="z-10 w-full max-w-[550px] absolute bg-white space-y-5 p-5 right-0"
+      <form className="z-10 w-full max-w-[550px] absolute bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0"
         style={{height: `${heightPage}px`}}
       >
-        <div className="flex justify-between">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <div className="flex mt-2 items-center">
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
             <div className="ml-3">

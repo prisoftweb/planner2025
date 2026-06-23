@@ -249,17 +249,11 @@ export default function TableCollectionsComponent({token, user, collectionsParam
             </TooltipContainerIcon>
           </Link>
           <p className="flex-1 text-xl ml-4 font-medium">Recuperacion de cartera</p>
-          {/* <div className="flex justify-end sm:hidden">
-            <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
-          </div> */}
           <div className="flex flex-col items-center sm:hidden">
             <PlusCircleIcon onClick={() => setShowNewCollection(true)} className={`w-6 h-6 text-slate-700 cursor-pointer`} />
             <span className="text-xs">Nuevo</span>
           </div>
         </div>
-        {/* <div className="flex w-full justify-end sm:hidden">
-          <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
-        </div> */}
         <div className="xl:flex lg:gap-x-3 items-center">
           <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3 xl:order-2`}>
             <div className="flex-1 flex justify-end">
@@ -330,7 +324,6 @@ export default function TableCollectionsComponent({token, user, collectionsParam
           </div>
         </div>
       </div>
-      {/* {widthPage > 1080 && filterElemnts} */}
       
       <div className="relative mt-5 flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border h-[calc(100vh-317px)]">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-317px)]

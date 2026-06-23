@@ -140,9 +140,10 @@ export default async function Page({ params }: { params: { id: string }}){
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderImage image={client.logo? client.logo: '/img/clients.svg'} 
               previousPage="/clients" title={client.name}>
-          {permisionsClient.permission.searchfull? (
+          {/* {permisionsClient.permission.searchfull? (
             <Selectize options={options} routePage="clients" subpath="/profile" />
-          ): <></>}
+          ): <></>} */}
+          <Selectize options={options} routePage="clients" subpath="/profile" />
         </HeaderImage>
         <NavTab idCli={params.id} tab='1' />
         <NextUiProviders>
