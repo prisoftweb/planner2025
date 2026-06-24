@@ -5,13 +5,28 @@ import { getCatalogs } from "../api/routeCatalogs";
 import { Catalog } from "@/interfaces/Catalogs";
 import ListClient from "@/components/catalogs/ListClient";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let catalogs: Catalog[] = await getCatalogs(token);
+  // let catalogs: Catalog[] = await getCatalogs(token);
+
+  const [catalogs, resresource]=await Promise.all([
+    getCatalogs(token),
+    getAllResourcesByROL(token, user.rol?._id?? '')
+  ]);
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
+
   if(typeof(catalogs)=== 'string'){
     return (
       <>

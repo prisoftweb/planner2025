@@ -147,3 +147,21 @@ export interface TreeTable{
   routes: string,
   components: string,
 }
+
+export interface IAllResourcesByROL{
+  resource: string
+  permission: {
+    create: boolean
+    read: boolean
+    update: boolean
+    delete: boolean
+    search: boolean
+    export: boolean
+    print: boolean
+    select: boolean
+    filter: boolean
+    searchfull: boolean
+    readfull: boolean
+  }
+  id: string
+}

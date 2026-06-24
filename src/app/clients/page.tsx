@@ -13,6 +13,7 @@ import { ClientDataToTableClient } from "../functions/ClientFunctions";
 // import { Resource2 } from "@/interfaces/Roles";
 import ComponentError from "@/components/ComponentError";
 import { getCompany } from "../api/routeCompany";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function clients(){
   
@@ -45,11 +46,20 @@ export default async function clients(){
   // tags = await getTags(token);
   // clients = await getClients(token);
 
-  const [tags, clients, company]=await Promise.all([
+  const [tags, clients, company, resresource]=await Promise.all([
     getTags(token),
     getClients(token),
-    getCompany(token, user.profile)
+    getCompany(token, user.profile),
+    getAllResourcesByROL(token, user.rol?._id?? '')
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(tags)==='string'){
     return(

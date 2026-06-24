@@ -5,6 +5,7 @@ import ContainerNewCode from "@/components/codes/ContainerNewCode";
 import { getCompany } from "@/app/api/routeCompany";
 import { Company } from "@/interfaces/Companies"
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "./api/routeRoles";
 
 export default async function Home() {
   const cookieStore = cookies();
@@ -14,9 +15,26 @@ export default async function Home() {
 
   const depto = typeof(user.department)==='string'? user.department:  user.department.name;
   const role = user.rol?.name || '';
+  const idRole=user.rol?._id ?? '';
 
-  const rescomp: string|Company = await getCompany(token, user.profile);
+  // const rescomp: string|Company = await getCompany(token, user.profile);
   // const rescomp='Error al consultar logo de la compañia';
+
+  const [rescomp, resresource]=await Promise.all([
+    getCompany(token, user.profile),
+    getAllResourcesByROL(token, idRole)
+  ])
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        {/* {role.toLowerCase().includes('invitado')? <></>: (
+          <Navigation user={user} token={token} />
+        )} */}
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(rescomp)==='string'){
     return (
@@ -32,9 +50,10 @@ export default async function Home() {
   return (
     <>
       <div className="bg-white">
-        {role.toLowerCase().includes('invitado')? <></>: (
+        {/* {role.toLowerCase().includes('invitado')? <></>: (
           <Navigation user={user} token={token} />
-        )}
+        )} */}
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md:p-5 flex justify-center">
           {depto.toLowerCase().includes('direccion') || role.toLowerCase().includes('invitado') || 
               role.toLowerCase().includes('residente') || 

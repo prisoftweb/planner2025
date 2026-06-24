@@ -16,8 +16,9 @@ import { getCompanysProfilesByWorkspaceMIN } from "@/app/api/routeWorkspace";
 import { updateUser } from "@/app/api/routeUser";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { setCookie } from "cookies-next";
+import { IAllResourcesByROL } from "@/interfaces/Roles";
 
-export default function Navigation({user, token}: {user:UsrBack, token:string}){
+export default function Navigation({user, token, resources}: {user:UsrBack, token:string, resources?:IAllResourcesByROL[]}){
   
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenP, setIsOpenP] = useState(false);
@@ -105,6 +106,15 @@ export default function Navigation({user, token}: {user:UsrBack, token:string}){
   }
 
   // const firstName = user.name.substring(0, user.name.indexOf(' '));
+  const resResources = resources?.map(item => item.resource);
+
+  // if(resources){
+  //   return(
+  //     <>
+  //       <p>{JSON.stringify(resources)}</p>
+  //     </>
+  //   )
+  // }
   
   return(
     <>
@@ -115,7 +125,7 @@ export default function Navigation({user, token}: {user:UsrBack, token:string}){
         </Link>
         <div className="w-1/12 md:w-9/12 flex justify-end print:hidden">
           <div className="hidden w-full text-white md:flex justify-between print:hidden ">
-            <NavItems role={role} user={user} /> 
+            <NavItems role={role} user={user} resources={resResources} /> 
           </div>
         </div>
         
@@ -146,7 +156,7 @@ export default function Navigation({user, token}: {user:UsrBack, token:string}){
       </nav>
       {isOpen && (
           <div className="flex text-gray-200 bg-blue-950 md:hidden flex-col items-start pl-2  basis-full print:hidden">
-            <NavItems role={role} user={user} />
+            <NavItems role={role} user={user} resources={resResources} />
           </div>
         )}
       {isOpenP && (
@@ -290,86 +300,355 @@ export default function Navigation({user, token}: {user:UsrBack, token:string}){
   )
 }
 
-const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
-  if(role.toLowerCase().includes('residente')){
-    return(
-      <>
-        <NavItem name="Clientes" link="/clients" items={[]}/>
-        <NavItem name="Proyectos" link="/projects" items={[]}/>
-        <NavItem name="Costos" link="" items={[
-            {
-              name: 'Conceptos',
-              link: '/expenses/concepts'
-            },
-            {
-              name: 'Gastos',
-              link: '/expenses'
-            },
-            {
-              name: 'En proceso',
-              link: '/expenses/pending'
-            },
-            {
-              name: 'Historial',
-              link: '/expenses/history'
-            },
-          ]}
-        />
-        <NavItem name="Cotizaciones" link="/quotations/byuser" items={[]} />
-        <NavItem name="Estimaciones" link="/projects/estimates" items={[]} />
-        <NavItem name="Informes" link="" items={[
-            {
-              name: 'Informes',
-              link: '/reports'
-            },
-            {
-              name: 'Historial',
-              link: '/reports/history'
-            },
-          ]} 
-        />
-        {user._id === '679ac44767135227cd14d1e9' && (
-          <NavItem name="Codigos" link="/codes" items={[]} />
-        )}
-      </>
-    )
-  }
+const NavItems = ({role, user, resources}: {role:string, user:UsrBack, resources?:string[]}) => {
 
-  if(role.toLowerCase().includes('invitado')){
-    return(
+  if(resources){
+    console.log('resources => ', resources);
+    const menuConfig = [
+      {
+        name: 'Usuarios',
+        items: [
+          { name: 'Usuarios', link: '/users' },
+          { name: 'Roles', link: '/roles/role' },
+          { name: 'Recursos', link: '/roles/resources' },
+          { name: 'Rutas', link: '/roles/sub-path' },
+          { name: 'Componentes', link: '/roles/components' },
+          { name: 'Arboles', link: '/roles/trees' },
+        ]
+      },
+      {
+        name: 'Proveedores',
+        items: [
+          { name: 'Proveedores', link: '/providers' },
+          { name: 'Dashboards', link: '/providers/dashboards' },
+        ]
+      },
+      {
+        name: 'Clientes',
+        items: [
+          { name: 'Clientes', link: '/clients' }
+        ]
+      },
+      {
+        name: 'Proyectos',
+        items: [
+          { name: 'Proyectos', link: '/projects' },
+          { name: 'Presupuesto', link: '/projects/budget' },
+          { name: 'Historial', link: '/projects/history' },
+          { name: 'Dashboard', link: '/projects/dashboard' },
+          { name: 'Finanzas', link: '/projects/dashboardfinance' },
+          { name: 'Tablero', link: '/projects/board' },
+        ]
+      },
+      {
+        name: 'Cotizaciones',
+        items: [
+          { name: 'Cotizaciones', link: '/quotations' },
+          { name: 'Tablero', link: '/quotations/status' },
+        ]
+      },
+      {
+        name: 'Estimaciones',
+        items: [
+          { name: 'Por proyecto', link: '/projects/estimates' },
+          { name: 'Activas', link: '/projects/estimates/withoutinvoice' },
+          { name: 'Historial', link: '/projects/estimates/history' },
+        ]
+      },
+      {
+        name: 'Facturacion',
+        items: [
+          { name: 'Remisiones', link: '/referrals' },
+          { name: 'Subir facturas', link: '/invoices' },
+          { name: 'Facturas SAT', link: '/satinvoices' },
+        ]
+      },
+      {
+        name: 'Cobranza',
+        items: [
+          { name: 'Historial', link: '/collections/history' },
+          { name: 'Cuentas por cobrar', link: '/collections' },
+          { name: 'Dashboards', link: '/collections/dashboard' },
+          { name: 'Fondos de Garantia', link: '/guarantee' },
+        ]
+      },
+      {
+        name: 'Costos',
+        items: [
+          { name: 'Centro de costos', link: '/costcenter' },
+          { name: 'Conceptos', link: '/expenses/concepts' },
+          { name: 'Gastos', link: '/expenses' },
+          { name: 'En proceso', link: '/expenses/pending' },
+          { name: 'Historial', link: '/expenses/history' },
+          { name: 'Reportes', link: '/expenses/reports' },
+          { name: 'Dashboards', link: '/expenses/dashboard' },
+        ]
+      },
+      {
+        name: 'Informes',
+        items: [
+          { name: 'Informes', link: '/reports' },
+          { name: 'Historial', link: '/reports/history' },
+        ]
+      },
+      {
+        name: 'Catalogos',
+        items: [
+          { name: 'Listas', link: '/catalogs' },
+          { name: 'Departamentos', link: '/departments' },
+          { name: 'Glosarios', link: '/glossary' },
+          { name: 'Catalogos', link: '/status' },
+          { name: 'Codigos', link: '/codes' },
+          { name: 'Asignar Codigos', link: '/codes/assignedCode' },
+        ]
+      },
+      {
+        name: 'Workflow',
+        items: [
+          { name: 'Workflow', link: '/workflows' },
+          { name: 'Nodos', link: '/nodes' },
+          { name: 'Relaciones', link: '/relations' },
+        ]
+      }
+    ];
+    
+    const permissions=new Set(resources);
+
+    return (
       <>
-        <NavItem name="Clientes" link="/clients" items={[]}/>
-        <NavItem name="Proyectos" link="/projects" items={[]}/>
-        <NavItem name="Costos" link="" items={[
-            {
-              name: 'Gastos',
-              link: '/expenses'
-            },
-            {
-              name: 'En proceso',
-              link: '/expenses/pending'
-            },
-            {
-              name: 'Historial',
-              link: '/expenses/history'
-            },
-          ]}
-        />
-        <NavItem name="Cotizaciones" link="/quotations/byuser" items={[]} />
-        <NavItem name="Estimaciones" link="/projects/estimates" items={[]} />
-        <NavItem name="Informes" link="" items={[
-            {
-              name: 'Informes',
-              link: '/reports'
-            },
-            {
-              name: 'Historial',
-              link: '/reports/history'
-            },
-          ]} 
-        />
+        {menuConfig.map(menu => {
+          const allowedItems = menu.items.filter(item =>
+            permissions.has(item.link.replace(/^\//, ''))
+          );
+
+          if (!allowedItems.length) return null;
+
+          return (
+            <NavItem
+              key={menu.name}
+              name={menu.name}
+              link=""
+              items={allowedItems}
+            />
+          );
+        })}
       </>
-    )
+    );
+
+    // return(
+    //   <>
+    //     <NavItem name="Usuarios" link="" items={[
+    //       {
+    //         name: 'Usuarios',
+    //         link: '/users'
+    //       },
+    //       {
+    //         name: 'Roles',
+    //         link: '/roles/role'
+    //       },
+    //       {
+    //         name: 'Recursos',
+    //         link: '/roles/resources'
+    //       },
+    //       {
+    //         name: 'Rutas',
+    //         link: '/roles/sub-path'
+    //       },
+    //       {
+    //         name: 'Componentes',
+    //         link: '/roles/components'
+    //       },
+    //       {
+    //         name: 'Arboles',
+    //         link: '/roles/trees'
+    //       }
+    //     ]}/>
+    //     <NavItem name="Proveedores" link="" items={[
+    //       {
+    //         name: 'Proveedores',
+    //         link: '/providers'
+    //       },
+    //       {
+    //         name: 'Dashboards',
+    //         link: '/providers/dashboards'
+    //       },
+    //     ]}/>
+    //     <NavItem name="Clientes" link="/clients" items={[]}/>
+    //     <NavItem name="Proyectos" link="" items={[
+    //       {
+    //         name: 'Proyectos',
+    //         link: '/projects'
+    //       },
+    //       {
+    //         name: 'Presupuesto',
+    //         link: '/projects/budget'
+    //       },
+    //       {
+    //         name: 'Historial',
+    //         link: '/projects/history'
+    //       },
+    //       {
+    //         name: 'Dashboard',
+    //         link: '/projects/dashboard'
+    //       },
+    //       {
+    //         name: 'Finanzas',
+    //         link: '/projects/dashboardfinance'
+    //       },
+    //       {
+    //         name: 'Tablero',
+    //         link: '/projects/board'
+    //       },
+    //     ]}/>
+    //     <NavItem name="Cotizaciones" link="" items={[
+    //       {
+    //           name: 'Cotizaciones',
+    //           link: '/quotations'
+    //         },
+    //         {
+    //           name: 'Tablero',
+    //           link: '/quotations/status'
+    //         }
+    //     ]}/>
+    //     <NavItem name="Estimaciones" link="" items={[
+    //         {
+    //           name: 'Por proyecto',
+    //           link: '/projects/estimates'
+    //         },
+    //         {
+    //           name: 'activas',
+    //           link: '/projects/estimates/withoutinvoice'
+    //         },
+    //         {
+    //           name: 'Historial',
+    //           link: '/projects/estimates/history'
+    //         },
+    //       ]}
+    //     />
+    //     <NavItem name="Facturacion" link="" items={[
+    //         {
+    //           name: 'Remisiones',
+    //           link: '/referrals'
+    //         },
+    //         {
+    //           name: 'Subir facturas',
+    //           link: '/invoices'
+    //         },
+    //         {
+    //           name: 'Facturas SAT',
+    //           link: '/satinvoices'
+    //         },
+    //       ]}
+    //     />
+    //     <NavItem name="Cobranza" link="" items={[
+    //         {
+    //           name: 'Historial',
+    //           link: '/collections/history'
+    //         },
+    //         {
+    //           name: 'Cuentas por cobrar',
+    //           link: '/collections'
+    //         },
+    //         {
+    //           name: 'Dashboards',
+    //           link: '/collections/dashboard'
+    //         },
+    //         {
+    //           name: 'Fondos de Garantia',
+    //           link: '/guarantee'
+    //         },
+    //       ]}
+    //     />
+    //     <NavItem name="Costos" link="" items={[
+    //         {
+    //           name: 'Centro de costos',
+    //           link: '/costcenter'
+    //         },
+    //         {
+    //           name: 'Conceptos',
+    //           link: '/expenses/concepts'
+    //         },
+    //         {
+    //           name: 'Gastos',
+    //           link: '/expenses'
+    //         },
+    //         {
+    //           name: 'En proceso',
+    //           link: '/expenses/pending'
+    //         },
+    //         {
+    //           name: 'Historial',
+    //           link: '/expenses/history'
+    //         },
+    //         {
+    //           name: 'Reportes',
+    //           link: '/expenses/reports'
+    //         },
+    //         {
+    //           name: 'Dashboards',
+    //           link: '/expenses/dashboard'
+    //         },
+    //       ]}
+    //     />
+    //     <NavItem name="Informes" link="" items={[
+    //         {
+    //           name: 'Informes',
+    //           link: '/reports'
+    //         },
+    //         {
+    //           name: 'Historial',
+    //           link: '/reports/history'
+    //         },
+    //       ]} 
+    //     />
+    //     <NavItem name="Catalogos" link="" items={[
+    //         {
+    //           name: 'Listas',
+    //           link: '/catalogs'
+    //         },
+    //         // {
+    //         //   name: 'Compañias',
+    //         //   link: '/companies'
+    //         // },
+    //         {
+    //           name: 'Departamentos',
+    //           link: '/departments'
+    //         },
+    //         {
+    //           name: 'Glosarios',
+    //           link: '/glossary'
+    //         },
+    //         {
+    //           name: 'Catalogos',
+    //           link: '/status'
+    //         },
+    //         {
+    //           name: 'Codigos',
+    //           link: '/codes'
+    //         },
+    //         {
+    //           name: 'Asignar Codigos',
+    //           link: '/codes/assignedCode'
+    //         },
+    //       ]} 
+    //     />
+    //     <NavItem name="Workflow" link="" items={[
+    //         {
+    //           name: 'Workflow',
+    //           link: '/workflows'
+    //         },
+    //         {
+    //           name: 'Nodos',
+    //           link: '/nodes'
+    //         },
+    //         {
+    //           name: 'Relaciones',
+    //           link: '/relations'
+    //         },
+    //       ]} 
+    //     />
+    //   </>
+    // )
   }
   
   return(
@@ -586,6 +865,301 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
       />
     </>
   )
+  // if(role.toLowerCase().includes('residente')){
+  //   return(
+  //     <>
+  //       <NavItem name="Clientes" link="/clients" items={[]}/>
+  //       <NavItem name="Proyectos" link="/projects" items={[]}/>
+  //       <NavItem name="Costos" link="" items={[
+  //           {
+  //             name: 'Conceptos',
+  //             link: '/expenses/concepts'
+  //           },
+  //           {
+  //             name: 'Gastos',
+  //             link: '/expenses'
+  //           },
+  //           {
+  //             name: 'En proceso',
+  //             link: '/expenses/pending'
+  //           },
+  //           {
+  //             name: 'Historial',
+  //             link: '/expenses/history'
+  //           },
+  //         ]}
+  //       />
+  //       <NavItem name="Cotizaciones" link="/quotations/byuser" items={[]} />
+  //       <NavItem name="Estimaciones" link="/projects/estimates" items={[]} />
+  //       <NavItem name="Informes" link="" items={[
+  //           {
+  //             name: 'Informes',
+  //             link: '/reports'
+  //           },
+  //           {
+  //             name: 'Historial',
+  //             link: '/reports/history'
+  //           },
+  //         ]} 
+  //       />
+  //       {user._id === '679ac44767135227cd14d1e9' && (
+  //         <NavItem name="Codigos" link="/codes" items={[]} />
+  //       )}
+  //     </>
+  //   )
+  // }
+
+  // if(role.toLowerCase().includes('invitado')){
+  //   return(
+  //     <>
+  //       <NavItem name="Clientes" link="/clients" items={[]}/>
+  //       <NavItem name="Proyectos" link="/projects" items={[]}/>
+  //       <NavItem name="Costos" link="" items={[
+  //           {
+  //             name: 'Gastos',
+  //             link: '/expenses'
+  //           },
+  //           {
+  //             name: 'En proceso',
+  //             link: '/expenses/pending'
+  //           },
+  //           {
+  //             name: 'Historial',
+  //             link: '/expenses/history'
+  //           },
+  //         ]}
+  //       />
+  //       <NavItem name="Cotizaciones" link="/quotations/byuser" items={[]} />
+  //       <NavItem name="Estimaciones" link="/projects/estimates" items={[]} />
+  //       <NavItem name="Informes" link="" items={[
+  //           {
+  //             name: 'Informes',
+  //             link: '/reports'
+  //           },
+  //           {
+  //             name: 'Historial',
+  //             link: '/reports/history'
+  //           },
+  //         ]} 
+  //       />
+  //     </>
+  //   )
+  // }
+  
+  // return(
+  //   <>
+  //     <NavItem name="Usuarios" link="" items={[
+  //       {
+  //         name: 'Usuarios',
+  //         link: '/users'
+  //       },
+  //       {
+  //         name: 'Roles',
+  //         link: '/roles/role'
+  //       },
+  //       {
+  //         name: 'Recursos',
+  //         link: '/roles/resources'
+  //       },
+  //       {
+  //         name: 'Rutas',
+  //         link: '/roles/sub-path'
+  //       },
+  //       {
+  //         name: 'Componentes',
+  //         link: '/roles/components'
+  //       },
+  //       {
+  //         name: 'Arboles',
+  //         link: '/roles/trees'
+  //       }
+  //     ]}/>
+  //     <NavItem name="Proveedores" link="" items={[
+  //       {
+  //         name: 'Proveedores',
+  //         link: '/providers'
+  //       },
+  //       {
+  //         name: 'Dashboards',
+  //         link: '/providers/dashboards'
+  //       },
+  //     ]}/>
+  //     <NavItem name="Clientes" link="/clients" items={[]}/>
+  //     <NavItem name="Proyectos" link="" items={[
+  //       {
+  //         name: 'Proyectos',
+  //         link: '/projects'
+  //       },
+  //       {
+  //         name: 'Presupuesto',
+  //         link: '/projects/budget'
+  //       },
+  //       {
+  //         name: 'Historial',
+  //         link: '/projects/history'
+  //       },
+  //       {
+  //         name: 'Dashboard',
+  //         link: '/projects/dashboard'
+  //       },
+  //       {
+  //         name: 'Finanzas',
+  //         link: '/projects/dashboardfinance'
+  //       },
+  //       {
+  //         name: 'Tablero',
+  //         link: '/projects/board'
+  //       },
+  //     ]}/>
+  //     <NavItem name="Cotizaciones" link="" items={[
+  //       {
+  //           name: 'Cotizaciones',
+  //           link: '/quotations'
+  //         },
+  //         {
+  //           name: 'Tablero',
+  //           link: '/quotations/status'
+  //         }
+  //     ]}/>
+  //     <NavItem name="Estimaciones" link="" items={[
+  //         {
+  //           name: 'Por proyecto',
+  //           link: '/projects/estimates'
+  //         },
+  //         {
+  //           name: 'activas',
+  //           link: '/projects/estimates/withoutinvoice'
+  //         },
+  //         {
+  //           name: 'Historial',
+  //           link: '/projects/estimates/history'
+  //         },
+  //       ]}
+  //     />
+  //     <NavItem name="Facturacion" link="" items={[
+  //         {
+  //           name: 'Remisiones',
+  //           link: '/referrals'
+  //         },
+  //         {
+  //           name: 'Subir facturas',
+  //           link: '/invoices'
+  //         },
+  //         {
+  //           name: 'Facturas SAT',
+  //           link: '/satinvoices'
+  //         },
+  //       ]}
+  //     />
+  //     <NavItem name="Cobranza" link="" items={[
+  //         {
+  //           name: 'Historial',
+  //           link: '/collections/history'
+  //         },
+  //         {
+  //           name: 'Cuentas por cobrar',
+  //           link: '/collections'
+  //         },
+  //         {
+  //           name: 'Dashboards',
+  //           link: '/collections/dashboard'
+  //         },
+  //         {
+  //           name: 'Fondos de Garantia',
+  //           link: '/guarantee'
+  //         },
+  //       ]}
+  //     />
+  //     <NavItem name="Costos" link="" items={[
+  //         {
+  //           name: 'Centro de costos',
+  //           link: '/costcenter'
+  //         },
+  //         {
+  //           name: 'Conceptos',
+  //           link: '/expenses/concepts'
+  //         },
+  //         {
+  //           name: 'Gastos',
+  //           link: '/expenses'
+  //         },
+  //         {
+  //           name: 'En proceso',
+  //           link: '/expenses/pending'
+  //         },
+  //         {
+  //           name: 'Historial',
+  //           link: '/expenses/history'
+  //         },
+  //         {
+  //           name: 'Reportes',
+  //           link: '/expenses/reports'
+  //         },
+  //         {
+  //           name: 'Dashboards',
+  //           link: '/expenses/dashboard'
+  //         },
+  //       ]}
+  //     />
+  //     <NavItem name="Informes" link="" items={[
+  //         {
+  //           name: 'Informes',
+  //           link: '/reports'
+  //         },
+  //         {
+  //           name: 'Historial',
+  //           link: '/reports/history'
+  //         },
+  //       ]} 
+  //     />
+  //     <NavItem name="Catalogos" link="" items={[
+  //         {
+  //           name: 'Listas',
+  //           link: '/catalogs'
+  //         },
+  //         // {
+  //         //   name: 'Compañias',
+  //         //   link: '/companies'
+  //         // },
+  //         {
+  //           name: 'Departamentos',
+  //           link: '/departments'
+  //         },
+  //         {
+  //           name: 'Glosarios',
+  //           link: '/glossary'
+  //         },
+  //         {
+  //           name: 'Catalogos',
+  //           link: '/status'
+  //         },
+  //         {
+  //           name: 'Codigos',
+  //           link: '/codes'
+  //         },
+  //         {
+  //           name: 'Asignar Codigos',
+  //           link: '/codes/assignedCode'
+  //         },
+  //       ]} 
+  //     />
+  //     <NavItem name="Workflow" link="" items={[
+  //         {
+  //           name: 'Workflow',
+  //           link: '/workflows'
+  //         },
+  //         {
+  //           name: 'Nodos',
+  //           link: '/nodes'
+  //         },
+  //         {
+  //           name: 'Relaciones',
+  //           link: '/relations'
+  //         },
+  //       ]} 
+  //     />
+  //   </>
+  // )
 };
 
 const CardProfile = ({company, handleCompanyChange}: 

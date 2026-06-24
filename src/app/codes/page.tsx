@@ -6,6 +6,7 @@ import ContainerCodes from "@/components/codes/ContainerCodes";
 import Header from "@/components/HeaderPage";
 import { getAllProvidersWithTradeLine } from "../api/routeDashboardProviders";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
 
@@ -15,13 +16,22 @@ export default async function Page() {
 
   const today = new Date();
 
-  const [codes, providers] = await Promise.all([
+  const [codes, providers, resresource] = await Promise.all([
     // getAllCodesMINByDateANDProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), 
     //     new Date().toDateString(), [], 'TODOS'),
     getAllCodesMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
         today.toDateString(), [], 'TODOS'), 
-    getAllProvidersWithTradeLine(token)
+    getAllProvidersWithTradeLine(token),
+    getAllResourcesByROL(token, user.rol?._id?? '')
   ])
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if (typeof(codes) === 'string') {
     return (

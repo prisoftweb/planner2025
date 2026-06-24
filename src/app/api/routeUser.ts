@@ -109,12 +109,13 @@ export async function setLogin(email:string, password:string) {
     password
   };      
   const url=`${process.env.NEXT_PUBLIC_API_URL}/login`;
+  console.log('url => ', url);
   try {
     const response = await axios.post(url, userData);
+    console.log('response');
     return response.data;
-
   } catch (error:any) {
-    
+    console.log('error => ', error);
     const errorMsg : string = error.message;
 
     if(errorMsg.includes('401'))

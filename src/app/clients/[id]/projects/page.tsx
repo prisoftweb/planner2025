@@ -9,6 +9,7 @@ import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
 import TableProjectsClient from "@/components/clients/projects/TableProjectsClient"
 import ComponentError from "@/components/ComponentError"
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -21,11 +22,20 @@ export default async function Page({ params }: { params: { id: string }}){
   // let clients: ClientBack[] = await getClients(token);
   // let projects: ProjectMin[] = await getProjectsByClient(token, params.id);
 
-  const [client, clients, projects] = await Promise.all([
+  const [client, clients, projects, resresource] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
-    getProjectsByClient(token, params.id)
+    getProjectsByClient(token, params.id),
+    getAllResourcesByROL(token, user.rol?._id?? '')
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
 
   if(typeof(client) === "string")
     return (

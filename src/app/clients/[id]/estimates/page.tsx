@@ -7,6 +7,8 @@ import { UsrBack } from "@/interfaces/User"
 import { getClient, getClients } from "@/app/api/routeClients"
 import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import ComponentError from "@/components/ComponentError"
 
 export default async function Page({ params }: { params: { id: string }}){
 
@@ -21,16 +23,26 @@ export default async function Page({ params }: { params: { id: string }}){
   // client = await getClient(token, params.id);
   // clients = await getClients(token);
 
-  const [client, clients] = await Promise.all([
+  const [client, clients, resresource] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
+    getAllResourcesByROL(token, user.rol?._id?? '')
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(client) === "string"){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{client}</h1>
+        {/* <h1 className="text-center text-red-500">{client}</h1> */}
+        <ComponentError page="/" message={client} />
       </>
     )
   }
@@ -41,7 +53,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{clients}</h1>
+        {/* <h1 className="text-center text-red-500">{clients}</h1> */}
+        <ComponentError page="/" message={clients} />
       </>
     )
   }
@@ -51,7 +64,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>
+        {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1> */}
+        <ComponentError page="/" message="Ocurrio un error al obtener datos de los clientes!!" />
       </>
     )
   }

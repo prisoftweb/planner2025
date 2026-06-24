@@ -16,6 +16,8 @@ import HeaderImage from "@/components/HeaderImage";
 import WithOut from "@/components/WithOut";
 import { Resource2 } from "@/interfaces/Roles";
 import ConfigClient from "@/components/clients/ConfigClient";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -23,18 +25,33 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [client, clients, tags, totalprj, totalColl, totalPenBil, totalpay] = await Promise.all([
+  const [client, clients, tags, totalprj, totalColl, totalPenBil, totalpay, resresource] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
     getTags(token),
     getAllTOTALsProjectsByCLIENT(token, params.id), 
     getAllTOTALAccountReceivablesOnlyByOneClientMINRESUME(token, params.id),
     getAllTOTALEstimatesPendingByOneClientMINRESUME(token, params.id),
-    getAllTOTALChargedByOneCLIENT(token, params.id)
+    getAllTOTALChargedByOneCLIENT(token, params.id),
+    getAllResourcesByROL(token, user.rol?._id?? '')
   ]);
+ 
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(client) === "string")
-    return <h1 className="text-center text-red-500">{client} client</h1>
+    return (
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/" message={client} />
+        {/* <h1 className="text-center text-red-500">{client} client</h1> */}
+      </>
+  )
 
   const clientCookie = cookieStore.get('clients')?.value;
   let permisionsClient: Resource2 | undefined;
@@ -59,7 +76,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{clients} clients</h1>
+        {/* <h1 className="text-center text-red-500">{clients} clients</h1> */}
+        <ComponentError page="/" message={clients} />
       </>
     )
 
@@ -69,7 +87,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">Error al obtener clientes...</h1>
+        {/* <h1 className="text-center text-red-500">Error al obtener clientes...</h1> */}
+        <ComponentError page="/" message={'Error al obtener clientes...'} />
       </>
     )
   }
@@ -78,7 +97,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{tags} tags</h1>
+        {/* <h1 className="text-center text-red-500">{tags} tags</h1> */}
+        <ComponentError page="/" message={tags} />
       </>
     )
   }
@@ -87,7 +107,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{totalprj} proyecto</h1>
+        {/* <h1 className="text-center text-red-500">{totalprj} proyecto</h1> */}
+        <ComponentError page="/" message={totalprj} />
       </>
     )
   }
@@ -96,7 +117,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{totalPenBil} fact</h1>
+        {/* <h1 className="text-center text-red-500">{totalPenBil} fact</h1> */}
+        <ComponentError page="/" message={totalPenBil} />
       </>
     )
   }
@@ -105,7 +127,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{totalpay}</h1>
+        {/* <h1 className="text-center text-red-500">{totalpay}</h1> */}
+        <ComponentError page="/" message={totalpay} />
       </>
     )
   }
@@ -122,7 +145,8 @@ export default async function Page({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+        {/* <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1> */}
+        <ComponentError page="/" message={'Error al obtener etiquetas!!'} />
       </>
     )
   }

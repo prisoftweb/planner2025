@@ -223,14 +223,17 @@ export async function getTrees(auth_token:string) {
 
 export async function getTree(auth_token:string, id:string) {
   try {
+    console.log('res => ');
     const res = await axiosInstance.get(`/trees/${id}`, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
+    console.log('res => ', res);
     if(res.status === 200) return res.data.data.data;
     return 'Error al consultar arbol!!';
   } catch (error) {
+    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.message;
     }
@@ -451,5 +454,21 @@ export async function updateRole(idRole:string, data:Object, auth_token:string){
       return error.response?.data.message || error.message;
     }
     return 'Ocurrio un error al actualizar arbol en el rol!!';
+  }
+}
+
+export async function getAllResourcesByROL(auth_token:string, id:string){
+  try {
+    const res = await axiosInstance.get(`/roles/getAllResourcesByROL/${id}`, {
+      headers: {
+        Authorization: `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
   }
 }
