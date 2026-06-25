@@ -30,18 +30,18 @@ type ContainerProps={
   user:UsrBack, 
   token:string,
   company:Company,
-  resresource:IAllResourcesByROL[]
+  // resresource:IAllResourcesByROL[]
 }
 
-export default function ContainerProvider({providers, user, token, company, resresource}: ContainerProps ){
+export default function ContainerProvider({providers, user, token, company}: ContainerProps ){
 
-  if(typeof(resresource)==='string'){
-    return (
-      <>
-        <ComponentError page="/" message={resresource} />
-      </>
-    )
-  }
+  // if(typeof(resresource)==='string'){
+  //   return (
+  //     <>
+  //       <ComponentError page="/" message={resresource} />
+  //     </>
+  //   )
+  // }
 
   const {providerStore, updateProviderStore} = useProviderStore();
   const [isCreditLine, setIsCreditLine]=useState<boolean>(true);
@@ -59,7 +59,7 @@ export default function ContainerProvider({providers, user, token, company, resr
   if(providerStore.length <= 0 && (providers.length === 0 || !providers)){
     return (
       <div>
-        <Navigation user={user} token={token} resources={resresource} />
+        {/* <Navigation user={user} token={token} /> */}
         <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
           <WithOutProvider id={user._id} token={token} company={user.profile} />
         </div>
@@ -134,7 +134,7 @@ export default function ContainerProvider({providers, user, token, company, resr
   
   return(
     <>
-      <Navigation user={user} token={token} resources={resresource} />
+      {/* <Navigation user={user} token={token} /> */}
       
       <div className="p-2 sm:p-3 md:p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
         {/* <HeaderProvider title="Proveedores" placeHolder="Buscar proveedor..">

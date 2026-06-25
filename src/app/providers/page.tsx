@@ -65,6 +65,9 @@ export default async function Providers(){
     }
 
   return(
-    <ContainerProvider providers={providers} token={token} user={user} company={company} resresource={resresource} />
+    <>
+      <Navigation user={user} token={token} resources={resresource} />
+      <ContainerProvider providers={providers} token={token} user={user} company={company} />
+    </>
   )
 }
