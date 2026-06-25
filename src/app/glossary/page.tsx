@@ -8,18 +8,32 @@ import TableGlossary from "@/components/glossary/TableGlossary";
 import {getGlossaries} from "../api/routeGlossary";
 import { Glossary, GlossaryTable } from "@/interfaces/Glossary";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let glossaries: Glossary[] = await getGlossaries(token);
+  // let glossaries: Glossary[] = await getGlossaries(token);
+
+  const [resresource, glossaries] = await Promise.all([
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getGlossaries(token)
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(glossaries)=== 'string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500 text-lg">{glossaries}</h1>
         </div> */}
@@ -30,7 +44,7 @@ export default async function Page(){
 
   const table: GlossaryTable[] = [];
 
-  glossaries.map((gloss) => {
+  glossaries.map((gloss:Glossary) => {
     table.push({
       color: gloss.color || '#fff',
       description: gloss.description,
@@ -41,7 +55,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <CompanyClient option={4} >
         <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
           <ResponsiveHeader title="Glosarios" placeHolder="Buscar glosario.." >

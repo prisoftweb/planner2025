@@ -13,6 +13,7 @@ import { ProjectDataToTableDataWithUtilitiesMin } from "../functions/SaveProject
 import ContainerClient from "@/components/projects/ContainerClient";
 import { getDate } from "@/libs/dates";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -25,7 +26,7 @@ export default async function Page(){
   const first=new Date(new Date().getFullYear(), 0, 1);
   const firstString=getDate(first);
 
-  const [projects, finished, clients, costs, collections, catalogs, optCompanies, prjsCB, totalCB, prjsCBtrue, totalCBtrue] = await Promise.all([
+  const [projects, finished, clients, costs, collections, catalogs, optCompanies, prjsCB, totalCB, prjsCBtrue, totalCBtrue, resresource] = await Promise.all([
     role.toLowerCase().includes('residente') ? getProjectsMinInEjecucionUser(token, user._id) : getActiveProjectsMin(token),
     getProjectsMinFinishedUser(token, user._id),
     getClients(token), 
@@ -37,13 +38,22 @@ export default async function Page(){
     getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "false", firstString, now), //agregar parametro /?full=false para imprimir 
                                                                         //global o por proyecto
     getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", firstString, now),
-    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", firstString, now)
+    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", firstString, now),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(projects)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-10">
           <h1 className="text-red-500 text-center text-lg">{projects}projects</h1>
         </div> */}
@@ -55,7 +65,7 @@ export default async function Page(){
   if(typeof(clients)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{clients}clients</h1> */}
         <ComponentError page="/projects" message={clients} />
       </>
@@ -65,7 +75,7 @@ export default async function Page(){
   if(typeof(costs)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{costs}costs</h1> */}
         <ComponentError page="/projects" message={costs} />
       </>
@@ -75,7 +85,7 @@ export default async function Page(){
   if(typeof(collections)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{collections}collections</h1> */}
         <ComponentError page="/projects" message={collections} />
       </>
@@ -94,7 +104,7 @@ export default async function Page(){
     // return <h1 className="text-red-500 text-center text-lg">{catalogs}catalogs</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{catalogs}catalogs</h1> */}
         <ComponentError page="/projects" message={catalogs} />
       </>
@@ -106,7 +116,7 @@ export default async function Page(){
   if(typeof(optCompanies)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{optCompanies}comapies</h1> */}
         <ComponentError page="/projects" message={optCompanies} />
       </>
@@ -167,7 +177,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
           optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
           optTypes={optsTypes} optTypesFilter={optTypes} projects={allPrjs} token={token} user={user} 

@@ -6,18 +6,32 @@ import { getActiveProjectsMin } from "@/app/api/routeProjects";
 import DragAndDropProjects from "@/components/projects/DragAndDropProjects";
 import Header from "@/components/HeaderPage";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let projects: ProjectMin[] = await getActiveProjectsMin(token);
+  // let projects: ProjectMin[] = await getActiveProjectsMin(token);
+
+  const [projects, resresource ] = await Promise.all([
+    getActiveProjectsMin(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
 
   if(typeof(projects) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">{projects}</h1>
         </div> */}
@@ -28,7 +42,7 @@ export default async function Page(){
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <Header previousPage="/" title="Proyectos">
           <></>

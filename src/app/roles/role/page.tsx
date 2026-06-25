@@ -10,6 +10,7 @@ import TableRole from "@/components/roles/TableRole";
 // import Header from "@/components/Header";
 import { ResponsiveHeader as Header } from "@/components/Header";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -23,18 +24,31 @@ export default async function Page(){
   //   // return <h1>Ocurrio un error al obtener roles!!</h1>
   //   return(
   //     <>
-  //       <Navigation user={user} token={token} />
+  //       <Navigation user={user} token={token} resources={resresource} />
   //       <ComponentError page="/roles/role" message="Ocurrio un error al obtener roles!!" />
   //     </>
   //   )
   // }
 
-  const roles: Role[] = await getRoles(token);
+  // const roles: Role[] = await getRoles(token);
+
+  const [roles, resresource]=await Promise.all([
+        getRoles(token),
+        getAllResourcesByROL(token, user.rol?._id?? ''),
+      ]);
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
 
   if(typeof(roles)==='string'){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/guarantee" message={roles} />
       </>
     )
@@ -43,7 +57,7 @@ export default async function Page(){
   if(!roles || roles?.length <= 0){
     return (
       <div>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <RolesClient token={token} option={1}>
           <WithOut img="/img/clientes.svg" subtitle="Roles" 
             text="Aqui puedes gestionar tus roles para usuarios que usen el sistema"
@@ -58,7 +72,7 @@ export default async function Page(){
 
   const table: RoleTable[] = [];
 
-  roles.map((role) => {
+  roles.map((role:Role) => {
     table.push({
       id: role._id,
       name: role.name,
@@ -74,7 +88,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} token={token} />      
+      <Navigation user={user} token={token} resources={resresource} />      
       <RolesClient token={token} option={1}>
         <div>
           <Header title="Roles" placeHolder="Buscar rol..">

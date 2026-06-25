@@ -8,21 +8,31 @@ import { ProjectsTable } from "@/interfaces/Projects";
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerHistoryClient from "@/components/projects/ContainerHistoryClient";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [projects, catalogs] = await Promise.all([
+  const [projects, catalogs, resresource] = await Promise.all([
     getProjectsMin(token),
-    getCatalogsByName(token, 'projects')
+    getCatalogsByName(token, 'projects'),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(projects)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{projects}</h1> */}
         <ComponentError page="/projects/history" message={projects} />
       </>
@@ -32,7 +42,7 @@ export default async function Page(){
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{catalogs}</h1> */}
         <ComponentError page="/projects/history" message={catalogs} />
       </>
@@ -91,7 +101,7 @@ export default async function Page(){
   
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerHistoryClient data={table} optCategoriesFilter={optCategories}
         optConditionsFilter={optConditions} optTypesFilter={optTypes} 
         projects={projects} token={token} user={user} />

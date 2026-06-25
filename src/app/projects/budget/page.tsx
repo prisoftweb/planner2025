@@ -7,22 +7,32 @@ import { getProjectsMin } from "@/app/api/routeProjects";
 import ContainerBudgetClient from "@/components/projects/budget/ContainerBudgetClient";
 import { getBudgetsMin } from "@/app/api/routeBudget";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [projects, budgets, catalogs] = await Promise.all([
+  const [projects, budgets, catalogs, resresource] = await Promise.all([
     getProjectsMin(token),
     getBudgetsMin(token),
-    getCatalogsByName(token, 'budgets')
+    getCatalogsByName(token, 'budgets'),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(projects)==='string') 
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{projects}</h1>
         </div> */}
@@ -33,7 +43,7 @@ export default async function Page(){
   if(typeof(budgets)==='string') 
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{budgets}</h1>
         </div> */}
@@ -44,7 +54,7 @@ export default async function Page(){
   if(typeof(catalogs)==='string') 
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
         </div>         */}
@@ -81,7 +91,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerBudgetClient optConditionsFilter={optConditions} projects={projects} 
         token={token} user={user} budgets={budgets} optProjectsFilter={optProjects} />
     </>

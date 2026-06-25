@@ -7,6 +7,7 @@ import { GetReport, GetReportsLV, GetAllCostByReportWithDateMINAndMAX,
 import { getNodesByDepto } from "@/app/api/routeNodes";
 import { Node } from "@/interfaces/Nodes";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -14,17 +15,26 @@ export default async function Page({ params }: { params: { id: string }}){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [report, dateReport, optReports, nodes]=await Promise.all([
+  const [report, dateReport, optReports, nodes, resresource]=await Promise.all([
     GetReport(token, params.id),
     GetAllCostByReportWithDateMINAndMAX(token, params.id),
     GetReportsLV(token),
-    getNodesByDepto(token, typeof(user.department)==='string'? user.department : user.department._id)
+    getNodesByDepto(token, typeof(user.department)==='string'? user.department : user.department._id),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(report)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-lg text-red-500">{report}</h1> */}
         <ComponentError page={`/reports/${params.id}/profile`} message={report} />
       </>
@@ -34,7 +44,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(dateReport)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-lg text-red-500">{dateReport}</h1> */}
         <ComponentError page={`/reports/${params.id}/profile`} message={dateReport} />
       </>
@@ -44,7 +54,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(optReports)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-lg text-center text-red-500">{optReports}</h1> */}
         <ComponentError page={`/reports/${params.id}/profile`} message={optReports} />
       </>
@@ -56,7 +66,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(nodes)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-lg text-red-500 text-center-500">{nodes}</h1> */}
         <ComponentError page={`/reports/${params.id}/profile`} message={nodes} />
       </>
@@ -66,7 +76,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(!nodes || nodes.length <= 0){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1> */}
         <ComponentError page={`/reports/${params.id}/profile`} message="Error al consultar posicion en el flujo de trabajo del informe!!!" />
       </>
@@ -84,7 +94,7 @@ export default async function Page({ params }: { params: { id: string }}){
       if(typeof(res)==='string'){
         return(
           <>
-            <Navigation user={user} token={token} />
+            <Navigation user={user} token={token} resources={resresource} />
             {/* <h1 className="text-center text-lg text-red-500">{res}</h1> */}
             <ComponentError page={`/reports/${params.id}/profile`} message={res} />
           </>
@@ -93,7 +103,7 @@ export default async function Page({ params }: { params: { id: string }}){
     } catch (error) {
       return(
         <>
-          <Navigation user={user} token={token} />
+          <Navigation user={user} token={token} resources={resresource} />
           {/* <h1 className="text-center text-lg text-red-500">Ocurrio un problema al actualizar estatus del informe</h1> */}
           <ComponentError page={`/reports/${params.id}/profile`} message="Ocurrio un problema al actualizar estatus del informe" />
         </>
@@ -115,7 +125,7 @@ export default async function Page({ params }: { params: { id: string }}){
       if(res !== 200){
         return(
           <>
-            <Navigation user={user} token={token} />
+            <Navigation user={user} token={token} resources={resresource} />
             {/* <h1 className="text-center text-lg text-red-500">{res}</h1> */}
             <ComponentError page={`/reports/${params.id}/profile`} message={`Ocurrio un problema al actualizar el flujo del informe: ${res}`} />
           </>
@@ -124,7 +134,7 @@ export default async function Page({ params }: { params: { id: string }}){
     } catch (error) {
       return(
         <>
-          <Navigation user={user} token={token} />
+          <Navigation user={user} token={token} resources={resresource} />
           {/* <h1 className="text-center text-lg text-red-500">Ocurrio un error al actualizar estatus del flujo informes </h1> */}
           <ComponentError page={`/reports/${params.id}/profile`} message="Ocurrio un error al actualizar estatus del flujo informes" />
         </>
@@ -134,7 +144,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <ReportClient report={report} token={token} id={params.id} 
           user={user} node={node} dates={dateReport} optReports={optReports}

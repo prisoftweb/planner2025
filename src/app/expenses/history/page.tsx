@@ -6,6 +6,7 @@ import { GetCostsMIN } from "../../api/routeCost";
 import ContainerClient from "@/components/expenses/ContainerClient";
 import { ExpenseDataToTableData } from "../../functions/CostsFunctions";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   
@@ -16,12 +17,25 @@ export default async function Page() {
   const role = user.rol?.name || '';
   const isViewReports = role.toLowerCase().includes('residente')? false: true;
 
-  let expenses: Expense[] = await GetCostsMIN(token);
+  // let expenses: Expense[] = await GetCostsMIN(token);
+
+  const [expenses, resresource] = await Promise.all([
+    GetCostsMIN(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(expenses)=== 'string')
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
         </div> */}
@@ -32,13 +46,13 @@ export default async function Page() {
   const d = new Date();
   const dIni = new Date(d.getFullYear(), d.getMonth(), 1);
 
-  const expensesFil= expenses.filter((e) => new Date(e.date).getTime() >= dIni.getTime() && new Date(e.date).getTime() <= d.getTime())
+  const expensesFil= expenses.filter((e: Expense) => new Date(e.date).getTime() >= dIni.getTime() && new Date(e.date).getTime() <= d.getTime())
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expensesFil);
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerClient data={table} expenses={expenses}
         token={token} user={user} isViewReports={isViewReports} 
         isHistory={true} company={user.profile} />

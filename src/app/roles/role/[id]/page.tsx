@@ -8,6 +8,7 @@ import { getRole, getRolesLV, getTree } from "@/app/api/routeRoles";
 import { Tree } from "@/interfaces/Roles";
 import PermissionResource from "@/components/roles/PermissionResource";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params, searchParams }: 
               { params: { id: string }, searchParams: { rs: string}}){
@@ -17,16 +18,25 @@ export default async function Page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [rol, options] = await Promise.all([
+  const [rol, options, resresource] = await Promise.all([
     getRole(token, params.id),
-    getRolesLV(token)
+    getRolesLV(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+        return (
+          <>
+            <ComponentError page="/" message={resresource} />
+          </>
+        )
+      }
   
   if(typeof(rol) === 'string'){
     // <h1 className="text-center text-lg text-red-500">{rol}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/roles/role" message={rol} />
       </>
     )
@@ -36,7 +46,7 @@ export default async function Page({ params, searchParams }:
     // <h1 className="text-center text-lg text-red-500">{options}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/roles/role" message={options} />
       </>
     )
@@ -49,7 +59,7 @@ export default async function Page({ params, searchParams }:
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">

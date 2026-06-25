@@ -10,21 +10,35 @@ import { getComponents } from "@/app/api/routeRoles";
 import TableResource from "@/components/roles/TableResource";
 import { ResponsiveHeader as Header } from "@/components/Header";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let components: Resource[];
+  // let components: Resource[];
   
-  components = await getComponents(token);
+  // components = await getComponents(token);
+
+  const [components, resresource]=await Promise.all([
+    getComponents(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(components) === 'string'){
     // return <h1 className="text-center text-red-500">{components}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/roles/components" message={components} />
       </>
     )
@@ -33,7 +47,7 @@ export default async function Page(){
   if(!components || components.length <= 0){
     return(
       <div>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <RolesClient token={token} option={4}>
           <WithOut img="/img/clientes.svg" subtitle="Componentes" 
               text="Aqui puedes gestionar tus componentes para usuarios que usen el sistema"
@@ -48,7 +62,7 @@ export default async function Page(){
   }
   
   const data: ResourceTable[] = [];
-  components.map((resource) => {
+  components.map((resource:Resource) => {
     data.push({
       description: resource.description,
       id: resource._id,
@@ -59,7 +73,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <RolesClient token={token} option={4}>
         <div>
           <Header title="Componentes" placeHolder="Buscar componente..">

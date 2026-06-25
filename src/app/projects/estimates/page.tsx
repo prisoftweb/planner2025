@@ -8,6 +8,7 @@ import { ProjectEstimateDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerEstimatesClient from "@/components/projects/estimates/ContainerEstimatesClient";
 import { Options } from "@/interfaces/Common";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -16,15 +17,24 @@ export default async function Page(){
 
   let role = user.rol?.name || '';
 
-  const [projects, catalogs] = await Promise.all([
+  const [projects, catalogs, resresource] = await Promise.all([
     role.toLowerCase().includes('residente') ? getProjectsForEstimatedByUser(token, user._id) : getProjectsWithEstimatesMin(token),
-    getCatalogsByName(token, 'projects')
+    getCatalogsByName(token, 'projects'),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(projects)==='string') 
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{projects}</h1>
         </div> */}
@@ -35,7 +45,7 @@ export default async function Page(){
   if(typeof(catalogs)==='string') 
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
         </div> */}
@@ -95,7 +105,7 @@ export default async function Page(){
   
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerEstimatesClient data={table} optCategories={optCategories} optConditionsFilter={optConditions} 
         optTypes={optTypes} projectsParam={projects} token={token} user={user} rol={role} company={user.profile} />
     </>

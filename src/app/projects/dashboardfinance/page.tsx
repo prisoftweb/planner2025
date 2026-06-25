@@ -9,6 +9,7 @@ import { getDashboardProjectsAmount,
   getProjectsControlBudgeted, getProjectsSpent, getProjectsLV, getAllPaymentsProjects } 
 from "@/app/api/routeProjects";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   
@@ -17,7 +18,7 @@ export default async function Page() {
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
   const [amountProjects, listProjectsdate, projectsandTypes, projectsTotalCost, configMin,
-    projectsBudgeted, projectsSpent, projectsControlBudgeted, projects, allPaymentsProjects] = await Promise.all([
+    projectsBudgeted, projectsSpent, projectsControlBudgeted, projects, allPaymentsProjects, resresource] = await Promise.all([
       getDashboardProjectsAmount(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getDashboardListProjectsByDate(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getDashboardByProjectAndType(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
@@ -27,13 +28,22 @@ export default async function Page() {
       getProjectsSpent(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getProjectsControlBudgeted(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getProjectsLV(token),
-      getAllPaymentsProjects(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString())
+      getAllPaymentsProjects(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+      getAllResourcesByROL(token, user.rol?._id?? ''),
     ]); 
+
+  if(typeof(resresource)==='string'){
+        return (
+          <>
+            <ComponentError page="/" message={resresource} />
+          </>
+        )
+      }
   
   if(typeof(allPaymentsProjects) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{allPaymentsProjects}</h1>
         </div> */}
@@ -45,7 +55,7 @@ export default async function Page() {
   if(typeof(amountProjects)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{amountProjects} amount</h1>
         </div> */}
@@ -57,7 +67,7 @@ export default async function Page() {
   if(typeof(projectsTotalCost)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsTotalCost} list</h1>
         </div> */}
@@ -69,7 +79,7 @@ export default async function Page() {
   if(typeof(configMin)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{configMin}</h1>
         </div> */}
@@ -81,7 +91,7 @@ export default async function Page() {
   if(typeof(projectsBudgeted)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsBudgeted}</h1>
         </div> */}
@@ -93,7 +103,7 @@ export default async function Page() {
   if(typeof(projectsSpent)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsSpent}</h1>
         </div>         */}
@@ -105,7 +115,7 @@ export default async function Page() {
   if(typeof(projectsControlBudgeted)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsControlBudgeted}</h1>
         </div> */}
@@ -117,7 +127,7 @@ export default async function Page() {
   if(typeof(projects)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projects}</h1>
         </div> */}
@@ -128,7 +138,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <DashBoardFinanceContainer token={token} amountProjects={amountProjects} listProjects={listProjectsdate} 
         projectsandTypes={projectsandTypes} projectsTotalCost={projectsTotalCost} configMin={configMin} 
         projectsBudgeted={projectsBudgeted} projectsControlBudgeted={projectsControlBudgeted} 

@@ -7,6 +7,7 @@ import { getWorkSpacesMin } from "@/app/api/routeWorkspace";
 import WorkSpaceCompaniesCli from "@/components/workspace/companies/WorkSpaceCompaniesCli";
 import { getCompaniesByWorkSpace } from "@/app/api/routeCompany";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   
@@ -18,12 +19,25 @@ export default async function Page() {
   //   getWorkSpacesMin(token),
   //   getCompanies(token)
   // ]);
-  const workSpaces=await getWorkSpacesMin(token);
+  // const workSpaces=await getWorkSpacesMin(token);
+
+  const [workSpaces, resresource] = await Promise.all([
+        getWorkSpacesMin(token),
+        getAllResourcesByROL(token, user.rol?._id?? ''),
+      ]);
+  
+    if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
   
   if(typeof(workSpaces)=== 'string')
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/workspace/config" message={workSpaces} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{workSpaces}</h1>
@@ -36,7 +50,7 @@ export default async function Page() {
   if(typeof(companies)=== 'string')
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/workspace/config" message={companies} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{companies}</h1>
@@ -46,7 +60,7 @@ export default async function Page() {
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header previousPage="/" title="">
           <></>

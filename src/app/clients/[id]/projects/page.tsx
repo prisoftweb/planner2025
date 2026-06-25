@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(client) === "string")
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{client}</h1>
         </div> */}
@@ -51,7 +51,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(clients) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{clients}</h1>
         </div> */}
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(projects) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{projects}</h1>
         </div> */}
@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">

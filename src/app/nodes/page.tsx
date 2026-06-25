@@ -13,24 +13,34 @@ import TableNode from "@/components/nodes/TableNode";
 import { NodeTable } from "@/interfaces/Nodes";
 import { getRelations } from "../api/routeRelations";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function page() {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [nodes, optDepartments, glossaries, workflows, res] = await Promise.all([
+  const [nodes, optDepartments, glossaries, workflows, res, resresource] = await Promise.all([
     getNodes(token), 
     getDepartmentsLV(token), 
     getGlossaries(token), 
     getWorkFlows(token),
-    getRelations(token)
+    getRelations(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(nodes) ==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
         </div> */}
@@ -42,7 +52,7 @@ export default async function page() {
   if(typeof(optDepartments) ==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{optDepartments}</h1>
         </div> */}
@@ -54,7 +64,7 @@ export default async function page() {
   if(typeof(glossaries) ==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
         </div> */}
@@ -66,7 +76,7 @@ export default async function page() {
   if(typeof(workflows) ==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
         </div> */}
@@ -119,7 +129,7 @@ export default async function page() {
   if(typeof(res)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{res}</h1>
         </div>
@@ -141,7 +151,7 @@ export default async function page() {
   if(!nodes || nodes.length <= 0){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/costs/costs.svg" subtitle="Nodos"
             text="Agrega nodo, para el control del workflow"
@@ -157,7 +167,7 @@ export default async function page() {
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Nodos" placeHolder="Buscar nodo.." >
         <ButtonNewNode token={token} user={user._id} 

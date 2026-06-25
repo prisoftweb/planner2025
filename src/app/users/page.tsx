@@ -8,6 +8,7 @@ import ButtonNewUser from "@/components/users/ButtonNewUser";
 import { getRolesLV } from "../api/routeRoles";
 import UsersConstext from "@/components/users/UsersContext";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Users() {  
 
@@ -16,16 +17,25 @@ export default async function Users() {
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  const [users, optionsRoles, departments] = await Promise.all([
+  const [users, optionsRoles, departments, resresource] = await Promise.all([
     getUsers(token),
     getRolesLV(token),
-    getDepartmentsLV(token)
+    getDepartmentsLV(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+        return (
+          <>
+            <ComponentError page="/" message={resresource} />
+          </>
+        )
+      }
 
   if(typeof(users)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/users" message={users} />
       </>
     )
@@ -34,7 +44,7 @@ export default async function Users() {
   if(typeof(optionsRoles)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/users" message={optionsRoles} />
       </>
     )
@@ -43,7 +53,7 @@ export default async function Users() {
   if(typeof(departments)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/users" message={departments} />
       </>
     )
@@ -52,7 +62,7 @@ export default async function Users() {
   if(users.length === 0 || !users){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <WithOut img="/img/user.svg" subtitle="Usuarios" 
             text="Aqui puedes gestionar tus usuarios con toda su informacion" title="Usuarios"
           ><ButtonNewUser optionsDepartments={departments} token={token} 
@@ -64,7 +74,7 @@ export default async function Users() {
   
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <UsersConstext departments={departments} optionsRoles={optionsRoles} token={token} users={users} />
       </div>

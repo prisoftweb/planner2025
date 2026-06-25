@@ -10,6 +10,7 @@ import Header from "@/components/HeaderPage";
 import ProjectGuaranteeFundsContainer from "@/components/projects/ProjectGuaranteeFundsContainer";
 import { getGuaranteesByProject } from "@/app/api/routeGuarantee";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -19,16 +20,25 @@ export default async function Page({ params }: { params: { id: string }}){
 
   let role = user.rol?.name || '';
 
-  const [project, options, guarantees] = await Promise.all([
+  const [project, options, guarantees, resresource] = await Promise.all([
     GetProjectMin(token, params.id),
     role.toLowerCase().includes('residente') ? getProjectsByUserLV(token, user._id) : getProjectsLV(token),
-    getGuaranteesByProject(token, params.id)
+    getGuaranteesByProject(token, params.id),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(project) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{project}</h1>
         </div> */}
@@ -39,7 +49,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(guarantees) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{guarantees}</h1>
         </div> */}
@@ -50,7 +60,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(options) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{options}</h1>
         </div> */}
@@ -60,7 +70,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects">
           <>

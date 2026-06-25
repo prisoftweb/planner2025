@@ -26,6 +26,7 @@ import { TbArrowNarrowLeft } from "react-icons/tb";
 import SearchInTable from "../SearchInTable";
 import {Tooltip} from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
+// import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 type Props = {
   token:string, 
@@ -87,7 +88,7 @@ export default function ContainerClient({token, optCompanies, optDepartments,
   if( reports.length <= 0 && reportsStore.length <= 0){
     return (
       <>
-        <Navigation user={user} token={token} />
+        {/* <Navigation user={user} token={token} resources={resresource} /> */}
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           {isHistory? (
             <WithOut img="/img/costs/costs.svg" subtitle="Historial de Informes"

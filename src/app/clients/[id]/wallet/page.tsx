@@ -37,7 +37,7 @@ export default async function Wallet({ params }: { params: { id: string }}){
   if(typeof(client) === "string"){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{client}</h1> */}
         <ComponentError page={`/clients/${params.id}/wallet`} message={client} />
       </>
@@ -49,7 +49,7 @@ export default async function Wallet({ params }: { params: { id: string }}){
   if(typeof(clients) === "string"){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{clients}</h1> */}
         <ComponentError page={`/clients/${params.id}/wallet`} message={clients} />
       </>
@@ -59,7 +59,7 @@ export default async function Wallet({ params }: { params: { id: string }}){
   if(typeof(pendindInvoices) === "string"){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{pendindInvoices}</h1> */}
         <ComponentError page={`/clients/${params.id}/wallet`} message={pendindInvoices} />
       </>
@@ -69,7 +69,7 @@ export default async function Wallet({ params }: { params: { id: string }}){
   if(clients.length <= 0){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1> */}
         <ComponentError page={`/clients/${params.id}/wallet`} message="Ocurrio un error al obtener datos de los clientes!!" />
       </>
@@ -85,7 +85,7 @@ export default async function Wallet({ params }: { params: { id: string }}){
   
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">

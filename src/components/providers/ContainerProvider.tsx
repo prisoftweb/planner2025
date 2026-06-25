@@ -21,15 +21,27 @@ import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadProvidersReportPDF from "./DownloadProvidersReportPDF"
 import { Company } from "@/interfaces/Companies"
+// import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { IAllResourcesByROL } from "@/interfaces/Roles"
+import ComponentError from "../ComponentError"
 
 type ContainerProps={
   providers: IProviderMin[], 
   user:UsrBack, 
   token:string,
-  company:Company
+  company:Company,
+  resresource:IAllResourcesByROL[]
 }
 
-export default function ContainerProvider({providers, user, token, company}: ContainerProps ){
+export default function ContainerProvider({providers, user, token, company, resresource}: ContainerProps ){
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
 
   const {providerStore, updateProviderStore} = useProviderStore();
   const [isCreditLine, setIsCreditLine]=useState<boolean>(true);
@@ -47,7 +59,7 @@ export default function ContainerProvider({providers, user, token, company}: Con
   if(providerStore.length <= 0 && (providers.length === 0 || !providers)){
     return (
       <div>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
           <WithOutProvider id={user._id} token={token} company={user.profile} />
         </div>
@@ -122,7 +134,7 @@ export default function ContainerProvider({providers, user, token, company}: Con
   
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       
       <div className="p-2 sm:p-3 md:p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
         {/* <HeaderProvider title="Proveedores" placeHolder="Buscar proveedor..">

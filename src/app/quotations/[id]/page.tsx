@@ -6,21 +6,31 @@ import Selectize from "@/components/Selectize";
 import Header from "@/components/HeaderPage";
 import ContainerQuatationProfile from "@/components/quotations/ContainerQuatationProfile";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({params}: {params:{id:string}}){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [quotation, quotations] = await Promise.all([
+  const [quotation, quotations, resresource] = await Promise.all([
     getQuotationMin(token, params.id), 
-    getQuotationsLV(token)
+    getQuotationsLV(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
 
   if(typeof(quotation) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div>
           <h1 className="text-center text-red-500">{quotation}</h1>
         </div> */}
@@ -32,7 +42,7 @@ export default async function Page({params}: {params:{id:string}}){
   if(typeof(quotations) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div>
           <h1 className="text-center text-red-500">{quotations}</h1>
         </div> */}
@@ -45,7 +55,7 @@ export default async function Page({params}: {params:{id:string}}){
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <Header title={quotation.title} previousPage={role? "/quotations/byuser": "/quotations"}>
           <>

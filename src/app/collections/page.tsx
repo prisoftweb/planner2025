@@ -6,6 +6,7 @@ import { getAllTotalAmountRecoveredCollection,
   getAllTOTAmountRecoveredByDateAndCondition, getAllCollectionsMINByDateAndCondition } from "../api/routeCollections";
 import { getDate } from "@/libs/dates";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
 
@@ -19,7 +20,7 @@ export default async function Page(){
     conditionAccountsReceivable:['67d20cb359865f640af92638'],
   }
 
-  const [res, rest, restt] = await Promise.all([
+  const [res, rest, restt, resresource] = await Promise.all([
     getAllCollectionsMINByDateAndCondition(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()),{
           "condition": [
               "67e31aa81945c0b1e4c9bc76", "67e318171945c0b1e4c9bc72", "67e318601945c0b1e4c9bc74"
@@ -27,12 +28,21 @@ export default async function Page(){
       }), 
     getAllTotalAmountRecoveredCollection(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), data),
     getAllTOTAmountRecoveredByDateAndCondition(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), []),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
 
   if(typeof(res) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{res}</h1>
         </div> */}
@@ -43,7 +53,7 @@ export default async function Page(){
   if(typeof(rest) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{rest}</h1>
         </div> */}
@@ -54,7 +64,7 @@ export default async function Page(){
   if(typeof(restt) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{restt}</h1>
         </div> */}
@@ -64,7 +74,7 @@ export default async function Page(){
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <TableCollectionsComponent token={token} user={user._id} collectionsParam={res} totalParam={rest} 
           totalRecoveredP={restt[0]} company={user.profile} />

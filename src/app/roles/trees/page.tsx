@@ -13,24 +13,34 @@ import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [trees, resources, routes, components] = await Promise.all([
+  const [trees, resources, routes, components, resresource] = await Promise.all([
     getTrees(token),
     getResources(token),
     getRoutes(token),
-    getComponents(token)
+    getComponents(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+          return (
+            <>
+              <ComponentError page="/" message={resresource} />
+            </>
+          )
+        }
   
   if(typeof(trees) === 'string'){
     // return <h1 className="text-center text-red-500">{trees}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/roles/trees" message={trees} />
       </>
     )
@@ -40,7 +50,7 @@ export default async function Page() {
   
   if(!trees || trees.length <= 0){
     return <div className="p-10">
-              <Navigation user={user} token={token} />
+              <Navigation user={user} token={token} resources={resresource} />
               <WithOut img="/img/clientes.svg" subtitle="Arboles" 
                 text="Aqui puedes gestionar tu arbol con toda su informacion relevante"
                 title="Arboles">
@@ -84,7 +94,7 @@ export default async function Page() {
     // return <h1 className="text-center text-red-500">{resources}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/roles/trees" message={resources} />
       </>
     )
@@ -94,7 +104,7 @@ export default async function Page() {
     // return <h1 className="text-center text-red-500">{routes}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/roles/trees" message={routes} />
       </>
     )
@@ -104,7 +114,7 @@ export default async function Page() {
     // return <h1 className="text-center text-red-500">{components}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/roles/trees" message={components} />
       </>
     )
@@ -185,7 +195,7 @@ export default async function Page() {
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       
       <RolesClient token={token} option={5}>
         <div>

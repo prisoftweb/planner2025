@@ -8,6 +8,7 @@ import ExpenseStatusClient from "@/components/expenses/ExpenseStatusClient";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params, searchParams }: 
     { params: { id: string }, searchParams: { prov: string, status:string, project:string }}){
@@ -16,15 +17,24 @@ export default async function Page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  const [cost, options] = await Promise.all([
+  const [cost, options, resresource] = await Promise.all([
     GetCostMIN(token, params.id),
-    GetCostsLVByCond(token)
+    GetCostsLVByCond(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(cost) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{cost}</h1>
         </div> */}
@@ -35,7 +45,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(options) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{options}</h1> */}
         <ComponentError page={`/expenses/${params.id}/status`} message={options} />
       </>
@@ -51,7 +61,7 @@ export default async function Page({ params, searchParams }:
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderProfileExpense options={options} subTotal={subTotal} idProv={searchParams.prov} 
           pending={previous} idProj={searchParams.project} />

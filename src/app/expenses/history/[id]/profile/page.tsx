@@ -9,6 +9,7 @@ import ExpenseClient from "@/components/expenses/ExpenseClient";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params }: { params: { id: string, idProv:string, project:string }}){
   const cookieStore = cookies();
@@ -16,15 +17,24 @@ export default async function Page({ params }: { params: { id: string, idProv:st
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [cost, options] = await Promise.all([
+  const [cost, options, resresource] = await Promise.all([
     GetCostMIN(token, params.id),
-    GetCostsLV(token)
+    GetCostsLV(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(cost) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{cost}</h1>
         </div> */}
@@ -35,7 +45,7 @@ export default async function Page({ params }: { params: { id: string, idProv:st
   if(typeof(options) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
          <h1 className="text-center text-red-500">{options}</h1>
         </div> */}
@@ -50,7 +60,7 @@ export default async function Page({ params }: { params: { id: string, idProv:st
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={subTotal} previousPage="/expenses/history">
           <Selectize options={options} routePage="expenses/history" subpath="/profile" />

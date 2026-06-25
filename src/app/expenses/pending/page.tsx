@@ -6,6 +6,7 @@ import ContainerClient from "@/components/expenses/ContainerClient";
 import { getAllCostsByUserNormal, getAllCostsAndNE3ConditionsMIN } from "@/app/api/routeCost";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   
@@ -18,6 +19,18 @@ export default async function Page() {
   const role = user.rol?.name || '';
 
   const isViewReports = role.toLowerCase().includes('residente')? false: true;
+
+  const [resresource] = await Promise.all([
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   let expenses: Expense[] = [];
   if(role.toLowerCase().includes('admin')){
@@ -31,7 +44,7 @@ export default async function Page() {
   if(typeof(expenses)=== 'string')
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
         </div> */}
@@ -43,7 +56,7 @@ export default async function Page() {
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerClient data={table} expenses={expenses} company={user.profile}
         token={token} user={user} isViewReports={isViewReports} isViewUser={true} />
     </>

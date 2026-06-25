@@ -5,6 +5,7 @@ import { GetProjectMin } from "@/app/api/routeProjects";
 import { getInvoiceMinFull, getTotalInvoicesByProject, getCollectionsByInvoice } from "@/app/api/routeInvoices";
 import ContainerDetailInvoice from "@/components/projects/estimates/ContainerDetailInvoice";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params, searchParams }: 
   { params: { idp: string, idi:string }, searchParams: { page: string }}){
@@ -12,18 +13,27 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [project, invoice, totalInvoiceProject, collections] = await Promise.all([
+  const [project, invoice, totalInvoiceProject, collections, resresource] = await Promise.all([
     GetProjectMin(token, params.idp),
     getInvoiceMinFull(token, params.idi),
     getTotalInvoicesByProject(token, params.idp),
-    getCollectionsByInvoice(token, params.idi)
+    getCollectionsByInvoice(token, params.idi),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
 
   if(typeof(project) === "string"){
     // return <h1 className="text-center text-red-500">{project}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{project}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice/${params.idi}`} message={project} />
       </>
@@ -34,7 +44,7 @@ export default async function Page({ params, searchParams }:
     // return <h1 className="text-center text-red-500">{invoice}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{invoice}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice/${params.idi}`} message={invoice} />
       </>
@@ -45,7 +55,7 @@ export default async function Page({ params, searchParams }:
     // return <h1 className="text-center text-red-500">{totalInvoiceProject}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{totalInvoiceProject}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice/${params.idi}`} message={totalInvoiceProject} />
       </>
@@ -56,7 +66,7 @@ export default async function Page({ params, searchParams }:
     // return <h1 className="text-center text-red-500">{collections}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{collections}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice/${params.idi}`} message={collections} />
       </>
@@ -65,7 +75,7 @@ export default async function Page({ params, searchParams }:
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerDetailInvoice invoice={invoice} project={project} token={token} user={user._id} 
           collections={collections} totalInvoiceProject={totalInvoiceProject} pageQuery={searchParams.page} />

@@ -12,6 +12,7 @@ import ProjectHistoryCli from "@/components/projects/ProjectHistoryCli";
 
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -19,17 +20,26 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [project, options, clients, catalogs] = await Promise.all([
+  const [project, options, clients, catalogs, resresource] = await Promise.all([
     GetProjectMin(token, params.id),
     getProjectsLV(token),
     getClients(token),
-    getCatalogsByName(token, 'projects')
+    getCatalogsByName(token, 'projects'),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
   
   if(typeof(project) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{project}</h1> */}
         <ComponentError page={`/projects/history/${params.id}`} message={project} />
       </>
@@ -39,7 +49,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(options) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{options}</h1> */}
         <ComponentError page={`/projects/history/${params.id}`} message={options} />
       </>
@@ -49,7 +59,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(clients)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{clients}</h1> */}
         <ComponentError page={`/projects/history/${params.id}`} message={clients} />
       </>
@@ -59,7 +69,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{catalogs}</h1> */}
         <ComponentError page={`/projects/history/${params.id}`} message={catalogs} />
       </>
@@ -100,7 +110,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects/history">
           <>

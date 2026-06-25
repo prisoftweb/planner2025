@@ -9,36 +9,50 @@ import SearchInTable from "@/components/SearchInTable";
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+  
+  const [estimates, resresource] = await Promise.all([
+      getEstimatesWithoutInvoiceMin(token),
+      getAllResourcesByROL(token, user.rol?._id?? ''),
+    ]);
 
-  let estimates: IEstimateMin[];
-  try {
-    estimates = await getEstimatesWithoutInvoiceMin(token);
-    if(typeof(estimates) === "string")
-      return(
+  if(typeof(resresource)==='string'){
+      return (
         <>
-          <Navigation user={user} token={token} />
-          {/* <h1 className="text-center text-red-500">{estimates}</h1> */}
-          <ComponentError page="/projects/estimates/withoutinvoice" message={estimates} />
+          <ComponentError page="/" message={resresource} />
         </>
       )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} token={token} />
-        {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones sin factura!!</h1> */}
-        <ComponentError page="/projects/estimates/withoutinvoice" message="Ocurrio un error al obtener las estimaciones sin factura!!" />
-      </>
-    )
-  }
+    }
+
+  // let estimates: IEstimateMin[];
+  // try {
+  //   estimates = await getEstimatesWithoutInvoiceMin(token);
+  //   if(typeof(estimates) === "string")
+  //     return(
+  //       <>
+  //         <Navigation user={user} token={token} resources={resresource} />
+  //         {/* <h1 className="text-center text-red-500">{estimates}</h1> */}
+  //         <ComponentError page="/projects/estimates/withoutinvoice" message={estimates} />
+  //       </>
+  //     )
+  // } catch (error) {
+  //   return(
+  //     <>
+  //       <Navigation user={user} token={token} resources={resresource} />
+  //       {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones sin factura!!</h1> */}
+  //       <ComponentError page="/projects/estimates/withoutinvoice" message="Ocurrio un error al obtener las estimaciones sin factura!!" />
+  //     </>
+  //   )
+  // }
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
           <div className="flex items-center w-96">

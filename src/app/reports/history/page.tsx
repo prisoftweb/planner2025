@@ -11,6 +11,7 @@ import { ReportParseDataToTableData } from "../../functions/ReportsFunctions";
 import { getCatalogsByName } from "../../api/routeCatalogs";
 import ContainerClient from "@/components/reports/ContainerClient";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   
@@ -23,19 +24,28 @@ export default async function Page() {
       value: 'all'
     }]
     
-  const [reports, optCompanies, optProjects, catalogs]=await Promise.all([
+  const [reports, optCompanies, optProjects, catalogs, resresource]=await Promise.all([
     typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('direccion')? 
       GetReportsMin(token) : (typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('obras') ?
       GetReportsByUserMin(token, user._id) : GetReportsMin(token)),
     getCompaniesLV(token),
     getProjectsLV(token),
-    getCatalogsByName(token, 'reports')
+    getCatalogsByName(token, 'reports'),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
 
   if(typeof(reports)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-lg text-center text-red-500">{reports}</h1> */}
         <ComponentError page="/reports/history" message={reports} />
       </>
@@ -45,7 +55,7 @@ export default async function Page() {
   if(typeof(optProjects)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-lg text-red-500">{optProjects}</h1> */}
         <ComponentError page="/reports/history" message={optProjects} />
       </>
@@ -64,7 +74,7 @@ export default async function Page() {
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{catalogs}</h1> */}
         <ComponentError page="/reports/history" message={catalogs} />
       </>
@@ -86,7 +96,7 @@ export default async function Page() {
   if(!reports || reports.length <= 0){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/costs/costs.svg" subtitle="Informes"
             text="No cuentas con un historial de informes!!"
@@ -102,7 +112,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerClient data={table} optCompaniesFilter={optCompaniesFilter} 
           optConditionsFilter={optConditionsFilter} condition="" optCompanies={[]}
           optDepartments={[]} optProjects={[]} user={user} isHistory={true}

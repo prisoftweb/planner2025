@@ -29,7 +29,7 @@ export default async function Home() {
     return (
       <>
         {/* {role.toLowerCase().includes('invitado')? <></>: (
-          <Navigation user={user} token={token} />
+          <Navigation user={user} token={token} resources={resresource} />
         )} */}
         <ComponentError page="/" message={resresource} />
       </>
@@ -40,7 +40,7 @@ export default async function Home() {
     return (
       <>
         {role.toLowerCase().includes('invitado')? <></>: (
-          <Navigation user={user} token={token} />
+          <Navigation user={user} token={token} resources={resresource} />
         )}
         <ComponentError page="/" message={rescomp} />
       </>
@@ -51,7 +51,7 @@ export default async function Home() {
     <>
       <div className="bg-white">
         {/* {role.toLowerCase().includes('invitado')? <></>: (
-          <Navigation user={user} token={token} />
+          <Navigation user={user} token={token} resources={resresource} />
         )} */}
         <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md:p-5 flex justify-center">

@@ -10,6 +10,7 @@ import { CostCenterTable } from "@/interfaces/CostCenter";
 import { getCostoCenters } from "../api/routeCostCenter";
 import TableCostCenter from "@/components/costcenter/TableCostCenter";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   
@@ -17,15 +18,24 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [catalogs, costs] = await Promise.all([
+  const [catalogs, costs, resresource] = await Promise.all([
     getCatalogsByName(token, 'projects'), 
-    getCostoCenters(token)
+    getCostoCenters(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
 
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
         </div> */}
@@ -45,7 +55,7 @@ export default async function Page(){
   if(typeof(costs)=== 'string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{costs}</h1>
         </div> */}
@@ -57,7 +67,7 @@ export default async function Page(){
   if(!costs || costs.length <= 0){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/projects.jpg" subtitle="Centro de costos"
             text="Aqui se personalizan las categorias y
@@ -87,7 +97,7 @@ export default async function Page(){
   
   return(
     <>
-      <Navigation user={user} token={token} />     
+      <Navigation user={user} token={token} resources={resresource} />     
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
         <ResponsiveHeader other={false} title="Centro de costos" placeHolder="Buscar centro de costos..">
           <ButtonNew token={token} id="" company={user.profile} />

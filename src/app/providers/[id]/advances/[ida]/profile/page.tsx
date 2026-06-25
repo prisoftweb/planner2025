@@ -8,6 +8,7 @@ import IconText from "@/components/providers/IconText";
 import AdvanceClient from "@/components/providers/advances/AdvanceClient";
 import { IProviderMin } from "@/interfaces/Providers";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params }: { params: { id: string, ida:string }}){
   const cookieStore = cookies();
@@ -15,15 +16,24 @@ export default async function Page({ params }: { params: { id: string, ida:strin
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [prov, cost] = await Promise.all([
+  const [prov, cost, resresource] = await Promise.all([
     getProviderMin(params.id, token),
-    getAdvance(token, params.ida )
+    getAdvance(token, params.ida ),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(cost) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{cost}</h1>
         </div> */}
@@ -36,7 +46,7 @@ export default async function Page({ params }: { params: { id: string, ida:strin
   if(typeof(prov) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{prov}</h1>
         </div> */}
@@ -49,7 +59,7 @@ export default async function Page({ params }: { params: { id: string, ida:strin
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2 gap-x-2">

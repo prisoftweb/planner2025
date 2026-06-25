@@ -36,7 +36,7 @@ export default async function Page() {
   if (typeof(codes) === 'string') {
     return (
       <div>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md:p-5">
           <h1 className="text-red-500 text-center text-lg">{codes}</h1>
         </div> */}
@@ -48,7 +48,7 @@ export default async function Page() {
   if (typeof(providers) === 'string') {
     return (
       <div>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md:p-5">
           <h1 className="text-red-500 text-center text-lg">{providers}</h1>
         </div> */}
@@ -59,7 +59,7 @@ export default async function Page() {
 
   return (
     <div>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md:p-5">
         <Header previousPage="/" title="Codigos" >
           <></>

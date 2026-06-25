@@ -5,6 +5,7 @@ import Navigation from "@/components/navigation/Navigation";
 import BudgetCli from "@/components/projects/budget/BudgetClient";
 import { getCostoCenters } from "@/app/api/routeCostCenter";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function page({ params, searchParams }: 
   { params: { id: string }, searchParams: { project: string }}) {
@@ -14,15 +15,24 @@ export default async function page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [budget, costoCenters] = await Promise.all([
+  const [budget, costoCenters, resresource] = await Promise.all([
     getBudget(token, params.id),
-    getCostoCenters(token)
+    getCostoCenters(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(budget)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center">{budget}</h1> */}
         <ComponentError page={`/projects/budget/${params.id}`} message={budget} />
       </>
@@ -32,7 +42,7 @@ export default async function page({ params, searchParams }:
   if(typeof(costoCenters)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <p>{costoCenters}</p> */}
         <ComponentError page={`/projects/budget/${params.id}`} message={costoCenters} />
       </>
@@ -41,7 +51,7 @@ export default async function page({ params, searchParams }:
   
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <BudgetCli budget={budget} id={params.id} token={token} 
           costoCenters={costoCenters} user={user._id} projectQuery={searchParams.project} />

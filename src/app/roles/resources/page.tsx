@@ -10,21 +10,35 @@ import TableResource from "@/components/roles/TableResource";
 // import Header from "@/components/Header";
 import { ResponsiveHeader as Header } from "@/components/Header";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let resources: Resource[];
+  // let resources: Resource[];
   
-  resources = await getResources(token);
+  // resources = await getResources(token);
+
+  const [resources, resresource]=await Promise.all([
+      getResources(token),
+      getAllResourcesByROL(token, user.rol?._id?? ''),
+    ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }  
   
   if(typeof(resources) === 'string'){
     // return <h1 className="text-center text-red-500">{resources}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/roles/resources" message={resources} />
       </>
     )
@@ -33,7 +47,7 @@ export default async function Page(){
   if(!resources || resources.length <= 0){
     return(
       <div>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <RolesClient token={token} option={2}>
           <WithOut img="/img/clientes.svg" subtitle="Rutas" 
             text="Aqui puedes gestionar tus rutas para usuarios que usen el sistema"
@@ -47,7 +61,7 @@ export default async function Page(){
   }
   
   const data: ResourceTable[] = [];
-  resources.map((resource) => {
+  resources.map((resource:Resource) => {
     data.push({
       description: resource.description,
       id: resource._id,
@@ -58,7 +72,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <RolesClient token={token} option={2}>
         <div>
           <Header title="Recursos" placeHolder="Buscar recurso..">

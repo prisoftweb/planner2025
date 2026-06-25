@@ -325,6 +325,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
       // console.log('invoice => ', invoice);
 
       const res: IResponseSatInvoice|string = await createFiscalApiInvoice(invoice);
+      // const res=1;
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
@@ -357,6 +358,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
           // concepts: dataConcepts,
           folio:f,
           taxfolio: res.uuid,///////
+          // taxfolio: 'ESTA NO ES REAL',
           date,
           series: "F",
           // useCFDI: type?? '',
@@ -391,7 +393,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
           typeInvoice: 'Timbrada'
         }
         
-        console.log('invoice data => ', invoiceData);
+        // console.log('invoice data => ', invoiceData);
         const resInvoice = await createInvoice(token, invoiceData);
         if(typeof(resInvoice)==='string'){
           showToastMessageError(resInvoice);

@@ -13,6 +13,7 @@ import { getDashboardProjectsAmount,
   getDashboardProjectsByFeaturesGuaranteeFund, getDashboardProjectsByFeaturesAmountCharge, 
   getDashboardProjectsByFeaturesTaxes } 
 from "@/app/api/routeProjects";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   
@@ -22,7 +23,7 @@ export default async function Page() {
 
   const [amountProjects, listProjectsdate, projectsClient, projectsSegment, projectsStatus,
     projectsProgress, listProjectsnotCompleted, projectsandTypes, projectsTop10,
-    projectsTotalCost, configMin, projects, numEvaluacion, totGuaranteeFund, totAmountCharge, totTaxes] = await Promise.all([
+    projectsTotalCost, configMin, projects, numEvaluacion, totGuaranteeFund, totAmountCharge, totTaxes, resresource] = await Promise.all([
       getDashboardProjectsAmount(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getDashboardListProjectsByDate(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getDashboardProjectsByClient(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
@@ -38,13 +39,22 @@ export default async function Page() {
       getLenghtProjectsEvaluacion(token),
       getDashboardProjectsByFeaturesGuaranteeFund(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getDashboardProjectsByFeaturesAmountCharge(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
-      getDashboardProjectsByFeaturesTaxes(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), [])
+      getDashboardProjectsByFeaturesTaxes(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getAllResourcesByROL(token, user.rol?._id?? ''),
     ]);
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
     
   if(typeof(amountProjects)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{amountProjects} amountprojects</h1>
         </div> */}
@@ -56,7 +66,7 @@ export default async function Page() {
   if(typeof(listProjectsdate)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{listProjectsdate} list</h1>
         </div> */}
@@ -68,7 +78,7 @@ export default async function Page() {
   if(typeof(projectsClient)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsClient} cleint</h1>
         </div> */}
@@ -80,7 +90,7 @@ export default async function Page() {
   if(typeof(projectsSegment)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsSegment} segment</h1>
         </div> */}
@@ -92,7 +102,7 @@ export default async function Page() {
   if(typeof(projectsStatus)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsStatus} status</h1>
         </div> */}
@@ -104,7 +114,7 @@ export default async function Page() {
   if(typeof(projectsProgress)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsProgress} progress</h1>
         </div> */}
@@ -116,7 +126,7 @@ export default async function Page() {
   if(typeof(listProjectsnotCompleted)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{listProjectsnotCompleted} list not completed</h1>
         </div> */}
@@ -128,7 +138,7 @@ export default async function Page() {
   if(typeof(projectsandTypes)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsandTypes} list</h1>
         </div> */}
@@ -140,7 +150,7 @@ export default async function Page() {
   if(typeof(projectsTop10)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsTop10} list</h1>
         </div> */}
@@ -152,7 +162,7 @@ export default async function Page() {
   if(typeof(projectsTotalCost)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projectsTotalCost} list</h1>
         </div> */}
@@ -164,7 +174,7 @@ export default async function Page() {
   if(typeof(configMin)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{configMin}</h1>
         </div> */}
@@ -176,7 +186,7 @@ export default async function Page() {
   if(typeof(projects)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{projects}</h1>
         </div> */}
@@ -188,7 +198,7 @@ export default async function Page() {
   if(typeof(totGuaranteeFund)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totGuaranteeFund}</h1>
         </div> */}
@@ -200,7 +210,7 @@ export default async function Page() {
   if(typeof(totAmountCharge)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totAmountCharge}</h1>
         </div> */}
@@ -212,7 +222,7 @@ export default async function Page() {
   if(typeof(totTaxes)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totTaxes}</h1>
         </div> */}
@@ -223,7 +233,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <DashBoardContainer token={token} amountProjects={amountProjects} listProjects={listProjectsdate} 
         projectsClient={projectsClient} projectsProgress={projectsProgress} 
         projectsSegment={projectsSegment} projectsStatus={projectsStatus} projectsTop10={projectsTop10}

@@ -6,6 +6,7 @@ import ContainerProvider from "@/components/providers/ContainerProvider";
 import Navigation from "@/components/navigation/Navigation";
 import ComponentError from "@/components/ComponentError";
 import { getCompany } from "../api/routeCompany";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Providers(){
   
@@ -21,7 +22,7 @@ export default async function Providers(){
   // } catch (error) {
   //   return(
   //     <>
-  //       <Navigation user={user} token={token} />
+  //       <Navigation user={user} token={token} resources={resresource} />
   //       {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
   //         <h1 className="text-5xl text-center text-red-500 font-semibold">Error al consultar proveedores!!</h1>
   //       </div> */}
@@ -30,16 +31,25 @@ export default async function Providers(){
   //   )
   // }
   
-  const [providers, company]=await Promise.all([
+  const [providers, company, resresource]=await Promise.all([
     // getProviders(token),
     getAllProvidersMin(token),
-    getCompany(token, user.profile)
+    getCompany(token, user.profile),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ])
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
 
   if(typeof(providers) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/providers" message={providers} />
       </>
     )
@@ -48,13 +58,13 @@ export default async function Providers(){
   if(typeof(company)==='string'){
       return(
         <>
-          <Navigation user={user} token={token} />
+          <Navigation user={user} token={token} resources={resresource} />
           <ComponentError page="/clients" message={company} />
         </>
       )
     }
 
   return(
-    <ContainerProvider providers={providers} token={token} user={user} company={company} />
+    <ContainerProvider providers={providers} token={token} user={user} company={company} resresource={resresource} />
   )
 }

@@ -7,6 +7,7 @@ import NavTabProject from "@/components/projects/NavTabProject";
 import Header from "@/components/HeaderPage";
 import ContainerBudgetsByProject from "@/components/projects/ContainerBudgetsByProjects";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params }: 
   { params: { id: string }}){
@@ -17,17 +18,26 @@ export default async function Page({ params }:
 
   // let role = user.rol?.name || '';
 
-  const [project, options, budgets] = await Promise.all([
+  const [project, options, budgets, resresource] = await Promise.all([
     GetProjectMin(token, params.id),
     getProjectsLV(token),
     // role.toLowerCase().includes('residente') ? getProjectsByUserLV(token, user._id) : getProjectsLV(token),
-    GetBudgetsByProjectMin(token, params.id)
+    GetBudgetsByProjectMin(token, params.id),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(project) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{project}</h1>
         </div> */}
@@ -38,7 +48,7 @@ export default async function Page({ params }:
   if(typeof(options) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{options}</h1>
         </div> */}
@@ -49,7 +59,7 @@ export default async function Page({ params }:
   if(typeof(budgets) === "string")
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{budgets}</h1>
         </div> */}
@@ -59,7 +69,7 @@ export default async function Page({ params }:
   
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects">
           <>

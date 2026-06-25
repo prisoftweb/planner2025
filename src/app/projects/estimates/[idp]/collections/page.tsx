@@ -10,6 +10,7 @@ import ComponentError from "@/components/ComponentError";
 
 import { getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
 import ContainerCollectionsProject from "@/components/projects/estimates/collections/ContainerCollectionsProject";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params, searchParams }: 
   { params: { idp: string }, searchParams: { page: string }}){
@@ -18,19 +19,28 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [project, collections, totalInvoicesProject, totalPaymentsResumen, projects, catalogs] = await Promise.all([
+  const [project, collections, totalInvoicesProject, totalPaymentsResumen, projects, catalogs, resresource] = await Promise.all([
     GetProjectMin(token, params.idp),
     getCollectionsByProjectMin(token, params.idp),
     getTotalInvoicesByProject(token, params.idp),
     getAllTotalPaymentsResumeByProjectMin(token, params.idp),
     getProjectsLVNoCompleted(token),
-    getCatalogsByName(token, 'projects')
+    getCatalogsByName(token, 'projects'),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(project) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">project min{project}</h1>
         </div> */}
@@ -42,7 +52,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(collections) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">collections{collections}</h1>
         </div> */}
@@ -54,7 +64,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(totalInvoicesProject) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">total invoice{totalInvoicesProject}</h1>
         </div> */}
@@ -66,7 +76,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(totalPaymentsResumen) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">total payments resumen{totalPaymentsResumen}</h1>
         </div> */}
@@ -78,7 +88,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(projects) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">opt pro{projects}</h1>
         </div> */}
@@ -90,7 +100,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">catalogs{catalogs}</h1>
         </div> */}
@@ -112,7 +122,7 @@ export default async function Page({ params, searchParams }:
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerCollectionsProject project={project} collections={collections} token={token} user={user._id} 
           totalInvoiceProject={totalInvoicesProject} resumenPayment={totalPaymentsResumen} 

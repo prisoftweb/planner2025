@@ -11,22 +11,32 @@ import { getNodes } from "../api/routeNodes";
 import TableRelations from "@/components/relations/TableRelation";
 import { RelationTable } from "@/interfaces/Relation";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [relations, glossaries, nodes] = await Promise.all([
+  const [relations, glossaries, nodes, resresource] = await Promise.all([
     getRelations(token), 
     getGlossaries(token), 
-    getNodes(token)
+    getNodes(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
   
   if(typeof(relations) ==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-xl text-center">{relations}</h1>
         </div> */}
@@ -38,7 +48,7 @@ export default async function Page() {
   if(typeof(glossaries) ==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
         </div> */}
@@ -50,7 +60,7 @@ export default async function Page() {
   if(typeof(nodes) ==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
         </div> */}
@@ -83,7 +93,7 @@ export default async function Page() {
   if(!relations || relations.length <= 0){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/costs/costs.svg" subtitle="Relaciones"
             text="Agrega relacion, para el control del flujo de los nodos"
@@ -109,7 +119,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Nodos" placeHolder="Buscar nodo.." >
         <ButtonNewRelation glossaries={optGlossaries} nodes={optNodes} 

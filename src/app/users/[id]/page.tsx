@@ -9,6 +9,7 @@ import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
 import ArrowReturn from "@/components/ArrowReturn";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params, searchParams }: 
   { params: { id: string }, searchParams: { tab: string, opt: string } }){
@@ -59,6 +60,18 @@ export default async function Page({ params, searchParams }:
         {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1> */}
       </>
     ) 
+  }
+
+  const [resresource] = await Promise.all([
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+  ]);
+  
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
 
   const photo=user.photo

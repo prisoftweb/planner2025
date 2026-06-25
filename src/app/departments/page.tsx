@@ -6,21 +6,31 @@ import { Options } from "@/interfaces/Common";
 import { getCompanies } from "../api/routeCompany";
 import ContainerDepartment from "@/components/departments/ContainerDepartment";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [companies, departments] = await Promise.all([
+  const [companies, departments, resresource] = await Promise.all([
     getCompanies(token), 
-    getDepartments(token)
+    getDepartments(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(companies)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md:p-5 lg:p-10">
           <h1 className=" text-center text-lg text-red-500">{companies}</h1>
         </div> */}
@@ -32,7 +42,7 @@ export default async function Page(){
   if(!companies || companies.length <= 0){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md:p-5 lg:p-10">
           <h1 className=" text-center text-lg text-red-500">{'Ocurrio un error al consultar compañias!!!'}</h1>
         </div> */}
@@ -52,7 +62,7 @@ export default async function Page(){
   if(typeof(departments)=== 'string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md:p-5 lg:p-10">
           <h1 className="text-center text-red-500 text-lg">{departments}</h1>
         </div> */}
@@ -63,7 +73,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerDepartment departments={departments} optsCompanies={optsCompanies} 
           token={token} company={user.profile} />
     </>

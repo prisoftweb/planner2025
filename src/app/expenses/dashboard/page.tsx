@@ -6,6 +6,7 @@ import { GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject, GetAllCostsGroupBy
   GetAllCostsGroupByDAYAndProject, GetAllCostsGroupByRESUMEN, GetAllCostsGroupByTYPERESUMEN } from "@/app/api/routeCost"
 import { getProjectsLV, getAllCostoCentersCategorysLV } from "@/app/api/routeProjects";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 interface OptionsDashboard {
   label: string,
@@ -19,20 +20,29 @@ export default async function Page() {
   // const token='';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  const [costsCategory, costsConcept, costsDays, costsResumen, costsResumenType, projects, categories] = await Promise.all([
+  const [costsCategory, costsConcept, costsDays, costsResumen, costsResumenType, projects, categories, resresource] = await Promise.all([
     GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
     GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
     GetAllCostsGroupByDAYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
     GetAllCostsGroupByRESUMEN(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
     GetAllCostsGroupByTYPERESUMEN(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
     getProjectsLV(token),
-    getAllCostoCentersCategorysLV(token)
+    getAllCostoCentersCategorysLV(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(costsCategory)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsCategory} cost cat</h1>
         </div> */}
@@ -44,7 +54,7 @@ export default async function Page() {
   if(typeof(costsConcept)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsConcept} cost con</h1>
         </div> */}
@@ -56,7 +66,7 @@ export default async function Page() {
   if(typeof(costsDays)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsDays} cost days</h1>
         </div> */}
@@ -68,7 +78,7 @@ export default async function Page() {
   if(typeof(costsResumen)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsResumen} cost res</h1>
         </div> */}
@@ -80,7 +90,7 @@ export default async function Page() {
   if(typeof(costsResumenType)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsResumenType} cost res type</h1>
         </div> */}
@@ -92,7 +102,7 @@ export default async function Page() {
   if(typeof(projects)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{projects} projects</h1>
         </div> */}
@@ -128,7 +138,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <DashBoardContainer token={token} costsCategories={optCategories} 
           costsConcepts={optConcepts} costsDays={optDays} projects={[{
             label: 'TODOS',

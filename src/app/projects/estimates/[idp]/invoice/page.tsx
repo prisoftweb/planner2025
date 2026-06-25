@@ -7,6 +7,7 @@ import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumenByProject } from "@/app/api/routeInvoices";
 import ContainerInvoicesProject from "@/components/projects/estimates/ContainerInvoicesProject";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params, searchParams }: 
   { params: { idp: string }, searchParams: { page: string }}){
@@ -15,20 +16,29 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [project, invoices, totalInvoicesProject, totalInvoicesResumen, projects, catalogs] = await Promise.all([
+  const [project, invoices, totalInvoicesProject, totalInvoicesResumen, projects, catalogs, resresource] = await Promise.all([
     GetProjectMin(token, params.idp),
     getInvoicesByProject(token, params.idp),
     getTotalInvoicesByProject(token, params.idp),
     getTotalInvoiceResumenByProject(token, params.idp),
     getProjectsLVNoCompleted(token),
-    getCatalogsByName(token, 'projects')
+    getCatalogsByName(token, 'projects'),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+        return (
+          <>
+            <ComponentError page="/" message={resresource} />
+          </>
+        )
+      }
   
   if(typeof(project) === "string"){
     // return <h1 className="text-center text-red-500">{project}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{project}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={project} />
       </>
@@ -39,7 +49,7 @@ export default async function Page({ params, searchParams }:
     // return <h1 className="text-center text-red-500">{invoices}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{invoices}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={invoices} />
       </>
@@ -50,7 +60,7 @@ export default async function Page({ params, searchParams }:
     // return <h1 className="text-center text-red-500">{totalInvoicesProject}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{totalInvoicesProject}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={totalInvoicesProject} />
       </>
@@ -61,7 +71,7 @@ export default async function Page({ params, searchParams }:
     // return <h1 className="text-center text-red-500">{totalInvoicesResumen}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{totalInvoicesResumen}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={totalInvoicesResumen} />
       </>
@@ -72,7 +82,7 @@ export default async function Page({ params, searchParams }:
     // return <h1 className="text-center text-red-500">{projects}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{projects}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={projects} />
       </>
@@ -83,7 +93,7 @@ export default async function Page({ params, searchParams }:
     // return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{catalogs}</h1> */}
         <ComponentError page={`/projects/estimates/${params.idp}/invoice`} message={catalogs} />
       </>
@@ -103,7 +113,7 @@ export default async function Page({ params, searchParams }:
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerInvoicesProject project={project} optConditions={optConditions} optProjects={[{
             label: 'Todos',

@@ -8,6 +8,7 @@ import ContainerTableDetailsExpenseProvider from "@/components/providers/Contain
 import { getCostsPayment, getPayment } from "@/app/api/routePayments";
 import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params }: { params: { id: string, idP: string }}){
   
@@ -18,18 +19,27 @@ export default async function Page({ params }: { params: { id: string, idP: stri
 
   let provider: IProviderMin;
 
-  const [arrProvider, providers, costs, payment, pending] = await Promise.all([
+  const [arrProvider, providers, costs, payment, pending, resresource] = await Promise.all([
     getProviderMin(params.id, token),
     getProviders(token),
     getCostsPayment(token, params.idP),
     getPayment(token, params.idP),
-    getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token)
+    getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
   
   if(typeof(arrProvider) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{arrProvider}provedor</h1> */}
         <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={arrProvider} />
       </>
@@ -42,7 +52,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(typeof(providers) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{providers} provedores</h1> */}
         <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={providers} />
       </>
@@ -52,7 +62,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(typeof(costs) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{costs} costos</h1> */}
         <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={costs} />
       </>
@@ -62,7 +72,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(typeof(payment) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{payment} one payment</h1> */}
         <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={payment} />
       </>
@@ -72,7 +82,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(typeof(pending) === "string"){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">{pending}</h1> */}
         <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={pending} />
       </>
@@ -82,7 +92,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(providers.length <= 0){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-red-500">Error al obtener proveedores...</h1> */}
         <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message="Error al obtener proveedores..." />
       </>
@@ -93,7 +103,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <ContainerTableDetailsExpenseProvider data={table} expenses={costs} token={token}
           user={user} provider={provider} payment={payment} pending={pending.flat()} />

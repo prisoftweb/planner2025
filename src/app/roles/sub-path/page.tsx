@@ -11,21 +11,35 @@ import TableResource from "@/components/roles/TableResource";
 import { ResponsiveHeader as Header } from "@/components/Header";
 
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let routes: Resource[];
+  // let routes: Resource[];
   
-  routes = await getRoutes(token);
+  // routes = await getRoutes(token);
+
+  const [routes, resresource] = await Promise.all([
+      getRoutes(token),
+      getAllResourcesByROL(token, user.rol?._id?? ''),
+    ]);
+
+  if(typeof(resresource)==='string'){
+          return (
+            <>
+              <ComponentError page="/" message={resresource} />
+            </>
+          )
+        }
   
   if(typeof(routes) === 'string'){
     // return <h1 className="text-center text-red-500">{routes}</h1>
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <ComponentError page="/roles/trees" message={routes} />
       </>
     )
@@ -34,7 +48,7 @@ export default async function Page(){
   if(!routes || routes.length <= 0){
     return(
       <div>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         <RolesClient token={token} option={3}>
           <WithOut img="/img/clientes.svg" subtitle="Sub Rutas" 
               text="Aqui puedes gestionar tus rutas para usuarios que usen el sistema"
@@ -49,7 +63,7 @@ export default async function Page(){
   }
   
   const data: ResourceTable[] = [];
-  routes.map((route) => {
+  routes.map((route:Resource) => {
     data.push({
       description: route.description,
       id: route._id,
@@ -60,7 +74,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <RolesClient token={token} option={3}>
         <div>
           <Header title="Rutas" placeHolder="Buscar ruta..">

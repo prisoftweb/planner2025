@@ -30,7 +30,7 @@ export default async function Page(){
   if(typeof(catalogs)=== 'string'){
     return (
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500 text-lg">{catalogs}</h1>
         </div> */}
@@ -41,7 +41,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ListClient lists={catalogs} token={token} />
     </>
   )

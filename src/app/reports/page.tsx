@@ -13,6 +13,7 @@ import { ReportParseDataToTableData } from "../functions/ReportsFunctions";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import ContainerClient from "@/components/reports/ContainerClient";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   
@@ -25,20 +26,29 @@ export default async function Page() {
       value: 'all'
     }]
   
-  const [reports, optCompanies, optDepartments, optProjects, catalogs, optReps]=await Promise.all([
+  const [reports, optCompanies, optDepartments, optProjects, catalogs, optReps, resresource]=await Promise.all([
     typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')? 
       GetAllReportsWithUSERAndNEConditionMIN(token, user._id): GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id),
       getCompaniesLV(token),
       getDepartmentsLV(token),
       getProjectsLVNoCompleted(token),
       getCatalogsByName(token, 'reports'), 
-      getAllReportsNE3ConditionsLV(token)
+      getAllReportsNE3ConditionsLV(token),
+      getAllResourcesByROL(token, user.rol?._id?? ''),
   ]);
+
+  if(typeof(resresource)==='string'){
+        return (
+          <>
+            <ComponentError page="/" message={resresource} />
+          </>
+        )
+      }
   
   if(typeof(reports)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-lg text-center text-red-500">{reports} rep</h1> */}
         <ComponentError page="/reports" message={reports} />
       </>
@@ -48,7 +58,7 @@ export default async function Page() {
   if(typeof(optReps)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-lg text-center text-red-500">{optReps} opr</h1> */}
         <ComponentError page="/reports" message={optReps} />
       </>
@@ -65,7 +75,7 @@ export default async function Page() {
   if(typeof(optProjects)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-center text-lg text-red-500">{optProjects} opp</h1> */}
         <ComponentError page="/reports" message={optProjects} />
       </>
@@ -77,7 +87,7 @@ export default async function Page() {
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} token={token} />
+        <Navigation user={user} token={token} resources={resresource} />
         {/* <h1 className="text-red-500 text-center text-lg">{catalogs} cat</h1> */}
         <ComponentError page="/reports" message={catalogs} />
       </>
@@ -104,7 +114,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerClient data={table} condition={condition} optCompanies={optCompanies} 
           optCompaniesFilter={optCompaniesFilter} optConditionsFilter={optConditionsFilter}
           optDepartments={optDepartments} optProjects={optProjects} optReps={optReps} 
