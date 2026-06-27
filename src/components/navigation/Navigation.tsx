@@ -18,7 +18,8 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import { setCookie } from "cookies-next";
 import { IAllResourcesByROL } from "@/interfaces/Roles";
 
-export default function Navigation({user, token, resources}: {user:UsrBack, token:string, resources?:IAllResourcesByROL[]}){
+// export default function Navigation({user, token, resources}: {user:UsrBack, token:string, resources?:IAllResourcesByROL[]}){
+export default function Navigation({user, token, resources}: {user:UsrBack, token:string, resources:IAllResourcesByROL[]}){
   
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenP, setIsOpenP] = useState(false);

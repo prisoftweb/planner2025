@@ -110,7 +110,7 @@ export default function ConceptsReferralsStepperComponent({token, nextStep, save
   const data = TransformConceptsInvoice(conceptsInvoice);
 
   // const total=useMemo(() => )
-  const total=conceptsInvoice.reduce((acum, item) => acum+=item.amount, 0);
+  const total=conceptsInvoice.reduce((acum, item) => acum+=((item?.amount?? 0) * (item?.quantity?? 0)), 0);
 
   const view1=(
     <>
@@ -206,7 +206,7 @@ export default function ConceptsReferralsStepperComponent({token, nextStep, save
                   })}</p>
                   <p className="text-black text-right">{CurrencyFormatter({
                     currency: 'MXN', 
-                    value: c?.amount || 0
+                    value: (c?.amount || 0) * (c?.quantity?? 0)
                   })}</p>
                 </div>
               ))}
@@ -362,6 +362,7 @@ function TransformConceptsInvoice(concepts:IConceptsInvoice[]):TableConceptsInvo
   const data:TableConceptsInvoice[]=[];
   
   concepts.forEach((c) => {
+    console.log('c => ', c);
     data.push({
       Clave:c.conceptEstimate.code,
       Concepto:c.conceptEstimate.name,
@@ -369,7 +370,8 @@ function TransformConceptsInvoice(concepts:IConceptsInvoice[]):TableConceptsInvo
       Unidad:c.conceptEstimate.unit.name,
       Cantidad:c.quantity,
       Price:c.priceConcepEstimate.cost,
-      Importe:c.amount,
+      // Importe:c.amount,
+      Importe:c.amount * c.quantity,
     })
   });
   return data;

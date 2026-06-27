@@ -58,9 +58,10 @@ export default function DataConceptStepperComponent({previousStep, price, concep
       date: new Date(),
       user: user
     }
-    // console.log('quantity => ', quantity);
-    // console.log('pu => ', pu);
-    // console.log('data => ', data);
+    console.log('quantity => ', quantity);
+    console.log('pu => ', pu);
+    console.log('data => ', data);
+    console.log('cost => ', price?.cost);
     updateConcepts(data);
     showForm(false);
   }

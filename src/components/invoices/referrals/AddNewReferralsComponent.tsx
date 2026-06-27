@@ -163,11 +163,11 @@ export default function AddNewReferralsComponent({showForm, user, token, company
           area:c.area,
           section:c.section,
           quantity:c.quantity,
-          amount:c.amount,
+          amount:c.amount * c.quantity,
           date:c.date,
           user:c.user
       });
-      amount += c.amount;
+      amount += (c.amount * c.quantity);
     });
 
     if(val){
@@ -209,7 +209,8 @@ export default function AddNewReferralsComponent({showForm, user, token, company
         }]
       }
 
-      // console.log('data remision => ', data);
+      console.log('data remision => ', data);
+      console.log('data json => ', JSON.stringify(data));
       const resInvoice = await createInvoice(token, data);
       if(typeof(resInvoice)==='string'){
         showToastMessageError(resInvoice);

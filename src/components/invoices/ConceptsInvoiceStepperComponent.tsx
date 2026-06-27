@@ -31,6 +31,7 @@ export default function ConceptsInvoiceStepperComponent({token, nextStep, saveIn
   const [showNewConcept, setShowNewConcept]=useState<boolean>(false);
 
   const handleAddNewConcept = (concept: IConceptsInvoice) => {
+    console.log('handle add new concept => ', concept);
     setConceptsInvoice((prev) => [...prev, concept]);
     setShowNewConcept(false);
   }
@@ -221,7 +222,8 @@ function TransformConceptsInvoice(concepts:IConceptsInvoice[]):TableConceptsInvo
       Unidad:c.conceptEstimate.unit.name,
       Cantidad:c.quantity,
       Price:c.priceConcepEstimate.cost,
-      Importe:c.amount,
+      // Importe:c.amount,
+      Importe:c.amount * c.quantity,
     })
   });
   return data;

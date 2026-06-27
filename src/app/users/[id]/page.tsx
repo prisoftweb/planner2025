@@ -27,7 +27,7 @@ export default async function Page({ params, searchParams }:
     if(typeof(user) === "string")
       return(
         <>
-          <Navigation user={userLog} token={token} />
+          {/* <Navigation user={userLog} token={token} resources={resresource} /> */}
           <ComponentError page={`/users/${params.id}`} message={user} />
           {/* <h1 className="text-center text-red-500">{user}</h1> */}
         </>
@@ -35,19 +35,23 @@ export default async function Page({ params, searchParams }:
   } catch (error) {
     return(
       <>
-        <Navigation user={userLog} token={token} />
+        {/* <Navigation user={userLog} token={token} /> */}
         <ComponentError page={`/users/${params.id}`} message="Ocurrio un error al obtener datos del usuario!!" />
         {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1> */}
       </>
     )
   }
 
+  const [resresource] = await Promise.all([
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+  ]);
+
   try {
     users = await getUsers(token);
     if(typeof(users) === "string")
       return(
         <>
-          <Navigation user={userLog} token={token} />
+          <Navigation user={userLog} token={token} resources={resresource} />
           <ComponentError page={`/users/${params.id}`} message={users} />
           {/* <h1 className="text-center text-red-500">{users}</h1> */}
         </>
@@ -55,16 +59,12 @@ export default async function Page({ params, searchParams }:
   } catch (error) {
     return(
       <>
-        <Navigation user={userLog} token={token} />
+        <Navigation user={userLog} token={token} resources={resresource} />
         <ComponentError page={`/users/${params.id}`} message="Ocurrio un error al obtener datos de los usuarios!!" />
         {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1> */}
       </>
     ) 
   }
-
-  const [resresource] = await Promise.all([
-    getAllResourcesByROL(token, user.rol?._id?? ''),
-  ]);
   
   if(typeof(resresource)==='string'){
     return (
@@ -99,7 +99,7 @@ export default async function Page({ params, searchParams }:
 
   return(
     <>
-      <Navigation user={userLog} token={token} />
+      <Navigation user={userLog} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center">

@@ -27,7 +27,7 @@ export default async function Page(){
   if(!token || token===''){
     return (
       <>
-        <Navigation user={user} token={''} />
+        <Navigation user={user} token={''} resources={resresource} />
         <ComponentError page="/guarantee" message="No estas logueado" />
       </>
     )

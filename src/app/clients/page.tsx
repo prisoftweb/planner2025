@@ -6,7 +6,7 @@ import Navigation from "@/components/navigation/Navigation";
 import { TableClient, Tag } from "@/interfaces/Clients";
 import { UsrBack } from "@/interfaces/User";
 // import Header from "@/components/Header";
-import { ResponsiveHeader } from "@/components/Header";
+// import { ResponsiveHeader } from "@/components/Header";
 import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
 import { ClientDataToTableClient } from "../functions/ClientFunctions";

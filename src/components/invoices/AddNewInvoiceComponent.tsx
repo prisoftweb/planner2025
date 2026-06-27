@@ -158,11 +158,13 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
           area:c.area,
           section:c.section,
           quantity:c.quantity,
-          amount:c.amount,
+          // amount:c.amount,
+          amount:c.amount * c.quantity,
           date:c.date,
           user:c.user
       });
-      amount += c.amount;
+      // amount += c.amount;
+      amount += c.amount * c.quantity;
     });
 
     if(val){

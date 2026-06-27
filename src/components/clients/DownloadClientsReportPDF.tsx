@@ -98,24 +98,24 @@ export default function DownloadClientsReportPDF({clients, satCompany}:
           </View>
 
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>NOMBRE</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>NOMBRE COMERCIAL</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>RFC</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>REGIMEN | PERSONA </Text>
+            <Text style={{flex: 4, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>NOMBRE</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>NOMBRE COMERCIAL</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>RFC</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>REGIMEN | PERSONA </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>PERFIL FISCAL </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>DIRECCION</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>TELEFONO</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>TELEFONO</Text>
           </View>
 
           {clients.map((c) => (
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={c._id}>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.name}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.tradename}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.rfc}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.taxregime?.id} | {c?.regime} </Text>
+              <Text style={{flex: 4, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.name}</Text>
+              <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.tradename}</Text>
+              <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.rfc}</Text>
+              <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.taxregime?.id} | {c?.regime} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.hasfulltaxprofile? 'SI':'NO'}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.location?.cp? 'SI':'NO'}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.phone}</Text>
+              <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c?.phone}</Text>
             </View>
           ))}
 

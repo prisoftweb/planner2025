@@ -72,8 +72,8 @@ export default async function Page({ params, searchParams }: { params: { id: str
 
   return(
     <>
-      {/* <Navigation user={user} token={token} resources={resresource} /> */}
-      <Navigation user={currentUser} token={token} />
+      <Navigation user={user} token={token} resources={resresource} />
+      {/* <Navigation user={currentUser} token={token} /> */}
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
           <>
