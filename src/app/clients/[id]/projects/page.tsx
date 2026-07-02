@@ -9,7 +9,8 @@ import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
 import TableProjectsClient from "@/components/clients/projects/TableProjectsClient"
 import ComponentError from "@/components/ComponentError"
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -18,21 +19,31 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let client: ClientBack = await getClient(token, params.id);
-  // let clients: ClientBack[] = await getClients(token);
-  // let projects: ProjectMin[] = await getProjectsByClient(token, params.id);
+  const perm=((user.rol?._id?? '') + ('/clients/id%2Fprojects'));
+  
+  console.log('per => ', perm);
 
-  const [client, clients, projects, resresource] = await Promise.all([
+  const [client, clients, projects, resresource, rescomponents] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
     getProjectsByClient(token, params.id),
-    getAllResourcesByROL(token, user.rol?._id?? '')
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
       </>
     )
   }
@@ -70,6 +81,11 @@ export default async function Page({ params }: { params: { id: string }}){
       </>
     )
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   let options: Options[] = [];
 
   clients.map((cli: ClientBack) => {
@@ -93,7 +109,9 @@ export default async function Page({ params }: { params: { id: string }}){
           <Selectize options={options} routePage="clients" subpath="/projects" />
         </div>
         <NavTab idCli={params.id} tab='2' />
-        <TableProjectsClient projects={projects} />
+        {result.permission.read && (
+          <TableProjectsClient projects={projects} />
+        )}
       </div>
     </>
   )

@@ -12,7 +12,8 @@ import ProjectHistoryCli from "@/components/projects/ProjectHistoryCli";
 
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -20,12 +21,18 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [project, options, clients, catalogs, resresource] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/6a3af6370d5f57b8a0bf1952/6a3af6370d5f57b8a0bf1953'));
+  // const perm=((user.rol?._id?? '') + ('/projects/history/id%2Fprofile'));
+
+  console.log('per => ', perm);
+
+  const [project, options, clients, catalogs, resresource, rescomponents] = await Promise.all([
     GetProjectMin(token, params.id),
     getProjectsLV(token),
     getClients(token),
     getCatalogsByName(token, 'projects'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -35,6 +42,54 @@ export default async function Page({ params }: { params: { id: string }}){
         </>
       )
     }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+      </>
+    )
+  }
+
+  // const data = [/* tu arreglo */];
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
+  // {
+  //   permission: {
+  //     create: false,
+  //     read: false,
+  //     update: false,
+  //     delete: false,
+  //     search: false,
+  //     export: false,
+  //     print: false,
+  //     select: false,
+  //     filter: false,
+  //     searchfull: false,
+  //     readfull: false
+  //   },
+  //   components: [
+  //     "dashboard",
+  //     "basicadata",
+  //     "extradata",
+  //     "address",
+  //     "guarantee",
+  //     "advance"
+  //   ]
+  // }
+
+  // const result = {
+  //   permission: data[0]?.permission ?? {},
+  //   components: data.map(({ component, title }) => ({
+  //     component,
+  //     title
+  //   }))
+  // };
   
   if(typeof(project) === "string"){
     return(
@@ -108,6 +163,8 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
+  console.log('res comp => ', rescomponents);
+
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
@@ -124,7 +181,7 @@ export default async function Page({ params }: { params: { id: string }}){
         </div>
         <NavTabProject idPro={params.id} tab='1' />
         <NextUiProviders>
-          <ProjectHistoryCli project={project} id={params.id} token={token} />
+          <ProjectHistoryCli project={project} id={params.id} token={token} permissions={result} />
         </NextUiProviders>
       </div>
     </>

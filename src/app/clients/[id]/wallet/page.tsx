@@ -9,7 +9,8 @@ import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
 import ClientCollectionCli from "@/components/clients/ClientCollectionCLi"
 import ComponentError from "@/components/ComponentError"
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Wallet({ params }: { params: { id: string }}){
 
@@ -18,12 +19,17 @@ export default async function Wallet({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
+  const perm=((user.rol?._id?? '') + ('/clients/id%2Fprofile'));
+  
+  console.log('per => ', perm);
+
   const [client, clients, pendindInvoices, resresource] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
     // getAllTOTALPENDINGPaymentsByCLIENTMIN(token, params.id)
     getAllTOTALPENDINGPaymentsOFClientANDBYProjectMIN(token, params.id),
-    getAllResourcesByROL(token, user.rol?._id?? '')
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){

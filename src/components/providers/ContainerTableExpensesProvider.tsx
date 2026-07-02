@@ -26,6 +26,7 @@ import { ITotalAcumulatedPendingPaymentResumeProviderPDF } from "@/interfaces/Pa
 
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   data:ExpensesTableProvider[], 
@@ -34,11 +35,12 @@ type Props = {
   user: string, 
   provider: Provider,
   pending: ITotalAcumulatedPendingPaymentResumeProviderPDF[],
-  company:string
+  company:string,
+  permissions:IPermissionsAndComponents
 }
 
 export default function ContainerTableExpensesProvider({data, token, expenses, user, 
-  provider, pending, company}: Props) {
+  provider, pending, company, permissions}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [stateExpenses, setStateExpenses] = useState<PaymentProvider[]>(expenses);
@@ -125,11 +127,15 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
         </div>
         <div className="flex gap-x-2 gap-y-2 items-center flex-wrap sm:flex-nowrap">
           <div className="flex w-full sm:w-auto gap-x-2 items-center">
-            <SearchInTable placeH={"Buscar gasto.."} />
+            {permissions.permission.searchfull && (
+              <SearchInTable placeH={"Buscar gasto.."} />
+            )}
             <div className={`w-auto`}>
               <div className="flex gap-x-4 justify-end items-center">
-                <TooltipFilterIcon handleFilter={handleFilter} />
-                {dataReport.length > 0 && satCompany && (
+                {permissions.permission.filter && (
+                  <TooltipFilterIcon handleFilter={handleFilter} />
+                )}
+                {dataReport.length > 0 && satCompany && permissions.permission.print && (
                   <div className="flex justify-end sm:hidden">
                     <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider}
                           dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} satCompany={satCompany}
@@ -153,20 +159,22 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
             </div>
           </div>
           <div>
-            <DateRangePicker 
-              className=''
-              placeholder='Seleccione un rango de fechas'
-              onValueChange={(e) => {
-                setRangeDate(e);
-                if(e.from && e.to){
-                  handleDate(e.from, e.to);
-                }
-              }}
-              value={rangeDate}
-              locale={es}
-            />
+            {permissions.components.includes('filterbydate') && (
+              <DateRangePicker 
+                className=''
+                placeholder='Seleccione un rango de fechas'
+                onValueChange={(e) => {
+                  setRangeDate(e);
+                  if(e.from && e.to){
+                    handleDate(e.from, e.to);
+                  }
+                }}
+                value={rangeDate}
+                locale={es}
+              />
+            )}
           </div>
-          {dataReport.length > 0 && satCompany && (
+          {dataReport.length > 0 && satCompany && permissions.permission.print && (
             <div className="hidden sm:flex justify-end ">
               <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider}
                     dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} satCompany={satCompany}
@@ -188,9 +196,11 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
           )}
         </div>
       </div>
-      <TableCostsProvider token={token} expenses={expenses} isFilter={filter}
-        setIsFilter={handleFilter} user={user} data={data} idProv={provider._id} 
-        udpateTable={updateStateExpenses} />
+      {permissions.permission.readfull && (
+        <TableCostsProvider token={token} expenses={expenses} isFilter={filter}
+          setIsFilter={handleFilter} user={user} data={data} idProv={provider._id} 
+          udpateTable={updateStateExpenses} />
+      )}
     </div>
   )
 }

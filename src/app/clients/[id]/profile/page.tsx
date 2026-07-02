@@ -16,8 +16,9 @@ import HeaderImage from "@/components/HeaderImage";
 import WithOut from "@/components/WithOut";
 import { Resource2 } from "@/interfaces/Roles";
 import ConfigClient from "@/components/clients/ConfigClient";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
 import ComponentError from "@/components/ComponentError";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -25,7 +26,11 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [client, clients, tags, totalprj, totalColl, totalPenBil, totalpay, resresource] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/clients/id%2Fprofile'));
+  
+  console.log('per => ', perm);
+
+  const [client, clients, tags, totalprj, totalColl, totalPenBil, totalpay, resresource, rescomponents] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
     getTags(token),
@@ -33,7 +38,8 @@ export default async function Page({ params }: { params: { id: string }}){
     getAllTOTALAccountReceivablesOnlyByOneClientMINRESUME(token, params.id),
     getAllTOTALEstimatesPendingByOneClientMINRESUME(token, params.id),
     getAllTOTALChargedByOneCLIENT(token, params.id),
-    getAllResourcesByROL(token, user.rol?._id?? '')
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
  
   if(typeof(resresource)==='string'){
@@ -44,6 +50,15 @@ export default async function Page({ params }: { params: { id: string }}){
     )
   }
   
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+      </>
+    )
+  }
+
   if(typeof(client) === "string")
     return (
       <>
@@ -53,24 +68,29 @@ export default async function Page({ params }: { params: { id: string }}){
       </>
   )
 
-  const clientCookie = cookieStore.get('clients')?.value;
-  let permisionsClient: Resource2 | undefined;
-  if(clientCookie){
-    permisionsClient = JSON.parse(clientCookie);
-  }
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
-  if(!permisionsClient){
-    return(
-      <>
-        <Navigation user={user} token={token} resources={resresource} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-            text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
-            title="Clientes"><></></WithOut>
-        </div>
-      </>
-    )
-  }
+  // const clientCookie = cookieStore.get('clients')?.value;
+  // let permisionsClient: Resource2 | undefined;
+  // if(clientCookie){
+  //   permisionsClient = JSON.parse(clientCookie);
+  // }
+
+  // if(!permisionsClient){
+  //   return(
+  //     <>
+  //       <Navigation user={user} token={token} resources={resresource} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+  //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+  //           text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
+  //           title="Clientes"><></></WithOut>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   if(typeof(clients) === "string")
     return (
@@ -172,8 +192,8 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTab idCli={params.id} tab='1' />
         <NextUiProviders>
           <ClientCli client={client} token={token} id={params.id} tags={arrTags} totalPenBil={totalPenBil}
-            clientPermissions={permisionsClient} totalprj={totalprj} totalColl={totalColl} 
-            totalpay={totalpay} company={user.profile} />
+            totalprj={totalprj} totalColl={totalColl} 
+            totalpay={totalpay} company={user.profile} permissions={result} />
         </NextUiProviders>
       </div>
     </>

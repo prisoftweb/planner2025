@@ -11,7 +11,8 @@ import ProjectCli from "@/components/projects/ProjectClient";
 import Header from "@/components/HeaderPage";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: 
   { params: { id: string }}){
@@ -22,12 +23,16 @@ export default async function Page({ params }:
 
   let role = user.rol?.name || '';
 
-  const [project, options, clients, catalogs, resresource] = await Promise.all([
+  // const perm=((user.rol?._id?? '') + ('/6a3af6370d5f57b8a0bf1952/6a3af6370d5f57b8a0bf1953'));
+  const perm=((user.rol?._id?? '') + ('/projects/id%2Fprofile'));
+
+  const [project, options, clients, catalogs, resresource, rescomponents] = await Promise.all([
     GetProjectMin(token, params.id),
     role.toLowerCase().includes('residente') ? getProjectsByUserLV(token, user._id) : getProjectsLV(token),
     getClients(token),
     getCatalogsByName(token, 'projects'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -37,6 +42,15 @@ export default async function Page({ params }:
         </>
       )
     }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+      </>
+    )
+  }
   
   if(typeof(project) === "string")
     return(
@@ -114,6 +128,11 @@ export default async function Page({ params }:
     })
   })
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
@@ -136,7 +155,7 @@ export default async function Page({ params }:
           <ProjectCli token={token} id={params.id} project={project}
             optCategories={optCategories} optClients={optClients} 
             optTypes={optTypes} optConditions={optConditions} 
-            user={user._id}
+            user={user._id} permissions={result}
           />
         </NextUiProviders>
       </div>

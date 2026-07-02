@@ -11,19 +11,18 @@ import { useState } from "react"
 import { IAdvanceProvider } from "@/interfaces/Providers"
 import TableAdvancesProvider from "./TableAdvancesProvider"
 import WithOut from "@/components/WithOut"
-import { showToastMessageError } from "@/components/Alert"
-import { getPaymentsProvider } from "@/app/api/routePayments"
-import TooltipFilterIcon from "@/components/tooltipIcons/TooltipFilterIcon"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   data:ExpensesTableProvider[], 
   token:string, 
   expenses:IAdvanceProvider[], 
   user: string, 
-  provider: Provider
+  provider: Provider,
+  permissions:IPermissionsAndComponents
 }
 
-export default function ContainerAdvances({data, token, expenses, user, provider}: Props) {
+export default function ContainerAdvances({data, token, expenses, user, provider, permissions}: Props) {
 
   // const [filter, setFilter] = useState<boolean>(false);
   const [stateExpenses, setStateExpenses] = useState<IAdvanceProvider[]>(expenses);
@@ -71,7 +70,9 @@ export default function ContainerAdvances({data, token, expenses, user, provider
           <p className="text-slate-500 mx-3">{provider.name}</p>
         </div> */}
         <div className="flex gap-x-2 mt-2 w-full sm:max-w-md">
-          <SearchInTable placeH={"Buscar anticipo.."} />
+          {permissions.permission.searchfull && (
+            <SearchInTable placeH={"Buscar anticipo.."} />
+          )}
           {/* <div className={`w-24`}>
             <div className="flex gap-x-4 justify-end items-center">
               <TooltipFilterIcon handleFilter={handleFilter} />
@@ -79,7 +80,9 @@ export default function ContainerAdvances({data, token, expenses, user, provider
           </div> */}
         </div>
       </div>
-        <TableAdvancesProvider data={expenses} expenses={expenses} idProv={provider._id} token={token} />
+        {permissions.permission.readfull && (
+          <TableAdvancesProvider data={expenses} expenses={expenses} idProv={provider._id} token={token} />
+        )}
     </div>
   )
 }

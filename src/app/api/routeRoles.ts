@@ -472,3 +472,19 @@ export async function getAllResourcesByROL(auth_token:string, id:string){
     }
   }
 }
+
+export async function getAllComponentsByROUTESAndRESOURCESAndROLFULL(auth_token:string, id:string){
+  try {
+    const res = await axiosInstance.get(`/roles/getAllComponentsByROUTESAndRESOURCESAndROLFULL/${id}`, {
+      headers: {
+        Authorization: `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+  }
+}

@@ -11,6 +11,7 @@ import SearchInTable from "../SearchInTable"
 import { useState } from "react"
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions"
 import { useEffect } from "react"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   data:HistoryExpensesTable[], 
@@ -19,11 +20,12 @@ type Props = {
   user: string, 
   provider: Provider, 
   optTypes: Options[], 
-  condition: string
+  condition: string,
+  permissions:IPermissionsAndComponents
 }
 
 export default function ContainerTableHistoryCosts({data, token, expenses, user, 
-  provider, optTypes, condition}: Props) {
+  provider, optTypes, condition, permissions}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [dataTable, setDataTable] = useState<HistoryExpensesTable[]>(data);
@@ -133,14 +135,18 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
           <p className="text-slate-500 mx-3">{provider.name}</p>
         </div>
         <div className="flex gap-x-2 w-full sm:max-w-md">
-          <SearchInTable placeH={"Buscar gasto.."} />
+          {permissions.permission.searchfull && (
+            <SearchInTable placeH={"Buscar gasto.."} />
+          )}
         </div>
       </div>
-      <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}
-        expenses={costsProvider} isFilter={filter} setIsFilter={handleFilter}
-        user={user} isViewReports={false} data={dataTable} idProv={provider._id}
-        filterData={filterData} maxAmount={maxAmount} minAmount={minAmount}
-      />
+      {permissions.permission.readfull && (
+        <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}
+          expenses={costsProvider} isFilter={filter} setIsFilter={handleFilter}
+          user={user} isViewReports={false} data={dataTable} idProv={provider._id}
+          filterData={filterData} maxAmount={maxAmount} minAmount={minAmount}
+        />
+      )}
     </div>
   )
 }

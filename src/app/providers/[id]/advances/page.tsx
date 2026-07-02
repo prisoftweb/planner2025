@@ -9,7 +9,8 @@ import ArrowReturn from "@/components/ArrowReturn";
 import { Options } from "@/interfaces/Common";
 import ContainerAdvances from "@/components/providers/advances/containerAdvances";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -18,20 +19,34 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [provider, providers, advances, resresource] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
+
+  const [provider, providers, advances, resresource, rescomponents] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),
     getAllCostsAdvancesByProviderMIN(token, params.id),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
-        return (
-          <>
-            <ComponentError page="/" message={resresource} />
-          </>
-        )
-      }
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
+    }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+      </>
+    )
+  }
   
   if(typeof(provider) === "string"){
     return(
@@ -81,6 +96,11 @@ export default async function Page({ params }: { params: { id: string }}){
       label: prov.name,
     })
   });
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>
@@ -92,11 +112,13 @@ export default async function Page({ params }: { params: { id: string }}){
             <IconText text={provider.tradename} size="w-8 h-8" sizeText="" />
             <p className="text-slate-500 mx-3">{provider.name}</p>
           </div>
-          <Selectize options={options} routePage="providers" subpath="/advances" />
+          {result.components.includes('findall') && (
+            <Selectize options={options} routePage="providers" subpath="/advances" />
+          )}
         </div>
         <NavTab idProv={params.id} tab='4' />
 
-        <ContainerAdvances data={advances} expenses={advances} provider={provider} token={token} user={user._id}/>
+        <ContainerAdvances data={advances} expenses={advances} provider={provider} token={token} user={user._id} permissions={result}/>
         
       </div>
     </>

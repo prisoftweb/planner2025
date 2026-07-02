@@ -9,7 +9,8 @@ import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providers
 import ContainerTableHistoryCosts from "@/components/providers/ContainerTableHistoryCosts";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -18,18 +19,32 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [provider, providers, costs, optTypes, resresource] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/providers/id%2FinvoiceHistory'));
+  
+  console.log('per => ', perm);
+
+  const [provider, providers, costs, optTypes, resresource, rescomponents] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),
     GetCostsMIN(token, params.id),
     getCatalogsByNameAndType(token, 'payments'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
       </>
     )
   }
@@ -93,6 +108,11 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   });
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   const table: HistoryExpensesTable[] = ExpenseDataToTableHistoryProviderData(costs);
   const cond = "67318a51ceaf47ece0d3aa72";
   return(
@@ -100,7 +120,7 @@ export default async function Page({ params }: { params: { id: string }}){
       <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <NavTab idProv={params.id} tab='3' />
-        <ContainerTableHistoryCosts data={table} expenses={costs} token={token} 
+        <ContainerTableHistoryCosts data={table} expenses={costs} token={token} permissions={result}
           user={user._id} optTypes={optTypes} provider={provider} condition={cond} />
       </div>
     </>

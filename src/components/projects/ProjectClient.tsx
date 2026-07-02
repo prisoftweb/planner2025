@@ -16,6 +16,7 @@ import UpdateDateGuaranteeComponent from "./UpdateDateGuaranteeComponent"
 import { getConditionsProject } from "@/app/api/routeProjects"
 import { IConditionProject } from "@/interfaces/Projects"
 import { showToastMessageError } from "../Alert"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   project:OneProjectMin, 
@@ -25,11 +26,12 @@ type Props = {
   optCategories:Options[], 
   optTypes:Options[], 
   optConditions:Options[],
-  user:string
+  user:string,
+  permissions:IPermissionsAndComponents
 }
 
 export default function ProjectCli({project, token, id, optCategories, optClients, 
-  optTypes, optConditions, user}: Props){
+  optTypes, optConditions, user, permissions}: Props){
 
   const [opt, setOpt] = useState<number>(1);
   const {updateOneProjectStore} = useOneProjectsStore();
@@ -92,12 +94,12 @@ export default function ProjectCli({project, token, id, optCategories, optClient
   return(
     <>
       <div className="lg:hidden mt-2">
-        <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
+        <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} permission={permissions} />
       </div>
       <div className={`flex`}>
         <div className={`hidden lg:block bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
-            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
+            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} permission={permissions} />
           </div>
         </div>
         <div className={`flex w-full px-2 flex-wrap ${opt===1? 'xl:flex-nowrap xl:space-x-2': 'md:flex-nowrap md:space-x-2'}  `}

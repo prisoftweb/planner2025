@@ -7,7 +7,8 @@ import HeaderImage from "@/components/HeaderImage";
 import ContainerProfileUser from "@/components/users/ContainerProfileUser";
 import { UsrBack } from "@/interfaces/User";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params, searchParams }: { params: { id: string }, searchParams: { opt: string } }){
   
@@ -15,6 +16,10 @@ export default async function Page({ params, searchParams }: { params: { id: str
   const token: string = cookieStore.get('token')?.value || '';
 
   const currentUser: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+
+  const perm=((currentUser.rol?._id?? '') + ('/users/id%2Fprofile'));
+  
+  console.log('per => ', perm);
 
   const [user, users]=await Promise.all([
     getUser(params.id, token),
@@ -41,14 +46,24 @@ export default async function Page({ params, searchParams }: { params: { id: str
     )
   }
 
-  const [resresource] = await Promise.all([
+  const [resresource, rescomponents] = await Promise.all([
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
   
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
       </>
     )
   }
@@ -70,6 +85,11 @@ export default async function Page({ params, searchParams }: { params: { id: str
   // else if(searchParams.opt==='3') opt = 3;
   //   else if(searchParams.opt==='4') opt = 4;
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
@@ -78,18 +98,22 @@ export default async function Page({ params, searchParams }: { params: { id: str
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
           <>
             <div className="hidden md:block w-full max-w-80 lg:max-w-md">
-              <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
+              {result.components.includes('findall') && (
+                <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
+              )}
             </div>
           </>
         </HeaderImage>
         <div className=" md:hidden mt-2">
-          <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
+          {result.components.includes('findall') && (
+            <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
+          )}
         </div>
         {/* <div className="mt-3">
           <NavTab idUser={params.id} tab={'1'} />
         </div> */}
         {/* <TabUser user={user} opt={opt} /> */}
-        <ContainerProfileUser token={token} user={user} />
+        <ContainerProfileUser token={token} user={user} permissions={result} />
       </div>
     </>
   )

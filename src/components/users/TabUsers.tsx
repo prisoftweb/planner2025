@@ -8,9 +8,10 @@ import { UsrBack } from "@/interfaces/User";
 import { useState, useEffect } from "react";
 import { Options } from "@/interfaces/Common";
 import { showToastMessageError } from "../Alert";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TabUser({user, opt, token}: 
-  {user:UsrBack, opt: number, token:string}){
+export default function TabUser({user, opt, token, permissions}: 
+  {user:UsrBack, opt: number, token:string, permissions:IPermissionsAndComponents}){
   
   // const cookieStore = cookies();
   // const token: string = cookieStore.get('token')?.value || '';
@@ -45,7 +46,7 @@ export default function TabUser({user, opt, token}:
         <NavTab idUser={''} tab={'1'} />
       </div> */}
       <UserClient user={user} token={token} departments={optionsDepartments} 
-        optsRole={optsRole} optTab={opt} />
+        optsRole={optsRole} optTab={opt} permissions={permissions} />
     </>
   )
 }

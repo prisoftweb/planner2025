@@ -12,6 +12,7 @@ import ProfileProject from "./ProfileProject"
 import ProgressProject from "./ProgressProject"
 import { useOneProjectsStore } from "@/app/store/projectsStore"
 import StatusProjectComponent from "./StatusProjectComponent"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   project:OneProjectMin, 
@@ -21,11 +22,12 @@ type Props = {
   optCategories:Options[], 
   optTypes:Options[], 
   optConditions:Options[],
-  user:string
+  user:string,
+  permissions:IPermissionsAndComponents
 }
 
 export default function ProjectStatusContainer({project, token, id, optCategories, optClients, 
-  optTypes, optConditions, user}: Props){
+  optTypes, optConditions, user, permissions}: Props){
 
   const [opt, setOpt] = useState<number>(1);
   const {updateOneProjectStore} = useOneProjectsStore();
@@ -75,7 +77,7 @@ export default function ProjectStatusContainer({project, token, id, optCategorie
       <div className={`flex`}>
         <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
-            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
+            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} permission={permissions} />
           </div>
         </div>
         <div className="flex w-full px-2 flex-wrap space-x-2"

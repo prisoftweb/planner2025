@@ -165,3 +165,41 @@ export interface IAllResourcesByROL{
   }
   id: string
 }
+
+export interface IAllComponentsByROUTESAndRESOURCESAndROLFULL {
+  resource: string
+  permission: {
+    create: boolean
+    read: boolean
+    update: boolean
+    delete: boolean
+    search: boolean
+    export: boolean
+    print: boolean
+    select: boolean
+    filter: boolean
+    searchfull: boolean
+    readfull: boolean
+  }
+  route: string
+  component: string
+  title: string
+}
+
+
+export interface IPermissionsAndComponents {
+  permission: {
+    create: boolean
+    read: boolean
+    update: boolean
+    delete: boolean
+    search: boolean
+    export: boolean
+    print: boolean
+    select: boolean
+    filter: boolean
+    searchfull: boolean
+    readfull: boolean
+  }
+  components: string[]
+}

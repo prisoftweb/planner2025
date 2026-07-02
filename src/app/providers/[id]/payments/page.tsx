@@ -9,7 +9,8 @@ import ContainerTableExpensesProvider from "@/components/providers/ContainerTabl
 import { getPaymentsProvider } from "@/app/api/routePayments";
 import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -18,12 +19,17 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [provider, providers, costs, pending, resresource] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fpayments'));
+  
+  console.log('per => ', perm);
+
+  const [provider, providers, costs, pending, resresource, rescomponents] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),
     getPaymentsProvider(token, params.id),
     getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -33,6 +39,15 @@ export default async function Page({ params }: { params: { id: string }}){
         </>
       )
     }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+      </>
+    )
+  }
   
   if(typeof(provider) === "string"){
     return(
@@ -85,13 +100,18 @@ export default async function Page({ params }: { params: { id: string }}){
   }
 
   const table: ExpensesTableProvider[] = ExpenseDataToTablePaidExpensesProviderData(costs);
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <NavTab idProv={params.id} tab='5' />
-        <ContainerTableExpensesProvider data={table} expenses={costs} token={token} 
+        <ContainerTableExpensesProvider data={table} expenses={costs} token={token} permissions={result}
           user={user._id} provider={provider} pending={pending.flat()} company={user.profile} />
       </div>
     </>

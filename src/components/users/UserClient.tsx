@@ -10,9 +10,10 @@ import { Options } from "@/interfaces/Common"
 import NavResponsive from "./NavResponsive"
 import { UsrBack } from "@/interfaces/User"
 import { useUserStore } from "@/app/store/userStore"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function UserClient({user, token, departments, optsRole, optTab}: 
-  {user:UsrBack, token:string, departments:Options[], optsRole:Options[], optTab: number}) {
+export default function UserClient({user, token, departments, optsRole, optTab, permissions}: 
+  {user:UsrBack, token:string, departments:Options[], optsRole:Options[], optTab: number, permissions:IPermissionsAndComponents}) {
   
   // const [opt, setOpt] = useState<number>(optQuery);
   // const [open, setOpen] = useState<boolean>(false);
@@ -47,12 +48,22 @@ export default function UserClient({user, token, departments, optsRole, optTab}:
   }, []);
 
   let view: JSX.Element;
+
+  const configUser=permissions.components.includes("deleteuser")? <ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />: <></>
+  const basicData=permissions.components.includes("personaldata")? <UpdateProfile departments={departments} user={usr.name ===''? user: usr} token={token} optsRoles={optsRole} />: <></>
+  const changePhoto=permissions.components.includes("updatephoto")? <ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />: <></>
+  const changePassword=permissions.components.includes("updatepassword")? <ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />: <></>
+
+  optTab===2? view = (changePhoto) : 
+      (optTab===3? view = (changePassword): 
+        (optTab===5? view = (configUser): 
+          view = (basicData)))
   
-  optTab===2? view = (<ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />) : 
-      (optTab===3? view = (<ChangePassword token={token} name={user.name} id={user._id} />): 
-        (optTab===5? view = (<ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />): 
-          view = (<UpdateProfile departments={departments} user={usr.name ===''? user: usr} 
-                      token={token} optsRoles={optsRole} />) ))
+  // optTab===2? view = (<ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />) : 
+  //     (optTab===3? view = (<ChangePassword token={token} name={user.name} id={user._id} />): 
+  //       (optTab===5? view = (<ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />): 
+  //         view = (<UpdateProfile departments={departments} user={usr.name ===''? user: usr} 
+  //                     token={token} optsRoles={optsRole} />) ))
 
   return(
     <>

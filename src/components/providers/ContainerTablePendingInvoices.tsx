@@ -28,6 +28,7 @@ import { UsrBack } from "@/interfaces/User"
 
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   data:HistoryExpensesTable[], 
@@ -37,11 +38,12 @@ type Props = {
   provider: Provider, 
   optTypes: Options[], 
   condition: string,
-  company:string
+  company:string,
+  permissions:IPermissionsAndComponents
 }
 
 export default function ContainerTablePendinginvoices({data, token, expenses, user, 
-  provider, optTypes, condition, company}: Props) {
+  provider, optTypes, condition, company, permissions}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [expensesSelected, setExpensesSelected] = useState<HistoryExpensesTable[]>([]);
@@ -93,6 +95,8 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
   //   totalAcum: 5,
   // }]);
   const [totalAccum, setTotalAccum]=useState<ITotalAcumulatedPendingPaymentResumeProviderPDF[]>([]);
+
+  console.log('permissions => ', permissions);
 
   useEffect(() => {
     const fetch = async () => {
@@ -249,20 +253,24 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
           <p className="text-slate-500 mx-3">{provider.name}</p>
         </div>
         <div className="flex gap-x-2 w-full max-w-md">
-          <SearchInTable placeH={"Buscar gasto.."} />
+          {permissions.permission.searchfull && (
+            <SearchInTable placeH={"Buscar gasto.."} />
+          )}
           <div className={`w-auto max-w-24`}>
             <div className="flex gap-x-4 justify-end items-center">
-              <GiSettingsKnobs onClick={() => handleFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              />
-              {expensesSelected.length > 0 && (
+              {permissions.permission.filter && (
+                <GiSettingsKnobs onClick={() => handleFilter(true)}
+                  className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
+                />
+              )}
+              {expensesSelected.length>0 && permissions.components.includes('paymentsupplement') && (
                 <TbPaywall onClick={() => handlePaidExpenses(true)}
                   className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
                 />
               )}
             </div>
           </div>
-          {satCompany && (
+          {satCompany && permissions.permission.print && (
             <PDFDownloadLink document={<DownloadPaymentsPendingProviderPDF costs={dataReport} satCompany={satCompany}
                                               provider={provider} totalAccum={totalAccum} user={user.name} />} fileName={`Pendientes ${provider.name}`} >
                 {({loading, url, error, blob}) => 
@@ -281,11 +289,13 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
           )}
         </div>
       </div>
-      <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}
-        expenses={costsProvider} isFilter={filter} setIsFilter={handleFilter}
-        user={user._id} isViewReports={false} data={dataTable} idProv={provider._id}
-        filterData={filterData} maxAmount={maxAmount} minAmount={minAmount}
-      />
+      {permissions.permission.readfull && (
+        <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}
+          expenses={costsProvider} isFilter={filter} setIsFilter={handleFilter}
+          user={user._id} isViewReports={false} data={dataTable} idProv={provider._id}
+          filterData={filterData} maxAmount={maxAmount} minAmount={minAmount}
+        />
+      )}
       {/* {paidExpenses && (
         <ContainerSideNav width="w-full max-w-5xl" open={paidExpenses}>
           <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition} open={paidExpenses}

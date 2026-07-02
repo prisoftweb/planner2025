@@ -11,26 +11,28 @@ import DataBasic from "./DataBasic"
 import ExtraData from "./ExtraData"
 import AddressClient from "./AddressClient"
 import NavResponsive from "./NavResponsive"
-import { Resource2 } from "@/interfaces/Roles"
+// import { Resource2 } from "@/interfaces/Roles"
 import { useClientProfileStore } from "@/app/store/clientStore"
 import ShowContactasClicComponent from "./ShowContactasClicComponent"
 import ConfigClient from "./ConfigClient"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type ClientCliProps = {
   client:ClientBack, 
   token:string, 
   id:string, 
   tags:Options[], 
-  clientPermissions: Resource2,
+  // clientPermissions: Resource2,
   totalprj: ITotalProjectsByClient,
   totalColl:ITotalCollectionsByClient,
   totalPenBil:ITotalPendingBillingByClient,
   totalpay:ITotalPaymentClient[],
-  company: string
+  company: string,
+  permissions:IPermissionsAndComponents
 }
 
-export default function ClientCli({client, token, id, tags, clientPermissions, 
-  totalprj, totalColl, totalPenBil, totalpay, company}: ClientCliProps){
+export default function ClientCli({client, token, id, tags, 
+  totalprj, totalColl, totalPenBil, totalpay, company, permissions}: ClientCliProps){
 
   const [opt, setOpt] = useState<number>(1);
   const handleOpt = (value: number) => {
@@ -56,13 +58,16 @@ export default function ClientCli({client, token, id, tags, clientPermissions,
             </div>): 
       (opt===4? (<div className="mt-3 w-full sm:max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                       style={{borderColor:'#F8FAFC'}}>
-                <AddressClient client={client} token={token} 
-                  editInfo={true} />
+                {permissions.components.includes('address') && (
+                  <AddressClient client={client} token={token} editInfo={true} />
+                )}
               </div>): 
       (opt===5? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
-                  <Contacts id={id} contacts={client.contact || []} token={token}
-                    editInfo={true} company={company} />
+                  {permissions.components.includes('contact') && (
+                    <Contacts id={id} contacts={client.contact || []} token={token}
+                      editInfo={true} company={company} />
+                  )}
                 </div>):  (
         opt===6? (<div className="mt-3 w-full sm:max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
@@ -70,11 +75,15 @@ export default function ClientCli({client, token, id, tags, clientPermissions,
                   </div>):(<div className="mt-3 w-full md:p-2" 
                                     style={{borderColor:'#F8FAFC'}}>
                               <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
-                                <Sumary totalprj={totalprj} totalColl={totalColl} 
-                                    totalPenBil={totalPenBil} totalpay={totalpay} />
-                                <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full sm:max-w-md mt-2">
-                                  <ShowContactasClicComponent client={client} token={token} idCli={id} />
-                                </div>
+                                {permissions.components.includes('resume') && (
+                                  <>
+                                    <Sumary totalprj={totalprj} totalColl={totalColl} 
+                                        totalPenBil={totalPenBil} totalpay={totalpay} />
+                                    <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full sm:max-w-md mt-2">
+                                      <ShowContactasClicComponent client={client} token={token} idCli={id} />
+                                    </div>
+                                  </>
+                                )}
                               </div>
                           </div>))) ))
   
@@ -88,13 +97,13 @@ export default function ClientCli({client, token, id, tags, clientPermissions,
     <>
       <div className={`md:hidden bg-white`}>
         <NavResponsive open={open} setOpen={handleOpen} changeOption={handleOpt} 
-            option={opt} clientPermission={clientPermissions} />
+            option={opt} permissions={permissions} />
       </div>
       <div className={`flex`}>
         <div className={`hidden md:block bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={handleOpen} changeOption={handleOpt} 
-                option={opt} clientPermission={clientPermissions} />
+                option={opt} permissions={permissions} />
           </div>
         </div>
         <div className="flex w-full md:px-2 flex-wrap lg:flex-nowrap lg:space-x-2" 
