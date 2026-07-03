@@ -5,7 +5,8 @@ import { getCatalogs } from "../api/routeCatalogs";
 import { Catalog } from "@/interfaces/Catalogs";
 import ListClient from "@/components/catalogs/ListClient";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -14,9 +15,14 @@ export default async function Page(){
 
   // let catalogs: Catalog[] = await getCatalogs(token);
 
-  const [catalogs, resresource]=await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
+
+  const [catalogs, resresource, rescomponents]=await Promise.all([
     getCatalogs(token),
-    getAllResourcesByROL(token, user.rol?._id?? '')
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -26,6 +32,15 @@ export default async function Page(){
         </>
       )
     }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
+      </>
+    )
+  }
 
   if(typeof(catalogs)=== 'string'){
     return (
@@ -38,6 +53,11 @@ export default async function Page(){
       </>
     )
   } 
+
+  // const result = {
+  //   permission: rescomponents[0]?.permission ?? {},
+  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  // };
 
   return(
     <>

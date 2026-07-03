@@ -11,7 +11,7 @@ export async function createInvoice(auth_token:string, data: Object) {
         'Content-Type': 'application/json'
       }
     })
-    // console.log('res local invoice  => ', res);
+    console.log('res local invoice  => ', res);
     // if(res.status===200) return res.data.data.data;
     if(res.status===201) return res.status;
     return res.statusText;

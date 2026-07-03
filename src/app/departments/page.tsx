@@ -6,23 +6,38 @@ import { Options } from "@/interfaces/Common";
 import { getCompanies } from "../api/routeCompany";
 import ContainerDepartment from "@/components/departments/ContainerDepartment";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [companies, departments, resresource] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
+
+  const [companies, departments, resresource, rescomponents] = await Promise.all([
     getCompanies(token), 
     getDepartments(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -70,6 +85,11 @@ export default async function Page(){
       </>
     )
   } 
+
+  // const result = {
+  //   permission: rescomponents[0]?.permission ?? {},
+  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  // };
 
   return(
     <>

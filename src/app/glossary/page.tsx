@@ -8,7 +8,8 @@ import TableGlossary from "@/components/glossary/TableGlossary";
 import {getGlossaries} from "../api/routeGlossary";
 import { Glossary, GlossaryTable } from "@/interfaces/Glossary";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -17,15 +18,29 @@ export default async function Page(){
   
   // let glossaries: Glossary[] = await getGlossaries(token);
 
-  const [resresource, glossaries] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
+
+  const [resresource, glossaries, rescomponents] = await Promise.all([
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getGlossaries(token)
+    getGlossaries(token),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -52,6 +67,11 @@ export default async function Page(){
       name: gloss.name  
     })
   });
+
+  // const result = {
+  //   permission: rescomponents[0]?.permission ?? {},
+  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  // };
 
   return(
     <>

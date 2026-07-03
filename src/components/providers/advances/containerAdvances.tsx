@@ -1,12 +1,8 @@
 'use client'
 
 import { ExpensesTableProvider } from "@/interfaces/Providers"
-import TableCostsProvider from "../TableCostsProvider"
-import ArrowReturn from "@/components/ArrowReturn"
-import IconText from "../IconText"
 import { Provider } from "@/interfaces/Providers"
 import SearchInTable from "@/components/SearchInTable"
-import { GiSettingsKnobs } from "react-icons/gi"
 import { useState } from "react"
 import { IAdvanceProvider } from "@/interfaces/Providers"
 import TableAdvancesProvider from "./TableAdvancesProvider"
@@ -80,9 +76,10 @@ export default function ContainerAdvances({data, token, expenses, user, provider
           </div> */}
         </div>
       </div>
-        {permissions.permission.readfull && (
+      <TableAdvancesProvider data={expenses} expenses={expenses} idProv={provider._id} token={token} />
+        {/* {permissions.permission.readfull && (
           <TableAdvancesProvider data={expenses} expenses={expenses} idProv={provider._id} token={token} />
-        )}
+        )} */}
     </div>
   )
 }

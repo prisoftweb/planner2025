@@ -6,7 +6,8 @@ import ContainerCodes from "@/components/codes/ContainerCodes";
 import Header from "@/components/HeaderPage";
 import { getAllProvidersWithTradeLine } from "../api/routeDashboardProviders";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page() {
 
@@ -16,19 +17,33 @@ export default async function Page() {
 
   const today = new Date();
 
-  const [codes, providers, resresource] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
+
+  const [codes, providers, resresource, rescomponents] = await Promise.all([
     // getAllCodesMINByDateANDProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), 
     //     new Date().toDateString(), [], 'TODOS'),
     getAllCodesMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
         today.toDateString(), [], 'TODOS'), 
     getAllProvidersWithTradeLine(token),
-    getAllResourcesByROL(token, user.rol?._id?? '')
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ])
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -56,6 +71,11 @@ export default async function Page() {
       </div>
     )
   }
+
+  // const result = {
+  //   permission: rescomponents[0]?.permission ?? {},
+  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  // };
 
   return (
     <div>

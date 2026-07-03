@@ -10,7 +10,8 @@ import { CostCenterTable } from "@/interfaces/CostCenter";
 import { getCostoCenters } from "../api/routeCostCenter";
 import TableCostCenter from "@/components/costcenter/TableCostCenter";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   
@@ -18,16 +19,30 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [catalogs, costs, resresource] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
+
+  const [catalogs, costs, resresource, rescomponents] = await Promise.all([
     getCatalogsByName(token, 'projects'), 
     getCostoCenters(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -94,6 +109,11 @@ export default async function Page(){
       concept 
     })
   })
+
+  // const result = {
+  //   permission: rescomponents[0]?.permission ?? {},
+  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  // };
   
   return(
     <>

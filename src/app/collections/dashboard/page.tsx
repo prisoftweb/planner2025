@@ -11,16 +11,21 @@ import DashboardCollectionsContainer from "@/components/collections/dashboard/Da
 import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
 import { getDate } from "@/libs/dates";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page() {
   
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
   
   const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes, totalCliRes, 
-    totalEstiatesPen, totalPendEstimatesCli, pendingBilling, resresource] = await Promise.all([
+    totalEstiatesPen, totalPendEstimatesCli, pendingBilling, resresource, rescomponents] = await Promise.all([
     getTotalAccountReceivablesByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
     getTotalAccountReceivablesByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
     getTotalAccountReceivablesPaymentByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
@@ -32,12 +37,22 @@ export default async function Page() {
     getTotalEstimatesPendingByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
     getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -161,6 +176,11 @@ export default async function Page() {
       </>
     )
   }
+
+  // const result = {
+  //   permission: rescomponents[0]?.permission ?? {},
+  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  // };
 
   return (
     <>

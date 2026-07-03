@@ -13,50 +13,41 @@ import { ClientDataToTableClient } from "../functions/ClientFunctions";
 // import { Resource2 } from "@/interfaces/Roles";
 import ComponentError from "@/components/ComponentError";
 import { getCompany } from "../api/routeCompany";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function clients(){
   
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   
-  // const clientCookie = cookieStore.get('clients')?.value;
-  // let permisionsClient: Resource2 | undefined;
-  // if(clientCookie){
-  //   permisionsClient = JSON.parse(clientCookie);
-  // }
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-  
-  // if(!permisionsClient){
-  //   return(
-  //     <>
-  //       <Navigation user={user} token={token} resources={resresource} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-  //           text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
-  //           title="Clientes"><></></WithOut>
-  //       </div>
-  //     </>
-  //   )
-  // }
 
-  // let tags;
-  // let clients;
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
   
-  // tags = await getTags(token);
-  // clients = await getClients(token);
+  console.log('per => ', perm);
 
-  const [tags, clients, company, resresource]=await Promise.all([
+  const [tags, clients, company, resresource, rescomponents]=await Promise.all([
     getTags(token),
     getClients(token),
     getCompany(token, user.profile),
-    getAllResourcesByROL(token, user.rol?._id?? '')
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }

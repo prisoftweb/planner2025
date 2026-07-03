@@ -287,6 +287,71 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
       const localString = (() => { const d = new Date(date); const now = new Date(); d.setHours(now.getHours(), now.getMinutes(), now.getSeconds()); return d.toLocaleString('sv-SE').replace(' ', 'T'); })();
       // console.log(localString);
 
+      //   const dataConcepts: any[] = [];
+      //   let amount: number = 0;
+      //   conceptsInvoice.map((c: ISatConcept) => {
+      //     dataConcepts.push({
+      //         conceptEstimate:c.conceptEstimate._id,
+      //         priceConcepEstimate:c.priceConcepEstimate,
+      //         area:'sin area',
+      //         section:'sin sección',
+      //         quantity:c.quantity,
+      //         amount:c.amount,
+      //         date:c.date,
+      //         user:c.user
+      //     });
+      //     amount += c.amount;
+      //   });
+      // const invoiceData = {
+      //     // concepts: dataConcepts,
+      //     folio:'f 200',
+      //     // taxfolio: res.uuid,///////
+      //     taxfolio: 'ESTA NO ES REAL',
+      //     date,
+      //     series: "F",
+      //     // useCFDI: type?? '',
+      //     // useCFDI: (conditionPayment?? '') + '-' + (labelConditionPayment?? ''),
+      //     useCFDI: (labelConditionPayment?? ''),
+      //     paymentMethod: (methodPaid?? '') + '-' + (labelMethodPaid?? ''),
+      //     paymentWay: (formPaid?? '') + '-' + (labeFormPaid?? ''),
+      //     user,
+      //     client,
+      //     project,
+      //     company,
+      //     concepts: dataConcepts,
+      //     cost: {
+      //       subtotal: subtotalInvoice, 
+      //       iva: vatT,
+      //       total: totalInvoice,
+      //     },
+      //     condition: [
+      //       {glossary:"67d20cb359865f640af92638", user}
+      //     ],
+      //     // termsofpayment:conditionPayment,
+      //     termsofpayment:condicionTPayment,
+      //     purchaseorder:odc,
+      //     accountreceivables: [{
+      //       previousbalanceamount: totalInvoice,
+      //       charged: 0,
+      //       unchargedbalanceamount: totalInvoice,
+      //       partialitynumber: 0,
+      //     }],
+      //     // sat:res.responses[0],
+      //     typeofreceipts: type?? '' + (type=='I'? '- Ingreso': ''),
+      //     typeInvoice: 'Timbrada'
+      //   }
+        
+      //   console.log('invoice data => ', invoiceData);
+      //   const resInvoice = await createInvoice(token, invoiceData);
+      //   if(typeof(resInvoice)==='string'){
+      //     showToastMessageError(resInvoice);
+      //   }else{
+      //     showToastMessage('Factura agregada satisfactoriamente!!');
+      //     showForm(false);
+      //     setTimeout(() => {
+      //       window.location.reload();
+      //     }, 1500);
+      //   }
       const invoice = {
         versionCode: "4.0",
         series: "F",

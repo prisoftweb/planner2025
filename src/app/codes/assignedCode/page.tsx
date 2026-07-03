@@ -7,7 +7,8 @@ import Header from "@/components/HeaderPage";
 import { getAllProvidersWithTradeLine } from "@/app/api/routeDashboardProviders";
 import { getAllCostsMINByDateANDProvider } from "@/app/api/routeCost";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page() {
 
@@ -16,20 +17,34 @@ export default async function Page() {
   const token: string = cookieStore.get('token')?.value || '';
 
   const today = new Date();
+
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
   
-  const [codes, providers, costs, resresource] = await Promise.all([
+  console.log('per => ', perm);
+  
+  const [codes, providers, costs, resresource, rescomponents] = await Promise.all([
     getAllCodesMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
         today.toDateString(), [], 'SIN ASIGNAR'), 
     getAllProvidersWithTradeLine(token), 
     getAllCostsMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
         today.toDateString(), []),
-    getAllResourcesByROL(token, user.rol?._id?? '')
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ])
  
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -57,6 +72,11 @@ export default async function Page() {
       </div>
     )
   }
+
+  // const result = {
+  //   permission: rescomponents[0]?.permission ?? {},
+  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  // };
 
   return (
     <div>

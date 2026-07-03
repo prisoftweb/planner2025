@@ -6,7 +6,8 @@ import { getAllTotalAmountRecoveredCollection,
   getAllTOTAmountRecoveredByDateAndCondition, getAllCollectionsMINByDateAndCondition } from "../api/routeCollections";
 import { getDate } from "@/libs/dates";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
 
@@ -20,7 +21,11 @@ export default async function Page(){
     conditionAccountsReceivable:['67d20cb359865f640af92638'],
   }
 
-  const [res, rest, restt, resresource] = await Promise.all([
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
+
+  const [res, rest, restt, resresource, rescomponents] = await Promise.all([
     getAllCollectionsMINByDateAndCondition(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()),{
           "condition": [
               "67e31aa81945c0b1e4c9bc76", "67e318171945c0b1e4c9bc72", "67e318601945c0b1e4c9bc74"
@@ -29,12 +34,22 @@ export default async function Page(){
     getAllTotalAmountRecoveredCollection(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), data),
     getAllTOTAmountRecoveredByDateAndCondition(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), []),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -71,6 +86,11 @@ export default async function Page(){
         <ComponentError page="/collections" message={restt} />
       </>
     )
+
+  // const result = {
+  //   permission: rescomponents[0]?.permission ?? {},
+  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  // };
 
   return (
     <>
