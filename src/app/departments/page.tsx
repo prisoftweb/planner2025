@@ -22,7 +22,7 @@ export default async function Page(){
     getCompanies(token), 
     getDepartments(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'departments', ''),
   ]);
 
   if(typeof(resresource)==='string'){

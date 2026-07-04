@@ -23,7 +23,7 @@ export default async function Page(){
 
   const [resresource, rescomponents] = await Promise.all([
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'companies', ''),
   ]);
 
   if(typeof(resresource)==='string'){

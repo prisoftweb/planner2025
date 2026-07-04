@@ -22,10 +22,10 @@ export default async function Page(){
   
   console.log('per => ', perm);
 
-  const [resresource, glossaries, rescomponents] = await Promise.all([
+  const [resresource, glossaries] = await Promise.all([
     getAllResourcesByROL(token, user.rol?._id?? ''),
     getGlossaries(token),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    // getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -36,14 +36,14 @@ export default async function Page(){
     )
   }
 
-  if(typeof(rescomponents) === "string"){
-    return(
-      <>
-        <Navigation user={user} token={token} resources={resresource} />
-        <ComponentError page={`/catalogs`} message={rescomponents} />
-      </>
-    )
-  }
+  // if(typeof(rescomponents) === "string"){
+  //   return(
+  //     <>
+  //       <Navigation user={user} token={token} resources={resresource} />
+  //       <ComponentError page={`/catalogs`} message={rescomponents} />
+  //     </>
+  //   )
+  // }
   
   if(typeof(glossaries)=== 'string'){
     return(

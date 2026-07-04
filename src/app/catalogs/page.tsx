@@ -22,7 +22,7 @@ export default async function Page(){
   const [catalogs, resresource, rescomponents]=await Promise.all([
     getCatalogs(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'catalogs', ''),
   ]);
 
   if(typeof(resresource)==='string'){

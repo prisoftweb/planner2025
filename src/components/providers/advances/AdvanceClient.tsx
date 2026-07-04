@@ -1,22 +1,20 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import ProfileExpense from "@/components/expenses/ProfileExpense"
+// import ProfileExpense from "@/components/expenses/ProfileExpense"
 import ProfileAdvanceProvider from "./ProfileAdvanceProvider"
 import { OneExpense } from "@/interfaces/Expenses"
-import UpdateExpense from "@/components/expenses/UpdateExpense";
+// import UpdateExpense from "@/components/expenses/UpdateExpense";
 import NavResponsiveAdvance from "./NavResponsiveAdvance";
-// import UpdateExtraExpense from "./UpdateExtraExpenses"
-// import UpdateVoucher from "./UpdateVoucher"
-import UpdateCFDI from "@/components/expenses/UpdateCFDI";
+// import UpdateCFDI from "@/components/expenses/UpdateCFDI";
 import { useNewExpense } from "@/app/store/newExpense"
-// import AddCFDIRelations from "./AddCFDIRelations";
 import SumaryAdvanceProvider from "./SumaryAdvanceProvider";
 import TableInvoicesAndCreditNotes from "./TableInvoicesAndCreditNotes"
 import { IProviderMin } from "@/interfaces/Providers"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function AdvanceClient({token, user, id, provider, advance, company}: 
-  { token:string, id:string, user:string, provider:IProviderMin, advance:OneExpense, company:string }) {
+export default function AdvanceClient({token, user, id, provider, advance, company, permissions}: 
+  { token:string, id:string, user:string, provider:IProviderMin, advance:OneExpense, company:string, permissions:IPermissionsAndComponents }) {
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {
@@ -24,6 +22,8 @@ export default function AdvanceClient({token, user, id, provider, advance, compa
 
     return () => updateCurrentExpense(null);
   }, []);
+
+  console.log('AdvanceClient permissions', permissions);
 
   const [opt, setOpt] = useState<number>(1);
   const [widhtPage, setWidhtPage] = useState<number>(900);
@@ -46,16 +46,22 @@ export default function AdvanceClient({token, user, id, provider, advance, compa
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
+  const sumary=permissions.components.includes('resume')? <SumaryAdvanceProvider advance={advance} />: <></>;
+  const tableinvoices=permissions.components.includes('uuidrelations')? <TableInvoicesAndCreditNotes provider={provider} token={token} user={user} advance={advance}
+                      ida={advance._id} pending={advance.advancesToSuppliers?.currentbalance?? 0} company={company} />: <></>;
+
   const view = (
     opt===1? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3 h-screen" 
                           style={{borderColor:'#F8FAFC'}}>
                               {/* <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} /> */}
-                              <SumaryAdvanceProvider advance={advance} />
+                              {/* <SumaryAdvanceProvider advance={advance} /> */}
+                              {sumary}
                         </div>) : 
     (opt===2? (<div className="mt-3 w-full flex space-x-2 flex-wrap 2xl:flex-nowrap" >
                 <div className="w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
-                  <TableInvoicesAndCreditNotes provider={provider} token={token} user={user} advance={advance}
-                      ida={advance._id} pending={advance.advancesToSuppliers?.currentbalance?? 0} company={company} />
+                  {/* <TableInvoicesAndCreditNotes provider={provider} token={token} user={user} advance={advance}
+                      ida={advance._id} pending={advance.advancesToSuppliers?.currentbalance?? 0} company={company} /> */}
+                  {tableinvoices}
                 </div>
               </div>): //max w-md antes abajo
               <div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
@@ -74,19 +80,19 @@ export default function AdvanceClient({token, user, id, provider, advance, compa
     <>
       <div className={`md:hidden bg-white`}>
         <NavResponsiveAdvance open={open} setOpen={setOpen}
-              changeOption={setOpt} option={opt} />
+              changeOption={setOpt} option={opt} permissions={permissions} />
       </div>
       <div className={`flex`}>
         <div className={`hidden md:block bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsiveAdvance open={open} setOpen={setOpen}
-                  changeOption={setOpt} option={opt} />
+                  changeOption={setOpt} option={opt} permissions={permissions} />
           </div>
         </div>
         <div className="flex w-full px-2 flex-wrap lg:flex-nowrap lg:space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
-            <ProfileAdvanceProvider token={token} user={user} />
+            <ProfileAdvanceProvider token={token} user={user} permissions={permissions} />
           </div>
           {view}
         </div>

@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: { id: string }}){
     GetCostsProviderMINWithoutPay(token, params.id),
     getCatalogsByNameAndType(token, 'payments'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', 'id/pendinginvoices'),
   ]);
 
   if(typeof(resresource)==='string'){

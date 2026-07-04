@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string }}){
     getProviders(token),
     getAllCostsAdvancesByProviderMIN(token, params.id),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', 'id/advances'),
   ]);
 
   if(typeof(resresource)==='string'){

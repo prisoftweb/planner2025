@@ -29,7 +29,7 @@ export default async function Wallet({ params }: { params: { id: string }}){
     // getAllTOTALPENDINGPaymentsByCLIENTMIN(token, params.id)
     getAllTOTALPENDINGPaymentsOFClientANDBYProjectMIN(token, params.id),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'clients', 'id/wallet'),
   ]);
 
   if(typeof(resresource)==='string'){

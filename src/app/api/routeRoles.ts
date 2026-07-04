@@ -473,13 +473,38 @@ export async function getAllResourcesByROL(auth_token:string, id:string){
   }
 }
 
-export async function getAllComponentsByROUTESAndRESOURCESAndROLFULL(auth_token:string, id:string){
+// export async function getAllComponentsByROUTESAndRESOURCESAndROLFULL(auth_token:string, id:string){
+//   try {
+//     const res = await axiosInstance.get(`/roles/getAllComponentsByROUTESAndRESOURCESAndROLFULL/${id}`, {
+//       headers: {
+//         Authorization: `Bearer ${auth_token}`,
+//       }
+//     })
+//     if(res.status === 200) return res.data.data.data;
+//     return res.statusText;
+//   } catch (error) {
+//     if(axios.isAxiosError(error)){
+//       return error.response?.data.message || error.message;
+//     }
+//   }
+// }
+
+export async function getAllComponentsByROUTESAndRESOURCESAndROLFULL(auth_token:string, role:string, resource:string, route:string){
+  const data = {
+    idrol: role,
+    resource: resource,
+    route: route,
+  }
+
+  console.log('data => ', data);
+
   try {
-    const res = await axiosInstance.get(`/roles/getAllComponentsByROUTESAndRESOURCESAndROLFULL/${id}`, {
+    const res = await axiosInstance.post(`/roles/getAllComponentsByROUTESAndRESOURCESAndROLFULL`, data , {
       headers: {
         Authorization: `Bearer ${auth_token}`,
       }
     })
+    console.log('res => ', res);
     if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {

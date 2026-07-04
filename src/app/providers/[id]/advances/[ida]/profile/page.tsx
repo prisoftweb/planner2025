@@ -8,7 +8,8 @@ import IconText from "@/components/providers/IconText";
 import AdvanceClient from "@/components/providers/advances/AdvanceClient";
 import { IProviderMin } from "@/interfaces/Providers";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string, ida:string }}){
   const cookieStore = cookies();
@@ -16,16 +17,26 @@ export default async function Page({ params }: { params: { id: string, ida:strin
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [prov, cost, resresource] = await Promise.all([
+  const [prov, cost, resresource, rescomponents] = await Promise.all([
     getProviderMin(params.id, token),
     getAdvance(token, params.ida ),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', 'id/advances/id/profile'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
       </>
     )
   }
@@ -57,6 +68,11 @@ export default async function Page({ params }: { params: { id: string, ida:strin
     provider = prov[0]
   }
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
@@ -71,7 +87,7 @@ export default async function Page({ params }: { params: { id: string, ida:strin
         </div>
         {/* <NavTabAdvance tab="1" idProv={params.id} /> */}
         <AdvanceClient id={params.id} token={token} user={user._id} provider={provider}
-          advance={cost} company={user.profile} />
+          advance={cost} company={user.profile} permissions={result} />
       </div>
     </>
   )

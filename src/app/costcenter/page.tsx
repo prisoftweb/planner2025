@@ -27,7 +27,7 @@ export default async function Page(){
     getCatalogsByName(token, 'projects'), 
     getCostoCenters(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'costcenter', ''),
   ]);
 
   if(typeof(resresource)==='string'){

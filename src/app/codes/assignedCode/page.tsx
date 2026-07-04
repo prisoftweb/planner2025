@@ -29,7 +29,7 @@ export default async function Page() {
     getAllCostsMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
         today.toDateString(), []),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'codes', '/assignedCode'),
   ])
  
   if(typeof(resresource)==='string'){

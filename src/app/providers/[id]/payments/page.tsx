@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { id: string }}){
     getPaymentsProvider(token, params.id),
     getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', 'id/payments'),
   ]);
 
   if(typeof(resresource)==='string'){

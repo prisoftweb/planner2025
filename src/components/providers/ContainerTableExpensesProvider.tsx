@@ -53,6 +53,8 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
     to: new Date(),
   });
 
+  console.log('permisions', permissions);
+
   useEffect(() => {
     const fetch = async () => {
       const [rescomp] = await Promise.all([
@@ -196,11 +198,14 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
           )}
         </div>
       </div>
-      {permissions.permission.readfull && (
+      <TableCostsProvider token={token} expenses={expenses} isFilter={filter}
+          setIsFilter={handleFilter} user={user} data={data} idProv={provider._id} 
+          udpateTable={updateStateExpenses} />
+      {/* {permissions.permission.readfull && (
         <TableCostsProvider token={token} expenses={expenses} isFilter={filter}
           setIsFilter={handleFilter} user={user} data={data} idProv={provider._id} 
           udpateTable={updateStateExpenses} />
-      )}
+      )} */}
     </div>
   )
 }

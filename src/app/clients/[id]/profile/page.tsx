@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: { id: string }}){
     getAllTOTALEstimatesPendingByOneClientMINRESUME(token, params.id),
     getAllTOTALChargedByOneCLIENT(token, params.id),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'clients', 'id/profile'),
   ]);
  
   if(typeof(resresource)==='string'){

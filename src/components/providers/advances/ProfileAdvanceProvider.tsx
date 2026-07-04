@@ -10,8 +10,9 @@ import {showToastMessage, showToastMessageError, showToastMessageWarning, showTo
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { UpdateCost } from "@/app/api/routeCost";
 import { OneExpense } from "@/interfaces/Expenses";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function ProfileAdvanceProvider({token, user}: {token:string, user:string}){
+export default function ProfileAdvanceProvider({token, user, permissions}: {token:string, user:string, permissions:IPermissionsAndComponents}){
 
   const {currentExpense } = useNewExpense();
 
@@ -136,7 +137,7 @@ export default function ProfileAdvanceProvider({token, user}: {token:string, use
         </div>
 
         <div className="mt-2 bg-white p-3 rounded-lg shadow-md py-2">
-          {currentExpense && (
+          {currentExpense && permissions.components.includes('deleteadvance') && (
             <CardConfig 
               text="ELIMINARAS LAS FACTURAS ASIGNADAS A ESTE ANTICIPO, CAMBIARAN SU ESTATUS A NO PAGADAS; ESTE ANTICIPO QUEDARA EN BLANCO Y PODRAS ASIGNAR NUEVAMENTE FACTURAS."
               title="Limpiar anticipo"

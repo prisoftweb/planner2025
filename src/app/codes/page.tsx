@@ -28,7 +28,7 @@ export default async function Page() {
         today.toDateString(), [], 'TODOS'), 
     getAllProvidersWithTradeLine(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'codes', ''),
   ])
 
   if(typeof(resresource)==='string'){

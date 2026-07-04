@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string }}){
     getClients(token),
     getProjectsByClient(token, params.id),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'clients', 'id/projects'),
   ]);
 
   if(typeof(resresource)==='string'){

@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { id: string }}){
     getProviders(token),
     getCostTOTALPendingPAYGroupByPROVIDER(params.id, token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', 'id/profile'),
   ]);
 
   if(typeof(resresource)==='string'){

@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { id: string }}){
     GetCostsMIN(token, params.id),
     getCatalogsByNameAndType(token, 'payments'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', '/id/invoiceHistory'),
   ]);
 
   if(typeof(resresource)==='string'){

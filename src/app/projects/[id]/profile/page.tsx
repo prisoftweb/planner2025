@@ -32,7 +32,7 @@ export default async function Page({ params }:
     getClients(token),
     getCatalogsByName(token, 'projects'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', '/id/profile'),
   ]);
 
   if(typeof(resresource)==='string'){

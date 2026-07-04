@@ -32,7 +32,7 @@ export default async function clients(){
     getClients(token),
     getCompany(token, user.profile),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'clients', ''),
   ]);
 
   if(typeof(resresource)==='string'){

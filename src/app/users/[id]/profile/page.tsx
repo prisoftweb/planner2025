@@ -48,7 +48,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
 
   const [resresource, rescomponents] = await Promise.all([
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (currentUser.rol?._id?? ''), 'users', 'id/profile'),
   ]);
   
   if(typeof(resresource)==='string'){
