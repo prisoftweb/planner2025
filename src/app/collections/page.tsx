@@ -21,10 +21,6 @@ export default async function Page(){
     conditionAccountsReceivable:['67d20cb359865f640af92638'],
   }
 
-  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
-  
-  console.log('per => ', perm);
-
   const [res, rest, restt, resresource, rescomponents] = await Promise.all([
     getAllCollectionsMINByDateAndCondition(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()),{
           "condition": [
@@ -87,17 +83,17 @@ export default async function Page(){
       </>
     )
 
-  // const result = {
-  //   permission: rescomponents[0]?.permission ?? {},
-  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
-  // };
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return (
     <>
       <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <TableCollectionsComponent token={token} user={user._id} collectionsParam={res} totalParam={rest} 
-          totalRecoveredP={restt[0]} company={user.profile} />
+          totalRecoveredP={restt[0]} company={user.profile} permissions={result} />
       </div>
     </>
   )

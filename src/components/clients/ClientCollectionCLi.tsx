@@ -13,21 +13,19 @@ import DownloadCollectionByClientPDF from "./DownloadCollectionByClient";
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
 import { showToastMessageError } from "../Alert";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type ClientCliProps = {
   collections: ICollectionByClientMin[],
   client:string,
   rfc:string,
   idc:string,
-  token:string
+  token:string,
+  permissions:IPermissionsAndComponents
 }
 
-export default function ClientCollectionCli({collections, client, rfc, idc, token}: ClientCliProps){
+export default function ClientCollectionCli({collections, client, rfc, idc, token, permissions}: ClientCliProps){
 
-  // const [opt, setOpt] = useState<number>(1);
-  // const handleOpt = (value: number) => {
-  //   setOpt(value);
-  // }
   const [satCompany, setSatCompany]=useState<Company>();
 
   useEffect(() => {
@@ -107,7 +105,7 @@ export default function ClientCollectionCli({collections, client, rfc, idc, toke
   return(
     <>
       <div className="flex justify-end">
-        {satCompany && (
+        {satCompany && permissions.permission.print && (
           <PDFDownloadLink document={<DownloadCollectionByClientPDF collections={collections} client={client} rfc={rfc} company={satCompany} />} fileName={`Cobranza ${client}`} >
             {({loading, url, error, blob}) => 
               loading? (
@@ -125,12 +123,16 @@ export default function ClientCollectionCli({collections, client, rfc, idc, toke
         )}
       </div>
       <div >
-        <div className="hidden md:block w-full">
-          <Table columns={columns} data={data} placeH="buscar cobro" />
-        </div>
-        <div className="block md:hidden w-full">
-          <ListData data={data} />
-        </div>
+        {permissions.permission.readfull && (
+          <>
+            <div className="hidden md:block w-full">
+              <Table columns={columns} data={data} placeH="buscar cobro" />
+            </div>
+            <div className="block md:hidden w-full">
+              <ListData data={data} />
+            </div>
+          </>
+        )}
       </div>
     </>
   )

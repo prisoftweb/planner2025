@@ -15,10 +15,6 @@ export default async function Page(){
 
   // let catalogs: Catalog[] = await getCatalogs(token);
 
-  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
-  
-  console.log('per => ', perm);
-
   const [catalogs, resresource, rescomponents]=await Promise.all([
     getCatalogs(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
@@ -54,15 +50,15 @@ export default async function Page(){
     )
   } 
 
-  // const result = {
-  //   permission: rescomponents[0]?.permission ?? {},
-  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
-  // };
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
-      <ListClient lists={catalogs} token={token} />
+      <ListClient lists={catalogs} token={token} permissions={result} />
     </>
   )
 }

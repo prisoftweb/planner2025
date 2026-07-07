@@ -30,10 +30,11 @@ import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
 import { getDate } from "@/libs/dates";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TableCollectionsComponent({token, user, collectionsParam, totalParam, totalRecoveredP, company}: 
+export default function TableCollectionsComponent({token, user, collectionsParam, totalParam, totalRecoveredP, company, permissions}: 
   {token:string, user:string, collectionsParam:ICollectionMin[], totalParam:ITotalAmountCollections, 
-    totalRecoveredP:ITotalAmountRecoveredCollections, company:string}) {
+    totalRecoveredP:ITotalAmountRecoveredCollections, company:string, permissions:IPermissionsAndComponents}) {
 
   const [collections, setCollections] = useState<ICollectionMin[]>(collectionsParam);
   const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
@@ -68,24 +69,6 @@ export default function TableCollectionsComponent({token, user, collectionsParam
 
     fetch();
   }, []);
-
-  // const handleResize = () => {
-  //   setWidthPage(Math.max(
-  //     document.body.scrollHeight, document.documentElement.scrollHeight,
-  //     document.body.offsetHeight, document.documentElement.offsetHeight,
-  //     document.body.clientHeight, document.documentElement.clientHeight
-  //   ));
-  // }
-
-  // useEffect(() => {
-  //   window.addEventListener("resize", handleResize, false);
-  //   setWidthPage(Math.max(
-  //     document.body.scrollWidth, document.documentElement.scrollWidth,
-  //     document.body.offsetWidth, document.documentElement.offsetWidth,
-  //     document.body.clientWidth, document.documentElement.clientWidth
-  //   ));
-  //   return () => window.removeEventListener('scroll', handleResize);
-  // }, []);
 
   useEffect(() => {
     handleFilter(rangeDate.from!, rangeDate.to!, statuses);
@@ -234,9 +217,13 @@ export default function TableCollectionsComponent({token, user, collectionsParam
             <p className="text-slate-600">Historial de cobranza</p>
           </div>
         </div>
-        <Card amount={totalCollections?.amountRecovered? totalCollections.amountRecovered.amount: 0} title="Recuperado"></Card>
-        <Card amount={totalCollections?.totalAccountsReceivable?.total || 0} title="Por cobrar"></Card>
-        <Card amount={totalCollections?.totalCharged?.totalCharged || 0} title="Por cobrar vencido"></Card>
+        {permissions.permission.readfull && (
+          <>
+            <Card amount={totalCollections?.amountRecovered? totalCollections.amountRecovered.amount: 0} title="Recuperado"></Card>
+            <Card amount={totalCollections?.totalAccountsReceivable?.total || 0} title="Por cobrar"></Card>
+            <Card amount={totalCollections?.totalCharged?.totalCharged || 0} title="Por cobrar vencido"></Card>
+          </>
+        )}
       </div>
 
       <div className="2xl:hidden mt-5 justify-between gap-x-2">
@@ -249,17 +236,21 @@ export default function TableCollectionsComponent({token, user, collectionsParam
             </TooltipContainerIcon>
           </Link>
           <p className="flex-1 text-xl ml-4 font-medium">Recuperacion de cartera</p>
-          <div className="flex flex-col items-center sm:hidden">
-            <PlusCircleIcon onClick={() => setShowNewCollection(true)} className={`w-6 h-6 text-slate-700 cursor-pointer`} />
-            <span className="text-xs">Nuevo</span>
-          </div>
+          {permissions.permission.create && (
+            <div className="flex flex-col items-center sm:hidden">
+              <PlusCircleIcon onClick={() => setShowNewCollection(true)} className={`w-6 h-6 text-slate-700 cursor-pointer`} />
+              <span className="text-xs">Nuevo</span>
+            </div>
+          )}
         </div>
         <div className="xl:flex lg:gap-x-3 items-center">
           <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3 xl:order-2`}>
             <div className="flex-1 flex justify-end">
-              <SearchInTable placeH={"Buscar cobro.."} />
+              {permissions.permission.searchfull && (
+                <SearchInTable placeH={"Buscar cobro.."} />
+              )}
             </div>
-            {satCompany && (
+            {satCompany && permissions.permission.print && (
               <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
                           fechaIni={rangeDate?.from} totalCollections={totalRecovered} satCompany={satCompany} />} fileName={'Cobranza'} >
                 {({loading, url, error, blob}) => 
@@ -277,10 +268,14 @@ export default function TableCollectionsComponent({token, user, collectionsParam
               </PDFDownloadLink>
             )}
             <div className="hidden sm:flex justify-end">
-              <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
+              {permissions.permission.create && (
+                <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
+              )}
             </div>
           </div>
-          {filterElemnts}
+          {permissions.permission.filter && (
+            filterElemnts
+          )}
         </div>
       </div>
 
@@ -297,12 +292,16 @@ export default function TableCollectionsComponent({token, user, collectionsParam
         </div>
         <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
           <div className="">
-            <SearchInTable placeH={"Buscar cobro.."} />
+            {permissions.permission.searchfull && (
+              <SearchInTable placeH={"Buscar cobro.."} />
+            )}
           </div>
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
-              {filterElemnts}
-              {satCompany && (
+              {permissions.permission.filter && (
+                filterElemnts
+              )}
+              {satCompany && permissions.permission.print && (
                 <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
                             fechaIni={rangeDate?.from} totalCollections={totalRecovered} satCompany={satCompany} />} fileName={'Cobranza'} >
                   {({loading, url, error, blob}) => 
@@ -319,7 +318,9 @@ export default function TableCollectionsComponent({token, user, collectionsParam
                     ) }
                 </PDFDownloadLink>
               )}
-              <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
+              {permissions.permission.create && (
+                <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
+              )}
             </div>
           </div>
         </div>
@@ -342,8 +343,10 @@ export default function TableCollectionsComponent({token, user, collectionsParam
                   <div className="flex gap-x-1 items-end">
                     <img alt="responsable" src={ '/img/projects/default.svg'}
                       className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-                    <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
-                      removeElement={delCollection} token={token} />
+                    {permissions.permission.delete && (
+                      <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
+                        removeElement={delCollection} token={token} />
+                    )}
                   </div>
                   <Chip label={col.condition.name} color={col.condition.color} darktext={col?.condition?.darktext?? false} />
                   {col.condition.name.toLowerCase().includes('depositado')? (
@@ -389,10 +392,12 @@ export default function TableCollectionsComponent({token, user, collectionsParam
         </nav>
       </div>
       
-      <ContainerSideNav width="w-full max-w-xl" open={showNewCollection}>
-        <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
-            user={user} updateCollections={updateCollections} company={company} />
-      </ContainerSideNav>
+      {permissions.permission.create && (
+        <ContainerSideNav width="w-full max-w-xl" open={showNewCollection}>
+          <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
+              user={user} updateCollections={updateCollections} company={company} />
+        </ContainerSideNav>
+      )}
     </>
   )
 }

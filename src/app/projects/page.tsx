@@ -13,7 +13,8 @@ import { ProjectDataToTableDataWithUtilitiesMin } from "../functions/SaveProject
 import ContainerClient from "@/components/projects/ContainerClient";
 import { getDate } from "@/libs/dates";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -26,7 +27,7 @@ export default async function Page(){
   const first=new Date(new Date().getFullYear(), 0, 1);
   const firstString=getDate(first);
 
-  const [projects, finished, clients, costs, collections, catalogs, optCompanies, prjsCB, totalCB, prjsCBtrue, totalCBtrue, resresource] = await Promise.all([
+  const [projects, finished, clients, costs, collections, catalogs, optCompanies, prjsCB, totalCB, prjsCBtrue, totalCBtrue, resresource, rescomponents] = await Promise.all([
     role.toLowerCase().includes('residente') ? getProjectsMinInEjecucionUser(token, user._id) : getActiveProjectsMin(token),
     getProjectsMinFinishedUser(token, user._id),
     getClients(token), 
@@ -40,12 +41,22 @@ export default async function Page(){
     getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", firstString, now),
     getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", firstString, now),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', ''),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects`} message={rescomponents} />
       </>
     )
   }
@@ -174,6 +185,13 @@ export default async function Page(){
   const allPrjs = (role.toLowerCase().includes('residente')? [...projects, ...finished]: projects);
   
   const table: ProjectsTable[] = ProjectDataToTableDataWithUtilitiesMin(allPrjs, collections, costs);
+
+  const result={
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
+  //pendiente
 
   return(
     <>

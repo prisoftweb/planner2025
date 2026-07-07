@@ -44,6 +44,8 @@ export default function ClientCli({client, token, id, tags,
   useEffect(() => {
     updateProfileClient(client);
   }, []);
+
+  console.log('permissions => ', permissions);
   
   const view = 
       opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
@@ -71,7 +73,9 @@ export default function ClientCli({client, token, id, tags,
                 </div>):  (
         opt===6? (<div className="mt-3 w-full sm:max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
-                    <ConfigClient client={client} status={client.status} token={token} />
+                    {permissions.components.includes('deleteclient') && (
+                      <ConfigClient client={client} status={client.status} token={token} />
+                    )}
                   </div>):(<div className="mt-3 w-full md:p-2" 
                                     style={{borderColor:'#F8FAFC'}}>
                               <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">

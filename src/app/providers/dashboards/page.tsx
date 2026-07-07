@@ -6,7 +6,8 @@ import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getTotalPayments, getTotalP
   getTotalCostPendingPaymentByProviderEstatusMIN, getTotalCostPendingPaymentByProvidersMIN, 
   getTotalCostApplyPaymentByProvidersTradelineMIN } from "@/app/api/routeDashboardProviders";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function page() {
 
@@ -16,7 +17,7 @@ export default async function page() {
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   const [totalCost, providersTradeLine, costsProviderWithTradeLine, costsProvider, 
-      totalPayments, penddingPayment, pendingPaymentProv, resresource] = await Promise.all([
+      totalPayments, penddingPayment, pendingPaymentProv, resresource, rescomponents] = await Promise.all([
     getTotalCostApplyPaymentByProvidersTradelineMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getTotalCostPendingPaymentByProviderEstatusMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true', new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
@@ -25,12 +26,22 @@ export default async function page() {
     getTotalPendingPaymentsProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getTotalCostPendingPaymentByProvidersMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', '/dashboards'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/providers`} message={rescomponents} />
       </>
     )
   }
@@ -104,6 +115,11 @@ export default async function page() {
       </>
     )
   }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return (
     <>

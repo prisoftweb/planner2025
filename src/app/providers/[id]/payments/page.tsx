@@ -19,17 +19,13 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const perm=((user.rol?._id?? '') + ('/providers/id%2Fpayments'));
-  
-  console.log('per => ', perm);
-
   const [provider, providers, costs, pending, resresource, rescomponents] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),
     getPaymentsProvider(token, params.id),
     getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', 'id/payments'),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', '/id/payments'),
   ]);
 
   if(typeof(resresource)==='string'){

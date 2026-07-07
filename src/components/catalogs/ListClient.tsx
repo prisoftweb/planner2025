@@ -8,8 +8,9 @@ import { ResponsiveHeader as Header } from "@/components/Header";
 import TableCatalogs from "./TableCatalogs"
 import ButtonNew from "./ButtonNew"
 import WithOut from "../WithOut"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function ListClient({lists, token}: {lists:Catalog[], token:string}) {
+export default function ListClient({lists, token, permissions}: {lists:Catalog[], token:string, permissions:IPermissionsAndComponents}) {
 
   const {listsStore, updateListsStore} = useListsStore();
 
@@ -23,7 +24,11 @@ export default function ListClient({lists, token}: {lists:Catalog[], token:strin
         <WithOut img="/img/clientes.svg" subtitle="Catalogos"
           text="Aqui puedes agregar los catalogos"
           title="Catalogos">
-              <ButtonNew token={token} catalog={''} />
+              <>
+                {permissions.permission.create && (
+                  <ButtonNew token={token} catalog={''} />
+                )}
+              </>
         </WithOut>
       </CompanyClient>
     )
@@ -43,10 +48,14 @@ export default function ListClient({lists, token}: {lists:Catalog[], token:strin
     <CompanyClient option={3} >
       <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
         <Header title="Catalogos" placeHolder="Buscar Catalogo.." >
-          <ButtonNew token={token} catalog={''} />
+          <>
+            {permissions.permission.create && (
+              <ButtonNew token={token} catalog={''} />
+            )}
+          </>
         </Header>
         <div className="mt-5">
-          <TableCatalogs  data={table}  token={token} />
+          <TableCatalogs  data={table}  token={token} permissions={permissions} />
         </div>
       </div>
     </CompanyClient>

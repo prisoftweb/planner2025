@@ -17,10 +17,6 @@ export default async function Page() {
 
   const today = new Date();
 
-  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
-  
-  console.log('per => ', perm);
-
   const [codes, providers, resresource, rescomponents] = await Promise.all([
     // getAllCodesMINByDateANDProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), 
     //     new Date().toDateString(), [], 'TODOS'),
@@ -76,6 +72,8 @@ export default async function Page() {
   //   permission: rescomponents[0]?.permission ?? {},
   //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
   // };
+
+  //pendiente
 
   return (
     <div>

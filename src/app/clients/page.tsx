@@ -23,10 +23,6 @@ export default async function clients(){
   
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
-  
-  console.log('per => ', perm);
-
   const [tags, clients, company, resresource, rescomponents]=await Promise.all([
     getTags(token),
     getClients(token),
@@ -126,20 +122,10 @@ export default async function clients(){
     )
   }
 
-  // let permission = false;
-
-  // if(!permission){
-  //   return (
-  //     <>
-  //       <Navigation user={user} token={token} resources={resresource} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-  //           text="Lo sentimos, no tienes acceso a esta informacion!!!" 
-  //           title="Clientes"><></></WithOut>
-  //       </div>
-  //     </>
-  //   )
-  // }
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   if(!clients || clients.length<= 0){
     return <>
@@ -147,8 +133,9 @@ export default async function clients(){
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <WithOut img="/img/clientes.svg" subtitle="Clientes" 
             text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
-            title="Clientes"><ButtonNewClient token={token} id={user._id} tags={arrTags}
-                                company={user.profile} /></WithOut>
+            title="Clientes">
+                {result.permission.create && <ButtonNewClient id={user._id} token={token} tags={arrTags} company={user.profile} />}
+          </WithOut>
         </div>
       </>
   }
@@ -166,11 +153,7 @@ export default async function clients(){
         </ResponsiveHeader> */}
         <div className="mt-5">
           <TableClients data={data} token={token} clientsData={clients} 
-            // deletePermission={permisionsClient.permission.delete}
-            // selectPermission={permisionsClient.permission.select}
-            selectPermission={true}
-            deletePermission={true}
-            company={company} tags={arrTags} user={user._id}
+            company={company} tags={arrTags} user={user._id} permissions={result}
           />
         </div>
       </div>

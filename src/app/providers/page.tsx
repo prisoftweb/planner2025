@@ -6,7 +6,8 @@ import ContainerProvider from "@/components/providers/ContainerProvider";
 import Navigation from "@/components/navigation/Navigation";
 import ComponentError from "@/components/ComponentError";
 import { getCompany } from "../api/routeCompany";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Providers(){
   
@@ -14,37 +15,31 @@ export default async function Providers(){
   const token = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let providers:Provider[]=[];
-
-  // try {
-  //   providers = await getProviders(token);
-  // } catch (error) {
-  //   return(
-  //     <>
-  //       <Navigation user={user} token={token} resources={resresource} />
-  //       {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1 className="text-5xl text-center text-red-500 font-semibold">Error al consultar proveedores!!</h1>
-  //       </div> */}
-  //       <ComponentError page="/providers" message="Error al consultar proveedores!!" />
-  //     </>
-  //   )
-  // }
   
-  const [providers, company, resresource]=await Promise.all([
+  const [providers, company, resresource, rescomponents]=await Promise.all([
     // getProviders(token),
     getAllProvidersMin(token),
     getCompany(token, user.profile),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', ''),
   ])
 
   if(typeof(resresource)==='string'){
-      return (
-        <>
-          <ComponentError page="/" message={resresource} />
-        </>
-      )
-    }
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/providers`} message={rescomponents} />
+      </>
+    )
+  }
 
   if(typeof(providers) === "string"){
     return(
@@ -63,6 +58,11 @@ export default async function Providers(){
         </>
       )
     }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return(
     <>

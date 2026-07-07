@@ -18,10 +18,6 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const perm=((user.rol?._id?? '') + ('/providers/id%2Fprofile'));
-  
-  console.log('per => ', perm);
-
   const [provider, providers, costPayment, resresource, rescomponents] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),

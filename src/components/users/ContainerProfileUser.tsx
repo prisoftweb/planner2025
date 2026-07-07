@@ -23,6 +23,8 @@ export default function ContainerProfileUser({token, user, permissions}:{user:Us
     view = <>Creando....</>
   }
 
+  console.log('tab => ', tab);
+
   return (
     <>
       <div className="mt-3">

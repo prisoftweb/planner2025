@@ -19,11 +19,7 @@ export default async function Wallet({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const perm=((user.rol?._id?? '') + ('/clients/id%2Fprofile'));
-  
-  console.log('per => ', perm);
-
-  const [client, clients, pendindInvoices, resresource] = await Promise.all([
+  const [client, clients, pendindInvoices, resresource, rescomponents] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
     // getAllTOTALPENDINGPaymentsByCLIENTMIN(token, params.id)
@@ -36,6 +32,15 @@ export default async function Wallet({ params }: { params: { id: string }}){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
       </>
     )
   }
@@ -88,6 +93,13 @@ export default async function Wallet({ params }: { params: { id: string }}){
       label: cli.name,
     })
   })
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
+  console.log('permissions => ', result);
   
   return(
     <>
@@ -105,7 +117,7 @@ export default async function Wallet({ params }: { params: { id: string }}){
         <NavTab idCli={params.id} tab='4' />
         <div className="mt-5">
           <ClientCollectionCli collections={pendindInvoices} rfc={client?.rfc?? 'sin rfc'} client={client?.name?? 'cliente'}
-              idc={user.profile} token={token} />
+              idc={user.profile} token={token} permissions={result} />
         </div>
       </div>
     </>

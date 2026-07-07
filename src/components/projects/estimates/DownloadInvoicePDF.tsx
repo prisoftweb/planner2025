@@ -16,9 +16,13 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
   // const months=['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
   // console.log('company pdf => ', satCompany);
-  console.log('invoice full => ', invoicefull);
+  // console.log('invoice full => ', invoicefull);
 
-  console.log('company => ', satCompany);
+  // console.log('company => ', satCompany);
+
+  const logo = satCompany?.isologo?? satCompany.logo;
+
+  // console.log('logo => ', logo);
 
   const folio= invoicefull.folio[0].toLowerCase()==='f'? invoicefull.folio: 'F '+invoicefull.folio; 
 
@@ -29,6 +33,8 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
   if(invoicefull.useCFDI.substring(0, 3)===invoicefull.useCFDI.substring(4, 7)){
     usecfdi=invoicefull.useCFDI.substring(4);
   }
+
+  // console.log('logo => ', invoicemin.company.logo);
 
   return(
     <Document>
@@ -63,7 +69,10 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
                 <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>Lugar de expedicion {satCompany.location?.cp}</Text>
               </View>
 
-              <Image source={invoicemin.company.logo} style={{height: '57px', width:'auto'}}></Image>
+              {/* <Image source={invoicemin.company.logo} style={{height: '57px', width:'auto'}}></Image> */}
+              {/* <Image source={invoicemin.company.logo} style={{height: '57px', width:'auto'}}></Image> */}
+              {/* <Image source={satCompany?.isologo?? satCompany.logo} style={{height: '57px', width:'auto'}}></Image> */}
+              <Image source={logo} style={{height: '57px', width:'auto'}}></Image>
 
             </View>
 

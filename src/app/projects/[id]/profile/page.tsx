@@ -24,7 +24,7 @@ export default async function Page({ params }:
   let role = user.rol?.name || '';
 
   // const perm=((user.rol?._id?? '') + ('/6a3af6370d5f57b8a0bf1952/6a3af6370d5f57b8a0bf1953'));
-  const perm=((user.rol?._id?? '') + ('/projects/id%2Fprofile'));
+  // const perm=((user.rol?._id?? '') + ('/projects/id%2Fprofile'));
 
   const [project, options, clients, catalogs, resresource, rescomponents] = await Promise.all([
     GetProjectMin(token, params.id),
@@ -32,7 +32,7 @@ export default async function Page({ params }:
     getClients(token),
     getCatalogsByName(token, 'projects'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', '/id/profile'),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'id/profile'),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -140,7 +140,10 @@ export default async function Page({ params }:
         <Header title={project.title} previousPage="/projects">
           <>
             <div className="hidden sm:block w-full max-w-48 sm:max-w-80 lg:max-w-md">
-              <Selectize options={options} routePage="projects" subpath="/profile" />
+              {/* <Selectize options={options} routePage="projects" subpath="/profile" /> */}
+              {result.components.includes('findall') && (
+                <Selectize options={options} routePage="projects" subpath="/profile" />
+              )}
             </div>
           </>
         </Header>
@@ -148,7 +151,10 @@ export default async function Page({ params }:
           <Selectize options={options} routePage="projects" subpath="/profile" />
         </ResponsiveHeader> */}
         <div className="block sm:hidden mt-2">
-          <Selectize options={options} routePage="projects" subpath="/profile" />
+          {/* <Selectize options={options} routePage="projects" subpath="/profile" /> */}
+          {result.components.includes('findall') && (
+            <Selectize options={options} routePage="projects" subpath="/profile" />
+          )}
         </div>
         <NavTabProject idPro={params.id} tab='1' />
         <NextUiProviders>

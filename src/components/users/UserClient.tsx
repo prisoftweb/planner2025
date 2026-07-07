@@ -52,7 +52,9 @@ export default function UserClient({user, token, departments, optsRole, optTab, 
   const configUser=permissions.components.includes("deleteuser")? <ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />: <></>
   const basicData=permissions.components.includes("personaldata")? <UpdateProfile departments={departments} user={usr.name ===''? user: usr} token={token} optsRoles={optsRole} />: <></>
   const changePhoto=permissions.components.includes("updatephoto")? <ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />: <></>
-  const changePassword=permissions.components.includes("updatepassword")? <ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />: <></>
+  const changePassword=permissions.components.includes("updatepassword")? <ChangePassword token={token} name={user.name} id={user._id} />: <></>
+
+  console.log('optTab => ', optTab);
 
   optTab===2? view = (changePhoto) : 
       (optTab===3? view = (changePassword): 

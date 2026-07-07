@@ -13,8 +13,9 @@ import {Tooltip} from "@nextui-org/react";
 import ContainerSideNav from "../ContainerSideNav";
 import { propsTooltip } from "@/libs/animations";
 import { useTableStates } from "@/app/store/tableStates";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TableCatalogs({data, token}: {data:CatalogTable[], token:string}){
+export default function TableCatalogs({data, token, permissions}: {data:CatalogTable[], token:string, permissions:IPermissionsAndComponents}){
   
   const columnHelper = createColumnHelper<CatalogTable>();
 
@@ -37,34 +38,44 @@ export default function TableCatalogs({data, token}: {data:CatalogTable[], token
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
         </div>
       ),
       enableSorting:false,
       header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
+        <>
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
+        </>
       )
     }),
     columnHelper.accessor(row => row.id, {
       id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
-              placement="right" className="text-black bg-white rounded-md border border-slate-400">
-            <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
-              onClick={() => {setCatEdit(row.original); setEditCat(true);}}
-            />
-          </Tooltip>
-          <RemoveElement id={row.original.id} name={row.original.name} token={token} 
+          {permissions.permission.update && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
+                onClick={() => {setCatEdit(row.original); setEditCat(true);}}
+              />
+            </Tooltip>
+          )}
+          {permissions.permission.delete && (
+            <RemoveElement id={row.original.id} name={row.original.name} token={token} 
               remove={RemoveCatalog} removeElement={delReport} />
+          )}
         </div>
       ),
       enableSorting:false,
@@ -90,17 +101,21 @@ export default function TableCatalogs({data, token}: {data:CatalogTable[], token
   
   return(
     <>
-      {editCat && (
+      {editCat && permissions.permission.update && (
         <ContainerSideNav width="w-full max-w-xs">
           <NewCatalog token={token} catalog={catEdit || ''} showForm={setEditCat} />
         </ContainerSideNav>
       )}
-      <div className="hidden md:block w-full">
-        <Table columns={columns} data={data} placeH="Buscar catalogo.." />
-      </div>
-      <div className="block md:hidden w-full">
-        <ListData data={data} token={token} delReport={delReport} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            <Table columns={columns} data={data} placeH="Buscar catalogo.." />
+          </div>
+          <div className="block md:hidden w-full">
+            <ListData data={data} token={token} delReport={delReport} />
+          </div>
+        </>
+      )}
     </>
   )
 }

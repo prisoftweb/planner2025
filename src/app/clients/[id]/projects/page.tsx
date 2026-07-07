@@ -19,10 +19,6 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const perm=((user.rol?._id?? '') + ('/clients/id%2Fprojects'));
-  
-  console.log('per => ', perm);
-
   const [client, clients, projects, resresource, rescomponents] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
@@ -86,6 +82,8 @@ export default async function Page({ params }: { params: { id: string }}){
     components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
   };
 
+  console.log('permissions => ', result);
+
   let options: Options[] = [];
 
   clients.map((cli: ClientBack) => {
@@ -106,10 +104,12 @@ export default async function Page({ params }: { params: { id: string }}){
                       alt="logo cliente" className="w-12 h-12" />
             <p className="text-slate-500 mx-3">{client.name}</p>
           </div>
-          <Selectize options={options} routePage="clients" subpath="/projects" />
+          {result.components.includes('findall') && (
+            <Selectize options={options} routePage="clients" subpath="/projects" />
+          )}
         </div>
         <NavTab idCli={params.id} tab='2' />
-        {result.permission.read && (
+        {result.permission.readfull && (
           <TableProjectsClient projects={projects} />
         )}
       </div>

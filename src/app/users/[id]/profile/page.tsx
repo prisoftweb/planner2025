@@ -17,10 +17,6 @@ export default async function Page({ params, searchParams }: { params: { id: str
 
   const currentUser: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const perm=((currentUser.rol?._id?? '') + ('/users/id%2Fprofile'));
-  
-  console.log('per => ', perm);
-
   const [user, users]=await Promise.all([
     getUser(params.id, token),
     getUsers(token),
@@ -63,7 +59,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
     return(
       <>
         <Navigation user={user} token={token} resources={resresource} />
-        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+        <ComponentError page={`/users/${params.id}/profile`} message={rescomponents} />
       </>
     )
   }

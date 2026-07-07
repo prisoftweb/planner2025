@@ -20,19 +20,19 @@ import { ResponsiveHeaderClient } from "../Header";
 import ButtonNewClient from "./ButtonNewClient";
 import { Options } from "@/interfaces/Common";
 import Label from "../Label";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type TableClientsProps = {
   data:TableClient[], 
   token:string, 
-  selectPermission:boolean, 
-  deletePermission: boolean,
   clientsData:ClientBack[],
   company:Company,
   user:string,
-  tags:Options[]
+  tags:Options[],
+  permissions:IPermissionsAndComponents
 }
 
-export default function TableClients({data, token, deletePermission, selectPermission, clientsData, company, tags, user}: 
+export default function TableClients({data, token, clientsData, company, tags, user, permissions}: 
   TableClientsProps){
   
   const columnHelper = createColumnHelper<TableClient>();
@@ -74,7 +74,7 @@ export default function TableClients({data, token, deletePermission, selectPermi
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          {selectPermission && (
+          {permissions.permission.select && (
             <input type="checkbox" 
               checked={row.getIsSelected()}
               onChange={row.getToggleSelectedHandler()}
@@ -87,7 +87,7 @@ export default function TableClients({data, token, deletePermission, selectPermi
       ),
       enableSorting:false,
       header: ({table}:any) => {
-        selectPermission? (
+        permissions.permission.select? (
           <input type="checkbox"
             checked={table.getIsAllRowsSelected()}
             onClick={()=> {
@@ -104,7 +104,7 @@ export default function TableClients({data, token, deletePermission, selectPermi
           <div 
             className={`w-4 h-4  ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
           </div>
-          {deletePermission && (
+          {permissions.permission.delete && (
             <RemoveElement id={row.original.id} name={row.original.name} token={token}
               remove={removeClient} removeElement={delClient} />
           )}
@@ -225,24 +225,27 @@ export default function TableClients({data, token, deletePermission, selectPermi
     <>
       <ResponsiveHeaderClient title="Clientes" placeHolder="Buscar cliente.." >
         <div className="flex items-center gap-x-5 justify-end">
-          <div className="inline-flex items-center">
-            <Label>Activos</Label>  
-            <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-              <input checked={isActive} 
-                onClick={() => setIsActive(!isActive)} id="active" type="checkbox"
-                // onChange={() => console.log('')}
-                className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-                  appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-                  peer-checked:border-green-500 peer-checked:before:bg-green-500
-                  border border-slate-300" />
-              <label htmlFor="active"
-                className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-                <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-                  data-ripple-dark="true"></div>
-              </label>
+          {permissions.permission.filter && (
+            <div className="inline-flex items-center">
+              <Label>Activos</Label>  
+              <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+                <input checked={isActive} 
+                  onClick={() => setIsActive(!isActive)} id="active" type="checkbox"
+                  // onChange={() => console.log('')}
+                  className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                    appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                    peer-checked:border-green-500 peer-checked:before:bg-green-500
+                    border border-slate-300" />
+                <label htmlFor="active"
+                  className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                  <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                    data-ripple-dark="true"></div>
+                </label>
+              </div>
             </div>
-          </div>
-          <Tooltip
+          )}
+          {permissions.permission.print && (
+            <Tooltip
             closeDelay={0}
             delay={100}
             motionProps={propsTooltip}
@@ -254,11 +257,16 @@ export default function TableClients({data, token, deletePermission, selectPermi
               <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
             </button>
           </Tooltip>
-          <ButtonNewClient id={user} token={token} tags={tags} company={company._id} />
+          )}
+          {permissions.permission.create && (
+            <ButtonNewClient id={user} token={token} tags={tags} company={company._id} />
+          )}
         </div>
       </ResponsiveHeaderClient>
       <div className="mt-5">
-        {table}
+        {permissions.permission.readfull && (
+          table
+        )}
       </div>
     </>
   )

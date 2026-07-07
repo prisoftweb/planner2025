@@ -8,7 +8,8 @@ import ContainerTableDetailsExpenseProvider from "@/components/providers/Contain
 import { getCostsPayment, getPayment } from "@/app/api/routePayments";
 import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string, idP: string }}){
   
@@ -19,19 +20,29 @@ export default async function Page({ params }: { params: { id: string, idP: stri
 
   let provider: IProviderMin;
 
-  const [arrProvider, providers, costs, payment, pending, resresource] = await Promise.all([
+  const [arrProvider, providers, costs, payment, pending, resresource, rescomponents] = await Promise.all([
     getProviderMin(params.id, token),
     getProviders(token),
     getCostsPayment(token, params.idP),
     getPayment(token, params.idP),
     getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', '/id/payments/id/profile'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
       </>
     )
   }
@@ -100,6 +111,11 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   }
 
   const table: DetailExpensesTableProvider[] = ExpenseDataToTableDetailExpensesProviderData(costs);
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>

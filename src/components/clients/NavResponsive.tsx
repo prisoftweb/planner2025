@@ -119,17 +119,19 @@ export default function NavResponsive({open, setOpen, option, changeOption, perm
               </div>              
           </Tooltip>
         )}
-        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Configuracion' 
-          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-            <div className="p-1" style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': '')}}>
-              <Cog8ToothIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                      text-slate-500 my-1 bg-white rounded-md ${option===6? 'bg-blue-500': ''}`} onClick={() => changeOption(6)} 
-                onMouseEnter={() => {setIsHover(6)} } onMouseLeave={() => setIsHover(-1)}
-                style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': ''), 
-                  color: isHover===6 || option===6 ? 'white' : '',}}
-              />
-            </div>              
-        </Tooltip>
+        {permissions.components.includes('deleteclient') && (
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Configuracion' 
+            placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+              <div className="p-1" style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': '')}}>
+                <Cog8ToothIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                        text-slate-500 my-1 bg-white rounded-md ${option===6? 'bg-blue-500': ''}`} onClick={() => changeOption(6)} 
+                  onMouseEnter={() => {setIsHover(6)} } onMouseLeave={() => setIsHover(-1)}
+                  style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': ''), 
+                    color: isHover===6 || option===6 ? 'white' : '',}}
+                />
+              </div>              
+          </Tooltip>
+        )}
       </div>
     )
   }else{
@@ -211,6 +213,21 @@ export default function NavResponsive({open, setOpen, option, changeOption, perm
                 ${option===5? 'bg-blue-500': ''}`}
             />
             Contactos
+          </div>
+        )}
+        {permissions.components.includes('deleteclient') && (
+          <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer pl-2
+            flex py-2 items-center ${option===6? 'bg-slate-200': ''}`}
+            onClick={() => changeOption(6)}
+          >
+            <Cog8ToothIcon
+              style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': ''), 
+                color: isHover===6 || option===6 ? 'white' : '',}}
+              className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                text-slate-500 my-1 bg-white rounded-md mr-2
+                ${option===6? 'bg-blue-500': ''}`}
+            />
+            Configuracion
           </div>
         )}
       </div>
@@ -433,10 +450,12 @@ export default function NavResponsive({open, setOpen, option, changeOption, perm
         </div>
       )}
 
-      <div onClick={() => changeOption(6)} className="flex flex-col items-center">
-        <Cog8ToothIcon className={`w-6 h-6 ${option===6 ? 'text-green-500' : 'text-slate-500'}`} />
-        <span className="text-xs">Configuracion</span>
-      </div>
+      {permissions.components.includes('deleteclient') && (
+        <div onClick={() => changeOption(6)} className="flex flex-col items-center">
+          <Cog8ToothIcon className={`w-6 h-6 ${option===6 ? 'text-green-500' : 'text-slate-500'}`} />
+          <span className="text-xs">Configuracion</span>
+        </div>
+      )}
     </div>
   )
    

@@ -17,10 +17,6 @@ export default async function Page() {
   const token: string = cookieStore.get('token')?.value || '';
 
   const today = new Date();
-
-  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
-  
-  console.log('per => ', perm);
   
   const [codes, providers, costs, resresource, rescomponents] = await Promise.all([
     getAllCodesMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
@@ -29,7 +25,7 @@ export default async function Page() {
     getAllCostsMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
         today.toDateString(), []),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'codes', '/assignedCode'),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'codes', 'assignedCode'),
   ])
  
   if(typeof(resresource)==='string'){
@@ -77,6 +73,8 @@ export default async function Page() {
   //   permission: rescomponents[0]?.permission ?? {},
   //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
   // };
+
+  //pendiente
 
   return (
     <div>

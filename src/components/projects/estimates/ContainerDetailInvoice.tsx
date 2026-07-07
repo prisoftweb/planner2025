@@ -46,7 +46,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
-  console.log('invlice detail => ', invoice);
+  // console.log('invlice detail => ', invoice);
 
   useEffect(() => {
     const fetch = async () => {
@@ -75,9 +75,9 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         
         if(typeof(rescomp)==='string'){
           showToastMessageError(rescomp);
-          console.log('res error comp => ', rescomp);
+          // console.log('res error comp => ', rescomp);
         }else{
-          console.log('res comp => ', rescomp);
+          // console.log('res comp => ', rescomp);
           setSatCompany(rescomp);
         }
 
@@ -104,7 +104,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
     fetch();
   }, []);
 
-  console.log('sat comp => ', satCompany);
+  // console.log('sat comp => ', satCompany);
 
   return (
     <>

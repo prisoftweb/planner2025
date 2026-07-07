@@ -13,11 +13,8 @@ import Navigation from "@/components/navigation/Navigation";
 import Selectize from "@/components/Selectize";
 import NavTab from "@/components/clients/NavTab";
 import HeaderImage from "@/components/HeaderImage";
-import WithOut from "@/components/WithOut";
-import { Resource2 } from "@/interfaces/Roles";
-import ConfigClient from "@/components/clients/ConfigClient";
-import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
 import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
 import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
@@ -25,10 +22,6 @@ export default async function Page({ params }: { params: { id: string }}){
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  const perm=((user.rol?._id?? '') + ('/clients/id%2Fprofile'));
-  
-  console.log('per => ', perm);
 
   const [client, clients, tags, totalprj, totalColl, totalPenBil, totalpay, resresource, rescomponents] = await Promise.all([
     getClient(token, params.id),
@@ -72,25 +65,6 @@ export default async function Page({ params }: { params: { id: string }}){
     permission: rescomponents[0]?.permission ?? {},
     components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
   };
-
-  // const clientCookie = cookieStore.get('clients')?.value;
-  // let permisionsClient: Resource2 | undefined;
-  // if(clientCookie){
-  //   permisionsClient = JSON.parse(clientCookie);
-  // }
-
-  // if(!permisionsClient){
-  //   return(
-  //     <>
-  //       <Navigation user={user} token={token} resources={resresource} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-  //           text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
-  //           title="Clientes"><></></WithOut>
-  //       </div>
-  //     </>
-  //   )
-  // }
 
   if(typeof(clients) === "string")
     return (
@@ -178,6 +152,8 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
+  console.log('result => ', result);
+
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
@@ -187,7 +163,10 @@ export default async function Page({ params }: { params: { id: string }}){
           {/* {permisionsClient.permission.searchfull? (
             <Selectize options={options} routePage="clients" subpath="/profile" />
           ): <></>} */}
-          <Selectize options={options} routePage="clients" subpath="/profile" />
+          {result.components.includes('findall') && (
+            <Selectize options={options} routePage="clients" subpath="/profile" />
+          )}
+          {/* <Selectize options={options} routePage="clients" subpath="/profile" /> */}
         </HeaderImage>
         <NavTab idCli={params.id} tab='1' />
         <NextUiProviders>

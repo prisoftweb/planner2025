@@ -26,6 +26,8 @@ export default function DownloadProvidersReportPDF({providers, satCompany}:
 
   // const orderCollections = Array.isArray(collections)? collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()): [];
 
+  console.log('logo => ', satCompany?.isologo?? satCompany.logo);
+
   return(
     <Document>
       <Page>
