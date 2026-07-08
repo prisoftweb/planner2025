@@ -6,7 +6,8 @@ import { GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject, GetAllCostsGroupBy
   GetAllCostsGroupByDAYAndProject, GetAllCostsGroupByRESUMEN, GetAllCostsGroupByTYPERESUMEN } from "@/app/api/routeCost"
 import { getProjectsLV, getAllCostoCentersCategorysLV } from "@/app/api/routeProjects";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 interface OptionsDashboard {
   label: string,
@@ -20,7 +21,7 @@ export default async function Page() {
   // const token='';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  const [costsCategory, costsConcept, costsDays, costsResumen, costsResumenType, projects, categories, resresource] = await Promise.all([
+  const [costsCategory, costsConcept, costsDays, costsResumen, costsResumenType, projects, categories, resresource, rescomponents] = await Promise.all([
     GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
     GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
     GetAllCostsGroupByDAYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
@@ -29,12 +30,22 @@ export default async function Page() {
     getProjectsLV(token),
     getAllCostoCentersCategorysLV(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'expenses', 'dashboard'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+  
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/expenses/dashboard`} message={rescomponents} />
       </>
     )
   }
@@ -135,6 +146,11 @@ export default async function Page() {
       costo: cc.subtotalCost
     })
   });
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return (
     <>

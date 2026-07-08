@@ -18,14 +18,10 @@ export default async function Page(){
   
   // let glossaries: Glossary[] = await getGlossaries(token);
 
-  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
-  
-  console.log('per => ', perm);
-
-  const [resresource, glossaries] = await Promise.all([
+  const [resresource, glossaries, rescomponents] = await Promise.all([
     getAllResourcesByROL(token, user.rol?._id?? ''),
     getGlossaries(token),
-    // getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, perm),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'glossary', ''),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -36,14 +32,14 @@ export default async function Page(){
     )
   }
 
-  // if(typeof(rescomponents) === "string"){
-  //   return(
-  //     <>
-  //       <Navigation user={user} token={token} resources={resresource} />
-  //       <ComponentError page={`/catalogs`} message={rescomponents} />
-  //     </>
-  //   )
-  // }
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/glossary`} message={rescomponents} />
+      </>
+    )
+  }
   
   if(typeof(glossaries)=== 'string'){
     return(
@@ -68,10 +64,10 @@ export default async function Page(){
     })
   });
 
-  // const result = {
-  //   permission: rescomponents[0]?.permission ?? {},
-  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
-  // };
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return(
     <>

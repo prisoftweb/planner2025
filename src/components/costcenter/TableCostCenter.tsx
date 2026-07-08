@@ -12,9 +12,10 @@ import { propsTooltip } from "@/libs/animations";
 import ContainerSideNav from "../ContainerSideNav";
 import { useTableStates } from "@/app/store/tableStates";
 import CardListComponent from "../CardListComponent";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TableCostCenter({data, token, company}: 
-  {data:CostCenterTable[], token:string, company:string}){
+export default function TableCostCenter({data, token, company, permissions}: 
+  {data:CostCenterTable[], token:string, company:string, permissions:IPermissionsAndComponents}){
 
   const columnHelper = createColumnHelper<CostCenterTable>();
 
@@ -34,10 +35,12 @@ export default function TableCostCenter({data, token, company}:
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
           <div 
             className={`rounded-md text-white bg-gray-600 text-center
             uppercase w-6 h-6 flex items-center justify-center`}>
@@ -47,28 +50,36 @@ export default function TableCostCenter({data, token, company}:
       ),
       enableSorting:false,
       header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
+        <>
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
+        </>
       )
     }),
     columnHelper.accessor('code', {
       id: 'accion',
       cell: ({row}) => (
         <div className="flex items-center gap-x-1">
-          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
-              placement="right" className="text-black bg-white rounded-md border border-slate-400">
-            <PencilIcon className="w-6 h-6 text-slate-600 cursor-pointer hover:bg-slate-100" 
-              onClick={() => {
-                setCostCenter(row.original);
-                setEditCostCenter(true);
-              }} />
-          </Tooltip>
-          <DeleteElement remove={RemoveCostoCenter} id={row.original.id} 
+          {permissions.permission.update && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <PencilIcon className="w-6 h-6 text-slate-600 cursor-pointer hover:bg-slate-100" 
+                onClick={() => {
+                  setCostCenter(row.original);
+                  setEditCostCenter(true);
+                }} />
+            </Tooltip>
+          )}
+          {permissions.permission.delete && (
+            <DeleteElement remove={RemoveCostoCenter} id={row.original.id} 
               token={token} name={row.original.category} />
+          )}
           <p className="text-base font-semibold">{row.original.code}</p>
         </div>
       ),
@@ -111,24 +122,29 @@ export default function TableCostCenter({data, token, company}:
 
   return(
     <>
-      {editCostCenter && (
+      {editCostCenter && permissions.permission.update && (
         <ContainerSideNav width="w-full max-w-md">
           <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} company={company} />
         </ContainerSideNav>
       ) }
-      <div className="hidden md:block w-full">
-        <Table columns={columns} data={data} placeH="Buscar centro de costo.." />
-      </div>
-      <div className="block md:hidden w-full">
-        <ListData data={data} token={token} handleCostCenter={handleCostCenter} handleEditCostCenter={handleEditCostCenter} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            <Table columns={columns} data={data} placeH="Buscar centro de costo.." />
+          </div>
+          <div className="block md:hidden w-full">
+            <ListData data={data} token={token} handleCostCenter={handleCostCenter} 
+              handleEditCostCenter={handleEditCostCenter} permissions={permissions} />
+          </div>
+        </>
+      )}
     </>
   )
 }
 
-const ListData = ({data, token, handleCostCenter, handleEditCostCenter }: 
+const ListData = ({data, token, handleCostCenter, handleEditCostCenter, permissions }: 
   {data: CostCenterTable[], token:string, handleCostCenter: (costCenter: CostCenterTable) => void, 
-    handleEditCostCenter: (value: boolean) => void }) => {
+    handleEditCostCenter: (value: boolean) => void, permissions:IPermissionsAndComponents }) => {
 
   const {search} = useTableStates();
 

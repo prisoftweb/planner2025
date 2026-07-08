@@ -14,10 +14,6 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
-  
-  console.log('per => ', perm);
-
   const [companies, departments, resresource, rescomponents] = await Promise.all([
     getCompanies(token), 
     getDepartments(token),
@@ -86,16 +82,16 @@ export default async function Page(){
     )
   } 
 
-  // const result = {
-  //   permission: rescomponents[0]?.permission ?? {},
-  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
-  // };
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
       <ContainerDepartment departments={departments} optsCompanies={optsCompanies} 
-          token={token} company={user.profile} />
+          token={token} company={user.profile} permissions={result} />
     </>
   )
 }

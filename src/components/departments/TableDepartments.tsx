@@ -14,15 +14,17 @@ import { propsTooltip } from "@/libs/animations";
 import { useTableStates } from "@/app/store/tableStates";
 import { useMemo } from "react";
 import CardListComponent from "../CardListComponent";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type DeptProps={
   data:DepartmentTable[], 
   token:string, 
   optionsCompany:Options[],
-  company:string
+  company:string,
+  permissions:IPermissionsAndComponents
 }
 
-export default function TableDepartments({data, token, optionsCompany, company}: DeptProps ){
+export default function TableDepartments({data, token, optionsCompany, company, permissions}: DeptProps ){
   
   const columnHelper = createColumnHelper<DepartmentTable>();
 
@@ -34,33 +36,43 @@ export default function TableDepartments({data, token, optionsCompany, company}:
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
         </div>
       ),
       enableSorting:false,
       header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
+        <>
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
+        </>
       )
     }),
     columnHelper.accessor(row => row.id, {
       id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
-              placement="right" className="text-black bg-white rounded-md border border-slate-400">
-            <PencilIcon className="w-6 h-6 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
-              onClick={() => {setDeptEdit(row.original); setEditDept(true);}}
-            />
-          </Tooltip>
-          <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveDepartment} token={token} />
+          {permissions.permission.create && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <PencilIcon className="w-6 h-6 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
+                onClick={() => {setDeptEdit(row.original); setEditDept(true);}}
+              />
+            </Tooltip>
+          )}
+          {permissions.permission.delete && (
+            <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveDepartment} token={token} />
+          )}
         </div>
       ),
       enableSorting:false,
@@ -95,18 +107,22 @@ export default function TableDepartments({data, token, optionsCompany, company}:
   
   return(
     <>
-      {editDept && (
+      {editDept && permissions.permission.update && (
         <ContainerSideNav width="w-full max-w-[360px]">
           <NewDepartment token={token} OptionsCompany={optionsCompany} dept={deptEdit || ''} 
               showForm={setEditDept} company={company} />
         </ContainerSideNav>
       )}
-      <div className="hidden md:block w-full">
-        <Table columns={columns} data={data} placeH="Buscar departamento.." />
-      </div>
-      <div className="block md:hidden w-full">
-        <ListData data={data} token={token} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            <Table columns={columns} data={data} placeH="Buscar departamento.." />
+          </div>
+          <div className="block md:hidden w-full">
+            <ListData data={data} token={token} />
+          </div>
+        </>
+      )}
     </>
   )
 }

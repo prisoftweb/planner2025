@@ -8,7 +8,8 @@ import ExpenseStatusClient from "@/components/expenses/ExpenseStatusClient";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params, searchParams }: 
     { params: { id: string }, searchParams: { prov: string, status:string, project:string }}){
@@ -17,16 +18,26 @@ export default async function Page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  const [cost, options, resresource] = await Promise.all([
+  const [cost, options, resresource, rescomponents] = await Promise.all([
     GetCostMIN(token, params.id),
     GetCostsLVByCond(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'expenses', 'id/status'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -58,6 +69,11 @@ export default async function Page({ params, searchParams }:
 
   // const previous = searchParams?.status==='pending' ? 1: 0;
   const previous = searchParams?.status==='pending' ? 1: searchParams?.status==='concept'? 2: 0;
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return(
     <>

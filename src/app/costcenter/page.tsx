@@ -110,20 +110,24 @@ export default async function Page(){
     })
   })
 
-  // const result = {
-  //   permission: rescomponents[0]?.permission ?? {},
-  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
-  // };
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />     
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
         <ResponsiveHeader other={false} title="Centro de costos" placeHolder="Buscar centro de costos..">
-          <ButtonNew token={token} id="" company={user.profile} />
+          <>
+            {result.permission.create && (
+              <ButtonNew token={token} id="" company={user.profile} />
+            )}
+          </>
         </ResponsiveHeader>
         <div className="mt-5">
-          <TableCostCenter data={table} token={token} company={user.profile} />
+          <TableCostCenter data={table} token={token} company={user.profile} permissions={result} />
         </div>
       </div>
     </>

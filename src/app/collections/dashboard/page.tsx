@@ -37,7 +37,7 @@ export default async function Page() {
     getTotalEstimatesPendingByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
     getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'collections', '/dashboard'),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'collections', 'dashboard'),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -181,6 +181,8 @@ export default async function Page() {
   //   permission: rescomponents[0]?.permission ?? {},
   //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
   // };
+
+  //pendiente
 
   return (
     <>

@@ -30,11 +30,12 @@ import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 import {Tooltip} from "@nextui-org/react";
 import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 import { propsTooltip } from "@/libs/animations"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 export default function ContainerClient({data, token, expenses, user, isHistory=false, 
-    isViewReports, isViewUser=false, company }:
+    isViewReports, isViewUser=false, company, permissions }:
   {data:ExpensesTable[], token:string, expenses:Expense[], user:UsrBack, isHistory?:boolean, 
-    isViewReports: boolean, isViewUser?: boolean, company: string}) {
+    isViewReports: boolean, isViewUser?: boolean, company: string, permissions:IPermissionsAndComponents}) {
 
   const { categories, conditions, costCenterOpt, projects, providers, responsibles, types, 
     updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
@@ -284,7 +285,11 @@ export default function ContainerClient({data, token, expenses, user, isHistory=
                     caja chica o proveedor desde esta
                     seccion a un determinado proyecto"
               title="Gastos">
-                <ButtonNew token={token} user={user} company={company} />
+                <>
+                  {permissions.permission.create && (
+                    <ButtonNew token={token} user={user} company={company} />
+                  )}
+                </>
             </WithOut>);
     return (
       <>
@@ -319,13 +324,13 @@ export default function ContainerClient({data, token, expenses, user, isHistory=
       <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
         expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
         idValidado={idVal} user={user._id} isViewReports={isViewReports}
-        data={tableData} isPending={isViewUser} company={user.profile}
+        data={tableData} isPending={isViewUser} company={user.profile} permissions={permissions}
       />
     ): (
       <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
         expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
         idValidado={idVal} user={user._id} isViewReports={isViewReports}
-        data={tableData} isPending={isViewUser} company={user.profile}
+        data={tableData} isPending={isViewUser} company={user.profile} permissions={permissions}
       />
     )
   
@@ -350,23 +355,25 @@ export default function ContainerClient({data, token, expenses, user, isHistory=
               {categories.length > 0 && 
                 conditions.length > 0 && costCenterOpt.length > 0 && 
                 projects.length > 0 && providers.length > 0 && responsibles.length > 0 && 
-                types.length > 0 && (
+                types.length > 0 && permissions.permission.filter && (
                   <TooltipFilterIcon handleFilter={handleFilter} />
               )}  
-              {!isHistory && !isViewUser && (
+              {!isHistory && !isViewUser && permissions.permission.create && (
                 <ButtonNew token={token} user={user} company={company} />
               )}
             </div>
           </div>
         </div>
         <div className={`flex gap-x-3 gap-y-3 ${isHistory? '': 'flex-wrap-reverse sm:flex-nowrap'} w-full justify-end`}>
-          <SearchInTable placeH={"Buscar gasto.."} />
+          {permissions.permission.searchfull && (
+            <SearchInTable placeH={"Buscar gasto.."} />
+          )}
           <div className={`${isHistory? '': 'w-72'} hidden sm:block`}>
             <div className="flex gap-x-4 justify-end items-center">
               {categories.length > 0 && 
                 conditions.length > 0 && costCenterOpt.length > 0 && 
                 projects.length > 0 && providers.length > 0 && responsibles.length > 0 && 
-                types.length > 0 && (
+                types.length > 0 && permissions.permission.filter && (
                   <TooltipFilterIcon handleFilter={handleFilter} />
               )}  
               <>

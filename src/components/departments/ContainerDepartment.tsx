@@ -9,15 +9,17 @@ import ButtonNew from "./ButtonNew";
 import { Options } from "@/interfaces/Common";
 import TableDepartments from "./TableDepartments";
 import { ResponsiveHeader as Header } from "@/components/Header";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type DeptProps={
   departments:Department[], 
   token:string, 
   optsCompanies:Options[],
-  company:string
+  company:string,
+  permissions:IPermissionsAndComponents
 }
 
-export default function ContainerDepartment({departments, optsCompanies, token, company}: DeptProps ) {
+export default function ContainerDepartment({departments, optsCompanies, token, company, permissions}: DeptProps ) {
 
   const {departmentStore, updateDepartmentStore} = useDepartmentStore();
 
@@ -31,7 +33,11 @@ export default function ContainerDepartment({departments, optsCompanies, token, 
         <WithOut img="/img/clientes.svg" subtitle="Departamentos"
           text="Aqui puedes agregar los departamentos"
           title="Departamentos">
-              <ButtonNew token={token} dept={''} optionsCompany={optsCompanies} company={company} />
+              <>
+                {permissions.permission.create && (
+                  <ButtonNew token={token} dept={''} optionsCompany={optsCompanies} company={company} />
+                )}
+              </>
         </WithOut>
       </CompanyClient>
     )
@@ -56,10 +62,14 @@ export default function ContainerDepartment({departments, optsCompanies, token, 
       <CompanyClient option={1} >
         <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
           <Header title="Departamentos" placeHolder="Buscar departamento.." >
-            <ButtonNew optionsCompany={optsCompanies} dept={''} token={token} company={company} />
+            <>
+              {permissions.permission.create && (
+                <ButtonNew optionsCompany={optsCompanies} dept={''} token={token} company={company} />
+              )}
+            </>
           </Header>
           <div className="mt-5">
-            <TableDepartments data={table} optionsCompany={optsCompanies} token={token} company={company} />
+            <TableDepartments data={table} optionsCompany={optsCompanies} token={token} company={company} permissions={permissions} />
           </div>
         </div>
       </CompanyClient>

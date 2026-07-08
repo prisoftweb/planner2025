@@ -5,7 +5,8 @@ import { ResponsiveHeader } from "@/components/Header";
 import ContainerConceptscomponent from "@/components/expenses/concepts/ContainerConceptscomponent";
 import { getAllConceptsLV } from "@/app/api/routeCostCenter";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -14,15 +15,25 @@ export default async function Page(){
 
   // const concepts = await getAllConceptsLV(token);
 
-  const [concepts, resresource] = await Promise.all([
+  const [concepts, resresource, rescomponents] = await Promise.all([
     getAllConceptsLV(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'expenses', 'concepts'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -38,6 +49,11 @@ export default async function Page(){
       </>
     )
   }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return (
       <>

@@ -18,8 +18,8 @@ import { CostoCenterLV } from "@/interfaces/CostCenter";
 import { getCostoCentersLV } from "@/app/api/routeCostCenter";
 import { GetCostMIN } from "@/app/api/routeCost";
 
-export default function UpdateExpense({token, id, expense, isticket, isHistory}: 
-  {token:string, id:string, expense:OneExpense, isticket:boolean, isHistory: boolean}){
+export default function UpdateExpense({token, id, expense, isticket, isHistory, updatePermission}: 
+  {token:string, id:string, expense:OneExpense, isticket:boolean, isHistory: boolean, updatePermission:boolean}){
 
   const {currentExpense, updateCurrentExpense} = useNewExpense();
 
@@ -256,7 +256,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
       value={totalExpense.replace(/[$,]/g, "")}
       decimalsLimit={2}
       prefix="$"
-      disabled={isHistory}
+      disabled={isHistory || !updatePermission}
       onValueChange={(value) => {try {
         setTotalExpense(value || '0');
       } catch (error) {
@@ -335,7 +335,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             className="w-full h-10 border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
               focus:border-slate-700 outline-0"
             type="date"
-            disabled={isHistory}
+            disabled={isHistory || !updatePermission}
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
@@ -344,7 +344,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
           <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
           <Input type="text" name="folio" autoFocus 
             value={formik.values.folio}
-            disabled={isHistory}
+            disabled={isHistory || !updatePermission}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
           />
@@ -358,7 +358,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
           <Label htmlFor="taxFolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio Fiscal</p></Label>
           <Input type="text" name="taxFolio" 
             value={formik.values.taxFolio}
-            disabled={isHistory}
+            disabled={isHistory || !updatePermission}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
           />
@@ -377,7 +377,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               focus:border-slate-700 outline-0"
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            disabled={isHistory}
+            disabled={isHistory || !updatePermission}
             defaultValue={currentExpense?.cost.subtotal || expense?.cost.subtotal || 0}
             decimalsLimit={2}
             prefix="$"
@@ -406,7 +406,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               onBlur={formik.handleChange}
               defaultValue={currentExpense?.cost.discount || expense?.cost.discount || 0}
               decimalsLimit={2}
-              disabled={isHistory}
+              disabled={isHistory || !updatePermission}
               prefix="$"
               onValueChange={(value) => {try {
                 handleIdVat(idVat);
@@ -435,7 +435,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               value={formik.values.taxExempt.replace(/[$,]/g, "") || 0}
               decimalsLimit={2}
               prefix="$"
-              disabled={isHistory}
+              disabled={isHistory || !updatePermission}
               onValueChange={(value) => {try {
                 formik.values.taxExempt=value || '0';
                 handleIdVat(idVat);
@@ -465,7 +465,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
               decimalsLimit={2}
-              disabled={isHistory}
+              disabled={isHistory || !updatePermission}
               value={vatValue}
               prefix="$"
               onValueChange={(value) => {try {
@@ -497,7 +497,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
               focus:border-slate-700 outline-0 overflow-hidden resize-none"
             rows={4}
-            disabled={isHistory} 
+            disabled={isHistory || !updatePermission} 
             value={formik.values.description}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
@@ -508,7 +508,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             </div>
           ) : null}
         </div>
-        {isHistory? <></>: (
+        {isHistory || !updatePermission? <></>: (
           <div className="flex justify-center mt-8 space-x-5">
             <Button type="submit">Guardar</Button>         
           </div>

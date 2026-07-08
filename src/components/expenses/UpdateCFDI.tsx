@@ -7,8 +7,8 @@ import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
 import { CFDIValidation } from "@/interfaces/Expense";
 // import { GetCostMIN } from "@/app/api/routeCost";
 
-export default function UpdateCFDI({id, token, expense, isHistory}: 
-  {token: string, id:string, expense:OneExpense, isHistory:boolean}){
+export default function UpdateCFDI({id, token, expense, isHistory, updatePermission}: 
+  {token: string, id:string, expense:OneExpense, isHistory:boolean, updatePermission:boolean}){
   
   const [file, setFile] = useState<File | null>();
   const [urlFile, setUrlFile] = useState<string>();
@@ -110,7 +110,7 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
           className="w-full h-96"
         ></iframe>
       )}
-      {isHistory? <></>: (
+      {isHistory || !updatePermission? <></>: (
         <>
           <UploadFileDropZone label="Subir archivo .XML" setFile={handleFile} 
               Validation={validationType} getData={handleCFDI} />

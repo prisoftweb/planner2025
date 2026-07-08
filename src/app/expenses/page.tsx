@@ -6,7 +6,8 @@ import { getAllCostsByConditionAndUser } from "../api/routeCost";
 import ContainerClient from "@/components/expenses/ContainerClient";
 import { ExpenseDataToTableData } from "../functions/CostsFunctions";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page() {
   
@@ -19,15 +20,25 @@ export default async function Page() {
   
   // let expenses: Expense[] = await getAllCostsByConditionAndUser(token, user._id);
 
-  const [expenses, resresource] = await Promise.all([
+  const [expenses, resresource, rescomponents] = await Promise.all([
     getAllCostsByConditionAndUser(token, user._id),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'expenses', ''),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -42,10 +53,15 @@ export default async function Page() {
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
-      <ContainerClient data={table} expenses={expenses}
+      <ContainerClient data={table} expenses={expenses} permissions={result}
         token={token} user={user} isViewReports={isViewReports} company={user.profile} />
     </>
   )

@@ -20,8 +20,8 @@ import { getUsersLV } from "@/app/api/routeUser";
 import { getCatalogsByNameAndCategory, getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import { GetCostMIN } from "@/app/api/routeCost";
 
-export default function UpdateExtraExpense({token, id, expense, isHistory, isticket}: 
-  {token:string, id:string, expense:OneExpense, isHistory:boolean, isticket:boolean}){
+export default function UpdateExtraExpense({token, id, expense, isHistory, isticket, updatePermission}: 
+  {token:string, id:string, expense:OneExpense, isHistory:boolean, isticket:boolean, updatePermission:boolean}){
   
   const {currentExpense, updateCurrentExpense} = useNewExpense();
   const [typeCFDI, setTypeCFDI] = useState<string>(currentExpense?.typeCFDI._id || expense.typeCFDI._id);
@@ -150,28 +150,28 @@ export default function UpdateExtraExpense({token, id, expense, isHistory, istic
       {!isticket && (
         <div className=" col-span-1 sm:col-span-2">
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-          <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
+          <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} disabled={!updatePermission} />
         </div>
       )}
 
       <div>
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-        <SelectReact index={indexCFDI} opts={optTypeCFDI} setValue={handleCFDI} />
+        <SelectReact index={indexCFDI} opts={optTypeCFDI} setValue={handleCFDI} disabled={!updatePermission} />
       </div>
       
       <div>
         <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-        <SelectReact index={indexCategory} opts={optCategories} setValue={handleCategory} />
+        <SelectReact index={indexCategory} opts={optCategories} setValue={handleCategory} disabled={!updatePermission} />
       </div>
       
       <div>
         <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
-        <SelectReact index={indexProject} opts={optProjects} setValue={handleProject} />
+        <SelectReact index={indexProject} opts={optProjects} setValue={handleProject} disabled={!updatePermission} />
       </div>
       
       <div>
         <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-        <SelectReact index={indexResponsible} opts={optResponsibles} setValue={handleResponsible} />
+        <SelectReact index={indexResponsible} opts={optResponsibles} setValue={handleResponsible} disabled={!updatePermission} />
       </div>
     </>
   ): (
@@ -281,7 +281,7 @@ export default function UpdateExtraExpense({token, id, expense, isHistory, istic
             </div>
           )}
         </div>
-        {isHistory? <></>: (
+        {isHistory || !updatePermission? <></>: (
           <div className="flex justify-center mt-8 space-x-5">
             <Button type="button" onClick={updateExpense}>Guardar</Button>         
           </div>

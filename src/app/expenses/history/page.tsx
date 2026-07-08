@@ -6,7 +6,8 @@ import { GetCostsMIN } from "../../api/routeCost";
 import ContainerClient from "@/components/expenses/ContainerClient";
 import { ExpenseDataToTableData } from "../../functions/CostsFunctions";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page() {
   
@@ -19,15 +20,25 @@ export default async function Page() {
 
   // let expenses: Expense[] = await GetCostsMIN(token);
 
-  const [expenses, resresource] = await Promise.all([
+  const [expenses, resresource, rescomponents] = await Promise.all([
     GetCostsMIN(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'expenses', 'history'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -50,12 +61,17 @@ export default async function Page() {
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expensesFil);
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
       <ContainerClient data={table} expenses={expenses}
         token={token} user={user} isViewReports={isViewReports} 
-        isHistory={true} company={user.profile} />
+        isHistory={true} company={user.profile} permissions={result} />
     </>
   )
 }

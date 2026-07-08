@@ -10,9 +10,10 @@ import UpdateVoucher from "./UpdateVoucher"
 import UpdateCFDI from "./UpdateCFDI"
 import { useNewExpense } from "@/app/store/newExpense"
 import AddCFDIRelations from "./AddCFDIRelations";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function ExpenseClient({token, user, id, expense, isHistory=false}: 
-  { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean}){
+export default function ExpenseClient({token, user, id, expense, isHistory=false, permissions}: 
+  { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean, permissions:IPermissionsAndComponents}){
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {
@@ -52,7 +53,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
     opt===1? (<div className="mt-3 w-full gap-y-3 flex sm:space-x-2 flex-wrap 2xl:flex-nowrap" >
                 <div className="w-full sm:max-w-xl bg-white rounded-lg shadow-md sm:pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                   <UpdateExpense id={id} token={token} expense={expense} 
-                    isticket={expense.isticket} isHistory={isHistory} />
+                    isticket={expense.isticket} isHistory={isHistory} updatePermission={permissions.permission.update} />
                 </div>
                 {pdfFile?.file && (<div className=" w-full h-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                     <iframe className="w-full h-full flex-grow overflow-auto mt-4" src={pdfFile.file} />
@@ -61,18 +62,18 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
     (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md sm:pl-2 px-3" 
                     style={{borderColor:'#F8FAFC'}}>
                       <div className=" max-w-lg">
-                        <UpdateExtraExpense expense={expense} id={id} 
+                        <UpdateExtraExpense expense={expense} id={id} updatePermission={permissions.permission.update} 
                           isHistory={isHistory} token={token} isticket={expense.isticket}
                         />
                       </div>
             </div>): //max w-md antes abajo
     (opt===3? (<div className="mt-3 w-full max-w-[1800px] bg-white rounded-lg shadow-md sm:pl-2 px-3 h-screen" 
                       style={{borderColor:'#F8FAFC'}}>
-                        <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} />
+                        <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} updatePermission={permissions.permission.update} />
                       </div>): 
       (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md sm:pl-2 px-3 h-screen" 
                           style={{borderColor:'#F8FAFC'}}>
-                              <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} />
+                              <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} updatePermission={permissions.permission.update} />
                         </div>): 
           (opt===5? (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md sm:pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
@@ -82,7 +83,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                       </div>): (<div className="mt-3 w-full sm:flex sm:space-x-2 gap-y-3" >
                                   <div className=" w-full sm:max-w-xl bg-white rounded-lg shadow-md sm:pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                                     <UpdateExpense id={id} token={token} expense={expense} 
-                                      isticket={expense.isticket} isHistory={isHistory} />
+                                      isticket={expense.isticket} isHistory={isHistory} updatePermission={permissions.permission.update} />
                                   </div>
                                   {pdfFile?.file && widhtPage > 1500 && (<div className=" max-w-md bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                                       <iframe className="w-full flex-grow overflow-auto mt-4" src={pdfFile.file} />

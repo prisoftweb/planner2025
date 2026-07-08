@@ -26,8 +26,9 @@ import { getDate } from "@/libs/dates";
 import { useTableStates } from "@/app/store/tableStates";
 
 import Slider from '@mui/material/Slider';
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TableGuaranteeComponent({token, user}: {token:string, user:string}) {
+export default function TableGuaranteeComponent({token, user, permissions}: {token:string, user:string, permissions:IPermissionsAndComponents}) {
 
   const [guarantees, setGuarantees] = useState<IGuaranteeResumenByProject[]>([]);
   const [filteredGuarantees, setFilteredGuarantees] = useState<IGuaranteeResumenByProject[]>([]);
@@ -170,10 +171,12 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
           {/* <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
                       removeElement={delCollection} token={token} /> */}
         </div>
@@ -181,12 +184,16 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
       size: 300,
       enableSorting:false,
       header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
+        <>
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
+        </>
         // <p>Accion</p>
       )
     }),
@@ -361,12 +368,14 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
         </div>
         <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
           <div className="">
-            <SearchInTable placeH={"Buscar garantia.."} />
+            {permissions.permission.searchfull && (
+              <SearchInTable placeH={"Buscar garantia.."} />
+            )}
           </div>
         </div>
       </div>
       {/* {widthPage > 1080 && filterElemnts} */}
-      {filterElemnts}
+      {permissions.permission?.filter && filterElemnts}
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5">
         <div>
           <Label>GARANTIA POR CLIENTE</Label>
@@ -418,12 +427,16 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
           </div>
         </div>
       </div>
-      <div className="hidden md:block w-full">
-        <Table columns={columns} data={data} placeH="buscar garantia" typeTable="guarantee" />      
-      </div>
-      <div className="block md:hidden w-full">
-        <ListData data={data} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            <Table columns={columns} data={data} placeH="buscar garantia" typeTable="guarantee" />      
+          </div>
+          <div className="block md:hidden w-full">
+            <ListData data={data} />
+          </div>
+        </>
+      )}
     </>
   )
 }

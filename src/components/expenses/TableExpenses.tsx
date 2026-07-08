@@ -20,6 +20,7 @@ import ContainerSideNav from "../ContainerSideNav";
 import { propsTooltip } from "@/libs/animations";
 import { IoIosLink } from "react-icons/io";
 import { useTableStates } from "@/app/store/tableStates";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   data:ExpensesTable[], 
@@ -33,11 +34,12 @@ type Props = {
   isViewReports: boolean, 
   isPending:boolean,
   company: string,
+  permissions:IPermissionsAndComponents
 }
 
 export default function TableExpenses({data, token, expenses, 
   handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
-  isViewReports, isPending, company }: Props){
+  isViewReports, isPending, company, permissions }: Props){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
   const refExpenses = useRef(expenses);
@@ -100,23 +102,27 @@ export default function TableExpenses({data, token, expenses,
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2 justify-center">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-            className="w-24 cursor-pointer"
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+              className="w-24 cursor-pointer"
+            />
+          )}
         </div>
       ),
       enableSorting:false,
       header: ({table}:any) => (
         <div className="w-8">
-          <input type="checkbox"
-            className="w-24 cursor-pointer"
-            checked={table.getIsAllRowsSelected()}
-            onClick={()=> {
-              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-            }}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox"
+              className="w-24 cursor-pointer"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
         </div>
       )
     }),
@@ -125,9 +131,11 @@ export default function TableExpenses({data, token, expenses,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
-          <RemoveElement id={row.original.id} name={row.original.Descripcion} 
+          {permissions.permission.delete && (
+            <RemoveElement id={row.original.id} name={row.original.Descripcion} 
               remove={RemoveCost} removeElement={delCost} 
               token={token} colorIcon="text-slate-500 hover:text-slate-300" />
+          )}
           <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Copiar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
             <span>
@@ -555,7 +563,7 @@ export default function TableExpenses({data, token, expenses,
   return(
     <>
       <div className="flex justify-end my-5">
-          {isFilter && (
+          {isFilter && permissions.permission.filter && (
             <ContainerSideNav width="w-full max-w-[550px]">
               <Filtering showForm={handleIsFilter} company={company} token={token}
                           FilterData={filterData} maxAmount={maxAmount} 
@@ -565,18 +573,22 @@ export default function TableExpenses({data, token, expenses,
           )}
       </div>
       
-      <div className="hidden md:block w-full">
-        {view}
-      </div>
-      <div className="block md:hidden w-full">
-        <ListData data={data} token={token} delCost={delCost} queryParam={queryParam} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            {view}
+          </div>
+          <div className="block md:hidden w-full">
+            <ListData data={data} token={token} delCost={delCost} queryParam={queryParam} permissions={permissions} />
+          </div>
+        </>
+      )}
     </>
   )
 }
 
-const ListData = ({data, token, delCost, queryParam}: 
-  {data: ExpensesTable[], token:string, delCost: (id: string) => Promise<void>, queryParam:string}) => {
+const ListData = ({data, token, delCost, queryParam, permissions}: 
+  {data: ExpensesTable[], token:string, delCost: (id: string) => Promise<void>, queryParam:string, permissions:IPermissionsAndComponents}) => {
 
   // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
@@ -597,7 +609,7 @@ const ListData = ({data, token, delCost, queryParam}:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData.map((e) => (
-            <CardExpense expense={e} key={e.id} delCost={delCost} token={token} queryParam={queryParam} />
+            <CardExpense expense={e} key={e.id} delCost={delCost} token={token} queryParam={queryParam} permissions={permissions} />
           ))}
 
         </nav>
@@ -606,8 +618,8 @@ const ListData = ({data, token, delCost, queryParam}:
   )
 }
 
-const CardExpense = ({expense, token, delCost, queryParam}: 
-  {expense:ExpensesTable, token:string, delCost: (id: string) => Promise<void>, queryParam:string}) => {
+const CardExpense = ({expense, token, delCost, queryParam, permissions}: 
+  {expense:ExpensesTable, token:string, delCost: (id: string) => Promise<void>, queryParam:string, permissions:IPermissionsAndComponents}) => {
   
   return(
     <div role="button"
@@ -625,9 +637,11 @@ const CardExpense = ({expense, token, delCost, queryParam}:
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
           {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
               remove={RemoveGlossary} removeElement={delGlossary} /> */}
-            <RemoveElement id={expense.id} name={expense.Descripcion} 
-              remove={RemoveCost} removeElement={delCost} 
-              token={token} colorIcon="text-slate-500 hover:text-slate-300" />
+            {permissions.permission.delete && (
+              <RemoveElement id={expense.id} name={expense.Descripcion} 
+                remove={RemoveCost} removeElement={delCost} 
+                token={token} colorIcon="text-slate-500 hover:text-slate-300" />
+            )}
         </div>
         <div className="w-full">
           <div className="flex gap-x-3 w-full justify-between items-center p-3">

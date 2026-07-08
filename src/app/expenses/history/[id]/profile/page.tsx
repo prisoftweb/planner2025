@@ -9,7 +9,8 @@ import ExpenseClient from "@/components/expenses/ExpenseClient";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string, idProv:string, project:string }}){
   const cookieStore = cookies();
@@ -17,16 +18,26 @@ export default async function Page({ params }: { params: { id: string, idProv:st
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [cost, options, resresource] = await Promise.all([
+  const [cost, options, resresource, rescomponents] = await Promise.all([
     GetCostMIN(token, params.id),
     GetCostsLV(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'expenses', 'id/history/profile'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
       </>
     )
   }
@@ -58,6 +69,11 @@ export default async function Page({ params }: { params: { id: string, idProv:st
     value: cost.cost.subtotal
   });
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
@@ -69,7 +85,7 @@ export default async function Page({ params }: { params: { id: string, idProv:st
             idProv={params.idProv} idProj={params.project} isHistory={true} />
         <NextUiProviders>
           <ExpenseClient expense={cost} id={params.id} token={token} 
-              user={user._id} isHistory={true}/>
+              user={user._id} isHistory={true} permissions={result} />
         </NextUiProviders>
       </div>
     </>

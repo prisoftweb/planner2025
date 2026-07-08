@@ -7,8 +7,8 @@ import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 import { GetCostMIN } from "@/app/api/routeCost";
 
-export default function UpdateVoucher({id, token, expense, isHistory}: 
-    {token: string, id:string, expense:OneExpense, isHistory:boolean}){
+export default function UpdateVoucher({id, token, expense, isHistory, updatePermission}: 
+    {token: string, id:string, expense:OneExpense, isHistory:boolean, updatePermission:boolean}){
   
   const [file, setFile] = useState<File | null>();
   const refRequest = useRef(true);
@@ -104,7 +104,7 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
           className="w-full flex-grow overflow-auto"
         ></iframe>
       )}
-      {isHistory? <></> : (
+      {isHistory || !updatePermission? <></> : (
         <>
           <UploadFileDropZone label="Subir PDF o imagen" setFile={handleFile} 
               Validation={validationType} getData={handle} />
