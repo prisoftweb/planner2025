@@ -1,9 +1,10 @@
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { IOneCollectionMin, IInvoicesByCollection } from "@/interfaces/Collections";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function ListInvoicesCollection({collection, invoices}: 
-  {collection:IOneCollectionMin, invoices:IInvoicesByCollection[]}){
+export default function ListInvoicesCollection({collection, invoices, permissions}: 
+  {collection:IOneCollectionMin, invoices:IInvoicesByCollection[], permissions:IPermissionsAndComponents}){
 
   return(
     <>
@@ -21,45 +22,49 @@ export default function ListInvoicesCollection({collection, invoices}:
 
         </div>
 
-        {invoices.map((invoice) => (
-          <div role="button"
-            key={invoice._id}
-            className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
-              outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
-              focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
-              active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 text-white`}
-          >
-            <div className="flex items-center w-full">
-              <div className="grid mr-4 place-items-center">
-                {/* <img alt="responsable" src={ '/img/estimates/invoices.svg'}
-                  className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
-                <FaFileInvoiceDollar className={`h-6 w-6 ${invoice.paymentInInvoice.ischargedfull? 'text-green-500': 'text-red-500'}`} />
-              </div>
-              <div className={`w-full`}>
-                <div className="flex justify-between items-center">
-                  <h6
-                    className="block font-sans antialiased font-semibold leading-relaxed tracking-normal text-2xl text-blue-600">
-                    {invoice.paymentInInvoice.folio}
-                  </h6>
-                  <p className="text-slate-500 text-sm">{CurrencyFormatter({
-                    currency: 'MXN',
-                    value: invoice.paymentInInvoice.total
-                  })}</p>
+        {permissions.components.includes('invoicescharged') && (
+          <>
+            {invoices.map((invoice) => (
+              <div role="button"
+                key={invoice._id}
+                className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+                  outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+                  focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+                  active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 text-white`}
+              >
+                <div className="flex items-center w-full">
+                  <div className="grid mr-4 place-items-center">
+                    {/* <img alt="responsable" src={ '/img/estimates/invoices.svg'}
+                      className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
+                    <FaFileInvoiceDollar className={`h-6 w-6 ${invoice.paymentInInvoice.ischargedfull? 'text-green-500': 'text-red-500'}`} />
+                  </div>
+                  <div className={`w-full`}>
+                    <div className="flex justify-between items-center">
+                      <h6
+                        className="block font-sans antialiased font-semibold leading-relaxed tracking-normal text-2xl text-blue-600">
+                        {invoice.paymentInInvoice.folio}
+                      </h6>
+                      <p className="text-slate-500 text-sm">{CurrencyFormatter({
+                        currency: 'MXN',
+                        value: invoice.paymentInInvoice.total
+                      })}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <h6
+                        className="block font-sans antialiased font-semibold leading-relaxed tracking-normal text-green-600">
+                        {invoice.paymentInInvoice.project}
+                      </h6>
+                      <p className="text-slate-500 text-sm">{invoice.paymentInInvoice.taxfolio}</p>
+                    </div>
+                    {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                      {invoice.notes}
+                    </p> */}
+                  </div>
                 </div>
-                <div className="flex justify-between items-center">
-                  <h6
-                    className="block font-sans antialiased font-semibold leading-relaxed tracking-normal text-green-600">
-                    {invoice.paymentInInvoice.project}
-                  </h6>
-                  <p className="text-slate-500 text-sm">{invoice.paymentInInvoice.taxfolio}</p>
-                </div>
-                {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                  {invoice.notes}
-                </p> */}
               </div>
-            </div>
-          </div>
-        ))}
+            ))}
+          </>
+        )}
 
       </div>
     </>

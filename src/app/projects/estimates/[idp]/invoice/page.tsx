@@ -7,7 +7,8 @@ import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumenByProject } from "@/app/api/routeInvoices";
 import ContainerInvoicesProject from "@/components/projects/estimates/ContainerInvoicesProject";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params, searchParams }: 
   { params: { idp: string }, searchParams: { page: string }}){
@@ -16,7 +17,7 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [project, invoices, totalInvoicesProject, totalInvoicesResumen, projects, catalogs, resresource] = await Promise.all([
+  const [project, invoices, totalInvoicesProject, totalInvoicesResumen, projects, catalogs, resresource, rescomponents] = await Promise.all([
     GetProjectMin(token, params.idp),
     getInvoicesByProject(token, params.idp),
     getTotalInvoicesByProject(token, params.idp),
@@ -24,6 +25,7 @@ export default async function Page({ params, searchParams }:
     getProjectsLVNoCompleted(token),
     getCatalogsByName(token, 'projects'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects/estimates', 'id/invoice'),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -33,6 +35,15 @@ export default async function Page({ params, searchParams }:
           </>
         )
       }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/glossary`} message={rescomponents} />
+      </>
+    )
+  }
   
   if(typeof(project) === "string"){
     // return <h1 className="text-center text-red-500">{project}</h1>
@@ -111,6 +122,11 @@ export default async function Page({ params, searchParams }:
     })
   })
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return (
     <>
       <Navigation user={user} token={token} resources={resresource} />
@@ -118,7 +134,7 @@ export default async function Page({ params, searchParams }:
         <ContainerInvoicesProject project={project} optConditions={optConditions} optProjects={[{
             label: 'Todos',
             value: 'all'
-          }, ...projects]} pageQuery={searchParams.page} invoices={invoices} token={token} user={user._id} 
+          }, ...projects]} pageQuery={searchParams.page} invoices={invoices} token={token} user={user._id} permissions={result}
           totalInvoiceProject={totalInvoicesProject} resumenInvoice={totalInvoicesResumen} company={user.profile} />
       </div>
     </>

@@ -21,10 +21,11 @@ import ContainerSideNav from "@/components/ContainerSideNav";
 import { propsTooltip } from "@/libs/animations";
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TableInvoicesComponent({token, project, user, pageQuery, resumenInvoice, company}: 
+export default function TableInvoicesComponent({token, project, user, pageQuery, resumenInvoice, company, permissions}: 
   {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined, 
-    resumenInvoice:ITotalInvoiceResumen, company:string}) {
+    resumenInvoice:ITotalInvoiceResumen, company:string, permissions:IPermissionsAndComponents}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByProject[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -95,8 +96,10 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           /> */}
-          <RemoveElement id={`${row.original.id}/${row.original.idEstimates}`} name={row.original.estimate} remove={removeInvoice} 
+          {permissions.permission.readfull && (
+            <RemoveElement id={`${row.original.id}/${row.original.idEstimates}`} name={row.original.estimate} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
+          )}
           {row.original.ischargedfull? (
             <TooltipContainerIcon label="Cobrada">
               {row.original.accountreceivablesCount > 0? (
@@ -254,7 +257,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
   return (
     <>
       <div className="flex justify-end p-3">
-        {satCompany && (
+        {satCompany && permissions.permission.print && (
           <PDFDownloadLink document={<DownloadInvoicesByProjectPDF invoices={invoices} project={project} satCompany={satCompany}
                                         resumenInvoice={resumenInvoice} token={token} />} fileName={'Estado de cuenta - ' + project.title} >
             {({loading, url, error, blob}) => 
@@ -273,12 +276,17 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
         )}
       </div>
       
-      <div className="hidden md:block w-full">
-        <Table columns={columns} data={data} placeH="buscar factura" />
-      </div>
-      <div className="block md:hidden w-full mt-3">
-        <ListData data={data} token={token} delInvoice={delInvoice} pageQuery={pageQuery} project={project} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            <Table columns={columns} data={data} placeH="buscar factura" />
+          </div>
+          <div className="block md:hidden w-full mt-3">
+            <ListData data={data} token={token} delInvoice={delInvoice} pageQuery={pageQuery} project={project}
+              permissions={permissions} />
+          </div>
+        </>
+      )}
 
       {showNewCollection && selInvoice && (
         <ContainerSideNav width="w-full max-w-xl">
@@ -294,9 +302,9 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
   )
 }
 
-const ListData = ({data, token, delInvoice, pageQuery, project}: 
+const ListData = ({data, token, delInvoice, pageQuery, project, permissions}: 
   {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void, 
-    project:OneProjectMin, pageQuery:string | undefined,}) => {
+    project:OneProjectMin, pageQuery:string | undefined, permissions:IPermissionsAndComponents}) => {
 
   // const [dataReports, setDataReports] = useState(data);
   // const {search} = useTableStates();
@@ -325,7 +333,8 @@ const ListData = ({data, token, delInvoice, pageQuery, project}:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {data.map((i) => (
-            <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} pageQuery={pageQuery} project={project} />
+            <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} pageQuery={pageQuery} 
+                project={project} permissions={permissions} />
           ))}
 
         </nav>
@@ -334,9 +343,9 @@ const ListData = ({data, token, delInvoice, pageQuery, project}:
   )
 }
 
-const CardInvoice = ({invoice, token, delInvoice, pageQuery, project }: 
+const CardInvoice = ({invoice, token, delInvoice, pageQuery, project, permissions }: 
   {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void, 
-    project:OneProjectMin, pageQuery:string | undefined, }) => {
+    project:OneProjectMin, pageQuery:string | undefined, permissions:IPermissionsAndComponents }) => {
   
   return(
     <div role="button"
@@ -354,9 +363,11 @@ const CardInvoice = ({invoice, token, delInvoice, pageQuery, project }:
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
           {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
               remove={RemoveGlossary} removeElement={delGlossary} /> */}
-            < RemoveElement id={ invoice.idEstimates? `${invoice.id}/${invoice.idEstimates}`: `${invoice.id}`} 
+            {permissions.permission.delete && (
+              <RemoveElement id={ invoice.idEstimates? `${invoice.id}/${invoice.idEstimates}`: `${invoice.id}`} 
                       name={invoice.estimate ?? invoice.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
+            )}
             {invoice.ischargedfull? (
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cobrada' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">

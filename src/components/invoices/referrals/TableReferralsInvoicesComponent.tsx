@@ -45,9 +45,10 @@ import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { TbFileInvoice } from "react-icons/tb";
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TableReferralsInvoicesComponent({token, user, company, optionsCancel}: 
-  {token:string, user:string, company:string, optionsCancel:Options[]}) {
+export default function TableReferralsInvoicesComponent({token, user, company, optionsCancel, permissions}: 
+  {token:string, user:string, company:string, optionsCancel:Options[], permissions:IPermissionsAndComponents}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByDateAndConditionMin[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -180,11 +181,13 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
-          {row.original.typeInvoice !== 'Timbrada' && (
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
+          {row.original.typeInvoice !== 'Timbrada' && permissions.permission.delete && (
             < RemoveElement id={ row.original.idEstimates? `${row.original.id}/${row.original.idEstimates}`: `${row.original.id}`} 
                       name={row.original.estimate ?? row.original.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
@@ -257,12 +260,14 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
       enableSorting:false,
       header: ({table}:any) => (
         <div className="flex gap-x-2 items-center">
-          <input type="checkbox"
-            checked={table.getIsAllRowsSelected()}
-            onClick={()=> {
-              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-            }}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
           <p>Accion</p>
         </div>
       )
@@ -408,97 +413,50 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
 
   const data = InvoiceDataToTableData(invoices);
 
-  // let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
-  //                 <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
-  //                 <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
-  //                 <ChipStatus id="678ed05cc5f08e8a0f36d5e1" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada" />
-  //                 <ChipStatus id="67d20e2959865f640af92682" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada parcial" />
-  //                 <ChipStatus id="678ecf6ec5f08e8a0f36d5dd" addStatus={addStatus} removeStatus={deleteStatus} title="Cancelada" />
-  //                 <div>
-  //                   <DateRangePicker 
-  //                     className='mt-2'
-  //                     placeholder='Seleccione un rango de fechas'
-  //                     onValueChange={(e) => {
-  //                       setRangeDate(e);
-  //                       if(e.from && e.to){
-  //                         handleDate(e.from, e.to);
-  //                       }
-  //                     }}
-  //                     value={rangeDate}
-  //                     locale={es}
-  //                   />
-  //                 </div>
-  //               </div>
-      
-  // let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 xl:order-1">
-  // let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 flex-wrap 2xl:flex-nowrap">
   let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 flex-wrap min-[1700px]:flex-nowrap">
-                          <div className="flex gap-x-4 gap-y-2 justify-end items-center flex-wrap sm:flex-nowrap">
-                            <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
-                            <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
-                            <ChipStatus id="678ed05cc5f08e8a0f36d5e1" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada" />
-                            <ChipStatus id="67d20e2959865f640af92682" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada parcial" />
-                            <ChipStatus id="678ecf6ec5f08e8a0f36d5dd" addStatus={addStatus} removeStatus={deleteStatus} title="Cancelada" />
-                          </div>
-                          <div className="flex gap-x-4 justify-end items-center">
-                            <DateRangePicker 
-                              className='mt-2'
-                              placeholder='Seleccione un rango de fechas'
-                              onValueChange={(e) => {
-                                setRangeDate(e);
-                                if(e.from && e.to){
-                                  handleDate(e.from, e.to);
-                                }
-                              }}
-                              value={rangeDate}
-                              locale={es}
-                            />
-                          </div>
+                          {permissions.components.includes('filterchips') && (
+                            <div className="flex gap-x-4 gap-y-2 justify-end items-center flex-wrap sm:flex-nowrap">
+                              <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
+                              <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
+                              <ChipStatus id="678ed05cc5f08e8a0f36d5e1" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada" />
+                              <ChipStatus id="67d20e2959865f640af92682" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada parcial" />
+                              <ChipStatus id="678ecf6ec5f08e8a0f36d5dd" addStatus={addStatus} removeStatus={deleteStatus} title="Cancelada" />
+                            </div>
+                          )}
+                          {permissions.components.includes('filterbydates') && (
+                            <div className="flex gap-x-4 justify-end items-center">
+                              <DateRangePicker 
+                                className='mt-2'
+                                placeholder='Seleccione un rango de fechas'
+                                onValueChange={(e) => {
+                                  setRangeDate(e);
+                                  if(e.from && e.to){
+                                    handleDate(e.from, e.to);
+                                  }
+                                }}
+                                value={rangeDate}
+                                locale={es}
+                              />
+                            </div>
+                          )}
                       </div>
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-3">
-        <Card amount={totalInvoices?.totalInvoicesPayment?.total || 0} title="Pagadas" footer={(totalInvoices?.totalInvoicesPayment?.quantity || 0)+" facturas"}></Card>
-        <Card amount={totalInvoices?.totalInvoiceIssued?.total || 0} title="Emitidas" footer={(totalInvoices?.totalInvoiceIssued?.quantity || 0)+" facturas"}></Card>
-        <Card amount={totalInvoices?.totalInvoiceOverdue?.total || 0} title="Vencidas" footer={(totalInvoices?.totalInvoiceOverdue?.quantity || 0)+" facturas"}></Card>
-        <Card amount={0} title="Total" footer="0 facturas"></Card>
+        {permissions.components.includes('cardinvoicespayment') && (
+          <Card amount={totalInvoices?.totalInvoicesPayment?.total || 0} title="Pagadas" footer={(totalInvoices?.totalInvoicesPayment?.quantity || 0)+" facturas"}></Card>
+        )}
+        {permissions.components.includes('cardinvoicesissued') && (
+          <Card amount={totalInvoices?.totalInvoiceIssued?.total || 0} title="Emitidas" footer={(totalInvoices?.totalInvoiceIssued?.quantity || 0)+" facturas"}></Card>
+        )}
+        {permissions.components.includes('cardinvoicesoverdue') && (
+          <Card amount={totalInvoices?.totalInvoiceOverdue?.total || 0} title="Vencidas" footer={(totalInvoices?.totalInvoiceOverdue?.quantity || 0)+" facturas"}></Card>
+        )}
+        {permissions.components.includes('cardinvoicestotal') && (
+          <Card amount={0} title="Total" footer="0 facturas"></Card>
+        )}
       </div>
-      {/* <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
-        <div className="flex items-center w-full max-w-96">
-          <Link href={'/'}>
-            <TooltipContainerIcon label="Regresar">
-              <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
-                <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
-              </div>
-            </TooltipContainerIcon>
-          </Link>
-          <p className="text-xl ml-4 font-medium">Facturas</p>
-        </div>
-        <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
-          <SearchInTable placeH={"Buscar factura.."} />
-          <div className={''}>
-            <div className="flex gap-x-4 justify-end items-center">
-              <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} />} fileName={'Facturacion'} >
-                {({loading, url, error, blob}) => 
-                  loading? (
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                    </Tooltip>
-                  ) : (
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                    </Tooltip>
-                  ) }
-              </PDFDownloadLink>
-              <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {widthPage > 1080 && filterElemnts} */}
 
       <div className="2xl:hidden mt-5 justify-between gap-x-2">
         <div className="flex items-center w-full">
@@ -511,15 +469,19 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
           </Link>
           <p className="text-xl ml-4 font-medium">Remisiones</p>
           <div className="flex-1 flex justify-end sm:hidden">
-            <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+            {permissions.permission.create && (
+              <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+            )}
           </div>
         </div>
         <div className="xl:flex lg:gap-x-3 items-center">
           <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3 xl:order-2`}>
             <div className="flex-1 flex justify-end">
-              <SearchInTable placeH={"Buscar factura.."} />
+              {permissions.permission.searchfull && (
+                <SearchInTable placeH={"Buscar factura.."} />
+              )}
             </div>
-            {satCompany && (
+            {satCompany && permissions.permission.print && (
               <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} satCompany={satCompany} />} fileName={'Facturacion'} >
                 {({loading, url, error, blob}) => 
                   loading? (
@@ -536,7 +498,9 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
               </PDFDownloadLink>
             )}
             <div className="hidden sm:flex justify-end">
-              <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+              {permissions.permission.create && (
+                <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+              )}
             </div>
           </div>
           {filterElemnts}
@@ -556,12 +520,14 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
         </div>
         <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
           <div className="flex items-center">
-            <SearchInTable placeH={"Buscar factura.."} />
+            {permissions.permission.searchfull && (
+              <SearchInTable placeH={"Buscar factura.."} />
+            )}
           </div>
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {filterElemnts}
-              {satCompany && (
+              {satCompany && permissions.permission.print && (
                 <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} satCompany={satCompany} />} fileName={'Facturacion'} >
                   {({loading, url, error, blob}) => 
                     loading? (
@@ -577,18 +543,25 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
                     ) }
                 </PDFDownloadLink>
               )}
-              <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+              {permissions.permission.create && (
+                <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+              )}
             </div>
           </div>
         </div>
       </div>
       
-      <div className="hidden md:block w-full">
-        <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
-      </div>
-      <div className="block md:hidden w-full mt-3">
-        <ListData data={data} token={token} delInvoice={delInvoice} updateView={updateView} user={user} optionsCancel={optionsCancel} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
+          </div>
+          <div className="block md:hidden w-full mt-3">
+            <ListData data={data} token={token} delInvoice={delInvoice} updateView={updateView} user={user} 
+              optionsCancel={optionsCancel} permissions={permissions} />
+          </div>
+        </>
+      )}
       
       {showNewCollection && selInvoice && (
         <ContainerSideNav width="w-full max-w-xl">
@@ -602,10 +575,12 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
         </ContainerSideNav>
       ) } */}
       {/* se comenta mientras esta en construccion */}
-      <ContainerSideNav width="w-full max-w-3xl" open={showNewInvoice}>
-        <AddNewReferralsComponent showForm={setShowNewinvoice} token={token} user={user}
-          company={company} />
-      </ContainerSideNav>
+      {permissions.permission.create && (
+        <ContainerSideNav width="w-full max-w-3xl" open={showNewInvoice}>
+          <AddNewReferralsComponent showForm={setShowNewinvoice} token={token} user={user}
+            company={company} />
+        </ContainerSideNav>
+      )}
     </>
   )
 }
@@ -647,9 +622,9 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   return table;
 }
 
-const ListData = ({data, token, delInvoice, updateView, user, optionsCancel }: 
+const ListData = ({data, token, delInvoice, updateView, user, optionsCancel, permissions }: 
   {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void, user:string, 
-    updateView: () => void, optionsCancel:Options[] }) => {
+    updateView: () => void, optionsCancel:Options[], permissions:IPermissionsAndComponents }) => {
 
   // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
@@ -679,7 +654,7 @@ const ListData = ({data, token, delInvoice, updateView, user, optionsCancel }:
 
           {filterData.map((i) => (
             <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} updateView={updateView} 
-                user={user} optionsCancel={optionsCancel} />
+                user={user} optionsCancel={optionsCancel} permissions={permissions} />
           ))}
 
         </nav>
@@ -688,9 +663,9 @@ const ListData = ({data, token, delInvoice, updateView, user, optionsCancel }:
   )
 }
 
-const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCancel }: 
+const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCancel, permissions }: 
   {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void, user:string, updateView: () => void, 
-    optionsCancel:Options[]}) => {
+    optionsCancel:Options[], permissions:IPermissionsAndComponents}) => {
   
   return(
     <div role="button"
@@ -708,9 +683,11 @@ const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCance
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
           {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
               remove={RemoveGlossary} removeElement={delGlossary} /> */}
-            < RemoveElement id={ invoice.idEstimates? `${invoice.id}/${invoice.idEstimates}`: `${invoice.id}`} 
+            {permissions.permission.delete && (
+              <RemoveElement id={ invoice.idEstimates? `${invoice.id}/${invoice.idEstimates}`: `${invoice.id}`} 
                       name={invoice.estimate ?? invoice.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
+            )}
             
             {invoice.accountreceivablesCount == 0 && (
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 

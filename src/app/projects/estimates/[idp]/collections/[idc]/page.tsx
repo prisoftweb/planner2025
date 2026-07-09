@@ -5,7 +5,8 @@ import { getCollectionMin, getInvoicesByCollectionMin } from "@/app/api/routeCol
 import ContainerCollectionProfile from "@/components/projects/estimates/collections/ContainerCollectionProfile";
 import Header from "@/components/HeaderPage";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function page({ params, searchParams }: 
   { params: { idp: string, idc:string }, searchParams: { page: string }}) {
@@ -14,10 +15,11 @@ export default async function page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [collection, invoices, resresource] = await Promise.all([
+  const [collection, invoices, resresource, rescomponents] = await Promise.all([
     getCollectionMin(token, params.idc),
     getInvoicesByCollectionMin(token, params.idc),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects/estimates', 'id/collections/id'),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -27,6 +29,15 @@ export default async function page({ params, searchParams }:
         </>
       )
     }
+  
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/glossary`} message={rescomponents} />
+      </>
+    )
+  }
   
   if(typeof(collection)==='string'){
     return (
@@ -52,6 +63,11 @@ export default async function page({ params, searchParams }:
     )
   }
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return (
     <>
       <Navigation user={user} token={token} resources={resresource} />
@@ -60,7 +76,7 @@ export default async function page({ params, searchParams }:
                   (searchParams.page=='collections'? '/collections': (searchParams.page=='collectionsHistory'? `/collections/history` : `/projects/estimates/${params.idp}/collections`))}>
           <></>
         </Header>
-        <ContainerCollectionProfile collection={collection} token={token} usr={user._id} invoices={invoices} />
+        <ContainerCollectionProfile collection={collection} token={token} usr={user._id} invoices={invoices} permissions={result} />
       </div>
     </>
   )

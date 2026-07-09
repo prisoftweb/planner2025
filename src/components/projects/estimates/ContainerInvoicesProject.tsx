@@ -10,6 +10,8 @@ import { IInvoiceByProject, ITotalInvoicesByProject, ITotalInvoiceResumen } from
 import NavTabEstimates from "./NavTabEstimates";
 import TableInvoicesComponent from "./TableInvoicesComponent";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
+
 interface OptionsDashboard {
   label: string,
   costo: number
@@ -25,11 +27,12 @@ type Props = {
   totalInvoiceProject: ITotalInvoicesByProject[], 
   resumenInvoice:ITotalInvoiceResumen 
   pageQuery:string | undefined,
-  company:string
+  company:string,
+  permissions:IPermissionsAndComponents
 }
 
 export default function ContainerInvoicesProject({project, optConditions, optProjects, 
-  token, user, invoices, totalInvoiceProject, resumenInvoice, pageQuery, company }: Props) {
+  token, user, invoices, totalInvoiceProject, resumenInvoice, pageQuery, company, permissions }: Props) {
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
@@ -64,69 +67,75 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
-        <div className="bg-white p-3">
-          <img src={project.client.logo} alt={project.client.name} className="h-32 w-auto " />
-          <div className="flex items-center gap-x-2">
-            <img src={project.photo} alt={project.title} className="rounded-full w-14 h-auto" />
-            <div>
-              <p className="text-blue-500">{project.title}</p>
-              <p className="text-blue-300">{CurrencyFormatter({
-                currency: 'MXN',
-                value: project.amount
-              })}</p>
-              <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
+        {permissions.components.includes('cardclientinvoice') && (
+          <div className="bg-white p-3">
+            <img src={project.client.logo} alt={project.client.name} className="h-32 w-auto " />
+            <div className="flex items-center gap-x-2">
+              <img src={project.photo} alt={project.title} className="rounded-full w-14 h-auto" />
+              <div>
+                <p className="text-blue-500">{project.title}</p>
+                <p className="text-blue-300">{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: project.amount
+                })}</p>
+                <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        <div className="bg-white p-3">
-          <DonutChartComponent data={dataInvoicesDashboard} colors={colors} category="costo"
-                        categories={categoriesEstimates} flexWrap="" size="w-60 h-60" />
-        </div>
+        {permissions.components.includes('cardresumeinvoice') && (
+          <div className="bg-white p-3">
+            <DonutChartComponent data={dataInvoicesDashboard} colors={colors} category="costo"
+                          categories={categoriesEstimates} flexWrap="" size="w-60 h-60" />
+          </div>
+        )}
 
-        <div className="bg-white p-3">
-          <div className=" border border-gray-700">
-            <div className="flex items-center border border-gray-700">
-              <p className="bg-green-600 text-white p-2 w-40 text-center">Facturado</p>
-              <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
-                currency: 'MXN',
-                value: resumenInvoice.billedTotal.billedTotal
-              })}</p>
-            </div>
-            <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Monto de proyecto</p>
-              <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
-                // value: project.amount
-                value: project.amountotal || 0
-              })}</p>
-            </div>
+        {permissions.components.includes('cardstatsinvoice') && (
+          <div className="bg-white p-3">
+            <div className=" border border-gray-700">
+              <div className="flex items-center border border-gray-700">
+                <p className="bg-green-600 text-white p-2 w-40 text-center">Facturado</p>
+                <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: resumenInvoice.billedTotal.billedTotal
+                })}</p>
+              </div>
+              <div className="flex justify-between items-center border border-slate-700 p-2">
+                <p className="text-xs text-slate-600">Monto de proyecto</p>
+                <p className="text-slate-600 text-right">{CurrencyFormatter({
+                  currency: 'MXN',
+                  // value: project.amount
+                  value: project.amountotal || 0
+                })}</p>
+              </div>
 
-            <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Estimado acumulado</p>
-              <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
-                value: resumenInvoice.totalAccumulated.estimatedTotal
-              })}</p>
-            </div>
+              <div className="flex justify-between items-center border border-slate-700 p-2">
+                <p className="text-xs text-slate-600">Estimado acumulado</p>
+                <p className="text-slate-600 text-right">{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: resumenInvoice.totalAccumulated.estimatedTotal
+                })}</p>
+              </div>
 
-            <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Pendiente de facturar</p>
-              <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
-                value: resumenInvoice.totalAccumulated.estimatedTotal - resumenInvoice.billedTotal.billedTotal
-              })}</p>
-            </div>
+              <div className="flex justify-between items-center border border-slate-700 p-2">
+                <p className="text-xs text-slate-600">Pendiente de facturar</p>
+                <p className="text-slate-600 text-right">{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: resumenInvoice.totalAccumulated.estimatedTotal - resumenInvoice.billedTotal.billedTotal
+                })}</p>
+              </div>
 
-            <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Pendiente de estimar</p>
-              <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
-                value:  project.amount - resumenInvoice.totalAccumulated.estimatedTotal
-              })}</p>
+              <div className="flex justify-between items-center border border-slate-700 p-2">
+                <p className="text-xs text-slate-600">Pendiente de estimar</p>
+                <p className="text-slate-600 text-right">{CurrencyFormatter({
+                  currency: 'MXN',
+                  value:  project.amount - resumenInvoice.totalAccumulated.estimatedTotal
+                })}</p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
       </div>
       
@@ -135,7 +144,7 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
       </div>
       
       <TableInvoicesComponent token={token} project={project} user={user} pageQuery={pageQuery} 
-        resumenInvoice={resumenInvoice} company={company} />
+        resumenInvoice={resumenInvoice} company={company} permissions={permissions} />
     </>
   )
 }

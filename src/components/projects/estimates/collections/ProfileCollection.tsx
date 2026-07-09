@@ -8,9 +8,10 @@ import { insertConditionInCollection } from "@/app/api/routeCollections";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { getCollectionMin } from "@/app/api/routeCollections";
 import { useState } from "react";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function ProfileCollection({collection, token, user}: 
-  {collection:IOneCollectionMin, token:string, user:string}){
+export default function ProfileCollection({collection, token, user, permissions}: 
+  {collection:IOneCollectionMin, token:string, user:string, permissions:IPermissionsAndComponents}){
 
   const [oneCollection, setOneCollection]=useState<IOneCollectionMin>(collection);
 
@@ -107,7 +108,7 @@ export default function ProfileCollection({collection, token, user}:
           </div>
         </div>
 
-        {isDeposited && (
+        {isDeposited && permissions.components.includes('refundpayment') && (
           <div className="bg-white p-3 rounded-lg shadow-md mt-2">
             <div className="flex gap-x-2 justify-center">
               <button

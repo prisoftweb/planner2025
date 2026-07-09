@@ -47,9 +47,10 @@ import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { TbFileInvoice } from "react-icons/tb";
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TableSatInvoicesComponent({token, user, company, optionsCancel}: 
-  {token:string, user:string, company:string, optionsCancel:Options[]}) {
+export default function TableSatInvoicesComponent({token, user, company, optionsCancel, permissions}: 
+  {token:string, user:string, company:string, optionsCancel:Options[], permissions:IPermissionsAndComponents}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByDateAndConditionMin[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -191,11 +192,13 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
-          {row.original.typeInvoice !== 'Timbrada' && (
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
+          {row.original.typeInvoice !== 'Timbrada' && permissions.permission.delete && (
             < RemoveElement id={ row.original.idEstimates? `${row.original.id}/${row.original.idEstimates}`: `${row.original.id}`} 
                       name={row.original.estimate ?? row.original.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
@@ -268,12 +271,14 @@ export default function TableSatInvoicesComponent({token, user, company, options
       enableSorting:false,
       header: ({table}:any) => (
         <div className="flex gap-x-2 items-center">
-          <input type="checkbox"
-            checked={table.getIsAllRowsSelected()}
-            onClick={()=> {
-              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-            }}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
           <p>Accion</p>
         </div>
       )
@@ -421,36 +426,52 @@ export default function TableSatInvoicesComponent({token, user, company, options
       //xl:order-1 en el primer div
   // let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 flex-wrap 2xl:flex-nowrap">
   let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 flex-wrap min-[1700px]:flex-nowrap">
-                        <div className="flex gap-x-4 gap-y-2 justify-end items-center flex-wrap sm:flex-nowrap">
-                          <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
-                          <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
-                          <ChipStatus id="678ed05cc5f08e8a0f36d5e1" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada" />
-                          <ChipStatus id="67d20e2959865f640af92682" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada parcial" />
-                          <ChipStatus id="678ecf6ec5f08e8a0f36d5dd" addStatus={addStatus} removeStatus={deleteStatus} title="Cancelada" />
-                        </div>
-                        <div className="flex gap-x-4 justify-end items-center">
-                          <DateRangePicker 
-                            className='mt-2'
-                            placeholder='Seleccione un rango de fechas'
-                            onValueChange={(e) => {
-                              setRangeDate(e);
-                              if(e.from && e.to){
-                                handleDate(e.from, e.to);
-                              }
-                            }}
-                            value={rangeDate}
-                            locale={es}
-                          />
-                        </div>
+                        {permissions.components.includes('filterchips') && (
+                          <div className="flex gap-x-4 gap-y-2 justify-end items-center flex-wrap sm:flex-nowrap">
+                            <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
+                            <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
+                            <ChipStatus id="678ed05cc5f08e8a0f36d5e1" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada" />
+                            <ChipStatus id="67d20e2959865f640af92682" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada parcial" />
+                            <ChipStatus id="678ecf6ec5f08e8a0f36d5dd" addStatus={addStatus} removeStatus={deleteStatus} title="Cancelada" />
+                          </div>
+                        )}
+                        {permissions.components.includes('filterbydates') && (
+                          <div className="flex gap-x-4 justify-end items-center">
+                            <DateRangePicker 
+                              className='mt-2'
+                              placeholder='Seleccione un rango de fechas'
+                              onValueChange={(e) => {
+                                setRangeDate(e);
+                                if(e.from && e.to){
+                                  handleDate(e.from, e.to);
+                                }
+                              }}
+                              value={rangeDate}
+                              locale={es}
+                            />
+                          </div>
+                        )}
                       </div>
 
   return(
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-3">
-        <Card amount={totalInvoices?.totalInvoicesPayment?.total || 0} title="Pagadas" footer={(totalInvoices?.totalInvoicesPayment?.quantity || 0)+" facturas"}></Card>
+        {/* <Card amount={totalInvoices?.totalInvoicesPayment?.total || 0} title="Pagadas" footer={(totalInvoices?.totalInvoicesPayment?.quantity || 0)+" facturas"}></Card>
         <Card amount={totalInvoices?.totalInvoiceIssued?.total || 0} title="Emitidas" footer={(totalInvoices?.totalInvoiceIssued?.quantity || 0)+" facturas"}></Card>
         <Card amount={totalInvoices?.totalInvoiceOverdue?.total || 0} title="Vencidas" footer={(totalInvoices?.totalInvoiceOverdue?.quantity || 0)+" facturas"}></Card>
-        <Card amount={0} title="Total" footer="0 facturas"></Card>
+        <Card amount={0} title="Total" footer="0 facturas"></Card> */}
+        {permissions.components.includes('cardinvoicespayment') && (
+          <Card amount={totalInvoices?.totalInvoicesPayment?.total || 0} title="Pagadas" footer={(totalInvoices?.totalInvoicesPayment?.quantity || 0)+" facturas"}></Card>
+        )}
+        {permissions.components.includes('cardinvoicesissued') && (
+          <Card amount={totalInvoices?.totalInvoiceIssued?.total || 0} title="Emitidas" footer={(totalInvoices?.totalInvoiceIssued?.quantity || 0)+" facturas"}></Card>
+        )}
+        {permissions.components.includes('cardinvoicesoverdue') && (
+          <Card amount={totalInvoices?.totalInvoiceOverdue?.total || 0} title="Vencidas" footer={(totalInvoices?.totalInvoiceOverdue?.quantity || 0)+" facturas"}></Card>
+        )}
+        {permissions.components.includes('cardinvoicestotal') && (
+          <Card amount={0} title="Total" footer="0 facturas"></Card>
+        )}
       </div>
 
       <div className="2xl:hidden mt-5 justify-between gap-x-2">
@@ -464,16 +485,20 @@ export default function TableSatInvoicesComponent({token, user, company, options
           </Link>
           <p className="text-xl ml-4 font-medium">Timbradas</p>
           <div className="flex-1 flex justify-end sm:hidden">
-            <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+            {permissions.permission.create && (
+              <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+            )}
           </div>
         </div>
         <div className="xl:flex lg:gap-x-3 items-center">
           {/* <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3 xl:order-2`}> */}
           <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3`}>
             <div className="flex-1 flex justify-end">
-              <SearchInTable placeH={"Buscar factura.."} />
+              {permissions.permission.searchfull && (
+                <SearchInTable placeH={"Buscar factura.."} />
+              )}
             </div>
-            {satCompany && (
+            {satCompany && permissions.permission.print && (
               <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} satCompany={satCompany} />} fileName={'Facturacion'} >
                 {({loading, url, error, blob}) => 
                   loading? (
@@ -490,7 +515,9 @@ export default function TableSatInvoicesComponent({token, user, company, options
               </PDFDownloadLink>
             )}
             <div className="hidden sm:flex justify-end">
-              <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+              {permissions.permission.create && (
+                <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+              )}
             </div>
           </div>
           {filterElemnts}
@@ -512,12 +539,14 @@ export default function TableSatInvoicesComponent({token, user, company, options
         </div>
         <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
           <div className="flex items-center">
-            <SearchInTable placeH={"Buscar factura.."} />
+            {permissions.permission.searchfull && (
+              <SearchInTable placeH={"Buscar factura.."} />
+            )}
           </div>
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {filterElemnts}
-              {satCompany && (
+              {satCompany && permissions.permission.print && (
                 <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} satCompany={satCompany} />} fileName={'Facturacion'} >
                   {({loading, url, error, blob}) => 
                     loading? (
@@ -533,19 +562,25 @@ export default function TableSatInvoicesComponent({token, user, company, options
                     ) }
                 </PDFDownloadLink>
               )}
-              <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+              {permissions.permission.create && (
+                <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
+              )}
             </div>
           </div>
         </div>
       </div>
       
-      <div className="hidden md:block w-full">
-        <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
-      </div>
-      <div className="block md:hidden w-full mt-3">
-        <ListData data={data} token={token} delInvoice={delInvoice} updateView={updateView} user={user} 
-          optionsCancel={optionsCancel} company={company} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
+          </div>
+          <div className="block md:hidden w-full mt-3">
+            <ListData data={data} token={token} delInvoice={delInvoice} updateView={updateView} user={user} 
+              optionsCancel={optionsCancel} company={company} permissions={permissions} />
+          </div>
+        </>
+      )}
       
       {showNewCollection && selInvoice && (
         <ContainerSideNav width="w-full max-w-xl">
@@ -554,10 +589,12 @@ export default function TableSatInvoicesComponent({token, user, company, options
         </ContainerSideNav>
       )}
 {/* el index stepper se debe manejar desde aqui para poder manipular responsivo de los compoentnes */}
-      <ContainerSideNav width={`w-full ${step > 1? 'max-w-3xl xl:max-w-[75%]': 'max-w-3xl'}`} open={showNewInvoice}>
-        <AddNewSatInvoiceComponent showForm={setShowNewinvoice} isNew={showNewInvoice} token={token} 
-          user={user} handleStep={handleStep} step={step} company={company} />
-      </ContainerSideNav>
+      {permissions.permission.create && (
+        <ContainerSideNav width={`w-full ${step > 1? 'max-w-3xl xl:max-w-[75%]': 'max-w-3xl'}`} open={showNewInvoice}>
+          <AddNewSatInvoiceComponent showForm={setShowNewinvoice} isNew={showNewInvoice} token={token} 
+            user={user} handleStep={handleStep} step={step} company={company} />
+        </ContainerSideNav>
+      )}
     </>
   )
 }
@@ -598,9 +635,9 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   return table;
 }
 
-const ListData = ({data, token, delInvoice, updateView, user, optionsCancel, company }: 
+const ListData = ({data, token, delInvoice, updateView, user, optionsCancel, company, permissions }: 
   {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void, user:string, 
-    updateView: () => void, optionsCancel:Options[], company:string }) => {
+    updateView: () => void, optionsCancel:Options[], company:string, permissions:IPermissionsAndComponents }) => {
 
   const {search} = useTableStates();
 
@@ -614,39 +651,6 @@ const ListData = ({data, token, delInvoice, updateView, user, optionsCancel, com
     // const term = search.toLowerCase();
     const term = search.trim().toLowerCase();
 
-    // const d = data.filter(item =>
-    //   item.folio?.toString().toLowerCase().includes(term) ||
-    //   item.client?.toLowerCase().includes(term) ||
-    //   item.project?.toLowerCase().includes(term) ||
-    //   item.estimate?.toLowerCase().includes(term) ||
-    //   item.fecha?.toLowerCase().includes(term) ||
-    //   item.amount?.toString().includes(search) ||
-    //   item.subtotal?.toString().includes(search)
-    // );
-    // const d = data.filter(item =>
-    //   item.folio?.toString().toLowerCase().includes(term) ||
-    //   item.client?.toLowerCase().includes(term) ||
-    //   item.nameProject?.toLowerCase().includes(term) ||
-    //   item.estimate?.toLowerCase().includes(term) ||
-    //   item.fecha?.toLowerCase().includes(term) ||
-    //   item.amount?.toString().includes(search) ||
-    //   item.subtotal?.toString().includes(search)
-    // );
-
-    // const d = data.filter(item =>
-    //   [
-    //     item.folio,
-    //     item.client,
-    //     item.nameProject,
-    //     item.estimate,
-    //     item.fecha,
-    //     item.amount,
-    //     item.subtotal
-    //   ].filter(Boolean)
-    //     .some(value =>
-    //       value.toString().toLowerCase().includes(term)
-    //     )
-    // );
     const d = data.filter(item =>
       [
         item.folio,
@@ -664,38 +668,6 @@ const ListData = ({data, token, delInvoice, updateView, user, optionsCancel, com
         )
     );
 
-    // data.slice(0, 5).forEach(item => {
-    //   console.log({
-    //     folio: item.folio?.toString().toLowerCase().includes(term),
-    //     client: item.client?.toLowerCase().includes(term),
-    //     project: item.project?.toLowerCase().includes(term),
-    //     estimate: item.estimate?.toLowerCase().includes(term),
-    //     fecha: item.fecha?.toLowerCase().includes(term),
-    //     amount: item.amount?.toString().includes(search),
-    //     subtotal: item.subtotal?.toString().includes(search),
-    //     item
-    //   });
-
-    //   console.log(JSON.stringify({
-    //     folio: item.folio?.toString().toLowerCase().includes(term),
-    //     client: item.client?.toLowerCase().includes(term),
-    //     project: item.project?.toLowerCase().includes(term),
-    //     estimate: item.estimate?.toLowerCase().includes(term),
-    //     fecha: item.fecha?.toLowerCase().includes(term),
-    //     amount: item.amount?.toString().includes(search),
-    //     subtotal: item.subtotal?.toString().includes(search),
-    //     item
-    //   }));
-    // });
-    // console.table(
-    //   data.slice(0, 10).map(item => ({
-    //     project: item.project,
-    //     nameProject: item.nameProject,
-    //     client: item.client,
-    //     matchProject: item.project?.toLowerCase().includes("orl"),
-    //     matchNameProject: item.nameProject?.toLowerCase().includes("orl")
-    //   }))
-    // );
     filterData=d;
   }
 
@@ -707,7 +679,7 @@ const ListData = ({data, token, delInvoice, updateView, user, optionsCancel, com
 
           {filterData.map((i) => (
             <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} updateView={updateView} user={user} 
-              optionsCancel={optionsCancel} company={company} />
+              optionsCancel={optionsCancel} company={company} permissions={permissions} />
           ))}
 
         </nav>
@@ -716,9 +688,9 @@ const ListData = ({data, token, delInvoice, updateView, user, optionsCancel, com
   )
 }
 
-const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCancel, company }: 
+const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCancel, company, permissions }: 
   {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void, user:string, updateView: () => void, 
-    optionsCancel:Options[], company:string}) => {
+    optionsCancel:Options[], company:string, permissions:IPermissionsAndComponents}) => {
   
   return(
     <div role="button"
@@ -732,9 +704,11 @@ const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCance
     >
       <div className="flex items-center w-full ">
         <div className="grid mr-4 place-items-center">
-          <RemoveElement id={ invoice.idEstimates? `${invoice.id}/${invoice.idEstimates}`: `${invoice.id}`} 
+          {permissions.permission.delete && (
+            <RemoveElement id={ invoice.idEstimates? `${invoice.id}/${invoice.idEstimates}`: `${invoice.id}`} 
                     name={invoice.estimate ?? invoice.folio} remove={removeInvoice} 
                     removeElement={delInvoice} token={token} />
+          )}
           
           {invoice.accountreceivablesCount == 0 && (
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
