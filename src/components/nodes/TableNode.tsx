@@ -10,6 +10,7 @@ import { Options } from "@/interfaces/Common";
 import TooltipPencilIcon from "../tooltipIcons/TooltipPencilIcon";
 import ContainerSideNav from "../ContainerSideNav";
 import { useTableStates } from "@/app/store/tableStates";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Params = {
   data:NodeTable[], 
@@ -18,11 +19,12 @@ type Params = {
   workflows: Options[], 
   glossaries:Options[], 
   optRels: Options[], 
-  optDesc: Options[] 
+  optDesc: Options[],
+  permissions:IPermissionsAndComponents
 }
 
 export default function TableNode({data, token, departments, glossaries, workflows, 
-  optDesc, optRels}: Params){
+  optDesc, optRels, permissions}: Params){
   
   const columnHelper = createColumnHelper<NodeTable>();
 
@@ -38,28 +40,38 @@ export default function TableNode({data, token, departments, glossaries, workflo
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
         </div>
       ),
       enableSorting:false,
       header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
+        <>
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
+        </>
       )
     }),
     columnHelper.accessor(row => row.id, {
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <TooltipPencilIcon element={row.original} handleBooleanValue={setEditNode} handleElement={setNodeEdit} />
-          <DeleteElement id={row.original.id} name={row.original.department} remove={removeNode} token={token} />
+          {permissions.permission.update && (
+            <TooltipPencilIcon element={row.original} handleBooleanValue={setEditNode} handleElement={setNodeEdit} />
+          )}
+          {permissions.permission.delete && (
+            <DeleteElement id={row.original.id} name={row.original.department} remove={removeNode} token={token} />
+          )}
         </div>
       ),
       enableSorting:false,
@@ -92,24 +104,29 @@ export default function TableNode({data, token, departments, glossaries, workflo
   
   return(
     <>
-      {editNode && (
+      {editNode && permissions.permission.update && (
         <ContainerSideNav width="w-full max-w-md">
           <UpdateNode showForm={handleEdit} departments={departments} 
             glossaries={glossaries} id={nodeEdit?.id || ''} token={token} workFlows={workflows} 
             optDesc={optDesc} optRels={optRels} node={nodeEdit} />
         </ContainerSideNav>
       ) }
-      <div className="hidden md:block w-full">
-        <Table columns={columns} data={data} placeH="Buscar nodo.." />
-      </div>
-      <div className="block md:hidden w-full">
-        <ListData data={data} token={token} />
-      </div>
+
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            <Table columns={columns} data={data} placeH="Buscar nodo.." />
+          </div>
+          <div className="block md:hidden w-full">
+            <ListData data={data} token={token} permissions={permissions} />
+          </div>
+        </>
+      )}
     </>
   )
 }
 
-const ListData = ({data, token}: {data: NodeTable[], token:string}) => {
+const ListData = ({data, token, permissions}: {data: NodeTable[], token:string, permissions:IPermissionsAndComponents}) => {
 
   // const [dataReports, setDataReports] = useState(data);
 
@@ -131,7 +148,7 @@ const ListData = ({data, token}: {data: NodeTable[], token:string}) => {
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData.map((c) => (
-            <CardNode node={c} key={c.id} token={token} />
+            <CardNode node={c} key={c.id} token={token} permissions={permissions} />
           ))}
 
         </nav>
@@ -140,8 +157,8 @@ const ListData = ({data, token}: {data: NodeTable[], token:string}) => {
   )
 }
 
-const CardNode = ({node, token}: 
-  {node:NodeTable, token:string}) => {
+const CardNode = ({node, token, permissions}: 
+  {node:NodeTable, token:string, permissions:IPermissionsAndComponents}) => {
   
   return(
     <div role="button"
@@ -157,7 +174,9 @@ const CardNode = ({node, token}:
         <div className="grid mr-4 place-items-center">
           <img alt="responsable" src={ '/img/catalogs.svg'}
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-          <DeleteElement id={node.id} name={node.department} remove={removeNode} token={token} />
+          {permissions.permission.delete && (
+            <DeleteElement id={node.id} name={node.department} remove={removeNode} token={token} />
+          )}
         </div>
         <div className="w-full">
           <div className="flex gap-x-3 w-full justify-between items-center p-3">

@@ -16,6 +16,7 @@ import { propsTooltip } from "@/libs/animations"
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
 import { showToastMessageError } from "../Alert"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   project:OneProjectMin, 
@@ -23,10 +24,11 @@ type Props = {
   id:string,
   user:string
   guarantees: IGuaranteeByPojectMin[],
-  company:string
+  company:string,
+  permissions:IPermissionsAndComponents
 }
 
-export default function ProjectGuaranteeFundsContainer({project, token, id, user, guarantees, company}: Props){
+export default function ProjectGuaranteeFundsContainer({project, token, id, user, guarantees, company, permissions}: Props){
 
   const {updateOneProjectStore} = useOneProjectsStore();
 
@@ -59,10 +61,12 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
           {/* <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
                       removeElement={delCollection} token={token} /> */}
         </div>
@@ -183,7 +187,7 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
     <>
       {/* <div className="flex w-full max-w-2xl justify-end items-center p-3"> */}
       <div className="flex w-full justify-end items-center p-3">
-        {satCompany && (
+        {satCompany && permissions.permission.print && (
           <PDFDownloadLink document={<DownloadGuaranteeByProjectPDF project={project} token={token} guarantees={guarantees} satCompany={satCompany} />} fileName={'Fondo de garantia - '+project.title} >
             {({loading, url, error, blob}) => 
               loading? (
@@ -203,12 +207,16 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
       {/* <div className={`flex w-full`}>
         <Table columns={columns} data={data} placeH="Buscar fondo de garantia" typeTable="guaranteefunds" />
       </div> */}
-      <div className="hidden xl:block w-full">
-        <Table columns={columns} data={data} placeH="Buscar fondo de garantia" typeTable="guaranteefunds" />
-      </div>
-      <div className="block xl:hidden w-full">
-        <ListData data={data} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden xl:block w-full">
+            <Table columns={columns} data={data} placeH="Buscar fondo de garantia" typeTable="guaranteefunds" />
+          </div>
+          <div className="block xl:hidden w-full">
+            <ListData data={data} />
+          </div>
+        </>
+      )}
     </>
   )
 }

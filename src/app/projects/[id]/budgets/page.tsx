@@ -7,7 +7,8 @@ import NavTabProject from "@/components/projects/NavTabProject";
 import Header from "@/components/HeaderPage";
 import ContainerBudgetsByProject from "@/components/projects/ContainerBudgetsByProjects";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: 
   { params: { id: string }}){
@@ -18,18 +19,28 @@ export default async function Page({ params }:
 
   // let role = user.rol?.name || '';
 
-  const [project, options, budgets, resresource] = await Promise.all([
+  const [project, options, budgets, resresource, rescomponents] = await Promise.all([
     GetProjectMin(token, params.id),
     getProjectsLV(token),
     // role.toLowerCase().includes('residente') ? getProjectsByUserLV(token, user._id) : getProjectsLV(token),
     GetBudgetsByProjectMin(token, params.id),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'id/budgets'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/glossary`} message={rescomponents} />
       </>
     )
   }
@@ -66,6 +77,11 @@ export default async function Page({ params }:
         <ComponentError page={`/projects/${params.id}/budgets`} message={budgets} />
       </>
     )
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>
@@ -73,16 +89,20 @@ export default async function Page({ params }:
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects">
           <>
-            <div className="hidden sm:block w-full max-w-48 sm:max-w-80 lg:max-w-md">
-              <Selectize options={options} routePage="projects" subpath="/budgets" />
-            </div>
+            {result.components.includes('findall') && (
+              <div className="hidden sm:block w-full max-w-48 sm:max-w-80 lg:max-w-md">
+                <Selectize options={options} routePage="projects" subpath="/budgets" />
+              </div>
+            )}
           </>
         </Header>
-        <div className="block sm:hidden mt-2">
-          <Selectize options={options} routePage="projects" subpath="/budgets" />
-        </div>
+        {result.components.includes('findall') && (
+          <div className="block sm:hidden mt-2">
+            <Selectize options={options} routePage="projects" subpath="/budgets" />
+          </div>
+        )}
         <NavTabProject idPro={params.id} tab='3' />
-        <ContainerBudgetsByProject budgets={budgets} project={project} token={token} user={user._id} />
+        <ContainerBudgetsByProject budgets={budgets} project={project} token={token} user={user._id} permissions={result} />
       </div>
     </>
   )

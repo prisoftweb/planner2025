@@ -5,15 +5,17 @@ import Table from "../Table"
 import { CurrencyFormatter, MoneyFormatter } from "@/app/functions/Globals"
 import { ProjectsBudgetTable } from "@/interfaces/Projects"
 import { ProjectBudgetDataToTableDataProjectMin } from "@/app/functions/SaveProject"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   project:OneProjectMin, 
   token:string, 
   user:string,
-  budgets: IBudgetByProject[]
+  budgets: IBudgetByProject[],
+  permissions:IPermissionsAndComponents
 }
 
-export default function ContainerBudgetsByProject({project, token, user, budgets}: Props){
+export default function ContainerBudgetsByProject({project, token, user, budgets, permissions}: Props){
 
   const columnHelper = createColumnHelper<ProjectsBudgetTable>();
 
@@ -24,20 +26,26 @@ export default function ContainerBudgetsByProject({project, token, user, budgets
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
         </div>
       ),
       enableSorting:false,
       header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
+        <>
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
+        </>
       )
     }),
     columnHelper.accessor('id', {
@@ -132,30 +140,22 @@ export default function ContainerBudgetsByProject({project, token, user, budgets
 
   return(
     <>
-      <div className="hidden lg:block w-full">
-        <Table columns={columns} data={dataExpenses} placeH="Buscar presupuesto.." />
-      </div>
-      <div className="block lg:hidden w-full">
-        <ListData data={dataExpenses} queryParam={queryParam} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden lg:block w-full">
+            <Table columns={columns} data={dataExpenses} placeH="Buscar presupuesto.." />
+          </div>
+          <div className="block lg:hidden w-full">
+            <ListData data={dataExpenses} queryParam={queryParam} />
+          </div>
+        </>
+      )}
     </>
   )
 }
 
 const ListData = ({data, queryParam }: 
   {data: ProjectsBudgetTable[], queryParam:string }) => {
-
-  // const [dataReports, setDataReports] = useState(data);
-  // const {search} = useTableStates();
-
-  // const filterData = useMemo(() => {
-  //   if(search.trim() === ''){
-  //     return data;
-  //   }else{
-  //     const d = data.filter(item => item.Titulo.toLowerCase().includes(search.toLowerCase()));
-  //     return d;
-  //   }
-  // }, [search]);
 
   return(
     <div className="mt-2">
@@ -189,13 +189,6 @@ const CardBudget = ({budget, queryParam }:
         <div className="grid mr-4 place-items-center">
           <img alt="responsable" src={ budget.project.project ?? '/img/users/default.jpg'}
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
-              remove={RemoveGlossary} removeElement={delGlossary} /> */}
-            {/* <RemoveElement id={budget.id} name={budget.Titulo} remove={removeQuotation} 
-              token={token} removeElement={deleteQuatation} /> */}
-            {/* <RemoveElement id={budget.id} name={budget.Descripcion} 
-              remove={RemoveCost} removeElement={delCost} 
-              token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
         </div>
         <div className="w-full"
           onClick={() => window.location.replace(`/projects/budget/${budget.id}${queryParam}`)}

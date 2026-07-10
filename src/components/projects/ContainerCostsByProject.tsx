@@ -27,6 +27,7 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 // }
 
 import { DonutChartJS } from '@/interfaces/DashboardProjects';
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   project:OneProjectMin, 
@@ -35,10 +36,11 @@ type Props = {
   costs: ICostsByProject[],
   costsConcepts?: DonutChartJS, 
   costsCategories?: DonutChartJS,
-  company:string
+  company:string,
+  permissions:IPermissionsAndComponents
 }
 
-export default function ContainerCostsByProject({project, token, user, costs, costsCategories, costsConcepts, company}: Props){
+export default function ContainerCostsByProject({project, token, user, costs, costsCategories, costsConcepts, company, permissions}: Props){
 
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -68,23 +70,27 @@ export default function ContainerCostsByProject({project, token, user, costs, co
         id: 'seleccion',
         cell: ({row}) => (
           <div className="flex gap-x-2 justify-center">
-            <input type="checkbox" 
-              checked={row.getIsSelected()}
-              onChange={row.getToggleSelectedHandler()}
-              className="w-24 cursor-pointer"
-            />
+            {permissions.permission.select && (
+              <input type="checkbox" 
+                checked={row.getIsSelected()}
+                onChange={row.getToggleSelectedHandler()}
+                className="w-24 cursor-pointer"
+              />
+            )}
           </div>
         ),
         enableSorting:false,
         header: ({table}:any) => (
           <div className="w-8">
-            <input type="checkbox"
-              className="w-24 cursor-pointer"
-              checked={table.getIsAllRowsSelected()}
-              onClick={()=> {
-                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-              }}
-            />
+            {permissions.permission.select && (
+              <input type="checkbox"
+                className="w-24 cursor-pointer"
+                checked={table.getIsAllRowsSelected()}
+                onClick={()=> {
+                  table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+                }}
+              />
+            )}
           </div>
         )
       }),
@@ -278,7 +284,7 @@ export default function ContainerCostsByProject({project, token, user, costs, co
       <div className="flex w-full justify-end mt-5 gap-x-2 items-center">
         <SearchInTable placeH="Buscar gasto.." />
         
-        {satCompany && (
+        {satCompany && permissions.permission.print && (
           <PDFDownloadLink document={<DownloadCostsProjectPDF satCompany={satCompany} costs={costs} project={project} />} 
               fileName={`Costos detalles-${project.title}`} >
             {({loading, url, error, blob}) => 
@@ -291,12 +297,16 @@ export default function ContainerCostsByProject({project, token, user, costs, co
         )}
       </div> 
       
-      <div className="hidden xl:block w-full">
-        <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." typeTable="cost" />
-      </div>
-      <div className="block xl:hidden w-full">
-        <ListData data={dataExpenses} queryParam={queryParam} />
-      </div>
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden xl:block w-full">
+            <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." typeTable="cost" />
+          </div>
+          <div className="block xl:hidden w-full">
+            <ListData data={dataExpenses} queryParam={queryParam} />
+          </div>
+        </>
+      )}
     </>
   )
 }

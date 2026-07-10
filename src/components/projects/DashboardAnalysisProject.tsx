@@ -21,6 +21,7 @@ import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadProjectAnalisysPDF from "./DownloadProjectAnalisysPDF"
 import { propsTooltip } from "@/libs/animations";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
@@ -36,8 +37,8 @@ interface OptionsBarChart {
   backgroundColor: string,
 }
 
-export default function DashboardAnalysisProject({token, id, project, company}: 
-  {token:string, id: string, project:OneProjectMin, company:string}){
+export default function DashboardAnalysisProject({token, id, project, company, permissions}: 
+  {token:string, id: string, project:OneProjectMin, company:string, permissions:IPermissionsAndComponents}){
   
   const {oneProjectStore} = useOneProjectsStore();
   const [budgetedControl, setBudgetedControl] = useState<ProjectByBudgetedControl>();
@@ -221,7 +222,7 @@ export default function DashboardAnalysisProject({token, id, project, company}:
           </div>
         </div>
 
-        {budgetedControl && satCompany && (
+        {budgetedControl && satCompany && permissions.permission.print && (
           <PDFDownloadLink document={<DownloadProjectAnalisysPDF project={project} satCompany={satCompany}
                                       token={token} contractualControl={contractualControl}
                                       budgetedControl={budgetedControl} />} fileName={'Analisis - ' + project.title} >
@@ -242,84 +243,88 @@ export default function DashboardAnalysisProject({token, id, project, company}:
 
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-3 mt-3">
-        <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
-          <img src={project.photo} alt="foto" className="rounded-full w-6 h-6" />
-          <div>
-            <p className="text-slate-600">Proyecto</p>
-            <p className="text-xl font-bold">{project.title}</p>
+      {permissions.components.includes('cardsanalysis') && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-3 mt-3">
+          <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
+            <img src={project.photo} alt="foto" className="rounded-full w-6 h-6" />
+            <div>
+              <p className="text-slate-600">Proyecto</p>
+              <p className="text-xl font-bold">{project.title}</p>
+            </div>
           </div>
+
+          <Card amount={showTotal? (project.amount * 1.16): project.amount} title="Monto" >
+            <LiaMoneyCheckAltSolid className="rounded-full w-7 h-7" />
+          </Card>
+
+          <Card amount={(showTotal? budgetedControl?.spentInfo?.spentTotal: budgetedControl?.spentInfo?.spentSubTotal) || 0} title="Costo" >
+            <LiaMoneyBillWaveAltSolid className="rounded-full w-7 h-7" />
+          </Card>
+
+          <Card amount={(showTotal? budgetedControl?.netprofitInfo.netprofitTotal: budgetedControl?.netprofitInfo.netprofitSubTotal) || 0} title="Utilidad" >
+            <GiProfit className="rounded-full w-7 h-7" />
+          </Card>
         </div>
-
-        <Card amount={showTotal? (project.amount * 1.16): project.amount} title="Monto" >
-          <LiaMoneyCheckAltSolid className="rounded-full w-7 h-7" />
-        </Card>
-
-        <Card amount={(showTotal? budgetedControl?.spentInfo?.spentTotal: budgetedControl?.spentInfo?.spentSubTotal) || 0} title="Costo" >
-          <LiaMoneyBillWaveAltSolid className="rounded-full w-7 h-7" />
-        </Card>
-
-        <Card amount={(showTotal? budgetedControl?.netprofitInfo.netprofitTotal: budgetedControl?.netprofitInfo.netprofitSubTotal) || 0} title="Utilidad" >
-          <GiProfit className="rounded-full w-7 h-7" />
-        </Card>
-      </div>
+      )}
 
       <div className="mt-4 rounded-lg space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-3">
 
           <div className="bg-white">
-            <div className="p-3 w-full flex flex-col justify-center">
-              <p className="mb-2">AVANCE DE PROYECTO</p>
-              <div className="flex gap-x-2 items-center">
-                {project.estimatedProject && (
-                  <div>
-                    <div className="border-b-1 border-green-500 py-2">
-                      <p className="text-xs">Duracion de proyecto</p>
+            {permissions.components.includes('advanceproject') && (
+              <div className="p-3 w-full flex flex-col justify-center">
+                <p className="mb-2">AVANCE DE PROYECTO</p>
+                <div className="flex gap-x-2 items-center">
+                  {project.estimatedProject && (
+                    <div>
+                      <div className="border-b-1 border-green-500 py-2">
+                        <p className="text-xs">Duracion de proyecto</p>
+                      </div>
+                      <div className="border-b-1 border-green-500 py-2">
+                        <p className="text-xs">Aplica fondo de garantia</p>
+                        {project.hasguaranteefund? (
+                            <div className="flex gap-x-3 items-center mt-1">
+                              <p className="font-bold">si</p>
+                              <div className="w-4 h-4 bg-green-500"></div>
+                            </div>
+                          ): (
+                            <div className="flex gap-x-3 items-center mt-1">
+                              <p className="font-bold">no</p>
+                              <div className="w-4 h-4 bg-red-500"></div>
+                            </div>
+                          )}
+                      </div>
+                      <div className="py-2">
+                        <p className="text-xs">Aplica anticipo</p>
+                        {project.hasamountChargeOff? (
+                            <div className="flex gap-x-3 items-center mt-1">
+                              <p className="font-bold">si</p>
+                              <div className="w-4 h-4 bg-green-500"></div>
+                            </div>
+                          ): (
+                            <div className="flex gap-x-3 items-center mt-1">
+                              <p className="font-bold">no</p>
+                              <div className="w-4 h-4 bg-red-500"></div>
+                            </div>
+                          )}
+                      </div>
                     </div>
-                    <div className="border-b-1 border-green-500 py-2">
-                      <p className="text-xs">Aplica fondo de garantia</p>
-                      {project.hasguaranteefund? (
-                          <div className="flex gap-x-3 items-center mt-1">
-                            <p className="font-bold">si</p>
-                            <div className="w-4 h-4 bg-green-500"></div>
-                          </div>
-                        ): (
-                          <div className="flex gap-x-3 items-center mt-1">
-                            <p className="font-bold">no</p>
-                            <div className="w-4 h-4 bg-red-500"></div>
-                          </div>
-                        )}
-                    </div>
-                    <div className="py-2">
-                      <p className="text-xs">Aplica anticipo</p>
-                      {project.hasamountChargeOff? (
-                          <div className="flex gap-x-3 items-center mt-1">
-                            <p className="font-bold">si</p>
-                            <div className="w-4 h-4 bg-green-500"></div>
-                          </div>
-                        ): (
-                          <div className="flex gap-x-3 items-center mt-1">
-                            <p className="font-bold">no</p>
-                            <div className="w-4 h-4 bg-red-500"></div>
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                )}
-                
-                <ProgressCircle 
-                  value={oneProjectStore.progress}
-                  radius={100}
-                  strokeWidth={12}
-                >
-                    <span className="text-lg font-medium text-gray-900 dark:text-gray-50">
-                      {oneProjectStore.progress}%
-                    </span>
-                </ProgressCircle>
+                  )}
+                  
+                  <ProgressCircle 
+                    value={oneProjectStore.progress}
+                    radius={100}
+                    strokeWidth={12}
+                  >
+                      <span className="text-lg font-medium text-gray-900 dark:text-gray-50">
+                        {oneProjectStore.progress}%
+                      </span>
+                  </ProgressCircle>
+                </div>
               </div>
-            </div>
+            )}
 
-            { project.estimatedProject && (
+            { project.estimatedProject && permissions.components.includes('contractalcontrol') && (
             // (
               <div className="p-3 mt-3 bg-white">
                 <p className="mb-2">CONTROL CONTRACTUAL</p>
@@ -383,207 +388,204 @@ export default function DashboardAnalysisProject({token, id, project, company}:
 
           </div>
 
-          <div className="p-3 bg-white">
-            <p className="mb-2">CONTROL PRESUPUESTAL</p>
-            {budgetedControl && (
-              <div>
-                <p className=" text-sm mt-2">Monto ({
-                  CurrencyFormatter({
-                    currency:'MXN',
-                    value: (showTotal? budgetedControl?.amountInfo?.amountotal: budgetedControl?.amountInfo?.amount) || 0
-                  })}) 
-                </p>
-                <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.amountInfo?.porcentageTotal: 
-                                                    budgetedControl?.amountInfo?.porcentage) || 0} 
-                  widthBar="w-full" color={colorsRandom[c1]} hei="h-5"
-                  amount={(showTotal? budgetedControl?.amountInfo?.amountotal: budgetedControl?.amountInfo?.amount) || 0} />
-                <div className="flex justify-between">
-                  <div>
-                    <p className="text-xs text-slate-500">
-                      {CurrencyFormatter({
-                        currency:'MXN',
-                        value: budgetedControl.amountInfo.amountotal?? 0
-                      })}
-                    </p>
-                    <p className="text-xs text-slate-700">Monto con IVA</p>
+          {permissions.components.includes('budgetarycontrol') && (
+            <div className="p-3 bg-white">
+              <p className="mb-2">CONTROL PRESUPUESTAL</p>
+              {budgetedControl && (
+                <div>
+                  <p className=" text-sm mt-2">Monto ({
+                    CurrencyFormatter({
+                      currency:'MXN',
+                      value: (showTotal? budgetedControl?.amountInfo?.amountotal: budgetedControl?.amountInfo?.amount) || 0
+                    })}) 
+                  </p>
+                  <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.amountInfo?.porcentageTotal: 
+                                                      budgetedControl?.amountInfo?.porcentage) || 0} 
+                    widthBar="w-full" color={colorsRandom[c1]} hei="h-5"
+                    amount={(showTotal? budgetedControl?.amountInfo?.amountotal: budgetedControl?.amountInfo?.amount) || 0} />
+                  <div className="flex justify-between">
+                    <div>
+                      <p className="text-xs text-slate-500">
+                        {CurrencyFormatter({
+                          currency:'MXN',
+                          value: budgetedControl.amountInfo.amountotal?? 0
+                        })}
+                      </p>
+                      <p className="text-xs text-slate-700">Monto con IVA</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 text-right">
+                        {CurrencyFormatter({
+                          currency:'MXN',
+                          value: (budgetedControl.amountInfo.amountotal?? 0) - (budgetedControl.amountInfo.amount?? 0)
+                        })}
+                      </p>
+                      <p className="text-xs text-slate-700 text-right">IVA</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-slate-500 text-right">
-                      {CurrencyFormatter({
-                        currency:'MXN',
-                        value: (budgetedControl.amountInfo.amountotal?? 0) - (budgetedControl.amountInfo.amount?? 0)
-                      })}
-                    </p>
-                    <p className="text-xs text-slate-700 text-right">IVA</p>
+                  
+                  <p className=" text-sm mt-2">Presupuestado ({
+                    CurrencyFormatter({
+                      currency:'MXN',
+                      value: (showTotal? budgetedControl?.budgetedInfo?.budgetedTotal: 
+                        (budgetedControl?.budgetedInfo?.budgetedTotal - (budgetedControl?.budgetedInfo?.budgetedTotal * 0.16) )) || 0
+                    })}) 
+                  </p>
+                  <ProgressBarComponent label={''} progress={budgetedControl?.budgetedInfo?.porcentageTotal || 0 } 
+                    widthBar="w-full" color={colorsRandom[c2]} hei="h-5"
+                    amount={(showTotal? budgetedControl?.budgetedInfo?.budgetedTotal: 
+                        (budgetedControl?.budgetedInfo?.budgetedTotal - (budgetedControl?.budgetedInfo?.budgetedTotal * 0.16) )) || 0} />
+                  <div className="flex justify-between">
+                    <div>
+                      <p className="text-xs text-slate-500">
+                        {CurrencyFormatter({
+                          currency:'MXN',
+                          value: budgetedControl.budgetedInfo.pendingBugetedTotal?? 0
+                        })}
+                      </p>
+                      <p className="text-xs text-slate-700">Pendiente</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 text-right">
+                        { (100 - (budgetedControl.budgetedInfo.porcentageTotal?? 0)).toFixed(2)}%
+                      </p>
+                      <p className="text-xs text-slate-700 text-right">Porcentaje</p>
+                    </div>
                   </div>
-                </div>
-                
-                <p className=" text-sm mt-2">Presupuestado ({
-                  CurrencyFormatter({
-                    currency:'MXN',
-                    value: (showTotal? budgetedControl?.budgetedInfo?.budgetedTotal: 
-                      (budgetedControl?.budgetedInfo?.budgetedTotal - (budgetedControl?.budgetedInfo?.budgetedTotal * 0.16) )) || 0
-                  })}) 
-                </p>
-                <ProgressBarComponent label={''} progress={budgetedControl?.budgetedInfo?.porcentageTotal || 0 } 
-                  widthBar="w-full" color={colorsRandom[c2]} hei="h-5"
-                  amount={(showTotal? budgetedControl?.budgetedInfo?.budgetedTotal: 
-                      (budgetedControl?.budgetedInfo?.budgetedTotal - (budgetedControl?.budgetedInfo?.budgetedTotal * 0.16) )) || 0} />
-                <div className="flex justify-between">
-                  <div>
-                    <p className="text-xs text-slate-500">
-                      {CurrencyFormatter({
-                        currency:'MXN',
-                        value: budgetedControl.budgetedInfo.pendingBugetedTotal?? 0
-                      })}
-                    </p>
-                    <p className="text-xs text-slate-700">Pendiente</p>
+                  
+                  <p className=" text-sm mt-2">Costo ({
+                    CurrencyFormatter({
+                      currency:'MXN',
+                      value: (showTotal? budgetedControl?.spentInfo?.spentTotal: 
+                                budgetedControl?.spentInfo?.spentSubTotal) || 0
+                    })}) 
+                  </p>
+                  <ProgressBarComponent label={''} progress={budgetedControl?.spentInfo?.porcentage || 0 } 
+                    widthBar="w-full" color={colorsRandom[c3]} hei="h-5"
+                    amount={(showTotal? budgetedControl?.spentInfo?.spentTotal: 
+                                budgetedControl?.spentInfo?.spentSubTotal) || 0} />
+                  <div className="flex justify-between">
+                    <div>
+                      <p className="text-xs text-slate-500">
+                        {CurrencyFormatter({
+                          currency:'MXN',
+                          value: (showTotal? budgetedControl?.spentInfo?.pendingSpentTotal: 
+                            budgetedControl?.spentInfo?.pendingSpentSubTotal) || 0
+                        })}
+                      </p>
+                      <p className="text-xs text-slate-700">Sobrante</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 text-right">
+                        { (100 - ((showTotal? budgetedControl.spentInfo.porcentage: 
+                                    budgetedControl.spentInfo.porcentageSubTotal) || 0)).toFixed(2)}%
+                      </p>
+                      <p className="text-xs text-slate-700 text-right">Porcentaje</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-slate-500 text-right">
-                      { (100 - (budgetedControl.budgetedInfo.porcentageTotal?? 0)).toFixed(2)}%
-                    </p>
-                    <p className="text-xs text-slate-700 text-right">Porcentaje</p>
-                  </div>
-                </div>
-                
-                <p className=" text-sm mt-2">Costo ({
-                  CurrencyFormatter({
-                    currency:'MXN',
-                    value: (showTotal? budgetedControl?.spentInfo?.spentTotal: 
-                              budgetedControl?.spentInfo?.spentSubTotal) || 0
-                  })}) 
-                </p>
-                <ProgressBarComponent label={''} progress={budgetedControl?.spentInfo?.porcentage || 0 } 
-                  widthBar="w-full" color={colorsRandom[c3]} hei="h-5"
-                  amount={(showTotal? budgetedControl?.spentInfo?.spentTotal: 
-                              budgetedControl?.spentInfo?.spentSubTotal) || 0} />
-                <div className="flex justify-between">
-                  <div>
-                    <p className="text-xs text-slate-500">
-                      {CurrencyFormatter({
-                        currency:'MXN',
-                        value: (showTotal? budgetedControl?.spentInfo?.pendingSpentTotal: 
-                          budgetedControl?.spentInfo?.pendingSpentSubTotal) || 0
-                      })}
-                    </p>
-                    <p className="text-xs text-slate-700">Sobrante</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500 text-right">
-                      { (100 - ((showTotal? budgetedControl.spentInfo.porcentage: 
-                                  budgetedControl.spentInfo.porcentageSubTotal) || 0)).toFixed(2)}%
-                    </p>
-                    <p className="text-xs text-slate-700 text-right">Porcentaje</p>
-                  </div>
-                </div>
 
-                <p className=" text-sm mt-2">Facturado ({
-                  CurrencyFormatter({
-                    currency:'MXN',
-                    value: (showTotal? budgetedControl?.billingInfo?.billedTotal: 
-                      budgetedControl?.billingInfo?.billedSubTotal) || 0
-                  })}) 
-                </p>
-                <ProgressBarComponent label={''} 
-                  progress={(showTotal? budgetedControl?.billingInfo?.porcentage: 
-                      budgetedControl?.billingInfo?.porcentageSubTotal) || 0} 
-                  widthBar="w-full" color={colorsRandom[c5]} hei="h-5"
-                  amount={(showTotal? budgetedControl?.billingInfo?.billedTotal: 
-                      budgetedControl?.billingInfo?.billedSubTotal) || 0} />
-                <div className="flex justify-between">
-                  <div>
-                    <p className="text-xs text-slate-500">
-                      {CurrencyFormatter({
-                        currency:'MXN',
-                        value: (showTotal? budgetedControl?.billingInfo?.pendingBillingTotal: 
-                          budgetedControl?.billingInfo?.pendingBillingSubTotal) || 0
-                      })}
-                    </p>
-                    <p className="text-xs text-slate-700">Pendiente</p>
+                  <p className=" text-sm mt-2">Facturado ({
+                    CurrencyFormatter({
+                      currency:'MXN',
+                      value: (showTotal? budgetedControl?.billingInfo?.billedTotal: 
+                        budgetedControl?.billingInfo?.billedSubTotal) || 0
+                    })}) 
+                  </p>
+                  <ProgressBarComponent label={''} 
+                    progress={(showTotal? budgetedControl?.billingInfo?.porcentage: 
+                        budgetedControl?.billingInfo?.porcentageSubTotal) || 0} 
+                    widthBar="w-full" color={colorsRandom[c5]} hei="h-5"
+                    amount={(showTotal? budgetedControl?.billingInfo?.billedTotal: 
+                        budgetedControl?.billingInfo?.billedSubTotal) || 0} />
+                  <div className="flex justify-between">
+                    <div>
+                      <p className="text-xs text-slate-500">
+                        {CurrencyFormatter({
+                          currency:'MXN',
+                          value: (showTotal? budgetedControl?.billingInfo?.pendingBillingTotal: 
+                            budgetedControl?.billingInfo?.pendingBillingSubTotal) || 0
+                        })}
+                      </p>
+                      <p className="text-xs text-slate-700">Pendiente</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 text-right">
+                        { (100 - ((showTotal? budgetedControl?.billingInfo?.porcentage: 
+                                    budgetedControl?.billingInfo?.porcentageSubTotal) || 0)).toFixed(2)}%
+                      </p>
+                      <p className="text-xs text-slate-700 text-right">Porcentaje</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-slate-500 text-right">
-                      { (100 - ((showTotal? budgetedControl?.billingInfo?.porcentage: 
-                                  budgetedControl?.billingInfo?.porcentageSubTotal) || 0)).toFixed(2)}%
-                    </p>
-                    <p className="text-xs text-slate-700 text-right">Porcentaje</p>
-                  </div>
-                </div>
 
-                <p className=" text-sm mt-2">Pagado ({
-                  CurrencyFormatter({
-                    currency:'MXN',
-                    value: (showTotal? budgetedControl?.paymentInfo?.paymentTotal: 
-                      budgetedControl?.paymentInfo?.paymentSubTotal) || 0
-                  })}) 
-                </p>
-                <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.paymentInfo?.porcentage: 
-                                                    budgetedControl?.paymentInfo?.porcentageSubTotal) || 0} 
-                  widthBar="w-full" color={colorsRandom[c4]} hei="h-5"
-                  amount={(showTotal? budgetedControl?.paymentInfo?.paymentTotal: 
-                      budgetedControl?.paymentInfo?.paymentSubTotal) || 0} />
-                <div className="flex justify-between">
-                  <div>
-                    <p className="text-xs text-slate-500">
-                      {CurrencyFormatter({
-                        currency:'MXN',
-                        value: (showTotal? budgetedControl?.paymentInfo?.pendingPaymentTotal: 
-                            budgetedControl?.paymentInfo?.pendingPaymentSubTotal) || 0
-                      })}
-                    </p>
-                    <p className="text-xs text-slate-700">Pendiente</p>
+                  <p className=" text-sm mt-2">Pagado ({
+                    CurrencyFormatter({
+                      currency:'MXN',
+                      value: (showTotal? budgetedControl?.paymentInfo?.paymentTotal: 
+                        budgetedControl?.paymentInfo?.paymentSubTotal) || 0
+                    })}) 
+                  </p>
+                  <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.paymentInfo?.porcentage: 
+                                                      budgetedControl?.paymentInfo?.porcentageSubTotal) || 0} 
+                    widthBar="w-full" color={colorsRandom[c4]} hei="h-5"
+                    amount={(showTotal? budgetedControl?.paymentInfo?.paymentTotal: 
+                        budgetedControl?.paymentInfo?.paymentSubTotal) || 0} />
+                  <div className="flex justify-between">
+                    <div>
+                      <p className="text-xs text-slate-500">
+                        {CurrencyFormatter({
+                          currency:'MXN',
+                          value: (showTotal? budgetedControl?.paymentInfo?.pendingPaymentTotal: 
+                              budgetedControl?.paymentInfo?.pendingPaymentSubTotal) || 0
+                        })}
+                      </p>
+                      <p className="text-xs text-slate-700">Pendiente</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 text-right">
+                        { (100 - ((showTotal? budgetedControl.paymentInfo.porcentage: 
+                                    budgetedControl?.paymentInfo?.porcentageSubTotal) || 0)).toFixed(2)}%
+                      </p>
+                      <p className="text-xs text-slate-700 text-right">Porcentaje</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs text-slate-500 text-right">
-                      { (100 - ((showTotal? budgetedControl.paymentInfo.porcentage: 
-                                  budgetedControl?.paymentInfo?.porcentageSubTotal) || 0)).toFixed(2)}%
-                    </p>
-                    <p className="text-xs text-slate-700 text-right">Porcentaje</p>
-                  </div>
-                </div>
 
-                <p className=" text-sm mt-2">Utilidades ({
-                  CurrencyFormatter({
-                    currency:'MXN',
-                    value: (showTotal? budgetedControl?.netprofitInfo?.netprofitTotal: 
-                              budgetedControl?.netprofitInfo?.netprofitSubTotal) || 0
-                  })}) 
-                </p>
-                <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.netprofitInfo?.porcentage: 
-                                                    budgetedControl?.netprofitInfo?.porcentageSubtotal) || 0} 
-                  widthBar="w-full" color={colorsRandom[c6]} hei="h-5"
-                  amount={(showTotal? budgetedControl?.netprofitInfo?.netprofitTotal: 
-                              budgetedControl?.netprofitInfo?.netprofitSubTotal) || 0} />
-              </div>
-            )}
-          </div>
+                  <p className=" text-sm mt-2">Utilidades ({
+                    CurrencyFormatter({
+                      currency:'MXN',
+                      value: (showTotal? budgetedControl?.netprofitInfo?.netprofitTotal: 
+                                budgetedControl?.netprofitInfo?.netprofitSubTotal) || 0
+                    })}) 
+                  </p>
+                  <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.netprofitInfo?.porcentage: 
+                                                      budgetedControl?.netprofitInfo?.porcentageSubtotal) || 0} 
+                    widthBar="w-full" color={colorsRandom[c6]} hei="h-5"
+                    amount={(showTotal? budgetedControl?.netprofitInfo?.netprofitTotal: 
+                                budgetedControl?.netprofitInfo?.netprofitSubTotal) || 0} />
+                </div>
+              )}
+            </div>
+          )}
 
           <div>
-            {/* <div className="p-3 bg-white">
-              <p className="mb-2">CENTRO DE COSTOS CATEGORIA</p>
-              <DonutChartComponent data={dataCostoCenters} colors={colors} category="costo"
-                categories={categoriesCostoCenters}  />
-                <VerticalBarChart datasets={dataCostoCenters} labels={categoriesCostoCenters} />
-            </div> */}
 
-            <div className="p-3 mt-3 bg-white">
-              <p className="mb-2">CENTRO DE COSTOS CONCEPTOS</p>
-              {/* <DonutChartComponent data={dataCostoCenters} colors={colors} category="costo"
-                categories={categoriesCostoCenters}  /> */}
-                {/* <NewDonutChartComponent data={dataCostCenterConcepts} /> */}
+            {permissions.components.includes('chartcostcenter') && (
+              <div className="p-3 mt-3 bg-white">
+                <p className="mb-2">CENTRO DE COSTOS CONCEPTOS</p>
                 <DonutChartComponentWithDescription data={dataCostCenterConcepts} descriptions={descriptions} />
-            </div>
+              </div>
+            )}
           </div>
 
         </div>
       </div>
 
-      <div className="p-3 bg-white">
-        <p className="mb-2">CENTRO DE COSTOS CATEGORIA</p>
-        {/* <VerticalBarChart datasets={dataCostoCentersCat} labels={['Costo total']} /> */}
-        <VerticalBarChart datasets={dataCostCenterCategories} labels={descriptionsCat} />
-      </div>
+      {permissions.components.includes('chartcategorys') && (
+        <div className="p-3 bg-white">
+          <p className="mb-2">CENTRO DE COSTOS CATEGORIA</p>
+          {/* <VerticalBarChart datasets={dataCostoCentersCat} labels={['Costo total']} /> */}
+          <VerticalBarChart datasets={dataCostCenterCategories} labels={descriptionsCat} />
+        </div>
+      )}
     </div>
   )
 }
