@@ -5,7 +5,8 @@ import { getQuotationsByUserMin } from "@/app/api/routeQuotations";
 import { IQuotationMin } from "@/interfaces/Quotations";
 import ContainerQuotations from "@/components/quotations/ContainerQuotations";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -14,9 +15,10 @@ export default async function Page(){
 
   // let quotations: IQuotationMin[] = await getQuotationsByUserMin(token, user._id);
 
-  const [quotations, resresource] = await Promise.all([
+  const [quotations, resresource, rescomponents] = await Promise.all([
     getQuotationsByUserMin(token, user._id),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'quotations', 'byuser'),
   ]);
 
   if(typeof(resresource)==='string'){
@@ -26,6 +28,15 @@ export default async function Page(){
           </>
         )
       }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history`} message={rescomponents} />
+      </>
+    )
+  }
   
   if(typeof(quotations) === "string"){
     return(
@@ -39,12 +50,17 @@ export default async function Page(){
     )
   }
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return (
     <>
       <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerQuotations quotations={quotations} token={token} user={user} 
-          isByUser={true} company={user.profile} />
+          isByUser={true} company={user.profile} permissions={result} />
       </div>
     </>
   )

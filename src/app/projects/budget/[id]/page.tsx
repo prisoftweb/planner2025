@@ -5,7 +5,8 @@ import Navigation from "@/components/navigation/Navigation";
 import BudgetCli from "@/components/projects/budget/BudgetClient";
 import { getCostoCenters } from "@/app/api/routeCostCenter";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function page({ params, searchParams }: 
   { params: { id: string }, searchParams: { project: string }}) {
@@ -15,16 +16,26 @@ export default async function page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [budget, costoCenters, resresource] = await Promise.all([
+  const [budget, costoCenters, resresource, rescomponents] = await Promise.all([
     getBudget(token, params.id),
     getCostoCenters(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'budget/id'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/budget`} message={rescomponents} />
       </>
     )
   }
@@ -48,6 +59,11 @@ export default async function page({ params, searchParams }:
       </>
     )
   }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return (
     <>

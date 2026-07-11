@@ -24,8 +24,6 @@ export default async function Page({ params }: { params: { id: string }}){
 
   let role = user.rol?.name || '';
 
-  const perm=((user.rol?._id?? '') + ('/6a3af6370d5f57b8a0bf1952/6a3af6370d5f57b8a0bf1953'));
-
   const [project, options, clients, catalogs, resresource, rescomponents ] = await Promise.all([
     GetProjectMin(token, params.id),
     role.toLowerCase().includes('residente') ? await getProjectsByUserLV(token, user._id) : await getProjectsLV(token),
@@ -44,13 +42,13 @@ export default async function Page({ params }: { params: { id: string }}){
   }
 
   if(typeof(rescomponents) === "string"){
-      return(
-        <>
-          <Navigation user={user} token={token} resources={resresource} />
-          <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
-        </>
-      )
-    }
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+      </>
+    )
+  }
   
   if(typeof(project) === "string")
     return(

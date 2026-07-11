@@ -6,26 +6,37 @@ import Selectize from "@/components/Selectize";
 import Header from "@/components/HeaderPage";
 import ContainerQuatationProfile from "@/components/quotations/ContainerQuatationProfile";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({params}: {params:{id:string}}){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [quotation, quotations, resresource] = await Promise.all([
+  const [quotation, quotations, resresource, rescomponents] = await Promise.all([
     getQuotationMin(token, params.id), 
     getQuotationsLV(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'quotations', 'id'),
   ]);
 
   if(typeof(resresource)==='string'){
-      return (
-        <>
-          <ComponentError page="/" message={resresource} />
-        </>
-      )
-    }
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history`} message={rescomponents} />
+      </>
+    )
+  }
 
   if(typeof(quotation) === "string"){
     return(
@@ -52,6 +63,11 @@ export default async function Page({params}: {params:{id:string}}){
   }
 
   const role = user.rol?.name?.toLowerCase().includes('residente');
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return (
     <>

@@ -6,24 +6,33 @@ import { getQuotationsMin } from "@/app/api/routeQuotations";
 import DragAndDropQuotations from "@/components/quotations/DragAndDropQuatations";
 import Header from "@/components/HeaderPage";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let quotations: IQuotationMin[]= await getQuotationsMin(token);
-
-  const [quotations, resresource] = await Promise.all([
-      getQuotationsMin(token),
-      getAllResourcesByROL(token, user.rol?._id?? ''),
-    ]);
+  const [quotations, resresource, rescomponents] = await Promise.all([
+    getQuotationsMin(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'quotations', 'status'),
+  ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history`} message={rescomponents} />
       </>
     )
   }
@@ -37,6 +46,11 @@ export default async function Page(){
       </>
     )
   }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return (
     <>

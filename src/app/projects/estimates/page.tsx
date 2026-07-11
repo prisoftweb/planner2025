@@ -8,7 +8,8 @@ import { ProjectEstimateDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerEstimatesClient from "@/components/projects/estimates/ContainerEstimatesClient";
 import { Options } from "@/interfaces/Common";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -17,16 +18,26 @@ export default async function Page(){
 
   let role = user.rol?.name || '';
 
-  const [projects, catalogs, resresource] = await Promise.all([
+  const [projects, catalogs, resresource, rescomponents] = await Promise.all([
     role.toLowerCase().includes('residente') ? getProjectsForEstimatedByUser(token, user._id) : getProjectsWithEstimatesMin(token),
     getCatalogsByName(token, 'projects'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'estimates'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/budget`} message={rescomponents} />
       </>
     )
   }
@@ -102,12 +113,18 @@ export default async function Page(){
   })
 
   const table: ProjectsTable[] = ProjectEstimateDataToTableDataMin(projects);
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>
       <Navigation user={user} token={token} resources={resresource} />
       <ContainerEstimatesClient data={table} optCategories={optCategories} optConditionsFilter={optConditions} 
-        optTypes={optTypes} projectsParam={projects} token={token} user={user} rol={role} company={user.profile} />
+        optTypes={optTypes} projectsParam={projects} token={token} user={user} rol={role} company={user.profile}
+        permissions={result} />
     </>
   )
 }

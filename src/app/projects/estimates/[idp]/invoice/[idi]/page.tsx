@@ -5,7 +5,8 @@ import { GetProjectMin } from "@/app/api/routeProjects";
 import { getInvoiceMinFull, getTotalInvoicesByProject, getCollectionsByInvoice } from "@/app/api/routeInvoices";
 import ContainerDetailInvoice from "@/components/projects/estimates/ContainerDetailInvoice";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params, searchParams }: 
   { params: { idp: string, idi:string }, searchParams: { page: string }}){
@@ -13,18 +14,28 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [project, invoice, totalInvoiceProject, collections, resresource] = await Promise.all([
+  const [project, invoice, totalInvoiceProject, collections, resresource, rescomponents] = await Promise.all([
     GetProjectMin(token, params.idp),
     getInvoiceMinFull(token, params.idi),
     getTotalInvoicesByProject(token, params.idp),
     getCollectionsByInvoice(token, params.idi),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'estimates/id/invoice/id'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/budget`} message={rescomponents} />
       </>
     )
   }
@@ -72,6 +83,11 @@ export default async function Page({ params, searchParams }:
       </>
     )
   }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return (
     <>

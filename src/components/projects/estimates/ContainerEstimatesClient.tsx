@@ -17,6 +17,7 @@ import { getProjectsWithEstimatesMin, getProjectsWithOutEstimateMin, getProjects
 import { showToastMessageError } from "@/components/Alert"
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import ContainerSideNav from "@/components/ContainerSideNav";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 type Props = {
   token:string, 
@@ -27,11 +28,12 @@ type Props = {
   optTypes: Options[], 
   data: ProjectsTable[],
   rol:string,
-  company:string
+  company:string,
+  permissions:IPermissionsAndComponents
 }
 
 export default function ContainerEstimatesClient({token, user, optConditionsFilter, 
-  projectsParam, optCategories, optTypes, data, rol, company }: Props){
+  projectsParam, optCategories, optTypes, data, rol, company, permissions }: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -64,9 +66,13 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
           <WithOut img="/img/estimates/estimates.svg" subtitle="Proyectos para estimar"
             text="Aqui se mostraran los proyectos a los que se les puede realizar o consultar una estimacion"
             title="Proyectos para estimar">
-              <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
+              <>
+                {permissions.permission.create && (
+                  <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
+                )}
+              </>
           </WithOut>
-          {newEstimate && (
+          {newEstimate && permissions.permission.create && (
               <ContainerSideNav width="w-full sm:max-w-4xl">
                 <NewEstimateStepper showForm={handleNewEstimate} rol={rol} company={company}
                               token={token} user={user._id} updateProjects={updateProjects} />
@@ -92,10 +98,12 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
           {/* <div className="flex-1 flex justify-end sm:hidden">
             <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
           </div> */}
-          <div className="flex flex-1 flex-col items-end sm:hidden pr-4">
-            <PlusCircleIcon onClick={() => setNewEstimate(true)} className={`w-6 h-6 text-slate-700 cursor-pointer`} />
-            <span className="text-xs">Nuevo</span>
-          </div>
+          {permissions.permission.create && (
+            <div className="flex flex-1 flex-col items-end sm:hidden pr-4">
+              <PlusCircleIcon onClick={() => setNewEstimate(true)} className={`w-6 h-6 text-slate-700 cursor-pointer`} />
+              <span className="text-xs">Nuevo</span>
+            </div>
+          )}
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
           <div className="flex flex-grow sm:flex-grow-0 gap-x-3 gap-y-3 justify-end">
@@ -112,35 +120,33 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
                 />
               </TooltipContainerIcon>
             </div>
-            <SearchInTable placeH="Buscar presupuesto.." />
+            {permissions.permission.searchfull && (
+              <SearchInTable placeH="Buscar presupuesto.." />
+            )}
           </div>
           <div className="">
             <div className="hidden sm:flex gap-x-3 items-center">
-              <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
-                        {/* {newEstimate && (
-                          <ContainerSideNav width="w-full sm:max-w-4xl">
-                            <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
-                                          token={token} user={user._id} updateProjects={updateProjects} />
-                          </ContainerSideNav>
-                        )} */}
-              {/* <ContainerSideNav width="w-full sm:max-w-4xl" open={newEstimate}>
-                <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
-                              token={token} user={user._id} updateProjects={updateProjects} />
-              </ContainerSideNav> */}
+              {permissions.permission.create && (
+                <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
+              )}
             </div>
-            <ContainerSideNav width="w-full sm:max-w-4xl" open={newEstimate}>
-              <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
-                  token={token} user={user._id} updateProjects={updateProjects} company={company} />
-            </ContainerSideNav>
+            {permissions.permission.create && (
+              <ContainerSideNav width="w-full sm:max-w-4xl" open={newEstimate}>
+                <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
+                    token={token} user={user._id} updateProjects={updateProjects} company={company} />
+              </ContainerSideNav>
+            )}
           </div>
         </div>
       </div>
       <div className="mt-5">
-        <TableProjectsToEstimate token={token} 
-          optConditions={optConditionsFilter} isFilter={isFilter} 
-          setIsFilter={handleFilter} isTable={isTable} projects={projects} 
-          data={data} optCategories={optCategories} optTypes={optTypes}
-        />
+        {permissions.permission.readfull && (
+          <TableProjectsToEstimate token={token} 
+            optConditions={optConditionsFilter} isFilter={isFilter} 
+            setIsFilter={handleFilter} isTable={isTable} projects={projects} 
+            data={data} optCategories={optCategories} optTypes={optTypes} permissions={permissions}
+          />
+        )}
       </div>
     </div>
   )

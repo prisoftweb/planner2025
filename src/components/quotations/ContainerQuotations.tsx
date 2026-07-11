@@ -22,9 +22,10 @@ import { getClientsLV } from "@/app/api/routeClients"
 import { Options } from "@/interfaces/Common"
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon"
 import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function ContainerQuotations({quotations, token, user, isByUser=false, company}: 
-  {quotations: IQuotationMin[], token:string, user: UsrBack, isByUser?: boolean, company:string}) {
+export default function ContainerQuotations({quotations, token, user, isByUser=false, company, permissions}: 
+  {quotations: IQuotationMin[], token:string, user: UsrBack, isByUser?: boolean, company:string, permissions:IPermissionsAndComponents}) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [showFilter, setShowFilter]=useState<boolean>(false);
@@ -222,28 +223,40 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
           <p className="text-xl ml-4 font-medium">Cotizaciones</p>
           
           <div className="flex flex-1 justify-end sm:hidden gap-x-3 items-center ">
-            <TooltipFilterIcon handleFilter={handleShowFilter} />
-            <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
+            {permissions.permission.filter && (
+              <TooltipFilterIcon handleFilter={handleShowFilter} />
+            )}
+            {permissions.permission.create && (
+              <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
+            )}
           </div>
         </div>
         <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end">
-          <SearchInTable placeH="Buscar cotizacion.." />
+          {permissions.permission.searchfull && (
+            <SearchInTable placeH="Buscar cotizacion.." />
+          )}
           <div className="hidden sm:flex gap-x-3 items-center ">
-            <TooltipFilterIcon handleFilter={handleShowFilter} />
-            <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
+            {permissions.permission.filter && (
+              <TooltipFilterIcon handleFilter={handleShowFilter} />
+            )}
+            {permissions.permission.create && (
+              <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
+            )}
           </div>
         </div>
       </div>
       <div className="mt-5">
-        <TableQuotations quotationsData={quotationsData} token={token} deleteQuatation={deleteQuatation} />
+        {permissions.permission.readfull && (
+          <TableQuotations quotationsData={quotationsData} token={token} deleteQuatation={deleteQuatation} permissions={permissions} />
+        )}
       </div>
       {/* {showNewQuotation && optCategories.length> 0 && optClients.length> 0 && optTypes.length > 0 && 
           optUsers.length > 0 && optVats.length > 0 && <NewQuotation showForm={handleShowNewQuotation} 
             token={token} usr={user._id} updateQuotations={refreshQuatations} />} */}
       {optCategories.length> 0 && optClients.length> 0 && optTypes.length > 0 && 
-          optUsers.length > 0 && optVats.length > 0 && <NewQuotation showForm={handleShowNewQuotation} company={company} 
+          optUsers.length > 0 && optVats.length > 0 && permissions.permission.create && <NewQuotation showForm={handleShowNewQuotation} company={company} 
             token={token} usr={user._id} updateQuotations={refreshQuatations} showSideNav={showNewQuotation} />}
-      {showFilter && optClients && optConditions && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
+      {showFilter && optClients && optConditions && permissions.permission.filter && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
                     showForm={handleShowFilter} />}
     </>
   )

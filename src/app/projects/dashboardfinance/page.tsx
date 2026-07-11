@@ -9,7 +9,8 @@ import { getDashboardProjectsAmount,
   getProjectsControlBudgeted, getProjectsSpent, getProjectsLV, getAllPaymentsProjects } 
 from "@/app/api/routeProjects";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page() {
   
@@ -18,7 +19,7 @@ export default async function Page() {
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
   const [amountProjects, listProjectsdate, projectsandTypes, projectsTotalCost, configMin,
-    projectsBudgeted, projectsSpent, projectsControlBudgeted, projects, allPaymentsProjects, resresource] = await Promise.all([
+    projectsBudgeted, projectsSpent, projectsControlBudgeted, projects, allPaymentsProjects, resresource, rescomponents] = await Promise.all([
       getDashboardProjectsAmount(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getDashboardListProjectsByDate(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getDashboardByProjectAndType(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
@@ -30,6 +31,7 @@ export default async function Page() {
       getProjectsLV(token),
       getAllPaymentsProjects(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
       getAllResourcesByROL(token, user.rol?._id?? ''),
+      getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'dashboard'),
     ]); 
 
   if(typeof(resresource)==='string'){
@@ -39,6 +41,15 @@ export default async function Page() {
           </>
         )
       }
+  
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/budget`} message={rescomponents} />
+      </>
+    )
+  }
   
   if(typeof(allPaymentsProjects) === "string"){
     return(
@@ -135,6 +146,11 @@ export default async function Page() {
       </>
     )
   }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return (
     <>

@@ -21,18 +21,13 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const perm=((user.rol?._id?? '') + ('/6a3af6370d5f57b8a0bf1952/6a3af6370d5f57b8a0bf1953'));
-  // const perm=((user.rol?._id?? '') + ('/projects/history/id%2Fprofile'));
-
-  console.log('per => ', perm);
-
   const [project, options, clients, catalogs, resresource, rescomponents] = await Promise.all([
     GetProjectMin(token, params.id),
     getProjectsLV(token),
     getClients(token),
     getCatalogsByName(token, 'projects'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
-    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', '/history/id'),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'history/id'),
   ]);
 
   if(typeof(resresource)==='string'){

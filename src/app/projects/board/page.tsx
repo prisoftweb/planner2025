@@ -1,23 +1,22 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { ProjectMin } from "@/interfaces/Projects";
 import { getActiveProjectsMin } from "@/app/api/routeProjects";
 import DragAndDropProjects from "@/components/projects/DragAndDropProjects";
 import Header from "@/components/HeaderPage";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let projects: ProjectMin[] = await getActiveProjectsMin(token);
-
-  const [projects, resresource ] = await Promise.all([
+  const [projects, resresource, rescomponents ] = await Promise.all([
     getActiveProjectsMin(token),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'id/status'),
   ]);
 
   if(typeof(resresource)==='string'){

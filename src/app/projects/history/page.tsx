@@ -8,23 +8,34 @@ import { ProjectsTable } from "@/interfaces/Projects";
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerHistoryClient from "@/components/projects/ContainerHistoryClient";
 import ComponentError from "@/components/ComponentError";
-import { getAllResourcesByROL } from "@/app/api/routeRoles";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [projects, catalogs, resresource] = await Promise.all([
+  const [projects, catalogs, resresource, rescomponents] = await Promise.all([
     getProjectsMin(token),
     getCatalogsByName(token, 'projects'),
     getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'history'),
   ]);
 
   if(typeof(resresource)==='string'){
     return (
       <>
         <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history`} message={rescomponents} />
       </>
     )
   }
@@ -98,6 +109,11 @@ export default async function Page(){
   })
 
   const table: ProjectsTable[] = ProjectDataToTableDataMin(projects);
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>

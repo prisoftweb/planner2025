@@ -11,13 +11,14 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import Link from "next/link";
 import DeleteElement from "@/components/DeleteElement";
 import { RemoveProject } from "@/app/api/routeProjects";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
 export default function TableProjectsToEstimate({token, optConditions, isFilter, 
-                          setIsFilter, isTable, projects, data, optCategories, optTypes}:
+                          setIsFilter, isTable, projects, data, optCategories, optTypes, permissions}:
                         {token:string, optConditions: Options[], 
                           isFilter:boolean, setIsFilter:(value: boolean) => void, 
                           isTable:boolean, projects: IProjectWithEstimateMin[], data: ProjectsTable[], 
-                          optCategories: Options[], optTypes: Options[]}){
+                          optCategories: Options[], optTypes: Options[], permissions:IPermissionsAndComponents}){
   
   const columnHelper = createColumnHelper<ProjectsTable>();
 
@@ -128,7 +129,7 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
   return(
     <>
       <div className="flex justify-end mb-5">
-        {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
+        {isFilter && permissions.permission.filter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
                                   optTypes={optTypes} optConditions={optConditions} 
                                   FilterData={filterData} maxAmount={maxAmount}  />}
       </div>

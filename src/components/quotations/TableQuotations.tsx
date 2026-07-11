@@ -9,9 +9,10 @@ import { removeQuotation } from "@/app/api/routeQuotations";
 import RatingComponent from "./RatingComponent";
 import { useMemo } from "react";
 import { useTableStates } from "@/app/store/tableStates";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TableQuotations({quotationsData, token, deleteQuatation}:
-  {quotationsData: IQuotationTable[], token:string, deleteQuatation: Function}){
+export default function TableQuotations({quotationsData, token, deleteQuatation, permissions}:
+  {quotationsData: IQuotationTable[], token:string, deleteQuatation: Function, permissions:IPermissionsAndComponents}){
   
   const columnHelper = createColumnHelper<IQuotationTable>();
 
@@ -20,21 +21,27 @@ export default function TableQuotations({quotationsData, token, deleteQuatation}
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
         </div>
       ),
       size: 300,
       enableSorting:false,
       header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
+        <>
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
+        </>
       )
     }),
     columnHelper.accessor('Detalle', {
@@ -42,8 +49,10 @@ export default function TableQuotations({quotationsData, token, deleteQuatation}
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Detalle.photo} alt="foto" className="w-8 h-8" />
-          <RemoveElement id={row.original.id} name={row.original.Titulo} remove={removeQuotation} 
+          {permissions.permission.delete && (
+            <RemoveElement id={row.original.id} name={row.original.Titulo} remove={removeQuotation} 
               token={token} removeElement={deleteQuatation} />
+          )}
         </div>
       ),
       enableSorting:false,
@@ -136,26 +145,14 @@ export default function TableQuotations({quotationsData, token, deleteQuatation}
         <Table columns={columns} data={quotationsData} placeH="Buscar cotizacions.." typeTable="quotations" />
       </div>
       <div className="block md:hidden w-full">
-        <ListData data={quotationsData} token={token} deleteQuatation={deleteQuatation} />
+        <ListData data={quotationsData} token={token} deleteQuatation={deleteQuatation} permissions={permissions} />
       </div>
     </>
   )
 }
 
-const ListData = ({data, token, deleteQuatation }: 
-  {data: IQuotationTable[], token:string, deleteQuatation:Function }) => {
-
-  // const [dataReports, setDataReports] = useState(data);
-  const {search} = useTableStates();
-
-  // const filterData = useMemo(() => {
-  //   if(search.trim() === ''){
-  //     return data;
-  //   }else{
-  //     const d = data.filter(item => item.Titulo.toLowerCase().includes(search.toLowerCase()));
-  //     return d;
-  //   }
-  // }, [search]);
+const ListData = ({data, token, deleteQuatation, permissions }: 
+  {data: IQuotationTable[], token:string, deleteQuatation:Function, permissions:IPermissionsAndComponents }) => {
 
   return(
     <div className="mt-2">
@@ -164,7 +161,7 @@ const ListData = ({data, token, deleteQuatation }:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {data.map((q) => (
-            <CardQuotations quotations={q} key={q.id} token={token} deleteQuatation={deleteQuatation} />
+            <CardQuotations quotations={q} key={q.id} token={token} deleteQuatation={deleteQuatation} permissions={permissions} />
           ))}
 
         </nav>
@@ -173,8 +170,8 @@ const ListData = ({data, token, deleteQuatation }:
   )
 }
 
-const CardQuotations = ({quotations, token, deleteQuatation }: 
-  {quotations:IQuotationTable, token:string, deleteQuatation:Function }) => {
+const CardQuotations = ({quotations, token, deleteQuatation, permissions }: 
+  {quotations:IQuotationTable, token:string, deleteQuatation:Function, permissions:IPermissionsAndComponents }) => {
   
   return(
     <div role="button"
@@ -189,13 +186,10 @@ const CardQuotations = ({quotations, token, deleteQuatation }:
         <div className="grid mr-4 place-items-center">
           <img alt="responsable" src={ quotations.Detalle?.photo ?? '/img/users/default.jpg'}
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
-              remove={RemoveGlossary} removeElement={delGlossary} /> */}
-            <RemoveElement id={quotations.id} name={quotations.Titulo} remove={removeQuotation} 
-              token={token} removeElement={deleteQuatation} />
-            {/* <RemoveElement id={quotations.id} name={quotations.Descripcion} 
-              remove={RemoveCost} removeElement={delCost} 
-              token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
+            {permissions.permission.delete && (
+              <RemoveElement id={quotations.id} name={quotations.Titulo} remove={removeQuotation} 
+                token={token} removeElement={deleteQuatation} />
+            )}
         </div>
         <div className="w-full"
           onClick={() => window.location.replace(`/quotations/${quotations.id}`)}
