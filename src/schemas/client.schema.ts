@@ -1,5 +1,6 @@
 import {z} from 'zod'
 
+//con zod se agrega validacion para que antes de hacer la peticion al backend se valide si el objeto cumple con los requerimientos
 export const clientValidation = z.object({
   name: z.string({
     required_error : 'El nombre del cliente es obligatorio!!',

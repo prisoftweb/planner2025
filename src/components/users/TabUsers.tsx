@@ -19,6 +19,7 @@ export default function TabUser({user, opt, token, permissions}:
   const [optsRole, setOptsRole] = useState<Options[]>([]);
   // const [error, setError] = useState<string>('');
 
+  // consulta intermedia para consultas las opciones de deptartamentos y roles
   useEffect(() => {
     const fetchData = async () => {
       const [departments, roles] = await Promise.all([

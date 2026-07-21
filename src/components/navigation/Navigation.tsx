@@ -1,37 +1,36 @@
 'use client'
 
-import { Bars3Icon, UserIcon, Cog6ToothIcon, PhotoIcon, ArrowRightStartOnRectangleIcon, Cog8ToothIcon } 
-  from "@heroicons/react/24/solid"
+import { Bars3Icon, UserIcon, Cog6ToothIcon, PhotoIcon, ArrowRightStartOnRectangleIcon, Cog8ToothIcon } from "@heroicons/react/24/solid"
 import { MdPassword } from "react-icons/md";
-  import Image from "next/image"
+import Image from "next/image"
 import Link from "next/link"
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import RemoveCookies from "@/app/functions/RemoveCookies"
-import NavItem from "./NavItem"
+import { useState, useEffect } from "react" // usestate para guardar estados y usefect para realizar acciones que respondan a cambios en las propiedades establecidas
+import { useRouter } from "next/navigation" // propiedad de next para manejar el cambio de paginas del lado del cliente
+import RemoveCookies from "@/app/functions/RemoveCookies" // componente para eliminar las cookies si el usuario cierra sesion
+import NavItem from "./NavItem" // componente que se utiliza para formar el menu 
 import { UsrBack } from "@/interfaces/User"
-import { useOutsideClick } from "@/app/functions/useOutsideClick";
-import { ICompanyProfileInWorkSpace } from "@/interfaces/WorkSpaces";
-import { getCompanysProfilesByWorkspaceMIN } from "@/app/api/routeWorkspace";
-import { updateUser } from "@/app/api/routeUser";
+import { useOutsideClick } from "@/app/functions/useOutsideClick"; // hoock que se usa para detectar cuando se da clic fuera del componente establecido
+import { ICompanyProfileInWorkSpace } from "@/interfaces/WorkSpaces"; // interfaz para el tipado del objeto de la compania que se recibe del backend
+import { getCompanysProfilesByWorkspaceMIN } from "@/app/api/routeWorkspace";// endpoint para consultar las companias
+import { updateUser } from "@/app/api/routeUser"; //endpoint para actualizar usuario
 import { showToastMessage, showToastMessageError } from "../Alert";
-import { setCookie } from "cookies-next";
-import { IAllResourcesByROL } from "@/interfaces/Roles";
+import { setCookie } from "cookies-next"; // propiedad de next del lado del cliente para actualizar o agregar cookies
+import { IAllResourcesByROL } from "@/interfaces/Roles"; //interfaz de roles
 
-// export default function Navigation({user, token, resources}: {user:UsrBack, token:string, resources?:IAllResourcesByROL[]}){
 export default function Navigation({user, token, resources}: {user:UsrBack, token:string, resources:IAllResourcesByROL[]}){
   
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenP, setIsOpenP] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // estado para desplegar el menu en pantalla pequena
+  const [isOpenP, setIsOpenP] = useState(false); // estado para mostrar las opciones del usuario al presionar en su imagen
 
-  const [isProfileSideOpen, setIsProfileSideOpen] = useState(false);
-  const [companyProfiles, setCompanyProfiles] = useState<ICompanyProfileInWorkSpace[]>([]);
+  const [isProfileSideOpen, setIsProfileSideOpen] = useState(false); // estado para mostrar el menu de companias que tiene el perfil
+  const [companyProfiles, setCompanyProfiles] = useState<ICompanyProfileInWorkSpace[]>([]); // estado donde se almacenan las companias que tiene el perfil
 
   useEffect(() => {
+    //peticion para consultar las companias que tiene el workspace, por el momento es fijo 
+    //se consulta en cuanto se carga el componente y solo una vez
     const fetchCompanyProfiles = async () => {
       const profiles = await getCompanysProfilesByWorkspaceMIN(token, '6924db0701ab482e68044270');
       if(typeof(profiles) === 'string'){
-        // console.error('Error fetching company profiles:', profiles);
         showToastMessageError(profiles);
       } else {
         setCompanyProfiles(profiles);
@@ -40,6 +39,8 @@ export default function Navigation({user, token, resources}: {user:UsrBack, toke
     fetchCompanyProfiles();
   }, []);
 
+  //funcion para cambiar de compania y actualizar perfil del usurio 
+  //se actualiza la cookie de usuario para matener el nuevo perfil y se actualiza la pagina para mostrar los cambios
   const handleCompanyChange = async (companyId: string) => {
     try {
       const updatedUser = await updateUser({profile: companyId}, token, user._id);
@@ -51,34 +52,38 @@ export default function Navigation({user, token, resources}: {user:UsrBack, toke
         setTimeout(() => {
           window.location.reload();
         }, 1000);
-        // console.log('Company changed successfully:', updatedUser);
-        // Optionally, you can update the user state here if needed
       }
     } catch (error) {
       showToastMessageError('Error changing company');
     }
   }
 
+  //funcion que se utiliza para cambiar el estado de isProfileSideOpen
   const toggleProfileSide = () => {
     setIsProfileSideOpen(!isProfileSideOpen)
   }
 
+  //funcion que se utiliza para cambiar el estado de isOpen
   const toggleNavBar = () => {
     setIsOpen(!isOpen);
   }
 
+  //funcion que se utiliza para cambiar el estado de isOpenP
   const toggleProfile = () => {
     setIsOpenP(!isOpenP);
   }
 
+  // se consulta el perfil de la compania actual del usuario
   const profile= companyProfiles.find(profile => profile._id === user.profile);
 
+  //se obtiene la foto de perfil del usuario, si no tiene se queda la de por default
   let photo='/img/default.jpg', role='', id='';
   if(user.photo){
     photo = user.photo;
   }
 
-  // console.log('Company Profiles:', companyProfiles);
+  //obtenemos el logo de la compania actual del usuario
+  //se realiza una busqueda en el arreglo de companias y se compara con la del usuario actual para obtener de ahi el logo
   let logo='/img/default.jpg';
   if(Array.isArray(companyProfiles) && companyProfiles.length > 0){
     const index = companyProfiles.findIndex(profile => profile._id === user.profile);
@@ -91,8 +96,11 @@ export default function Navigation({user, token, resources}: {user:UsrBack, toke
     id = user._id;
   }
 
+  //se obtiene el nombre del rol del usuario
   role = user.rol?.name || '';
   
+  //se generera una referencia que se utilizara en el componente que muestra las opciones del usuario
+  // en caso de que le piquen fuera de ahi se cierra el submenu
   const ref = useOutsideClick(() => {
     if(isOpenP){
       setIsOpenP(false);
@@ -101,35 +109,32 @@ export default function Navigation({user, token, resources}: {user:UsrBack, toke
 
   const router = useRouter();
   
+  //funcion para llamar a borrar cookies y redireccionar a el login
   function logOut(){
     RemoveCookies();
     router.push('/login');
   }
 
-  // const firstName = user.name.substring(0, user.name.indexOf(' '));
+  //procesamos los recursos que trae el backend y los convertimos en un arreglo de string para manipularlos mas facilmentes
   const resResources = resources?.map(item => item.resource);
-
-  // if(resources){
-  //   return(
-  //     <>
-  //       <p>{JSON.stringify(resources)}</p>
-  //     </>
-  //   )
-  // }
   
   return(
     <>
       <nav className="bg-black h-16 fixed top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2 print:hidden">
+        {/* icono para desplegar el menu en pantalla pequena */}
         <Bars3Icon width={40} height={40} className="md:hidden cursor-pointer ml-2 rounded-md p-1 bg-slate-500 text-white print:hidden" onClick={toggleNavBar} />
+        {/* icono de la compania con redireccion a la pagina de inicio */}
         <Link href={'/'}>
           <Image src={logo} alt="logo" width={50} height={50} className="rounded-md" priority />
         </Link>
+        {/* componente para desplegar los botones del menu, estan ocultos en pantalla pequena y se muestran en tamano md */}
         <div className="w-1/12 md:w-9/12 flex justify-end print:hidden">
           <div className="hidden w-full text-white md:flex justify-between print:hidden ">
             <NavItems role={role} user={user} resources={resResources} /> 
           </div>
         </div>
         
+        {/* boton con el nombre de la compania y despliega el sidenav con las companias del workspace */}
         <div className="flex items-center print:hidden">
           <button
             onClick={toggleProfileSide}
@@ -144,22 +149,24 @@ export default function Navigation({user, token, resources}: {user:UsrBack, toke
           >
             {profile ? profile.name.split(' ')[0] : 'Sin perfil'}
           </button>
-          {/* <div className="flex justify-around items-center w-24 text-white print:hidden">
-            <p className="p-2 hover:bg-slate-700 text-center font-semibold print:hidden">{firstName}</p>
-          </div> */}
+          
+          {/* icono para acceder al workspace solo visible para el superusuario */}
           {role.toLowerCase().includes('super') && (
             <Cog8ToothIcon className="text-slate-100 w-7 h-7" onClick={() => window.location.replace('/workspace')} />
           )}
+          {/* foto del usuario */}
           <Image src={photo} alt="profile" width={50} height={50} 
                   onClick={toggleProfile} className="cursor-pointer rounded-full print:hidden"
           />
         </div>
       </nav>
+      {/* despliega los botones del menu en pantalla pequena cuando se activa la bandera */}
       {isOpen && (
           <div className="flex text-gray-200 bg-blue-950 md:hidden flex-col items-start pl-2  basis-full print:hidden">
             <NavItems role={role} user={user} resources={resResources} />
           </div>
         )}
+      {/* despliega el submenu con las opciones del usuario al presionar en su foto */}
       {isOpenP && (
         <div className="flex justify-end print:hidden" ref={ref}>
           <div className="flex flex-col w-44 absolute z-50 text-xs bg-white border-2 border-slate-300 print:hidden">
@@ -208,6 +215,7 @@ export default function Navigation({user, token, resources}: {user:UsrBack, toke
           </div>
         </div>
       )}
+      {/* despliega el sidenav con las companias del workspace  */}
       {isProfileSideOpen && (
         <>
           {/* Overlay */}
@@ -251,49 +259,6 @@ export default function Navigation({user, token, resources}: {user:UsrBack, toke
               <CardProfile key={company._id} company={company} handleCompanyChange={handleCompanyChange} />
             ))}
 
-            {/* Contenido */}
-            {/* <div className="p-4 flex flex-col items-center">
-              <Image
-                src={photo}
-                alt="profile"
-                width={90}
-                height={90}
-                className="rounded-full"
-              />
-
-              <h3 className="mt-4 text-lg font-bold">
-                {firstName}
-              </h3>
-
-              <p className="text-gray-500">
-                {role}
-              </p>
-            </div> */}
-
-            {/* Opciones */}
-            {/* <div className="flex flex-col mt-4">
-
-              <Link
-                href={`/users/${id}?tab=1&&opt=1`}
-                className="hover:bg-gray-100 p-4"
-              >
-                Editar Perfil
-              </Link>
-
-              <Link
-                href={`/users/${id}?tab=1&&opt=4`}
-                className="hover:bg-gray-100 p-4"
-              >
-                Configuración
-              </Link>
-
-              <button
-                onClick={logOut}
-                className="hover:bg-red-100 text-red-600 text-left p-4"
-              >
-                Salir
-              </button>
-            </div> */}
           </div>
         </>
       )}
@@ -305,6 +270,8 @@ const NavItems = ({role, user, resources}: {role:string, user:UsrBack, resources
 
   if(resources){
     console.log('resources => ', resources);
+    //Aqui se ponen todas las rutas, el name es el nombre principal del menu, y los items son todas las opciones del menu
+    //para agregar otro menu se tendria que agregar otro objeto y para agregar mas opciones se agregan objetos en los items
     const menuConfig = [
       {
         name: 'Usuarios',
@@ -415,6 +382,7 @@ const NavItems = ({role, user, resources}: {role:string, user:UsrBack, resources
     
     const permissions=new Set(resources);
 
+    //se recorre el menu, por cada submenu se filtran sus opciones en base a los permisos y mientras tenga permiso se pinta el boton
     return (
       <>
         {menuConfig.map(menu => {

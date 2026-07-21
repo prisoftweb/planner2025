@@ -27,6 +27,7 @@ export default function ContainerProfileUser({token, user, permissions}:{user:Us
 
   return (
     <>
+      {/* componente para cambiar la opcion del componente que se muestra en pantalla */}
       <div className="mt-3">
         <NavTab tab={tab} handleTab={handleTab} permissions={permissions} />
       </div>

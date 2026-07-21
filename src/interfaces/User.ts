@@ -1,6 +1,7 @@
 import { Role } from "./Roles"
 import { Department } from "./Departments"
 
+// interface para tipear los objetos en el codigo
 export interface User{
   'id': string,
   'photo': string,

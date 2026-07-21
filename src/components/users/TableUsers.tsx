@@ -17,10 +17,12 @@ import ContainerSideNav from "../ContainerSideNav";
 export default function TableUsers({token, optionsDepartments, roles}:
   {token:string, optionsDepartments:Options[], roles:Options[]}){
   
+  //Este elemento es para crear las columnas de la tabla, le pasamos la interface para que sepa que columnas se requieren aunque no es obligatorio cubrir todas las columnas
   const columnHelper = createColumnHelper<User>();
-  const [newUser, setNewUser] = useState<boolean>(false);
-  const {pushUser, users, deleteUser} = useUserStore();
+  const [newUser, setNewUser] = useState<boolean>(false); // variable para abrir el sidenav de nuevo usuario
+  const {pushUser, users, deleteUser} = useUserStore(); //se importan metodos del store de usuarios
 
+  //handle para cambiar valor de estado, aunque se puede no se recomienda pasar directamente el set a otro componente hijo
   const handleClickNew = (value:boolean) => {
     setNewUser(value);
   }
@@ -33,19 +35,20 @@ export default function TableUsers({token, optionsDepartments, roles}:
     deleteUser(id);
   }
 
+  //aqui se hace un parse de los datos como vienen del backend a como los manipulamos en la tabla
   const data = DataUsersToTableData(users);
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'Seleccion',
-      cell: ({row}) => (
+      id: 'Seleccion', // identificador de la columna, en la opcion para ocultar o mostrar asi es como aparecera
+      cell: ({row}) => ( // En cell va el contenido de la celda 
         <input type="checkbox" 
           checked={row.getIsSelected()}
           onChange={row.getToggleSelectedHandler()}
         />
       ),
       enableSorting:false,
-      header: ({table}:any) => (
+      header: ({table}:any) => ( // El header es el encabezado de la tabla
         <input type="checkbox" 
           checked={table.getIsAllRowsSelected()}
           onClick={()=> {
@@ -119,6 +122,7 @@ export default function TableUsers({token, optionsDepartments, roles}:
   
   return(
     <>
+      {/* Componente que muestra el encabezado de la pagina y se le pasa como hijo un componente que traiga la funcionalidad requerida, que lo normal son botones para agregar un nuevo elemento */}
       <Header title="Usuarios" placeHolder="Buscar usuario..">
         <>
           <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
@@ -131,6 +135,7 @@ export default function TableUsers({token, optionsDepartments, roles}:
         </>
       </Header>
       <div className="hidden md:block w-full mt-5">
+        {/* Esta es la tabla que recibe las columnas y los datos de la tabla, dentro lo unico que cambia es cuando se requiere una funcionalidad al  seleccionar como seleccionar facturas y esperar que se pinte en el encabezado el acumulado, porque al ser de diferentes tipos de datos los campos varian */}
         <Table columns={columns} data={data} placeH="Buscar usuario..." />
       </div>
       <div className="block md:hidden mt-5">

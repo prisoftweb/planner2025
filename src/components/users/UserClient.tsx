@@ -15,14 +15,9 @@ import { IPermissionsAndComponents } from "@/interfaces/Roles"
 export default function UserClient({user, token, departments, optsRole, optTab, permissions}: 
   {user:UsrBack, token:string, departments:Options[], optsRole:Options[], optTab: number, permissions:IPermissionsAndComponents}) {
   
-  // const [opt, setOpt] = useState<number>(optQuery);
-  // const [open, setOpen] = useState<boolean>(false);
+  //se importan metodos y propiedades del estado global de usuario
   const {updateUser, name, _id, department, email, photo, role, status, __v, 
       createAt, passwordChangedAt, rol, profile} = useUserStore();
-
-  // const handleOpenNav = (value: boolean) => {
-  //   setOpen(value);
-  // }
 
   const usr: UsrBack = {
     __v,
@@ -39,16 +34,14 @@ export default function UserClient({user, token, departments, optsRole, optTab, 
     profile
   }
 
-  // const handleChangeOpt = (value:number) => {
-  //   setOpt(value);
-  // }
-
+  //se actualiza el estado global de user con los datos del usuario recibido del backend
   useEffect(() => {
     updateUser(user);
   }, []);
 
   let view: JSX.Element;
 
+  //se asignan en variables los componentes dependiendo de si el usuario tiene permiso o no
   const configUser=permissions.components.includes("deleteuser")? <ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />: <></>
   const basicData=permissions.components.includes("personaldata")? <UpdateProfile departments={departments} user={usr.name ===''? user: usr} token={token} optsRoles={optsRole} />: <></>
   const changePhoto=permissions.components.includes("updatephoto")? <ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />: <></>

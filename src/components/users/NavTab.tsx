@@ -22,44 +22,8 @@ export default function NavTab({tab, handleTab, permissions}: {tab:number, handl
   let tabUser: JSX.Element = <></>;
 
   if(width < 710){
-    // tabUser = <div className="flex justify-between mt-3">
-    //                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-    //                   placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
-    //                   <UserCircleIcon data-tooltip-target="tooltip-dark"
-    //                     className={`w-6 h-6 text-slate-600 cursor-pointer 
-    //                     ${tab===1? 'bg-green-500 rounded-lg': ''}`}
-    //                     onClick={() => handleTab(1) } />
-    //                 </Tooltip>  
-    //                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-    //                   placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cambiar foto'>
-    //                   <CurrencyDollarIcon
-    //                     className={`w-6 h-6 text-slate-600 cursor-pointer 
-    //                     ${tab===2? 'bg-green-500 rounded-lg': ''}`}
-    //                     onClick={() => handleTab(2)} />
-    //                 </Tooltip>
-    //                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-    //                   placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cambiar contrasena'>
-    //                   <QuestionMarkCircleIcon
-    //                     className={`w-6 h-6 text-slate-600 cursor-pointer 
-    //                     ${tab===3? 'bg-green-500 rounded-lg': ''}`}
-    //                     onClick={() => handleTab(3)} />
-    //                 </Tooltip>
-    //                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-    //                   placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Logs'>
-    //                   <QuestionMarkCircleIcon
-    //                     className={`w-6 h-6 text-slate-600 cursor-pointer 
-    //                     ${tab===4? 'bg-green-500 rounded-lg': ''}`}
-    //                     onClick={() => handleTab(4)} />
-    //                 </Tooltip>
-    //                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-    //                   placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Configuracion'>
-    //                   <QuestionMarkCircleIcon
-    //                     className={`w-6 h-6 text-slate-600 cursor-pointer 
-    //                     ${tab===5? 'bg-green-500 rounded-lg': ''}`}
-    //                     onClick={() => handleTab(5)} />
-    //                 </Tooltip>
-    //               </div>
-                
+    // diseno responsivo del tab para cambiar de pestana en el perfil del usuario
+    // se valida con los componentes si tiene permiso para verlo o sino no se muestra la opcion
     tabUser=<div className="grid grid-cols-5 mt-3 border-t pt-2 gap-y-2">
               {permissions.components.includes("personaldata") && (
                 <div onClick={() => handleTab(1) } className="flex flex-col items-center" >
@@ -106,6 +70,7 @@ export default function NavTab({tab, handleTab, permissions}: {tab:number, handl
 
             </div>
   }else{
+    // mismo componente pero en opcion de pantalla mas grande
     tabUser=(
       <div className="flex mt-5 py-1 border-b border-blue-300">
         {permissions.components.includes("personaldata") && (

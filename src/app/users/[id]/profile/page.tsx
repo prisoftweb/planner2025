@@ -17,11 +17,15 @@ export default async function Page({ params, searchParams }: { params: { id: str
 
   const currentUser: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
+  // se hacen los llamados a los endpoints de forma paralela, end los route donde se encuentran los llamados se valida con try catch si funciona o no
+  //en caso de error regresa una cadena con el error, por eso las validaciones que se hacen aqui se comparan si es una cadena o no
   const [user, users]=await Promise.all([
     getUser(params.id, token),
     getUsers(token),
   ]);
   
+  //si la variable es de tipo cadena significa que la peticion fallo y se muestra el error con con el mensaje que regresa
+  //en esta validacion no se agrega el componente de menu porque la peticion que fallo es la que tiene los recursos que se pueden mostrar
   if(typeof(user) === "string"){
     return(
       <>
@@ -81,6 +85,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
   // else if(searchParams.opt==='3') opt = 3;
   //   else if(searchParams.opt==='4') opt = 4;
 
+  //se procesan los datos que manda el backend en componentes y permisos, para agrupar los componentes en un arreglo de cadenas y un solo objeto de permisos y que sea mas facil su implementacion
   const result = {
     permission: rescomponents[0]?.permission ?? {},
     components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
@@ -93,6 +98,9 @@ export default async function Page({ params, searchParams }: { params: { id: str
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
           <>
+            {/* componente para mostrar el encabezado de la pagina, recibe como parametro un componente hijo que muestra del lado derecho de la ventana
+            se le pasa el componente para cambiar de pestana con las opciones pasadas como parametro
+            se valida con el componente de findall y si no lo tiene no se muestra nada */}
             <div className="hidden md:block w-full max-w-80 lg:max-w-md">
               {result.components.includes('findall') && (
                 <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
@@ -100,6 +108,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
             </div>
           </>
         </HeaderImage>
+        {/* en tamano responsivo se muestra y cuando crece desaparece para que se muestre el del encabezado */}
         <div className=" md:hidden mt-2">
           {result.components.includes('findall') && (
             <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
