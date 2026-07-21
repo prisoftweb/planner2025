@@ -1,15 +1,16 @@
 import axios from "axios";
 
 export async function createUserPhoto(user:FormData, auth_token:string){
+  //se guarda la url a la que se hace la peticion
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/userWithPhoto`;
-  try {
+  try {//se hace la peticion al endpoint con el metodo requerido, se le pasan los encabezados, data si lleva, 
     const res = await axios.post(url, user, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'multipart/form-data',
       }
     })
-    if(res.status === 201){
+    if(res.status === 201){//se valida con el codigo de status si fue exitosa o no y se regresa la informacion o se regresa un string que es el que se valida cuando se hace una peticion
       return res.data.data.data;
     }else{
       return res.statusText;

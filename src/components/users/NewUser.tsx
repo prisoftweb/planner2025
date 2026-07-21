@@ -2,7 +2,6 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
 import UploadImage from "../UploadImage"
 import { useState, useEffect, useRef } from "react"
 import Button from "../Button"
@@ -31,11 +30,13 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
   }
 
   useEffect(() => {
+    //Evento para el alto del componente por si cambia la altura de la pantalla
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 110);
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
   
+  //encontrar la opcion del departamento actual entre el arreglo de departamentos
   let optDepto = optionsDepartments.find(dep => dep.value === department)?? optionsDepartments[0];
 
   const formik = useFormik({
@@ -62,7 +63,7 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
         refRequest.current = false;
         const { email, password, confirmpassword, name } = valores;
 
-        if(file){
+        if(file){//si tiene archivo se genera un formdata y se agregan sus elementos
           const formdata = new FormData();
           formdata.append('name',name);
           formdata.append('email', email);
@@ -73,7 +74,7 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
           if(file) formdata.append('photo', file);
 
           try {
-            const res = await createUserPhoto(formdata, token);
+            const res = await createUserPhoto(formdata, token); //se llama al endpoint para crear un usuaario con foto
             if(typeof(res)==='string'){
               refRequest.current = true;
               showToastMessageError(res);
@@ -87,7 +88,7 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
             refRequest.current = true;
             showToastMessageError('Error al crear usuario!!');
           }
-        }else{
+        }else{//si no tiene foto se crea un objeto y se llama al enpoint para crear usuario sin foto
           const data = {
             name, email, password, confirmpassword, department, rol:role
           }
