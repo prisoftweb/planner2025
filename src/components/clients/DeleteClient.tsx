@@ -5,7 +5,7 @@ import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { removeClient } from '@/app/api/routeClients';
-import { ClientBack, TableClient } from '@/interfaces/Clients';
+import { TableClient } from '@/interfaces/Clients';
 
 export default function DeleteClient({token, client} : {token : string, client:TableClient}){
   
@@ -33,8 +33,6 @@ export default function DeleteClient({token, client} : {token : string, client:T
                   showToastMessageError('El cliente no pudo ser eliminado..');
                 }
               } catch (error) {
-                console.log(error);
-                console.log('Error al eliminar cliente');
                 showToastMessageError('Error al eliminar cliente');
               }
             break;

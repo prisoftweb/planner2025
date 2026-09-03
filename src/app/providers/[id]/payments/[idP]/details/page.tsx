@@ -1,14 +1,15 @@
-//import NavTab from "@/components/providers/NavTab";
 import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
-import { getProvider, getProviderMin, getProviders } from "@/app/api/routeProviders";
+import { getProviderMin, getProviders } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { DetailExpensesTableProvider, Provider, ProviderMin } from "@/interfaces/Providers";
+import { DetailExpensesTableProvider, IProviderMin } from "@/interfaces/Providers";
 import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableDetailsExpenseProvider from "@/components/providers/ContainerTableDetailsExpenseProvider";
-// import { Expense } from "@/interfaces/Expenses";
-import { CostPayment, OnePayment } from "@/interfaces/Payments";
 import { getCostsPayment, getPayment } from "@/app/api/routePayments";
+import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string, idP: string }}){
   
@@ -17,57 +18,111 @@ export default async function Page({ params }: { params: { id: string, idP: stri
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let provider: ProviderMin;
-  try {
-    const arrProvider = await getProviderMin(params.id, token);
-    if(typeof(arrProvider) === "string")
-      return <h1 className="text-center text-red-500">{arrProvider}provedor</h1>
-    else
-      provider = arrProvider[0];
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
+  let provider: IProviderMin;
+
+  const [arrProvider, providers, costs, payment, pending, resresource, rescomponents] = await Promise.all([
+    getProviderMin(params.id, token),
+    getProviders(token),
+    getCostsPayment(token, params.idP),
+    getPayment(token, params.idP),
+    getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', '/id/payments/id/profile'),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
 
-  let providers: Provider[];
-  try {
-    providers = await getProviders(token);
-    if(typeof(providers) === "string")
-      return <h1 className="text-center text-red-500">{providers} provedores</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+      </>
+    )
+  }
+  
+  if(typeof(arrProvider) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{arrProvider}provedor</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={arrProvider} />
+      </>
+    )
+  }
+  else{
+    provider = arrProvider[0];
   }
 
-  let costs: CostPayment[];
-  try {
-    costs = await getCostsPayment(token, params.idP);
-    if(typeof(costs) === "string")
-      return <h1 className="text-center text-red-500">{costs} costos</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del pago!!</h1>  
+  if(typeof(providers) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{providers} provedores</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={providers} />
+      </>
+    )
   }
 
-  let payment: OnePayment;
-  try {
-    payment = await getPayment(token, params.idP);
-    if(typeof(payment) === "string")
-      return <h1 className="text-center text-red-500">{payment} one payment</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del pago!!</h1>  
+  if(typeof(costs) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{costs} costos</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={costs} />
+      </>
+    )
+  }
+
+  if(typeof(payment) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{payment} one payment</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={payment} />
+      </>
+    )
+  }
+
+  if(typeof(pending) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{pending}</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message={pending} />
+      </>
+    )
   }
 
   if(providers.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">Error al obtener proveedores...</h1> */}
+        <ComponentError page={`/providers/${params.id}/payments/${params.idP}/details`} message="Error al obtener proveedores..." />
+      </>
+    )
   }
 
   const table: DetailExpensesTableProvider[] = ExpenseDataToTableDetailExpensesProviderData(costs);
-  // const table: DetailExpensesTableProvider[] = [];
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <ContainerTableDetailsExpenseProvider data={table} expenses={costs} token={token}
-          user={user} provider={provider} payment={payment} />
+          user={user} provider={provider} payment={payment} pending={pending.flat()} />
       </div>
     </>
   )

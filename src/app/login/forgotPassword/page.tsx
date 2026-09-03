@@ -24,8 +24,7 @@ export default function Forgot(){
 			const { email } = valores;
 				
 			let res = await forgotPassword(email);
-			console.log(res);
-      resetForm();            
+			resetForm();            
 			if(res != undefined)
 				if(res === 201) {
 					showToastMessage('Varifica tu correo para reestablecer el password');                

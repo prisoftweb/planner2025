@@ -2,6 +2,7 @@ import {create} from 'zustand'
 import { OneExpense, Expense } from '@/interfaces/Expenses'
 import { Options } from '@/interfaces/Common'
 import { ReportParse } from '@/interfaces/Reports'
+import { CFDIValidation } from "@/interfaces/Expense";
 
 interface NewExpenseState {
   folio:string, 
@@ -23,6 +24,7 @@ interface NewExpenseState {
   
   voucher: (File | null),
   CFDI: (File | null)
+  dataCFDI: (CFDIValidation | undefined),
   haveTaxExempt: boolean,
   haveDiscount: boolean
 
@@ -57,10 +59,10 @@ interface CurrentExpense{
 interface Actions {
   updateBasicData: (folio:string, description:string, amount: string,
     date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-    typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string, 
+    typeCFDI:string, typeExpense:string, idVat:string, type:string, 
     taxExempt: string, total:string) => void,
   updateVoucher: (file: File) => void,
-  updateCDFI: (CFDI: File) => void,
+  updateCDFI: (CFDI: File, dataCFDI: CFDIValidation) => void,
   updateIndexStepper: (index: number) => void,
   reset: () => void,
   updateRefresh: (value: boolean) => void,
@@ -104,6 +106,7 @@ const initialState: NewExpenseState = {
   haveDiscount: false,
   taxExempt: '',
   total: '0',
+  dataCFDI: undefined
 }
 
 const initialCostCenter : CostCenterState = {
@@ -140,7 +143,7 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState
   ...initialCostCenter,
   updateBasicData: ( folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-      typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string, 
+      typeCFDI:string, typeExpense:string, idVat:string, type:string, 
       taxExempt: string, total: string) => set(state => ({
     ...state,
     folio: folio,
@@ -154,7 +157,7 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState
     responsible: responsible,
     typeCFDI: typeCFDI,
     typeExpense: typeExpense,
-    category: category,
+    // category: category,
     idVat: idVat,
     type: type,
     taxExempt: taxExempt,
@@ -164,9 +167,10 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState
     ...state,
     voucher: file    
   })),
-  updateCDFI: (CFDI: File) => set(state => ({
+  updateCDFI: (CFDI: File, dataCFDI: CFDIValidation) => set(state => ({
       ...state,
-      CFDI: CFDI
+      CFDI: CFDI,
+      dataCFDI: dataCFDI
   })),
   updateIndexStepper: (index: number) => set(state => ({
     ...state,
@@ -224,7 +228,6 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState
     haveTaxExempt: value,
   })),
   updateExpensesTable: (value:Expense[]) => {
-    console.log('update expenses table => ', value);
     set(state => ({
       ...state,
       expensesTable: value,

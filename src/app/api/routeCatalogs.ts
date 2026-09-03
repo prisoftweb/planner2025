@@ -121,7 +121,6 @@ export async function InsertTypeInCatalog(auth_token:string, id:string, data:Obj
         'Content-Type': 'application/json',
       }
     })
-    console.log('res router => ', res);
     if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {

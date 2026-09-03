@@ -1,5 +1,4 @@
 'use client'
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
@@ -10,11 +9,18 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
 import { getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
+
+type Props = {
+  showForm:(value: boolean) => void, 
+  FilterData:Function, 
+  maxAmount:number, 
+  minAmount:number, 
+  token: string
+}
 
 export default function FilteringPaymentsProvider({showForm, FilterData, maxAmount, minAmount, 
-                      token }: 
-                    {showForm:Function, FilterData:Function, maxAmount:number, 
-                      minAmount:number, token: string}){
+  token }: Props){
 
   const [conditionsSel, setConditionsSel] = useState<string[]>(['all']);
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -22,9 +28,6 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
   const [conditions, setConditions] = useState<Options[]>([]);  
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
-
-  // const [isPaid, setIsPaid] = useState<boolean>(false);
-  // const [isPaid, setIsPaid] = useState<number>(1);
 
   const [values, setValues] = useState([
     new DateObject().setDay(4).subtract(1, "month"),
@@ -34,13 +37,9 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
   useEffect(() => {
     const fetchApis = async () => {
       let optConditions: Options[] = [];
-      try {
-        //optConditions = await getCatalogsByNameAndCondition(token, 'cost');
-        optConditions = await getCatalogsByNameAndCondition(token, 'payments');
-        if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
-      } catch (error) {
-        return <h1>Error al consultar catalogos!!</h1>
-      }
+      optConditions = await getCatalogsByNameAndCondition(token, 'payments');
+      if(typeof(optConditions)==='string') 
+        return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
 
       setConditions(optConditions);
     }
@@ -90,7 +89,6 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
   }, [values]);
 
   useEffect(() => {
-    //console.log('providers sel => ', providersSel);
     FilterData(conditionsSel, minValue, maxValue, 
       firstDate?.getTime(), secondDate?.getTime(), 1);
   }, [ conditionsSel, minValue, maxValue, firstDate, secondDate]);
@@ -109,12 +107,12 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
     return <></>
   }
 
-  return(
+  return(//top-16
     <>
-      <form className="z-10 top-16 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-md absolute bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0"
         style={{height: `${heightPage}px`}}
       >
-        <div className="flex justify-between">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <div className="flex mt-2 items-center">
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
             <div className="ml-3">
@@ -122,36 +120,11 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
               <p className="text-gray-500 text-sm">Filtra gastos por diferentes caracteristicas</p>
             </div>
           </div>
-          <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-8 h-8 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
-        {/* <div className="flex justify-end px-5 items-center">
-          <p className="text-gray-500 text-sm after:content-['*'] after:ml-0.5 after:text-red-500">Pagado?</p>
-          <div>
-            <div className="inline-flex rounded-md shadow-sm mx-2">
-            <button type="button" className={`px-3 py-1 text-sm border border-blue-400 rounded-md 
-                        ${isPaid === 1? 'bg-blue-500 text-white': ''}`}
-                onClick={() => setIsPaid(1)}
-              >
-                Ambos
-              </button>
-              <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
-                        ${isPaid===2? 'bg-green-500 text-white': ''}`}
-                onClick={() => setIsPaid(2)}
-              >
-                Pagado
-              </button>
-              <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
-                        ${isPaid===3? 'bg-red-500 text-white': ''}`}
-                onClick={() => setIsPaid(3)}
-              >
-                No Pagado
-              </button>
-            </div>
-          </div>
-        </div> */}
-        
         <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
           <SelectMultipleReact index={0} opts={allArray.concat(conditions)} setValue={handleConditions} />
@@ -167,8 +140,6 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
             onInput={(e) => {
               handleInput(e);
             }}
-            //baseClassName='multi-range-slider-black'
-            //style={{" border: 'none', boxShadow: 'none', padding: '15px 10px' "}}
             style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
                 backgroundColor: 'white', 'zIndex': '0'}}
             label='false'
@@ -181,11 +152,11 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
           />
           <div className="flex justify-between">
             <p>{CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: minValue
                 })}</p>
             <p>{CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: maxValue
                 })}</p>
           </div>
@@ -196,7 +167,6 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             value={values}
-            //onChange={setValues}
             onChange={(e: any) => setValues(e)}
             range
             numberOfMonths={2}

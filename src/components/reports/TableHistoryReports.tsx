@@ -1,28 +1,33 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import DeleteElement from "../DeleteElement";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Options } from "@/interfaces/Common";
 import { ReportTable, ReportParse } from "@/interfaces/Reports";
 import Chip from "../providers/Chip";
-//import { RemoveReport } from "@/app/api/routeReports";
 import { ReportParseDataToTableData } from "@/app/functions/ReportsFunctions";
 import Filtering from "./FilteringReports";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
+import ContainerSideNav from "../ContainerSideNav";
+import { Badge } from "@mui/material";
 
-export default function TableHistoryReports({data, token, reports, 
-                          optCompanies, optConditions, optProjects, 
-                          isFilter, setIsFilter}:
-                        {data:ReportTable[], token:string, 
-                          reports: ReportParse[], optCompanies: Options[], 
-                          optProjects: Options[], optConditions: Options[], 
-                          isFilter:boolean, setIsFilter:Function}){
+type Props = {
+  data:ReportTable[], 
+  token:string, 
+  reports: ReportParse[], 
+  optCompanies: Options[], 
+  optProjects: Options[], 
+  optConditions: Options[], 
+  isFilter:boolean, 
+  setIsFilter:(value: boolean) => void
+}
+
+export default function TableHistoryReports({data, token, reports, optCompanies, 
+  optConditions, optProjects, isFilter, setIsFilter}: Props){
   
   const columnHelper = createColumnHelper<ReportTable>();
 
-  //const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataReports, setDataReports] = useState(data);
 
@@ -51,9 +56,11 @@ export default function TableHistoryReports({data, token, reports,
       id: 'Responsable',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
-          <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
-          {/* <DeleteElement id={row.original.id} name={row.original.Report} remove={RemoveReport} token={token} /> */}
-          {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500" />}
+          {/* <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" /> */}
+          <Badge color="secondary" badgeContent={row.original.NºGastos}>
+            <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
+          </Badge>
+          {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500 hover:bg-blue-100" />}
         </div>
       ),
       enableSorting:false,
@@ -117,16 +124,7 @@ export default function TableHistoryReports({data, token, reports,
       id: 'Estatus',
       cell: ({row}) => (
         <Link href={`/reports/history/${row.original.id}`}>
-          <Chip label={row.original.Status} color={row.original.color} />
-        </Link>
-      ),
-    }),
-    columnHelper.accessor('NºGastos', {
-      header: 'NºGastos',
-      id: 'NºGastos',
-      cell: ({row}) => (
-        <Link href={`/reports/history/${row.original.id}`}>
-          <p className="">{row.original.NºGastos}</p>
+          <Chip label={row.original.Status} color={row.original.color} darktext={row.original?.darktext?? false} />
         </Link>
       ),
     }),
@@ -154,7 +152,6 @@ export default function TableHistoryReports({data, token, reports,
   
   useEffect(() => {
     if(filter){
-      console.log('data rep ', dataReports);
       setView(<></>);
       setTimeout(() => {
         setView(<Table columns={columns} data={dataReports} placeH="Buscar reporte.." />);
@@ -166,10 +163,8 @@ export default function TableHistoryReports({data, token, reports,
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {
     const repAmount = reports.reduce((previous, current) => {
-      //console.log('REP => ', previous);
       return current.total > previous.total ? current : previous;
     });
-    //console.log('rep amount => ', repAmount);
     setMaxAmount(repAmount.total || 100);
   }, [])
 
@@ -248,7 +243,6 @@ export default function TableHistoryReports({data, token, reports,
     startDate:number, endDate:number, isPettyCash:boolean) => {
   
     let filtered: ReportParse[] = [];
-    //console.log('filter data => ');
     reports.map((report) => {
       if(pettyCashValidation(report, minAmount, maxAmount, startDate, 
           endDate, projects, companies, conditions, isPettyCash)){
@@ -256,7 +250,6 @@ export default function TableHistoryReports({data, token, reports,
       }
     });
 
-    //console.log('filteres => ', filtered);
     setDataReports(ReportParseDataToTableData(filtered));
     setFilter(true);
   }
@@ -264,9 +257,13 @@ export default function TableHistoryReports({data, token, reports,
   return(
     <>
       <div className="flex justify-end my-5">
-        {isFilter && <Filtering showForm={setIsFilter} optConditions={optConditions} 
+        {isFilter && (
+          <ContainerSideNav width="w-full max-w-md">
+            <Filtering showForm={setIsFilter} optConditions={optConditions} 
                         FilterData={filterData} maxAmount={maxAmount} 
-                        optProjects={optProjects} optCompanies={optCompanies} />}
+                        optProjects={optProjects} optCompanies={optCompanies} />
+          </ContainerSideNav>
+        )}
       </div>
       {view}
     </>

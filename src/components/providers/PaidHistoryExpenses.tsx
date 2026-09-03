@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { XMarkIcon } from "@heroicons/react/24/solid";
 import { GiSettingsKnobs } from "react-icons/gi";
 import NavStepperPaidExpenses from "./NavStepperPaidExpenses";
 import { HistoryExpensesTable } from "@/interfaces/Providers";
@@ -8,44 +7,74 @@ import { Provider } from "@/interfaces/Providers";
 import TableListExpensesPaid from "./TableListsExpensesPaid";
 import PaidExpensesHistory from "./PaidExpensesHistory";
 import { Options } from "@/interfaces/Common";
-import { CostInPayment } from "@/interfaces/Payments";
 import { CostsPaymentTable } from "@/interfaces/Providers";
+import PaymentPlugin from "./PaymentPlugin";
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
+
+type Props = {
+  showForm: (value: boolean) => void, 
+  dataTable: HistoryExpensesTable[], 
+  provider: Provider, 
+  token:string, 
+  user: string, 
+  updateTable: Function, 
+  condition: string, 
+  optTypes: Options[],
+  open: boolean,
+  company:string
+}
 
 export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user, 
-    updateTable, condition, optTypes}: 
-  {showForm:Function, dataTable: HistoryExpensesTable[], provider: Provider, 
-    token:string, user: string, updateTable: Function, condition: string, optTypes: Options[]}) {
+  updateTable, condition, optTypes, open, company}: Props) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
 
   const [costsInPayment, setCostInPayment] = useState<CostsPaymentTable[]>([]);
 
+  const [paymentPlugin, setPaymentPlugin] = useState<string>('');
+  const [date, setDate] = useState<string>('');
+  const [comments, setComments] = useState<string>('');
+
+  const handlePaymentPlugin = (value:string) => {
+    setPaymentPlugin(value);
+  }
+
+  const handleDate = (value:string) => {
+    setDate(value);
+  }
+
+  const handleComments = (value:string) => {
+    setComments(value);
+  }
+
   useEffect(() => {
-    const aux: CostsPaymentTable[] = [];
-    dataTable.map((c) => {
-      aux.push({
-        archivos: c.archivos,
-        condition: c.Estatus,
-        Fecha: c.Fecha,
-        id: c.id,
-        isPaid: c.isPaid,
-        Responsable: c.Responsable,
-        Total: c.Total,
-        paid: Number(c.Total.replace(/[$,",", M, X]/g, "")),
-        pending: 0,
-        parciality: 1,
-        conceptCostoCenter: c.conceptCostoCenter,
-        discount: c.discount,
-        Importe: c.Importe,
-        iva: c.iva,
-        typeCFDI: c.typeCFDI,
-        folio: c.folio,
-        folioFiscal: c.folioFiscal
+    if(open){
+      const aux: CostsPaymentTable[] = [];
+      dataTable.map((c) => {
+        aux.push({
+          archivos: c.archivos,
+          condition: c.Estatus,
+          Fecha: c.Fecha,
+          id: c.id,
+          isPaid: c.isPaid,
+          Responsable: c.Responsable,
+          Total: c.Total,
+          paid: Number(c.Total.replace(/[$,",", M, X]/g, "")),
+          pending: 0,
+          parciality: 1,
+          conceptCostoCenter: c.conceptCostoCenter,
+          discount: c.discount,
+          Importe: c.Importe,
+          iva: c.iva,
+          typeCFDI: c.typeCFDI,
+          folio: c.folio,
+          folioFiscal: c.folioFiscal
+        });
       });
-    });
-    setCostInPayment(aux);
-  }, []);
+      setCostInPayment(aux);
+    }
+  }, [open]);
 
   const updateCostPartiality = (value: CostsPaymentTable) => {
     const filtered = costsInPayment.filter((c) => c.id !== value.id);
@@ -94,36 +123,41 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   });
 
   let viewComponent = indexStepper===1? 
-      <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
+      <PaymentPlugin comments={comments} date={date} nextStep={handleIndexStepper} paymentPlugin={paymentPlugin} 
+        setComments={handleComments} setDate={handleDate} setPaymentPlugin={handlePaymentPlugin} />:
+      (indexStepper==2? <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
           user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} 
-          optTypes={optTypes} costsPayment={costsInPayment} />:
-      <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />;
+          commentsPayment={comments} datePayment={date} paymentPlugin={paymentPlugin} 
+          optTypes={optTypes} costsPayment={costsInPayment} company={company} handleIndexStepper={handleIndexStepper} />: 
+        <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />);
   
   return(
     <>
-      <form className="z-10 top-16 w-full max-w-5xl absolute bg-white space-y-5 p-3 right-0"
-        style={{height: `${heightPage}px`}}
-      >
-        <div className="flex justify-between">
-          <div className="flex mt-2 items-center">
-            <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
-            <div className="ml-3">
-              <p className="text-xl">Nuevo pago</p>
-              <p className="text-gray-500 text-sm">Agrega un nuevo pago a proveedores</p>
+      <div>
+        {/* top-16 */}
+        <form className="z-10 w-full max-w-5xl absolute bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0"
+          style={{height: `${heightPage}px`}}
+        >
+          <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
+            <div className="flex mt-2 items-center">
+              <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
+              <div className="ml-3">
+                <p className="text-xl">Nuevo pago</p>
+                <p className="text-gray-500 text-sm">Agrega un nuevo pago a proveedores</p>
+              </div>
             </div>
+            <TooltipCloseIcon handleClose={showForm} />
           </div>
-          <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
-        </div>
-        
-        <NavStepperPaidExpenses index={indexStepper} changeTab={handleIndexStepper} />
-        <div className="mt-3">
-          <HeaderPaidHistoryExpenses expensesTable={costsInPayment} provider={provider} token={token} />
-        </div>
-        <div className="mt-3">
-          {viewComponent}
-        </div>
-      </form>
+          
+          <NavStepperPaidExpenses index={indexStepper} changeTab={handleIndexStepper} />
+          <div className="mt-3">
+            <HeaderPaidHistoryExpenses expensesTable={costsInPayment} provider={provider} token={token} />
+          </div>
+          <div className="mt-3">
+            {viewComponent}
+          </div>
+        </form>
+      </div>
     </>
   )
 }

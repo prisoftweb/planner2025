@@ -2,7 +2,7 @@ import Link from "next/link"
 import { ArrowLeftIcon } from "@heroicons/react/24/solid"
 import ButtonNewProvider from "./ButtonNewProvider"
 
-export default function HeaderProvider({id, token}: {id:string, token: string}){
+export default function HeaderProvider({id, token, company}: {id:string, token: string, company: string}){
   return(
     <>
       <div className="flex justify-between items-center">
@@ -12,7 +12,7 @@ export default function HeaderProvider({id, token}: {id:string, token: string}){
           </Link>
           <p className="text-2xl ml-3 font-semibold">Proveedores</p>
         </div>
-        <ButtonNewProvider id={id} token={token} />
+        <ButtonNewProvider id={id} token={token} company={company} />
       </div>
     </>
   )

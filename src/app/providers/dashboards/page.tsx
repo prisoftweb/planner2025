@@ -2,11 +2,12 @@ import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import DashboardContainer from "@/components/providers/dashboard/DashboardContainer";
-import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE,
-  getAllProvidersWithTradeLine, getTotalPayments } from "@/app/api/routeDashboardProviders";
-import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine } from "@/interfaces/DasboardProviders";
-import { TotalPayments } from "@/interfaces/DasboardProviders";
-import { ProvidersDataToTableData } from "@/app/functions/DashboardProviderFunctions";
+import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getTotalPayments, getTotalPendingPaymentsProvider, 
+  getTotalCostPendingPaymentByProviderEstatusMIN, getTotalCostPendingPaymentByProvidersMIN, 
+  getTotalCostApplyPaymentByProvidersTradelineMIN } from "@/app/api/routeDashboardProviders";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function page() {
 
@@ -15,67 +16,120 @@ export default async function page() {
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let totalCost: TotalCostsByProvidersTradeLine[] = [];
-  try {
-    totalCost = await getAllCostsTOTALGroupByPROVIDERTRADELINE(token);
-    if(typeof(totalCost)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{totalCost}totalCost</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener total de los costos por proveedor!!</h1>
+  const [totalCost, providersTradeLine, costsProviderWithTradeLine, costsProvider, 
+      totalPayments, penddingPayment, pendingPaymentProv, resresource, rescomponents] = await Promise.all([
+    getTotalCostApplyPaymentByProvidersTradelineMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+    getTotalCostPendingPaymentByProviderEstatusMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+    getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true', new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+    getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'false', new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+    getTotalPayments(token),
+    getTotalPendingPaymentsProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+    getTotalCostPendingPaymentByProvidersMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', '/dashboards'),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
 
-  let providersTradeLine: ProviderWithTradeLine[] = [];
-  try {
-    providersTradeLine = await getAllProvidersWithTradeLine(token);
-    if(typeof(providersTradeLine)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{providersTradeLine} providersTradeLine</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener proveedores con linea de credito!!</h1>
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/providers`} message={rescomponents} />
+      </>
+    )
   }
 
-  let costsProviderWithTradeLine: CostsByProvider[] = [];
-  try {
-    costsProviderWithTradeLine = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true');
-    console.log('costs linea de credito => ', costsProviderWithTradeLine);
-    if(typeof(costsProviderWithTradeLine)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}costsProviderWithTradeLine</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
+  if(typeof(totalCost)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{totalCost}totalCost</h1> */}
+        <ComponentError page="/providers/dashboard" message={totalCost} />
+      </>
+    )
   }
 
-  let costsProvider: CostsByProvider[] = [];
-  try {
-    costsProvider = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'false');
-    console.log('all costs provider => ', costsProvider);
-    if(typeof(costsProvider)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{costsProvider}costsprovider</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
+  if(typeof(providersTradeLine)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{providersTradeLine} providersTradeLine</h1> */}
+        <ComponentError page="/providers/dashboard" message={providersTradeLine} />
+      </>
+    )
   }
 
-  let totalPayments: TotalPayments[] = [];
-  try {
-    totalPayments = await getTotalPayments(token);
-    if(typeof(totalPayments)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{totalPayments}totalPayments</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener total de pagos de proveedores!!</h1>
+  if(typeof(costsProviderWithTradeLine)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}costsProviderWithTradeLine</h1> */}
+        <ComponentError page="/providers/dashboard" message={costsProviderWithTradeLine} />
+      </>
+    )
   }
 
-  const data = ProvidersDataToTableData(providersTradeLine);
+  if(typeof(costsProvider)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{costsProvider}costsprovider</h1> */}
+        <ComponentError page="/providers/dashboard" message={costsProvider} />
+      </>
+    )
+  }
+
+  if(typeof(totalPayments)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{totalPayments}totalPayments</h1> */}
+        <ComponentError page="/providers/dashboard" message={totalPayments} />
+      </>
+    )
+  }
+
+  if(typeof(penddingPayment)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{penddingPayment}</h1> */}
+        <ComponentError page="/providers/dashboard" message={penddingPayment} />
+      </>
+    )
+  }
+
+  if(typeof(pendingPaymentProv)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{penddingPayment}</h1> */}
+        <ComponentError page="/providers/dashboard" message={pendingPaymentProv} />
+      </>
+    )
+  }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <DashboardContainer costsProvider={costsProvider} totalCost={totalCost}
           costsProviderWithTradeLine={costsProviderWithTradeLine} 
-          providersTradeLine={providersTradeLine} data={data} totalPayments={totalPayments[0]} />
+          providersTradeLine={providersTradeLine} token={token}
+          totalPayments={totalPayments[0]} pendingPay={penddingPayment}
+          pendingPayProv={pendingPaymentProv} />
       </div>
     </>
   )

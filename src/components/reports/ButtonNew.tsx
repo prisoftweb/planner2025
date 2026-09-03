@@ -3,13 +3,20 @@ import Button from "../Button"
 import { useState } from "react";
 import NewReport from "./NewReport";
 import { Options } from "@/interfaces/Common";
+import ContainerSideNav from "../ContainerSideNav";
+
+type Props = {
+  token:string, 
+  departments:Options[], 
+  companies:Options[], 
+  projects:Options[], 
+  user:string, 
+  condition:string,
+  company:string
+}
 
 export default function ButtonNew({token, companies, departments, 
-                        projects, condition, user}: 
-                      {token:string, departments:Options[], 
-                        companies:Options[], projects:Options[], 
-                        user:string, condition:string
-                      }){
+  projects, condition, user, company}: Props){
   const [newReport, setNewReport] = useState<boolean>(false);
 
   const handleNewReport = (value: boolean) => {
@@ -19,11 +26,22 @@ export default function ButtonNew({token, companies, departments,
   return(
     <>
       <Button type="button" onClick={() => setNewReport(true)}>Nuevo</Button>
-          {newReport && <NewReport showForm={handleNewReport} 
+          {/* {newReport && (
+            <ContainerSideNav width="w-full max-w-xl">
+              <NewReport showForm={handleNewReport} 
                                   token={token} projects={projects}
                                   companies={companies} departments={departments} 
                                   condition={condition} user={user}
-                        />}
+                        />
+            </ContainerSideNav>
+          )} */}
+      <ContainerSideNav width="w-full max-w-md" open={newReport}>
+        <NewReport showForm={handleNewReport} 
+                            token={token} projects={projects}
+                            companies={companies} departments={departments} 
+                            condition={condition} user={user} company={company}
+                  />
+      </ContainerSideNav>
     </>
   )
 }

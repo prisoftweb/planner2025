@@ -42,8 +42,7 @@ export default function ResetPassword(){
 			resetForm();            
 			if(res != undefined)
 				if(res === 200) {
-          //console.log('Cambio de password realizado');
-					showToastMessage('Cambio de contraseña exitoso');
+          showToastMessage('Cambio de contraseña exitoso');
           deleteCookie('token');
           deleteCookie('user');
           deleteCookie('id');

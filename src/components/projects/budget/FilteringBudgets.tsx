@@ -1,7 +1,6 @@
 'use client'
-//import HeaderForm from "@/components/HeaderForm"
 import Label from "@/components/Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
 import SelectMultipleReact from "@/components/SelectMultipleReact"
 import { Options } from "@/interfaces/Common";
@@ -9,11 +8,17 @@ import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 
-export default function Filtering({showForm, optProjects, 
-                      optConditions, FilterData, maxAmount }: 
-                    {showForm:Function, optProjects: Options[],
-                      optConditions: Options[], FilterData:Function, maxAmount:number  }){
+type Params = {
+  showForm:(value: boolean) => void, 
+  optProjects: Options[],
+  optConditions: Options[], 
+  FilterData:Function, 
+  maxAmount:number 
+}
+
+export default function Filtering({showForm, optProjects, optConditions, FilterData, maxAmount }: Params){
   
   const [conditions, setConditions] = useState<string[]>([optConditions[0].value]);
   const [projects, setProjects] = useState<string[]>([optProjects[0].value]);
@@ -63,21 +68,16 @@ export default function Filtering({showForm, optProjects,
 
   return(
     <>
-      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
-        <div className="flex justify-between">
-          {/* <HeaderForm img="/img/role.svg" subtitle="Filtra proyectos por diferentes caracteristicas" 
-            title="Filtrar proyecto"
-          /> */}
+      <form className="z-10 top-16 fixed bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0 h-screen">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <div className="flex mt-2 items-center">
-            {/* <img src={img} alt="logo" className="rounded-full w-14 h-auto" /> */}
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
             <div className="ml-3">
               <p className="text-xl">Filtrar presupuestos</p>
               <p className="text-gray-500 text-sm">Filtra presupuestos por diferentes caracteristicas</p>
             </div>
           </div>
-          <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div className="">
@@ -88,7 +88,6 @@ export default function Filtering({showForm, optProjects,
           <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
           <SelectMultipleReact index={0} opts={optProjects} setValue={handleProjects} />
         </div>
-        {/* <div className="pt-9"> */}
         <div className="pt-0">
           <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
           <MultiRangeSlider
@@ -114,11 +113,11 @@ export default function Filtering({showForm, optProjects,
           />
           <div className="flex justify-between">
             <p>{CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: minValue
                 })}</p>
             <p>{CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: maxValue
                 })}</p>
           </div>
@@ -129,7 +128,6 @@ export default function Filtering({showForm, optProjects,
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             value={values}
-            //onChange={setValues}
             onChange={(e: any) => setValues(e)}
             range
             numberOfMonths={2}

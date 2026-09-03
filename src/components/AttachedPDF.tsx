@@ -1,18 +1,16 @@
 import {Document, Page, Text, Image, View, StyleSheet} from '@react-pdf/renderer'
 import { Report, DateReport } from '@/interfaces/Reports'
 import { CurrencyFormatter } from '@/app/functions/Globals'
+import { Company } from "@/interfaces/Companies"
 
-export default function AttachedPDF({report, dates} :{report:Report, dates: DateReport[]}){
+export default function AttachedPDF({report, dates, satCompany} :{report:Report, dates: DateReport[], satCompany:Company}){
   
   const months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MARZO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-  const date = new Date(report.date);
+  // const date = new Date(report.date);
+  const date = new Date();
 
   const dateIni = dates[0]?.minDate? new Date(dates[0].minDate): new Date();
   const dateEnd = dates[0]?.maxDate? new Date(dates[0].maxDate): new Date();
-
-  console.log('dates anexo => ', dates);
-  console.log('date i => ', dateIni);
-  console.log('date f => ', dateEnd);
 
   const bandMonth = dateIni.getMonth() === dateEnd.getMonth()
 
@@ -48,13 +46,14 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
       fontSize: '11px',
     }
   })
-  
+  console.log('comp -> ', satCompany);
   return(
     <Document>
       <Page>
         <View style={{padding: '15px'}}>
           <View style={{justifyContent: 'center', marginTop: '10px'}}>
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '170px'}}></Image>
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '170px'}}></Image> */}
+            <Image src={satCompany.logo} style={{width: '170px'}}></Image>
           </View>
           <Text style={{fontSize: '20px', textAlign: 'center', fontWeight: 'bold'}}>(FF ANEXO I)</Text>
           <Text style={{fontSize: '15px', textAlign: 'center', fontWeight: 'semibold'}}> OFICIO DE ENTREGA </Text>
@@ -62,7 +61,6 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
             <Text>SAN LUIS POTOSI S.L.P. </Text>
             <Text style={style.textBlue}>a {date.getDate()} DE {months[date.getMonth()]} DE {date.getFullYear()}</Text>
           </View>
-          {/* <Text style={{fontSize: '11px', marginTop: '18px'}}>C. DIANA CAMACHO PALACIOS</Text> */}
           <Text style={{fontSize: '11px', marginTop: '18px'}}>C. {process.env.NEXT_PUBLIC_ADMINISTRATION_USER}</Text>
           <Text style={{fontSize: '11px'}}>DEPARTAMENTO DE ADMINISTRACION</Text>
           <View style={style.textFlex}>
@@ -79,7 +77,7 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
               <Text style={style.textBlue}>{report.company.name}</Text>
               <Text> ( EL IMPORTE TOTAL COMPROBADO DE MI FONDO FIJO ES DE </Text>
               <Text style={style.textRed}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: report.total
                 })} </Text>
               <Text> ) </Text>
@@ -90,11 +88,10 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
             <Text>INGRESE A PLANNER LOS COMPROBANTES POR LA CANTIDAD MENCIONADA Y AL MISMO 
                 TIEMPO SOLICITO ME SEA REPUESTO EL IMPORTE POR LA CANTIDAD DE: 
               <Text style={style.textBlue}> {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: report.total
                 })} </Text>
               <Text> QUE SE REFIERE A GASTOS REALIZADOS DURANTE EL PERIODO COMPRENDIDO DEL </Text>
-              {/* <Text style={style.textBlue}>DIA 23 al 25 DE MAYO DEL AÑO 2024.</Text> */}
               <Text style={style.textBlue}>DIA {dateIni.getDate()} {!bandMonth? 'de' + ' ' + months[dateIni.getMonth()]: ''} al {dateEnd.getDate()} DE {months[dateEnd.getMonth()]} DEL AÑO {dateEnd.getFullYear()}.</Text>
             </Text>
           </View>
@@ -104,7 +101,7 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
                 GASTOS EFECTUADOS EN OPERACIONES DEL PROYECTO DE
                 <Text style={style.textBlue}> {report.project.title}</Text>
                 <Text> A FAVOR DE LA EMPRESA </Text>
-                <Text style={style.textBlue}>PALACIOS CONSTRUCCIONES</Text>
+                <Text style={style.textBlue}>{satCompany.tradename}</Text>
                 <Text> Y QUE FUI ASIGNADO PARA REALIZAR LAS SIGUIENTES ACTIVIDADES: </Text>
             </Text>
           </View>

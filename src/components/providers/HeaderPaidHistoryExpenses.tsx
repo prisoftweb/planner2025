@@ -1,16 +1,19 @@
-import { HistoryExpensesTable } from "@/interfaces/Providers"
 import IconText from "./IconText"
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { Provider } from "@/interfaces/Providers";
-import { ProgressCircle } from "@tremor/react";
 import { getPendingPaymentProvider } from "@/app/api/routePayments";
 import { useState, useEffect } from "react";
 import { pendingPaymentProvider } from "@/interfaces/Payments";
 import { showToastMessageError } from "../Alert";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 
-export default function HeaderPaidHistoryExpenses({expensesTable, provider, token}:
-   {expensesTable: CostsPaymentTable[], provider: Provider, token: string}) {
+type HeaderProps={
+  expensesTable: CostsPaymentTable[], 
+  provider: Provider, 
+  token: string
+}
+
+export default function HeaderPaidHistoryExpenses({expensesTable, provider, token}: HeaderProps) {
 
   const [pending, setPending] = useState<number>(0);
 
@@ -27,13 +30,8 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
   })
   
   let amount = 0;
-  // let amountP = 0;
   expensesTable.map((exp) => {
-    // amount += Number(exp.Total.replace(/[$,%,M,N,X]/g,""));
-    console.log('amount => ', amount);
-    console.log('paid => ', exp.paid);
     amount += Number(exp.paid);
-    console.log('new amount => ', amount);
   });
  
   return (
@@ -49,16 +47,13 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
           </div>
         </div>
 
-        {/* <div>
-          <ProgressCircle value={85} title={'85'} />
-        </div> */}
       </div>
 
-      <div className="grid grid-cols-3 mt-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 mt-3">
         <div>
           <p>Monto a pagar</p>
           <p className="text-green-500">{CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: amount
           })}</p>
         </div>
@@ -66,7 +61,7 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
         <div>
           <p>Pendiente por pagar</p>
           <p className="text-red-500">{CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: pending
           })}</p>
         </div>

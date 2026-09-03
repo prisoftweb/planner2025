@@ -1,9 +1,5 @@
 'use client'
-import { CurrencyFormatter } from '@/app/functions/Globals';
-import { DonutChart, Legend } from '@tremor/react';
-
-// const valueFormatter = (number: number) =>
-//   `$ ${Intl.NumberFormat('us').format(number).toString()}`;
+import { DonutChart } from '@tremor/react';
 
 const valueFormatter = (number: number) =>
   `${Intl.NumberFormat('us').format(number).toString()} %`;
@@ -40,7 +36,7 @@ export default function DonutChartBudget({data, colors, categories, category}:
               {/* text-tremor-content-emphasis */}
                 {categoryPayload.value}%
                 {/* {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: categoryPayload.value
                 })} */}
               </p>
@@ -56,9 +52,7 @@ export default function DonutChartBudget({data, colors, categories, category}:
       <div className="flex flex-wrap items-center justify-center space-x-6">
         <DonutChart
           data={data}
-          //category="sales"
           category={category}
-          //index="name"
           index='label'
           valueFormatter={valueFormatter}
           colors={colors}

@@ -4,16 +4,25 @@ import { useState } from "react";
 import NewDepartment from "./NewDepartment";
 import { Options } from "@/interfaces/Common";
 import { DepartmentTable } from "@/interfaces/Departments";
+import ContainerSideNav from "../ContainerSideNav";
 
-export default function ButtonNew({token, optionsCompany, dept}: 
-                          {token:string, optionsCompany:Options[], dept:(DepartmentTable | string)}){
+type ButtonNewProps = {
+  token:string, 
+  optionsCompany:Options[], 
+  dept:(DepartmentTable | string),
+  company:string
+}
+
+export default function ButtonNew({token, optionsCompany, dept, company}: ButtonNewProps){
   const [newCompany, setNewCompany] = useState<boolean>(false);
   
   return(
     <>
       <Button type="button" onClick={() => setNewCompany(true)}>Nuevo</Button>
-          {newCompany && <NewDepartment showForm={setNewCompany} token={token} 
-                            OptionsCompany={optionsCompany} dept={dept} />}
+      <ContainerSideNav width="w-full max-w-sm" open={newCompany}>
+        <NewDepartment showForm={setNewCompany} token={token} 
+                      OptionsCompany={optionsCompany} dept={dept} company={company} />
+      </ContainerSideNav>
     </>
   )
 }

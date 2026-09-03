@@ -1,0 +1,23 @@
+import { IOneCollectionMin, IInvoicesByCollection } from "@/interfaces/Collections"
+import ProfileCollection from "./ProfileCollection"
+import ListInvoicesCollection from "./ListInvoicesCollection"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
+
+export default function ContainerCollectionProfile({collection, token, usr, invoices, permissions}: 
+  {collection: IOneCollectionMin, usr:string, token:string, invoices:IInvoicesByCollection[], permissions:IPermissionsAndComponents}) {
+
+  return (
+    <>
+      <div className="flex w-full px-2 flex-wrap lg:flex-nowrap md:space-x-2"
+        style={{backgroundColor:'#F8FAFC'}}>
+          <div className={`w-full max-w-md`}>
+            <ProfileCollection collection={collection} token={token} user={usr} permissions={permissions} />
+          </div>
+          <div className="mt-3 w-full md:max-w-2xl lg:w-full bg-white rounded-lg shadow-md pl-2 px-3" 
+              style={{borderColor:'#F8FAFC'}}>
+            <ListInvoicesCollection collection={collection} invoices={invoices} permissions={permissions} />
+          </div>
+      </div>
+    </>
+  )
+}

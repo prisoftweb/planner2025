@@ -1,7 +1,6 @@
 import { Glossary } from "./Glossary"
 import { UsrBack } from "./User"
 import { Provider } from "./Providers"
-import { CostCenter } from "./CostCenter"
 import { Project } from "./Projects"
 import { Report } from "./Reports"
 import { Concept } from "./Concepts"
@@ -18,15 +17,25 @@ export interface ExpensesTable {
   Proveedor: string 
   Estatus: string 
   Fecha: string 
-  Importe: string
+  // Importe: string
+  Importe: number
+  ImporteMoneda: string
   condition: string,
   archivos: string[],
   costcenter: string,
-  vat: string,
-  discount: string,
-  total: string
+  // vat: string,
+  vat: number,
+  vatMoneda: string
+  // discount: string,
+  discount: number,
+  discountMoneda: string
+  // total: string
+  total: number
+  totalMoneda: string
   taxFolio: string
   color: string
+  darktext: boolean
+  isCfdisRelations: boolean
 }
 
 // export interface Expense {
@@ -76,6 +85,10 @@ export interface Expense {
   status: boolean
   iscard: boolean
   files: File[]
+  expiredDate?: string
+  daysExpired?: number
+  code?:string
+  isCfdisRelations?:boolean
 }
 
 export interface OneExpense {
@@ -99,6 +112,19 @@ export interface OneExpense {
   status: boolean
   iscard: boolean
   files: File[]
+  isadvancesToSuppliers: boolean
+  advancesToSuppliers?: {
+    currentbalance: number
+    percentadvance: number
+    user: string
+    notes: string[]
+    advanceInvoicesCfdis: {
+      invoiceUUID: string
+      applicationUUID: string
+      date: string
+      _id: string
+    }[]
+  }
 }
 
 export interface OneCategory {
@@ -162,4 +188,266 @@ export interface Cost {
   vatvalue: number
   total: number
   exempttax: number
+}
+
+export interface ICostWithoutCode {
+  _id: string
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+    discount: number
+    exempttax: any
+  }
+  provider: {
+    _id: string
+    name: string
+  }
+  project: {
+    _id: string
+    title: string
+  }
+  folio: string
+  description: string
+  date: string
+  estatus: {
+    _id: string
+    name: string
+    color: string
+    darktext?: boolean
+  }
+  status: boolean
+}
+
+// export interface ICostRelAdvance {
+//   _id: string
+//   folio: string
+//   taxfolio: string
+//   description: string
+//   date: string
+//   taxapply: boolean
+//   isticket: boolean
+//   ispaid: boolean
+//   iscard: boolean
+//   cost: {
+//     subtotal: number
+//     iva: number
+//     total: number
+//     discount: number
+//     exempttax: number
+//   }
+//   user: {
+//     _id: string
+//     name: string
+//     photo: string
+//   }
+//   project: {
+//     _id: string
+//     title: string
+//   }
+//   report: {
+//     _id: string
+//     name: string
+//   }
+//   provider: {
+//     _id: string
+//     name: string
+//   }
+//   costocenter: {
+//     _id: string
+//     category: string
+//     concept: {
+//       _id: string
+//       name: string
+//     }
+//   }
+//   typeCFDI: {
+//     _id: string
+//     name: string
+//   }
+//   category: {
+//     _id: string
+//     name: string
+//   }
+//   files: {
+//     file: string
+//     types: string
+//     _id: string
+//   }[]
+//   cfdisRelations: {
+//     relatedUUIDs: string[]
+//     typeUUID: string
+//   }
+//   estatus: {
+//     _id: string
+//     name: string
+//     color: string
+//     darktext?:boolean
+//   }
+//   status: boolean
+// }
+
+export interface ICostRelAdvanceInv {
+  invoiceUUID: {
+    _id: string
+    folio: string
+    taxfolio: string
+    description: string
+    date: string
+    taxapply: boolean
+    isticket: boolean
+    ispaid: boolean
+    iscard: boolean
+    isadvancesToSuppliers: boolean
+    cost: {
+      subtotal: number
+      iva: number
+      total: number
+      discount: number
+      exempttax: any
+    }
+    user: {
+      _id: string
+      name: string
+      photo: string
+    }
+    project: {
+      _id: string
+      title: string
+    }
+    report: {
+      _id: string
+      name: string
+    }
+    provider: {
+      _id: string
+      name: string
+    }
+    costocenter: {
+      _id: string
+      category: string
+      concept: {
+        _id: string
+        name: string
+      }
+    }
+    typeCFDI: {
+      _id: string
+      name: string
+    }
+    category: {
+      _id: string
+      name: string
+    }
+    files: {
+      file: string
+      types: string
+      _id: string
+    }[]
+    isCfdisRelations: boolean
+      cfdisRelations: {
+      relatedUUIDs: string[]
+      typeUUID: string
+    }
+    estatus: {
+      _id: string
+      name: string
+      color: string
+    }
+    status: boolean
+  }
+  applicationUUID: {
+    _id: string
+    folio: string
+    taxfolio: string
+    description: string
+    date: string
+    taxapply: boolean
+    isticket: boolean
+    ispaid: boolean
+    iscard: boolean
+    isadvancesToSuppliers: boolean
+    cost: {
+      subtotal: number
+      iva: number
+      total: number
+      discount: number
+      exempttax: any
+    }
+    user: {
+      _id: string
+      name: string
+      photo: string
+    }
+    project: {
+      _id: string
+      title: string
+    }
+    report: {
+      _id: string
+      name: string
+    }
+    provider: {
+      _id: string
+      name: string
+    }
+    costocenter: {
+      _id: string
+      category: string
+      concept: {
+        _id: string
+        name: string
+      }
+    }
+    typeCFDI: {
+      _id: string
+      name: string
+    }
+    category: {
+      _id: string
+      name: string
+    }
+    files: {
+      file: string
+      types: string
+      _id: string
+    }[]
+    isCfdisRelations: boolean
+    cfdisRelations: {
+      relatedUUIDs: string[]
+      typeUUID: string
+    }
+    estatus: {
+      _id: string
+      name: string
+      color: string
+    }
+    status: boolean
+  }[]
+}
+
+export interface ICostRelAdvanceTable{
+  id:string
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  files: {
+    file: string
+    types: string
+    _id: string
+  }[]
+  project: string
+  folio:string
+  description:string
+  date:string
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+    discount: number
+    exempttax: any
+  }
+  isinvoiceUUID: boolean
 }

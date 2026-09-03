@@ -1,28 +1,20 @@
 'use client'
-//import Header from "../Header"
-// import ButtonNew from "./ButtonNew"
 import ButtonNewBudgetProject from "./ButtonNewBudgetProject"
 import TableBudgetProjects from "./TableBudgetProjects"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
-import { ProjectsBudgetTable, ProjectMin } from "@/interfaces/Projects"
-import { GiSettingsKnobs } from "react-icons/gi"
+import { ProjectMin } from "@/interfaces/Projects"
+// import { GiSettingsKnobs } from "react-icons/gi"
 import { VscListUnordered } from "react-icons/vsc";
-import { PiTableThin } from "react-icons/pi";
-import Link from "next/link"
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "@/components/SearchInTable"
-import { useProjectsStore } from "@/app/store/projectsStore"
-
 import WithOut from "@/components/WithOut"
 import { UsrBack } from "@/interfaces/User"
-import { showToastMessageError } from "@/components/Alert"
-import { ProjectBudgetDataToTableDataMin } from "@/app/functions/SaveProject"
-import { getProjectsMin } from "@/app/api/routeProjects"
-import { CostoCenterLV } from "@/interfaces/CostCenter"
 import { BudgetMin } from "@/interfaces/Budget"
 import { useBudgetStore } from "@/app/store/budgetProject"
 import { Squares2X2Icon } from "@heroicons/react/24/solid"
+import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon"
+import TooltipFilterIcon from "@/components/tooltipIcons/TooltipFilterIcon"
 
 export default function ContainerBudgetClient({token, user, optConditionsFilter, 
                           projects, budgets, optProjectsFilter }: 
@@ -31,11 +23,9 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
-  //const [dataTable, setDataTable] = useState<ProjectsBudgetTable[]>(data);
-
-  // const {haveNewProject, projectStore, 
-  //   updateProjectStore, updateHaveNewProject} = useProjectsStore();
   const {budgetsStore, updateBudgetsStore} = useBudgetStore();
+
+  const [widthPage, setWidthPage]=useState<number>(500);
 
   useEffect(() => {
     updateBudgetsStore(budgets);
@@ -45,6 +35,28 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
     setIsFilter(value);
   }
 
+  const handleResize = () => {
+    const w = Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    )
+    setWidthPage(w);
+    if(w <= 500) setIsTable(false);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    const w = Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    );
+    setWidthPage(w);
+    if(w <= 500) setIsTable(false);
+    return () => window.removeEventListener('scroll', handleResize);
+  }, []);
+
   if(!budgetsStore || budgetsStore.length <= 0){
     return (
       <>
@@ -53,42 +65,53 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
             text="Agregar un presupuesto a
                     un proyecto determinado"
             title="Presupuestos">
-              <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
+              <ButtonNewBudgetProject projects={projects} token={token} user={user._id} company={user.profile} />
           </WithOut>
         </div>
       </>
     )
   }
 
-  //const dataTable: ProjectsBudgetTable[] = ProjectBudgetDataToTableDataMin(budgetsStore);
-
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-      <div className="flex justify-between items-center gap-x-3 gap-y-3 md:flex-nowrap flex-wrap">
-        <div className="flex items-center">
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600"
-              onClick={() => window.location.replace('/')} />
-          <p className="text-xl ml-4 font-medium">Presupuestos</p>
+      <div className="flex justify-between items-center gap-x-3 gap-y-3 sm:flex-nowrap flex-wrap">
+        <div className="flex flex-1 items-center">
+          <TooltipContainerIcon label="Regresar">
+            <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer hover:bg-blue-100" onClick={() => window.location.replace('/')}>
+              <TbArrowNarrowLeft className="w-10 h-10 text-slate-600"/>
+            </div>
+          </TooltipContainerIcon>
+          <p className="text-xl ml-4 flex-1 font-medium">Presupuestos</p>
+          <div className="flex sm:hidden justify-end gap-x-3 items-center">
+            <TooltipFilterIcon handleFilter={handleFilter} />
+            <ButtonNewBudgetProject projects={projects} token={token} user={user._id} company={user.profile} />
+          </div>
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
-          <div className="flex gap-x-3 gap-y-3 justify-end">
-            <div className="flex gap-x-3 items-center">
-              <p>Vista: </p>
-              <Squares2X2Icon onClick={() => setIsTable(true)} 
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
-              />
-              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
-                onClick={() => setIsTable(false)}
-              />
+          <div className="flex gap-x-3 gap-y-3 justify-end w-full sm:w-auto">
+            {widthPage >= 500 && (
+              <div className="hidden lg:flex gap-x-3 items-center">
+                <p>Vista: </p>
+                <TooltipContainerIcon label="Tabla">
+                  <Squares2X2Icon onClick={() => setIsTable(true)} 
+                    className="text-slate-600 w-10 h-810 cursor-pointer hover:slate-slate-300 hover:bg-blue-100"
+                  />
+                </TooltipContainerIcon>
+                <TooltipContainerIcon label="Tarjeta">
+                  <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100" 
+                    onClick={() => setIsTable(false)}
+                  />
+                </TooltipContainerIcon>
+              </div>
+            )}
+            <div className="flex w-full">
+              <SearchInTable placeH="Buscar presupuesto.." />
             </div>
-            <SearchInTable placeH="Buscar presupuesto.." />
           </div>
           <div className="">
-            <div className="flex gap-x-3 items-center">
-              <GiSettingsKnobs onClick={() => handleFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              />
-              <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
+            <div className="hidden sm:flex gap-x-3 items-center">
+              <TooltipFilterIcon handleFilter={handleFilter} />
+              <ButtonNewBudgetProject projects={projects} token={token} user={user._id} company={user.profile} />
             </div>
           </div>
         </div>

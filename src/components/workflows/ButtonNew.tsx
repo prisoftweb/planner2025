@@ -2,18 +2,55 @@
 import Button from "../Button"
 import { useState } from "react";
 import NewWorkFlow from "./NewWorkFlow";
+import ContainerSideNav from "../ContainerSideNav";
+import { forwardRef } from "react";
 
-export default function ButtonNew({token, user}: {token:string, user:string}){
-  const [newWorkFlow, setNewWorkFlow] = useState<boolean>(false);
+// export default function ButtonNew({token, user}: {token:string, user:string}){
+//   const [newWorkFlow, setNewWorkFlow] = useState<boolean>(false);
   
-  const handleClick = (value:boolean) => {
-    setNewWorkFlow(value);
-  }
+//   const handleClick = (value:boolean) => {
+//     setNewWorkFlow(value);
+//   }
+//   return(
+//     <>
+//       <Button type="button" onClick={() => handleClick(true)}>Nuevo</Button>
+//           {/* {newWorkFlow && (
+//             <ContainerSideNav width="w-full max-w-md">
+//               <NewWorkFlow showForm={handleClick} token={token} workFlow={''} />
+//             </ContainerSideNav>
+//             // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+//             //   <NewWorkFlow showForm={handleClick} token={token} workFlow={''} />
+//             // </div>
+//           )} */}
+//       <ContainerSideNav width="w-full max-w-md" open={newWorkFlow} >
+//         <NewWorkFlow showForm={handleClick} token={token} workFlow={''} />
+//       </ContainerSideNav>
+//     </>
+//   )
+// }
+
+type ButtonProps = {
+  token:string, 
+  // user:string
+  handleClick: (value: boolean) => void,
+  newWorkFlow: boolean
+}
+
+const ButtonNew = forwardRef<HTMLInputElement, ButtonProps>(function Header( { token, newWorkFlow, handleClick }, ref ){
+  // const [newWorkFlow, setNewWorkFlow] = useState<boolean>(false);
+  
+  // const handleClick = (value:boolean) => {
+  //   setNewWorkFlow(value);
+  // }
+
   return(
     <>
       <Button type="button" onClick={() => handleClick(true)}>Nuevo</Button>
-          {newWorkFlow && <NewWorkFlow showForm={handleClick} 
-                                  token={token} workFlow={''} />}
+      <ContainerSideNav width="w-full max-w-md" open={newWorkFlow} >
+        <NewWorkFlow showForm={handleClick} token={token} workFlow={''} ref={ref} />
+      </ContainerSideNav>
     </>
   )
-}
+});
+
+export default ButtonNew;

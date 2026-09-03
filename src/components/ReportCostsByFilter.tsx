@@ -1,8 +1,9 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { Expense } from '@/interfaces/Expenses'
+import { Company } from "@/interfaces/Companies"
 
-export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
+export default function ReportCostsByFilter({costs, satCompany}: {costs:Expense[], satCompany:Company}){
   
   const style = StyleSheet.create({
     table: {
@@ -13,7 +14,6 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
     containerTable: {
       paddingVertical: '10px',
       borderBottom: '1px solid gray',
-      //borderTop: '1px solid gray'
     },
     header: {
       fontSize: '7px',
@@ -42,18 +42,19 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
     totalIva += cost.cost?.iva || 0;
   });
 
+  const costsSorted = costs.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const date = new Date();
   return(
     <Document>
       <Page>
-        {/* <View style={{padding: '30px'}}> */}
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
+            <Image src={satCompany?.isologo?? satCompany.logo} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos detalle</Text>
-              {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text> */}
               <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
             </View>
           </View>
@@ -67,9 +68,8 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
               <View style={[style.header, {flex: 1}]}><Text>Fecha</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Importe</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
-              {/* <View style={[style.header, {flex: 1}]}><Text>Acumulado</Text></View> */}
             </View>
-            {costs.map((cost, index:number) => (
+            {costsSorted.map((cost, index:number) => (
               <View style={[style.table, {borderTop: '1px solid gray'}]} key={index}>
                 <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{cost.project?.title || ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.report?.name ?? ''}</Text></View>
@@ -77,11 +77,11 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
                 <View style={[style.element, {flex: 2}]}><Text>{cost.description ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.date?.substring(0, 10) ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: cost.cost.subtotal
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: cost.cost?.total || 0
                 })}</Text></View>
               </View>
@@ -92,7 +92,7 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalCosts
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
@@ -104,7 +104,7 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalIva
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
@@ -116,7 +116,7 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalTypes
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>

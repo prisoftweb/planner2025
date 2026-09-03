@@ -1,5 +1,4 @@
 "use client"
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
@@ -20,8 +19,13 @@ import CurrencyInput from 'react-currency-input-field';
 import { getSupplierCreditProv } from "@/app/functions/CostsFunctions"
 
 import { useOptionsExpense } from "@/app/store/newExpense";
+import { getProvider } from "@/app/api/routeProviders";
+import { Provider } from "@/interfaces/Providers";
+import { getAllCostsByProviderNEConditionLV } from "@/app/api/routeCost";
+import Select from 'react-select'
 
-export default function DataStepper({token, user}: {token:string, user:string }){
+export default function DataStepper({token, user, handleUpdateCategory, company}: 
+  {token:string, user:string, handleUpdateCategory: (value: string) => void, company:string }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     costCenter, date, description, discount, 
@@ -30,21 +34,66 @@ export default function DataStepper({token, user}: {token:string, user:string })
     report, condition, category, isPettyCash, concept,
     updateIsCard, updateCostCenter, updateHaveDiscount, 
     updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, 
-    total, reportObject} = useNewExpense();
+    total, reportObject, dataCFDI, updateCategory} = useNewExpense();
 
   const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
     vats, addProvider, addProviderSat} = useOptionsExpense();
 
-    // console.log('cost center data stepper => ', costCenter);
-    // console.log('concept data stepper => ', concept);
+  const [optionsInvoices, setOptionsInvoices] = useState<Options[]>([]);
+  const [optInvoice, setOptInvoice]=useState<Options>();
+
+  let year = new Date().getFullYear().toString();
+  let month = (new Date().getMonth() + 1).toString();
+  let day = new Date().getDate().toString();
+  if(month.length ===1) month = '0'+month;
+  if(day.length ===1) day = '0'+day;
+
+  const d = year+'-'+month+'-'+day;
+
+  const dateDat = dataCFDI? dataCFDI.date: date;
+
+  const [startDate, setStartDate] = useState<string>(dateDat!== ''? dateDat: d);
+  const [typeCFDIS, setTypeCFDIS] = useState<string>(types[0].value);
+  const [provider, setProvider] = useState<string>(dataCFDI? dataCFDI.proveedor: providers[0].value);
+  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
+  
+  const [showProvider, setShowProvider] = useState<boolean>(false);
+  const refRequest = useRef(true);
+  
+  const [idVat, setIdVat] = useState<string>(vats[0].value);
+  const [vatValue, setVatValue] = useState<string>(dataCFDI? dataCFDI.vat: '0');
+  const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
+  const [totalExpense, setTotalExpense] = useState<string>(dataCFDI? dataCFDI.total : total);
+
+  // const [typeCFDISprov, setTypeCFDISprov] = useState<string>(types[0].value);
+  const [CFDISrelation, setCFDISrelations] = useState<string>();
+
+  const handleOptInvoice = (value: Options) => {
+    setOptInvoice(value);
+  }
+
+  const fetchInvoices = async(provParam:string) => {
+    const res = await getAllCostsByProviderNEConditionLV(token, provParam);
+    if(typeof(res)!=='string'){
+      setOptionsInvoices(res);
+      setOptInvoice(res.length>0? res[0]: undefined);
+      setCFDISrelations(res.length>0? res[0].value : undefined);
+    }else{
+      showToastMessageError(res);
+    }
+  }
+
+  useEffect(() => {
+    fetchInvoices(dataCFDI? dataCFDI.proveedor: providers[0].value);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
-      folio: folio,
-      taxFolio: taxFolio,
-      description: description,
-      discount: discount,
-      amount: amount,
+      folio: dataCFDI? dataCFDI.folio: folio,
+      taxFolio: dataCFDI? dataCFDI.taxFolio : taxFolio,
+      description: dataCFDI? dataCFDI.concepts : description,
+      discount: dataCFDI? dataCFDI?.discount : discount,
+      amount: dataCFDI? dataCFDI.amount : amount,
       vat: vat,
       taxExempt: taxExempt,
     }, 
@@ -56,66 +105,32 @@ export default function DataStepper({token, user}: {token:string, user:string })
       taxFolio: Yup.string()
                   .required('El folio fiscal es obligatorio'),
       discount: Yup.string(),
-                  //.required('El descuento es obligatorio'),
       amount: Yup.string()
                   .required('El importe es obligatorio!!!'),
       vat: Yup.string(),
-                  //.required('El iva es obligatorio!!!')
       taxExempt: Yup.string(),
     }),
     onSubmit: async (valores) => {            
       const {description, folio, taxFolio, discount, amount, vat, taxExempt} = valores;
       updateBasicData(folio, description, amount.replace(/[$,]/g, ""), 
           startDate, taxFolio, vat.replace(/[$,]/g, ""), discount.replace(/[$,]/g, ""), provider, responsibleS, 
-          typeCFDIS, '', categoryS, idVat, 'PROVEEDOR', taxExempt.replace(/[$,]/g, ""), totalExpense.replace(/[$,]/g, ""));
+          typeCFDIS, '', idVat, 'PROVEEDOR', taxExempt.replace(/[$,]/g, ""), totalExpense.replace(/[$,]/g, ""));
+          //categoryS,
       updateIndexStepper(2);
     },
   });
-
-  let year = new Date().getFullYear().toString();
-  let month = (new Date().getMonth() + 1).toString();
-  let day = new Date().getDate().toString();
-  if(month.length ===1) month = '0'+month;
-  if(day.length ===1) day = '0'+day;
-
-  const d = year+'-'+month+'-'+day;
-  
-  //const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
-  const [startDate, setStartDate] = useState<string>(date!== ''? date: d);
-  //const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
-  const [typeCFDIS, setTypeCFDIS] = useState<string>(types[0].value);
-  const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: providers[0].value);
-  //const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: responsibles[0].value);
-  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
-  const [categoryS, setCategoryS] = useState<string>(categories[0].value);
-  
-  const [showProvider, setShowProvider] = useState<boolean>(false);
-  const refRequest = useRef(true);
-  //const [resetBand, setResetBand] = useState<boolean>(false);
-  //const [view, setView] = useState<JSX.Element>(<></>);
-  //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
-  //const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
-  
-  //actualizacion juntar estos 2 estados en un objeto
-
-  //console.log('vat zustand => ', vat);
-
-  const [idVat, setIdVat] = useState<string>(vats[0].value);
-  const [vatValue, setVatValue] = useState<string>(vat!==''? vat: '0');
-  const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
-  const [totalExpense, setTotalExpense] = useState<string>(total);
   
   const updateIva = (idValue: string) => {
     try {
       const foundVat = vats.find((vat) => vat.value === idValue);
-      const vatvalue = foundVat?.label || '0';
+      const vatval = foundVat?.label || '0';
       let operation;
       let t = 0;
       if(haveDiscount && haveTaxExempt){
         operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
                         Number(formik.values.discount.replace(/[$,]/g, "")) -
                         Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
-                          Number(vatvalue) / 100;
+                          Number(vatval) / 100;
         
         t = Number(formik.values.amount.replace(/[$,]/g, "")) -
               Number(formik.values.discount.replace(/[$,]/g, "")) +
@@ -124,7 +139,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
         if(haveDiscount){
           operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
                         Number(formik.values.discount.replace(/[$,]/g, ""))) * 
-                          Number(vatvalue) / 100;
+                          Number(vatval) / 100;
 
           t = Number(formik.values.amount.replace(/[$,]/g, "")) -
                 Number(formik.values.discount.replace(/[$,]/g, "")) +
@@ -133,12 +148,12 @@ export default function DataStepper({token, user}: {token:string, user:string })
           if(haveTaxExempt){
             operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
                         Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
-                          Number(vatvalue) / 100;
+                          Number(vatval) / 100;
 
             t = Number(formik.values.amount.replace(/[$,]/g, "")) + operation;              
           }else{
             operation = (Number(formik.values.amount.replace(/[$,]/g, ""))) * 
-                          Number(vatvalue) / 100;
+                          Number(vatval) / 100;
                 
             t = Number(formik.values.amount.replace(/[$,]/g, "")) + operation;
           }
@@ -171,7 +186,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
     }
   }
 
-  //console.log('formik amount => ', Number(formik.values.amount.replace(/[$,]/g, "")));
   let viewAmount: JSX.Element = <></>;
   viewAmount = (
     <CurrencyInput
@@ -181,13 +195,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
         focus:border-slate-700 outline-0"
       onChange={formik.handleChange}
       onBlur={formik.handleChange}
-      //defaultValue={Number(formik.values.amount.replace(/[$,]/g, ""))}
-      // value={Number(formik.values.amount.replace(/[$,]/g, ""))}
       value={formik.values.amount.replace(/[$,]/g, "")}
       decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {
-        //console.log('value amount data stepper => ', value);
         formik.values.amount=value || '0';
         handleIdVat(idVat);
       } catch (error) {
@@ -204,18 +215,12 @@ export default function DataStepper({token, user}: {token:string, user:string })
       name="total"
       className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
         focus:border-slate-700 outline-0"
-      //onChange={formik.handleChange}
-      //onBlur={formik.handleChange}
-      //value={formik.values.amount.replace(/[$,]/g, "")}
       value={totalExpense.replace(/[$,]/g, "")}
       decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {
-        //console.log('value amount data stepper => ', value);
-        //formik.values.amount=value || '0';
         setTotalExpense(value || '0');
       } catch (error) {
-        //formik.values.amount='0';
         setTotalExpense('0');
       }}}
     />
@@ -227,15 +232,14 @@ export default function DataStepper({token, user}: {token:string, user:string })
     }
   }, []);
 
-  //console.log('costcenter contex => ', costCenter);
-  //console.log('concept context => ', concept);
   const SaveData = async() => {
     refRequest.current = false;
     const {description, folio, taxFolio, discount, amount, vat, taxExempt} = formik.values
     updateBasicData(folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-        typeCFDIS, '', categoryS, idVat.replace(/[$,]/g, ""), 'PROVEEDOR', 
+        typeCFDIS, '', idVat.replace(/[$,]/g, ""), 'PROVEEDOR', 
         taxExempt.replace(/[$,]/g, ""), totalExpense.replace(/[$,]/g, ""));
+        //categoryS,
     
     let supplierCredit: boolean;
     try {
@@ -249,68 +253,121 @@ export default function DataStepper({token, user}: {token:string, user:string })
       concept
     }
 
-    console.log('save data !!!!');
-
     if(!formik.values.description || formik.values.description===''){
       refRequest.current = true;
       showToastMessageError("No se ha agregado una descripcion al gasto!!");
     }else{
       if(voucher || CFDI){
-        const formdata = new FormData();
-        //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
-        formdata.append('costocenter', JSON.stringify(costcenter));
-        formdata.append('date', startDate);
-        formdata.append('description', description);
-        //formdata.append('discount', discount.replace(/[$,]/g, ""));
-        formdata.append('folio', folio);
-        formdata.append('provider', provider);
-        formdata.append('user', responsibleS);
-        formdata.append('taxfolio', taxFolio);
-        formdata.append('typeCFDI', typeCFDIS);
-        formdata.append('category', categoryS);
-        formdata.append('project', project);
-        //formdata.append('vat', vat);
-        formdata.append('report', report);
-        formdata.append('isticket', JSON.stringify(false));
-        formdata.append('iscard', JSON.stringify(isCard));
-        formdata.append('type', 'PROVEEDOR');
-        formdata.append('exempttax', taxExempt.replace(/[$,]/g, ""));
-        formdata.append('conditionprovider', JSON.stringify([{
-          glossary: '674643dd734d5ab78ab98ddb',
-          user
-        }]));
-        formdata.append('condition', JSON.stringify([{
-          glossary: condition,
-          user
-        }]));
-        formdata.append('cost', JSON.stringify({
-          discount: discount.replace(/[$,]/g, ""),
-          subtotal:amount.replace(/[$,]/g, ""),
-          iva:vat.replace(/[$,]/g, ""),
-          vat: idVat, 
-          exempttax: taxExempt.replace(/[$,]/g, ""),
-          total: totalExpense.replace(/[$,]/g, "")
-        }));
-        if(voucher){
-          formdata.append('files', voucher);
-          formdata.append('types', voucher.type);
-        }
+        let val=true;
         if(CFDI){
-          formdata.append('files', CFDI);
-          formdata.append('types', CFDI.type);
+          val = await dataCFDIValidation();
+          if(!val){
+            refRequest.current = true;
+            showToastMessageError('El CFDI adjuntado no es valido con la informacion ingresada!!');
+          }
         }
-        try {
-          formdata.append('ispaid', JSON.stringify(supplierCredit));
-          if(reportObject && reportObject.ispettycash){
-            const fechaGasto = new Date(startDate);
-            const fechaReport = new Date(reportObject.date);
-            const currentDate = new Date();
-            const expiration = new Date(reportObject.expirationdate);
-            if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
-                (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+
+        if(val){
+          const formdata = new FormData();
+          formdata.append('costocenter', JSON.stringify(costcenter));
+          formdata.append('date', startDate);
+          formdata.append('description', description);
+          formdata.append('folio', folio);
+          formdata.append('provider', provider);
+          formdata.append('user', responsibleS);
+          formdata.append('taxfolio', taxFolio);
+          formdata.append('typeCFDI', typeCFDIS);
+          formdata.append('category', category);
+          formdata.append('project', project);
+          formdata.append('report', report);
+          formdata.append('isticket', JSON.stringify(false));
+          formdata.append('iscard', JSON.stringify(isCard));
+          formdata.append('type', 'PROVEEDOR');
+          formdata.append('company', company);
+          formdata.append('exempttax', taxExempt.replace(/[$,]/g, ""));
+          formdata.append('conditionprovider', JSON.stringify([{
+            glossary: '674643dd734d5ab78ab98ddb',
+            user
+          }]));
+          formdata.append('condition', JSON.stringify([{
+            glossary: condition,
+            user
+          }]));
+          formdata.append('cost', JSON.stringify({
+            discount: discount.replace(/[$,]/g, ""),
+            subtotal:amount.replace(/[$,]/g, ""),
+            // iva:vat.replace(/[$,]/g, ""),
+            iva: vatValue.replace(/[$,]/g, ""),
+            vat: idVat, 
+            exempttax: taxExempt.replace(/[$,]/g, ""),
+            total: totalExpense.replace(/[$,]/g, "")
+          }));
+          if(voucher){
+            formdata.append('files', voucher);
+            formdata.append('types', voucher.type);
+
+          }
+          if(CFDI){
+            formdata.append('files', CFDI);
+            formdata.append('types', CFDI.type);
+          }
+
+          if(concept==="6691a5f9c14942310b52ac0e"){
+            formdata.append('cfdisRelations', JSON.stringify({cfdisRelations: {                
+              relatedUUIDs: [CFDISrelation],                        
+              typeUUID: "07 CFDI por aplicacion de anticipo",                                     
+            }}));
+            formdata.append('isCfdisRelations', JSON.stringify(true));
+          }
+
+          if(concept==="6691a5f9c14942310b52ac0c"){
+            formdata.append('isadvancesToSuppliers', JSON.stringify(true));
+            formdata.append('advancesToSuppliers', JSON.stringify({
+                currentbalance: Number(totalExpense.replace(/[$,]/g, "")),
+                percentadvance: 100,
+                user,
+                notes:[],
+                advanceInvoicesCfdis:[]
+              }));
+          }
+
+          try {
+            formdata.append('ispaid', JSON.stringify(supplierCredit));
+            if(reportObject && reportObject.ispettycash){
+              const fechaGasto = new Date(startDate);
+              const fechaReport = new Date(reportObject.date);
+              const currentDate = new Date();
+              const expiration = new Date(reportObject.expirationdate);
+              if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+                  (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+                const res = await CreateCostWithFiles(token, formdata);
+                if(res === 201){
+                  const catAux=category;
+                  reset();
+                  formik.values.amount = '';
+                  formik.values.description = '';
+                  formik.values.discount = '';
+                  formik.values.folio = '';
+                  formik.values.taxFolio = '';
+                  formik.values.vat = '';
+                  setTotalExpense('0');
+                  showToastMessage('Costo creado satisfactoriamente!!!');
+                  updateRefresh(true);
+                  updateIndexStepper(4);
+                  refRequest.current = true;
+                  updateCategory(catAux);
+                }else{
+                  refRequest.current = true;
+                  showToastMessageError(res);
+                }
+              }else{
+                refRequest.current = true;
+                showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
+              }
+            }else{
               const res = await CreateCostWithFiles(token, formdata);
               if(res === 201){
-                //setView(<></>);
+                const catAux=category;
                 reset();
                 formik.values.amount = '';
                 formik.values.description = '';
@@ -319,67 +376,38 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 formik.values.taxFolio = '';
                 formik.values.vat = '';
                 setTotalExpense('0');
-                //setClearAmount(true);
                 showToastMessage('Costo creado satisfactoriamente!!!');
-                //updateHaveExpenses(true);
                 updateRefresh(true);
                 updateIndexStepper(4);
-                // setTimeout(() => {
-                //   setResetBand(true);
-                // }, 300);
                 refRequest.current = true;
+                updateCategory(catAux);
               }else{
                 refRequest.current = true;
                 showToastMessageError(res);
               }
-            }else{
-              refRequest.current = true;
-              showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
             }
-          }else{
-            const res = await CreateCostWithFiles(token, formdata);
-            if(res === 201){
-              //setView(<></>);
-              reset();
-              formik.values.amount = '';
-              formik.values.description = '';
-              formik.values.discount = '';
-              formik.values.folio = '';
-              formik.values.taxFolio = '';
-              formik.values.vat = '';
-              setTotalExpense('0');
-              //setClearAmount(true);
-              showToastMessage('Costo creado satisfactoriamente!!!');
-              //updateHaveExpenses(true);
-              updateRefresh(true);
-              updateIndexStepper(4);
-              // setTimeout(() => {
-              //   setResetBand(true);
-              // }, 300);
-              refRequest.current = true;
-            }else{
-              refRequest.current = true;
-              showToastMessageError(res);
-            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Ocurrio un error al guardar costo!!');
           }
-        } catch (error) {
-          refRequest.current = true;
-          showToastMessageError('Ocurrio un error al guardar costo!!');
         }
+        
       }else{
         const data = {
           costocenter:costcenter, date:startDate, description, 
           cost: {
             discount: discount.replace(/[$,]/g, ""),
             subtotal:amount.replace(/[$,]/g, ""),
-            iva:vat.replace(/[$,]/g, ""),
+            // iva:vat.replace(/[$,]/g, ""),
+            iva: vatValue.replace(/[$,]/g, ""),
             vat: idVat,
             exempttax: taxExempt.replace(/[$,]/g, ""),
             total: totalExpense.replace(/[$,]/g, "")
           },
           folio, provider, user:responsibleS, 
+          company,
           taxfolio:taxFolio, typeCFDI: typeCFDIS, project, ispaid:supplierCredit,
-          report, isticket:false, category:categoryS,
+          report, isticket:false, category:category,
           conditionprovider: [{
             glossary: '674643dd734d5ab78ab98ddb',
             user
@@ -388,27 +416,36 @@ export default function DataStepper({token, user}: {token:string, user:string })
             glossary: condition,
             user
           }], iscard:isCard, type:'PROVEEDOR',
+          ...(concept==="6691a5f9c14942310b52ac0e" && {
+                cfdisRelations: {                
+                relatedUUIDs: [CFDISrelation],                        
+                typeUUID: "07 CFDI por aplicacion de anticipo",                                     
+              },
+              isCfdisRelations:true
+            }),
+          ...(concept==="6691a5f9c14942310b52ac0c" && {
+              isadvancesToSuppliers:true,
+              advancesToSuppliers: {
+                currentbalance: Number(totalExpense.replace(/[$,]/g, "")),
+                percentadvance: 100,
+                user,
+                notes:[],
+                advanceInvoicesCfdis:[]
+              }
+            }),
         }
-    
+
         try {
           if(reportObject && reportObject.ispettycash){
             const fechaGasto = new Date(startDate);
             const fechaReport = new Date(reportObject.date);
             const currentDate = new Date();
             const expiration = new Date(reportObject.expirationdate);
-            // console.log(fechaGasto, ' mayor => ', fechaReport);
-            // console.log(currentDate, ' menor => ', expiration);
-            // console.log('fecha gasto time => ', fechaGasto.getTime());
-            // console.log('fecha report time => ', fechaReport.getTime());
-            // console.log('fecha current => ', currentDate.getTime());
-            // console.log('fecha expiration => ', expiration.getTime());
             if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
                 (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
-              // console.log('descripcion expense => ', formik.values.description);
-              // console.log('desc => ', data.description);
               const res = await SaveExpense(data, token);
               if(res===201){
-                //setView(<></>);
+                const catAux=category;
                 reset();
                 formik.values.amount = '';
                 formik.values.description = '';
@@ -418,14 +455,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 formik.values.vat = '';
                 setTotalExpense('0');
                 showToastMessage('Costo creado satisfactoriamente!!!');
-                //setClearAmount(true);
-                //updateHaveExpenses(true);
                 updateRefresh(true);
                 updateIndexStepper(4);
-                // setTimeout(() => {
-                //   setResetBand(true);
-                // }, 300);
                 refRequest.current = true;
+                updateCategory(catAux);
               }
               else{
                 showToastMessageError(res);
@@ -436,9 +469,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
               refRequest.current = true;
             }
           }else{
+            console.log('data => ', JSON.stringify(data));
             const res = await SaveExpense(data, token);
             if(res===201){
-              //setView(<></>);
+              const catAux=category;
               reset();
               formik.values.amount = '';
               formik.values.description = '';
@@ -448,14 +482,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
               formik.values.vat = '';
               setTotalExpense('0');
               showToastMessage('Costo creado satisfactoriamente!!!');
-              //setClearAmount(true);
-              //updateHaveExpenses(true);
               updateRefresh(true);
               updateIndexStepper(4);
-              // setTimeout(() => {
-              //   setResetBand(true);
-              // }, 300);
               refRequest.current = true;
+              updateCategory(catAux);
             }
             else{
               showToastMessageError(res);
@@ -470,31 +500,72 @@ export default function DataStepper({token, user}: {token:string, user:string })
     }
   }
 
+  const dataCFDIValidation = async() => {
+    const found = types.find((type) => type.value === typeCFDIS);
+    let absolute=false;
+    if(found){
+      if(found.label.toLowerCase().includes('egreso')){
+        absolute=true;
+      }
+    }
+
+    if(absolute){
+      if(Math.abs(Number(formik.values.amount.replace(/[$,]/g, ""))) !== Number(dataCFDI?.amount)){
+        showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
+        return false;
+      }
+    }else{
+      if(Number(formik.values.amount.replace(/[$,]/g, "")) !== Number(dataCFDI?.amount)){
+        showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
+        return false;
+      }
+    }
+    
+    if(startDate.substring(0, 10) !== dataCFDI?.date.substring(0, 10)){
+      showToastMessageError('La fecha ingresada no coincide con la del CFDI!!');
+      return false;
+    }
+    if(formik.values.taxFolio !== dataCFDI.taxFolio){
+      showToastMessageError('El folio fiscal ingresado no coincide con el del CFDI!!');
+      return false;
+    }
+    try {
+      const res:Provider = await getProvider(provider, token);
+      if(typeof(res)==='string'){
+        showToastMessageError('Error al validar proveedor!!');
+        return false
+      }
+      if(res.rfc !== dataCFDI.RFCProvider){
+        showToastMessageError('El rfc del proveedor no coincide con el del CFDI!!');
+        return false;
+      }
+    } catch (error) {
+      showToastMessageError('Error al validar proveedor!!');
+      return false
+    }
+    return true;
+  }
+
   const addProv = (newProviderSAT:Options, newProvider:Options) => {
-    //optProviders.push(newProvider);
-    //console.log('optProviders => ', optProviders);
-    //console.log('new Provider => ', newProvider);
-    //setProvider(newProvider.value);
     addProvider(newProvider);
     addProviderSat(newProviderSAT);
-
-    //console.log('prov length => ', optProviders.length)
-    //setIndexProv(optProviders.length - 1);
   }
 
   let indexProvider = 0;
-  if(provider !== ''){
+  if(provider !== '' || dataCFDI?.proveedor){
+    const valProv = dataCFDI? dataCFDI.proveedor: proveedor;
     providers.map((opt, index:number) => {
-      if(opt.value === proveedor){
+      if(opt.value === valProv){
         indexProvider = index;
       }
     });
   }
 
   let indexProviderSAT = 0;
-  if(provider !== ''){
+  if(provider !== '' || dataCFDI?.proveedor){
+    const valProv = dataCFDI? dataCFDI.proveedor: proveedor;
     providersSAT.map((opt, index:number) => {
-      if(opt.value === proveedor){
+      if(opt.value === valProv){
         indexProviderSAT = index;
       }
     });
@@ -502,18 +573,11 @@ export default function DataStepper({token, user}: {token:string, user:string })
 
   const handleProvider = (value : string) => {
     setProvider(value);
-  }
 
-  // const selectProvider = (
-  //   <div>
-  //       <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-  //       <div className="flex gap-x-2 items-center">
-  //         <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
-  //         <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-  //         onClick={() => setShowProvider(true)} />
-  //     </div>
-  //   </div>
-  // )
+    if (concept === '6691a5f9c14942310b52ac0e') {
+      fetchInvoices(value);
+    }
+  }
 
   const viewProvider = (
     <div className="flex gap-x-2 items-center">
@@ -531,15 +595,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
     </div>
   )
 
-  let indexCate = 0;
-  if(categoryS !== ''){
-    categories.map((opt, index:number) => {
-      if(opt.value === category){
-        indexCate = index;
-      }
-    });   
-  }
-
   let indexTypeCFDI = 0;
   if(typeCFDIS !== ''){
     types.map((opt, index:number) => {
@@ -549,22 +604,17 @@ export default function DataStepper({token, user}: {token:string, user:string })
     });      
   }
 
-  const handleCategory = (value: string) => {
-    setCategoryS(value);
-  }
-
   const handleTypeCfdi = (value: string) => {
     handleTypeCategoryCFDI(value);
-    console.log('value type cfdi => ', value);
     setTypeCFDIS(value);
+  }
+
+  const handleCfdirelations = (value: string) => {
+    setCFDISrelations(value);
   }
 
   const view = (
     <>
-      <div>
-        <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-        <SelectReact index={indexCate} opts={categories} setValue={handleCategory} />
-      </div>
       <div>
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
         <SelectReact index={indexTypeCFDI} opts={types} setValue={handleTypeCfdi} />
@@ -574,26 +624,22 @@ export default function DataStepper({token, user}: {token:string, user:string })
 
   let indexCC = 0;
   if(costCenter !== ''){
-    //console.log('costCenter => ', costCenter);
-    //console.log('concept => ', concept);
     costCenterOpt.map((opt, index:number) => {
       if(opt.value === costCenter + '/' + concept){
-        //console.log('opt => ', opt);
         indexCC = index;
       }
     });
-    //console.log('')
   }
 
   const handleConstCenter = (value : string) => {
-    //console.log('value costoc => ', value);
     const indexCaracter = value.indexOf('/');
     const c1 = value.substring(0, indexCaracter);
     const c2 = value.substring(indexCaracter + 1);
-    //console.log('cad 1 => ', c1);
-    //console.log('cad 2 => ', c2);
     updateCostCenter(c1, c2);
-    //setCostCenter(value);
+
+    if(c2 === '6691a5f9c14942310b52ac0e') {
+      fetchInvoices(provider);
+    }
   }
 
   const viewCC = (
@@ -663,10 +709,12 @@ export default function DataStepper({token, user}: {token:string, user:string })
     setIdVat(value);
   };
 
+  // if concept == 6691a5f9c14942310b52ac0e
+
   return(
     <div className="w-full bg-white">
       <div className="mt-2">
-        <NavExpenseStepper index={1} />
+        <NavExpenseStepper index={3} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg">
         <div className="flex gap-x-5 justify-end my-5 pr-3">
@@ -770,14 +818,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
               <CurrencyInput
                 id="discount"
                 name="discount"
-                // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-                //   focus:border-slate-700 outline-0"
                 className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                   focus:border-slate-700 outline-0"
                 onChange={formik.handleChange}
                 onBlur={formik.handleChange}
-                //defaultValue={0}
-                //defaultValue={discount}
                 value={formik.values.discount.replace(/[$,]/g, "") || 0}
                 decimalsLimit={2}
                 prefix="$"
@@ -802,14 +846,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
               <CurrencyInput
                 id="taxExemptt"
                 name="taxExemptt"
-                // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-                //   focus:border-slate-700 outline-0"
                 className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                   focus:border-slate-700 outline-0"
                 onChange={formik.handleChange}
                 onBlur={formik.handleChange}
-                //defaultValue={0}
-                //defaultValue={discount}
                 value={formik.values.taxExempt.replace(/[$,]/g, "") || 0}
                 decimalsLimit={2}
                 prefix="$"
@@ -829,7 +869,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
             </div>
           )}
           <div>
-            {/* <Label htmlFor="vat">Iva</Label> */}
             <div className="flex justify-between">
               <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
               <Label htmlFor="vatt"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Impuestos</p></Label>
@@ -870,12 +909,11 @@ export default function DataStepper({token, user}: {token:string, user:string })
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
             <Input 
               type="date"
-              value={startDate}
+              value={dataCFDI? dataCFDI.date.substring(0, 10) : startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
           {view}
-          {/* <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3"> */}
           <div className="col-span-1 sm:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-x-3">
             <div>
               <div className="flex items-center justify-between mr-5">
@@ -906,11 +944,30 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 )
               }
             </div>
-            {/* {selectProvider} */}
             {viewResponsible}
           </div>
           
         </div>
+
+        {
+          concept==="6691a5f9c14942310b52ac0e" && (
+            <div className="grid grid-cols-3 gap-x-2 mt-5" >
+              {optionsInvoices && (
+                <div className=" col-span-2">
+                  <Label htmlFor="CFDIrelations"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">CFDI&apos;s Relacionado</p></Label>
+                  {/* <SelectReact index={0} opts={optionsInvoices} setValue={handleCfdirelations} /> */}
+                  <SelectOptionReact opts={optionsInvoices} selOpt={optInvoice} setSelOpt={handleOptInvoice} 
+                    setValue={handleCfdirelations} />
+                </div>
+              )}
+
+              {/* <div>
+                <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
+                <SelectReact index={indexTypeCFDI} opts={types} setValue={handleTypeCfdiprov} />
+              </div> */}
+            </div>
+          )
+        }
 
         <div className="mt-5">
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
@@ -938,16 +995,35 @@ export default function DataStepper({token, user}: {token:string, user:string })
               showToastMessageError('Ya hay una peticion en proceso..!');
             }
           }}>Guardar</Button>
-          <button type="submit"
-            className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
-              border-slate-900 rounded-xl hover:bg-slate-200"
-          >
-            Siguiente
-          </button>         
         </div>
       </form> 
       {showProvider && <AddProvider token={token} setShowForm={setShowProvider} 
                             addProv={addProv}  />} 
     </div>
+  )
+}
+
+export function SelectOptionReact({opts, setValue, disabled=false, setSelOpt, selOpt}: 
+  {opts:Options[], setValue:Function, disabled?:boolean, 
+    setSelOpt:(value: Options) => void, selOpt: Options| undefined}) {
+  
+  return(
+    <Select
+      value={selOpt}
+      options={opts}
+      onChange={(e:any) => {
+        setSelOpt(e); 
+        setValue(e.value)
+      }} 
+      className="w-full text-lg mt-2 text-gray-900  rounded-lg 
+        bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
+      styles={{
+        control: (baseStyles, state) => ({
+          ...baseStyles,
+          height: '5px',
+        }),
+      }}
+      isDisabled={disabled}
+    />
   )
 }

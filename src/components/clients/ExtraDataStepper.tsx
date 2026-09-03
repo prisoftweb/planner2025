@@ -10,7 +10,7 @@ import SaveClient from "@/app/functions/SaveClient"
 import { SaveClientLogo } from "@/app/functions/SaveClient"
 import { useClientStore } from "@/app/store/clientStore"
 
-export default function ExtraDataStepper({token}: {token:string}){
+export default function ExtraDataStepper({token, company}: {token:string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const [page, setPage] = useState('');
@@ -26,8 +26,12 @@ export default function ExtraDataStepper({token}: {token:string}){
       if(state.databasic){
         data.append('name', state.databasic.name);
         data.append('tradename', state.databasic.tradename);
+        data.append('taxregime', state.databasic.taxregime);
         if(state.databasic.email){
           data.append('email', state.databasic.email);
+        }
+        if(state.databasic.capitalregime){
+          data.append('capitalregime', state.databasic.capitalregime);
         }
         data.append('rfc', state.databasic.rfc);
         data.append('source', state.databasic.source);
@@ -35,9 +39,6 @@ export default function ExtraDataStepper({token}: {token:string}){
         if(state.databasic.user){
           data.append('user', state.databasic.user);
         }
-        // if(state.databasic.phone){
-        //   data.append('phone', state.databasic.phone);
-        // }
       }
 
       let stret='', cp='', municipy='', country='', stateS='', community='';
@@ -53,17 +54,12 @@ export default function ExtraDataStepper({token}: {token:string}){
       const location = {
         community,
         country,
-        cp: cp,
+        // cp: cp,
+        cp: parseInt(cp),
         municipy,
         state: stateS,
         stret
       }
-
-      // if(state.contacts){
-      //   state.contacts.map((contact: string) => {
-      //     data.append('contact', contact);
-      //   })
-      // }
 
       data.append('logo', file);
       if(page && page!==''){
@@ -78,9 +74,6 @@ export default function ExtraDataStepper({token}: {token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -91,10 +84,12 @@ export default function ExtraDataStepper({token}: {token:string}){
       }
 
     }else{
-      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
+      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='', taxregime='', capitalregime='';
       if(state.databasic){
         name=state.databasic.name? state.databasic.name : '';
         tradename=state.databasic.tradename? state.databasic.tradename : '';
+        taxregime=state.databasic.taxregime? state.databasic.taxregime : '';
+        capitalregime=state.databasic.capitalregime? state.databasic.capitalregime : '';
         email=state.databasic.email? state.databasic.email : '';
         rfc=state.databasic.rfc? state.databasic.rfc : '';
         phone=state.databasic.phone? state.databasic.phone : '';
@@ -124,16 +119,19 @@ export default function ExtraDataStepper({token}: {token:string}){
         tradename, 
         email, 
         rfc, 
+        taxregime, 
+        capitalregime,
         phone, 
         source,
         tags, 
         user,
+        company,
         link:page,
-        //photo: file,
         regime,
         location: {
           stret,
-          cp,
+          // cp,
+          cp:parseInt(cp),
           municipy, 
           country,
           community,
@@ -148,9 +146,6 @@ export default function ExtraDataStepper({token}: {token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -188,7 +183,6 @@ export default function ExtraDataStepper({token}: {token:string}){
         <div className="my-5">
           <NavClientsStepper index={1} />
         </div>
-        {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
         <div className="grid grid-cols-1 gap-4">
           <div>
             <Label>Pagina</Label>

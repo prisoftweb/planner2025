@@ -47,6 +47,13 @@ export interface ClientBack{
   status: boolean,
   "createAt"?: string,
   "__v"?: number,
+  // taxregime?:string,
+  taxregime?:{
+    id:string,
+    regime:string,
+  },
+  capitalregime?: string,
+  hasfulltaxprofile: boolean
 }
 
 export interface Location{
@@ -73,12 +80,18 @@ export interface Condition{
 export interface TableClient{
   "id": string,
   "name":string,
+  tradename:string,
   "status":boolean,
   'contacts': number,
   "rfc": string,
   "account":string,
   "currentbalance": number,
   "logo": string,
+  taxregime:string,
+  regime:string,
+  taxprofile:string,
+  location:string,
+  phone:string
 }
 
 export interface Tag{
@@ -180,3 +193,93 @@ export const optionsTags:Options[] = [
     label: 'otro'
   },
 ]
+
+export interface ITotalProjectsByClient {
+  totalAmount: number
+  totalAmountTotal: number
+  projects: number
+}
+
+export interface ITotalCollectionsByClient {
+  client: string
+  quantity: number
+  type: string
+  pendingPayment: number
+}
+
+export interface ITotalPendingBillingByClient {
+  client: string
+  quantity: number
+  c: string
+  type: string
+  pendingEstimated: number
+}
+
+
+export interface ICollectionByClientMin {
+  // project: string
+  // client: string
+  // type: string
+  // pendingBilling: number
+  // pendingPayment: number
+  // pendingTotal: number
+  // porcentagePendingPAY: number
+
+  // quantity: number
+  // project: string
+  // date: string
+  // client: string
+  // type: string
+  // pendingBilling: number
+  // pendingPayment: number
+  // pendingTotal: number
+  // porcentagePendingPAY: number
+
+  quantity: number
+  project: {
+    title: string
+    photo: string
+    date: string
+    estatus: {
+      name: string
+      color: string
+      darktext: boolean
+    }
+  }
+  date: string
+  client: string
+  type: string
+  pendingBilling: number
+  pendingPayment: number
+  pendingTotal: number
+  porcentagePendingPAY: number
+}
+
+export interface ITableCollectionByClientMin {
+  user: string,
+  project: string, 
+  status: boolean,
+  pendingBilling: number, 
+  pendingCollection: number,
+  total: number
+}
+
+export interface ITotalPaymentClient {
+  quantity: number
+  totalCharged: number
+}
+
+export interface ISatCLient {
+  // _id: string
+  // name: string
+  // rfc: string
+  // taxregime: string
+  // regime: string
+  // cp: number
+  _id: string
+  legalName: string
+  tin: string
+  taxRegimeCode: string
+  regime: string
+  zipCode: number
+}

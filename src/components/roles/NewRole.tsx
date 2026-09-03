@@ -2,21 +2,18 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-//import { useRouter } from "next/navigation"
 import { createRole } from "@/app/api/routeRoles"
 import { useState, useEffect, useRef } from "react"
 import { getTrees } from "@/app/api/routeRoles"
-//import TextArea from "../TextArea"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 export default function NewRole({showForm, token}: 
-                    {showForm:Function, token:string}){
+  {showForm: (value: boolean) => void, token:string}){
   
-  //const router = useRouter();
   const refRequest = useRef(true);
 
   const [idTree, setIdTree] = useState<string>('');
@@ -70,15 +67,15 @@ export default function NewRole({showForm, token}:
 
   return(
     <>
-      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen"
+      {/* top-16 */}
+      <form className="z-10 fixed bg-white space-y-5 p-5 px-2 py-2 sm:py-5 sm:px-7 right-0 h-screen"
         onSubmit={formik.handleSubmit}
       >
-        <div className="flex justify-between">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <HeaderForm img="/img/role.svg" subtitle="Ingresa nuevo rol para usuarios" 
             title="Nuevo rol"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>
@@ -87,6 +84,7 @@ export default function NewRole({showForm, token}:
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             value={formik.values.name}
+            autoFocus
           />
           {formik.touched.name && formik.errors.name ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -105,11 +103,6 @@ export default function NewRole({showForm, token}:
             value={formik.values.description}
             rows={4}
           />
-          {/* <TextArea name="description"
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.description}
-          /> */}
           {formik.touched.description && formik.errors.description ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.description}</p>

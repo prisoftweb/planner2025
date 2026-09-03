@@ -4,30 +4,73 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import CompanyClient from "@/components/companies/CompanyClient";
 import ButtonNew from "@/components/companies/ButttonNew";
-import Header from "@/components/Header";
+import { ResponsiveHeader } from "@/components/Header";
 import { getCompanies } from "../api/routeCompany";
 import { Company, CompanyTable } from "@/interfaces/Companies";
 import TableCompany from "@/components/companies/TableCompany";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
+
+  const [resresource, rescomponents] = await Promise.all([
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'companies', ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
+      </>
+    )
+  }
+
   let companies: Company[];
   try {
     companies = await getCompanies(token);
     if(typeof(companies)=== 'string'){
-      return <h1 className="text-center text-red-500 text-lg">{companies}</h1>
+      return(
+        <>
+          <Navigation user={user} token={token} resources={resresource} />
+          {/* <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">
+            <h1 className="text-center text-red-500 text-lg">{companies}</h1>
+          </div> */}
+          <ComponentError page="/companies" message={companies} />
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-center text-red-500 text-lg">Error al consultar compañias!!</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500 text-lg">Error al consultar compañias!!</h1> */}
+        <ComponentError page="/companies" message="Error al consultar compañias!!" />
+      </>
+    )
   } 
 
   if(!companies || companies.length <= 0){
     return (
       <div>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} resources={resresource} />
         <CompanyClient option={2} >
           <WithOut img="/img/clientes.svg" subtitle="Compañias"
             text="Aqui puedes agregar las compañias
@@ -54,14 +97,19 @@ export default async function Page(){
     })
   })
 
+  // const result = {
+  //   permission: rescomponents[0]?.permission ?? {},
+  //   components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  // };
+
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <CompanyClient option={2} >
-        <div>
-          <Header title="Compañias" placeHolder="Buscar compañia.." >
+        <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
+          <ResponsiveHeader title="Compañias" placeHolder="Buscar compañia.." >
             <ButtonNew token={token} />
-          </Header>
+          </ResponsiveHeader>
           <div className="mt-5">
             <TableCompany data={table} token={token} />
           </div>

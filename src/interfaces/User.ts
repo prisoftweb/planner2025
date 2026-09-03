@@ -1,6 +1,7 @@
 import { Role } from "./Roles"
 import { Department } from "./Departments"
 
+// interface para tipear los objetos en el codigo
 export interface User{
   'id': string,
   'photo': string,
@@ -25,7 +26,8 @@ export interface UsrBack{
   "createAt"?: string,
   "__v"?: number,
   "passwordChangedAt"?: string,
-  "rol"? : Role
+  "rol"? : Role,
+  profile:string
 }
 
 // export interface Usr{

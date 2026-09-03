@@ -8,15 +8,22 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveProvider from "@/app/functions/SaveProvider";
 import BasicBarStepper from "./BasicBarStepper";
 import CurrencyInput from "react-currency-input-field";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useProviderStore } from "@/app/store/providerStore";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
+import { getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
 
-export default function CreditLineStepper({token, id, user}:{token:string, id:string, user: string}){
+export default function CreditLineStepper({token, id, user, company}:
+  {token:string, id:string, user: string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
 
   const {providerStore, updateProviderStore, updateHaveNewProvider} = useProviderStore();
+
+  const [category, setCategory]=useState<Options>();
+  const [optCategories, setOptCategories] = useState<Options[]>([]);
 
   let creditlimitI= '', creditdaysI='', currentbalanceI='', percentoverduedebtI=''; 
 
@@ -51,18 +58,36 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
         creditdays: parseInt(creditdays? creditdays: '0'), 
         creditlimit: parseInt(creditlimit? creditlimit.replace(/[$,%,]/g, ""): '0'),
         currentbalance: parseInt(currentbalance? currentbalance.replace(/[$,%,]/g, ""): '0'),
-        percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0')
+        percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0'),
+        category
       }
       dispatch({ type: 'SET_CREDIT_DATA', data: tradeline });
       dispatch({type: 'INDEX_STEPPER', data: 2})
     },       
   });
+
+  useEffect(() => {
+      const fetch = async () => {
+        const [resc] = await Promise.all([
+          // getCatalogsByNameAndType(token, 'Providers'),
+          getCatalogsByNameAndCategory(token, 'Providers')
+        ]) 
+        
+        if(typeof(resc)==='string'){
+          showToastMessageError(resc);
+        }else{
+          setOptCategories(resc);
+          setCategory(resc[0].value);
+        }
+      }
+      fetch();
+    }, [])
   
   const onClickSave = async () => {
     if(refRequest.current){
       refRequest.current = false;
       const {creditdays, creditlimit, currentbalance, percentoverduedebt} = formik.values;
-      const {name, rfc, suppliercredit, tradename} = state.databasic;
+      const {name, rfc, suppliercredit, tradename, type} = state.databasic;
       
       let contact = [];
       if(state.contacts){
@@ -86,22 +111,33 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
           tradename,
           suppliercredit,
           tradeline,
-          user: id,
+          user: user,
+          type,
+          category,
+          company,
           contact,
           condition: [{
             glossary: '663d2fe61d1c43ae98d77bc3',
             user
-          }]
+          },
+            ...(suppliercredit
+                ? [{
+                    glossary: "6746442a734d5ab78ab98ddd",
+                    user
+                  }]
+                : [])],
         }
+        console.log('data => ', JSON.stringify(data));
         const res = await SaveProvider(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           updateProviderStore([...providerStore, res.prov]);
           updateHaveNewProvider(true);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
+          dispatch({ type: 'SET_BASIC_DATA', data: null });
+          dispatch({ type: 'SET_CREDIT_DATA', data: null });
+          dispatch({ type: 'SET_CONTACTS', data: [] });
+          dispatch({type: 'INDEX_STEPPER', data: 0})
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -115,21 +151,15 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
     }
   }
 
+  const handleCategory=(value:Options) => {
+    setCategory(value);
+  }
+
   return(
     <div className="flex flex-col w-full ">
-      {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Linea de credito de proveedor" 
-        title="Linea de credito"
-      /> */}
       <div className="my-5">
         <BasicBarStepper index={1} />
       </div>
-      {/* <button type="button" 
-        onClick={onClickSave}
-        className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
-            hover:bg-slate-600"
-      >
-        Guardar
-      </button> */}
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-md space-y-5">
         <div>
           <Label htmlFor="creditlimit">Limite de credito</Label>
@@ -138,10 +168,8 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             name="creditlimit"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={creditlimitI || 0}
             decimalsLimit={2}
             prefix="$"
@@ -150,13 +178,7 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             } catch (error) {
               formik.values.creditlimit='0';
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="creditlimit" autoFocus 
-            value={formik.values.creditlimit}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.creditlimit && formik.errors.creditlimit ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.creditlimit}</p>
@@ -183,10 +205,8 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             name="currentbalance"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={currentbalanceI || 0}
             decimalsLimit={2}
             prefix="$"
@@ -195,13 +215,7 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             } catch (error) {
               formik.values.currentbalance='0';
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="currentbalance" 
-            value={formik.values.currentbalance}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.currentbalance && formik.errors.currentbalance ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.currentbalance}</p>
@@ -215,31 +229,28 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             name="percentoverduedebt"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={percentoverduedebtI || 0}
             decimalsLimit={2}
-            //prefix="%"
             suffix="%"
             onValueChange={(value) => {try {
               formik.values.percentoverduedebt=parseFloat(value || '0').toString();
             } catch (error) {
               formik.values.percentoverduedebt='0';
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="percentoverduedebt" 
-            value={formik.values.percentoverduedebt}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.percentoverduedebt && formik.errors.percentoverduedebt ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.percentoverduedebt}</p>
               </div>
           ) : null}
+        </div>
+        <div>
+          <Label>Categoria</Label>
+          {optCategories.length>0 && (
+            <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
+          )}
         </div>
         <div className="flex justify-end space-x-5 mt-8">
           <Button onClick={onClickSave} type="button">Guardar</Button>
@@ -250,9 +261,6 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             Siguiente
           </button>
         </div>
-        {/* <div className="flex justify-center mt-4">
-          <Button type="submit">Siguiente</Button>
-        </div> */}
       </form>  
     </div>
   )

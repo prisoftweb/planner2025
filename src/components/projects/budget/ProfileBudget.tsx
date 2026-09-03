@@ -10,24 +10,31 @@ interface OptionsDashboard {
   costo: number
 }
 
-export default function ProfileBudget({budget, token, id, user}: {budget: FullBudget, token:string, id: string, user:string}) {
+type Params = {
+  budget: FullBudget, 
+  token:string, 
+  id: string, 
+  user:string
+}
+
+export default function ProfileBudget({budget, token, id, user}: Params) {
 
   const {oneBudget} = useOneBudget();
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const amount = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: budget.amount
   });
 
   const budgeted = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: budget.budgeted
   });
 
   const tableData = BudgetDataToTableCostCenter(budget);
 
-  const view = <div className="mt-3 w-full bg-white rounded-lg shadow-md pl-2 px-3" 
+  const view = <div className="mt-3 md:mt-0 w-full bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
                   <TableCostCenter dataTable={tableData} token={token} id={id} user={user} budget={budget} />
               </div>;
@@ -37,7 +44,6 @@ export default function ProfileBudget({budget, token, id, user}: {budget: FullBu
 
   oneBudget?.newbudget.map((newB) => {
     optsChart.push({
-      //costo: newB.cost,
       costo: newB.percent,
       label: newB.costocenter.concept.name
     });
@@ -45,10 +51,9 @@ export default function ProfileBudget({budget, token, id, user}: {budget: FullBu
   });
 
   return (
-    <div className="flex w-full px-2 flex-wrap md:flex-nowrap space-x-2" 
+    <div className="flex w-full lg:px-2 flex-wrap lg:flex-nowrap lg:space-x-2" 
         style={{backgroundColor:'#F8FAFC'}}>
       <div className={`w-full max-w-lg`}>
-        {/* <ProfileProject project={project} /> */}
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
             <div>

@@ -1,7 +1,7 @@
 'use client'
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -11,12 +11,18 @@ import { Options } from "@/interfaces/Common"
 import { createRelation } from "@/app/api/routeRelations"
 import SelectReact from "../SelectReact"
 import SelectReactWithDescription from "../SelectReactWithDescription"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
+
+type Props = {
+  showForm:(value: boolean) => void, 
+  token:string, 
+  glossaries:Options[], 
+  nodes:Options[], 
+  descGlossaries:Options[]
+}
 
 export default function NewRelation({showForm, token, glossaries, 
-                      nodes, descGlossaries}: 
-                    {showForm:Function, token:string, 
-                      glossaries:Options[], nodes:Options[], 
-                      descGlossaries:Options[]}){
+  nodes, descGlossaries}: Props){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [glossary, setGlossary] = useState<string>(glossaries[0].value);
@@ -83,7 +89,7 @@ export default function NewRelation({showForm, token, glossaries,
 
   return(
     <>
-      <form className="z-10 w-full max-w-md top-16 absolute bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
         style={{height: `${heightPage}px`}}
       >
@@ -91,14 +97,11 @@ export default function NewRelation({showForm, token, glossaries,
           <HeaderForm img="/img/glossary.svg" subtitle="Agregar nueva relacion" 
             title="Agregar nueva relacion"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
-        {/* <div>
-          <Label htmlFor="condicion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
-          <SelectReact index={0} opts={glossaries} setValue={handleGlossary} />
-        </div> */}
         <div>
           <Label htmlFor="condicion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
           <SelectReactWithDescription index={0} opts={glossaries} 

@@ -2,7 +2,6 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -11,9 +10,15 @@ import { CreateCatalog, UpdateCatalog } from "@/app/api/routeCatalogs"
 import { Catalog, CatalogTable } from "@/interfaces/Catalogs"
 import { useState, useEffect, useRef } from "react"
 import { useListsStore } from "@/app/store/listStore"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
-export default function NewCatalog({showForm, token, catalog}: 
-                    {showForm:Function, token:string, catalog:(CatalogTable | string)}){
+type NewCatalogProps = {
+  showForm:(value: boolean) => void, 
+  token:string, 
+  catalog:(CatalogTable | string)
+}
+
+export default function NewCatalog({showForm, token, catalog}: NewCatalogProps){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const refRequest = useRef(true);
@@ -86,7 +91,7 @@ export default function NewCatalog({showForm, token, catalog}:
 
   return(
     <>
-      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <form className="z-10 absolute bg-white space-y-5 p-5 right-0 h-screen"
         onSubmit={formik.handleSubmit}
         style={{height: `${heightPage}px`}}
       >
@@ -94,8 +99,7 @@ export default function NewCatalog({showForm, token, catalog}:
           <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevo catalogo" 
             title="Agregar nuevo catalogo"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>

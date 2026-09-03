@@ -19,11 +19,9 @@ export default function ExtraDataHistory({project}: { project:OneProjectMin}){
           <Input name="category" disabled
             value={project.category.name}
           />
-          {/* <SelectReact opts={optCategories} setValue={setCategory} index={idCategory} /> */}
         </div>
         <div>
           <Label htmlFor="client"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
-          {/* <SelectReact opts={optClients} setValue={setClient} index={idCli} /> */}
           <Input name="client" disabled 
             value={project.client.name}
           />
@@ -46,14 +44,12 @@ export default function ExtraDataHistory({project}: { project:OneProjectMin}){
           <Input name="type" disabled
             value={project.type.name}
           />
-          {/* <SelectReact opts={optTypes} setValue={setType} index={idType} /> */}
         </div>
         <div>
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
           <DatePicker
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
             focus:border-slate-700 outline-0 outline-none" 
-            //showIcon
             selected={new Date(project.date)} 
             onChange={(date:Date) => {}}
             disabled 

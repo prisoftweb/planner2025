@@ -1,11 +1,8 @@
 import { ProjectMin } from "@/interfaces/Projects";
-import DeleteElement from "@/components/DeleteElement";
-import { RemoveProject } from "@/app/api/routeProjects";
-import { CurrencyFormatter, MoneyFormatter } from "@/app/functions/Globals";
+import { MoneyFormatter } from "@/app/functions/Globals";
 import { useNewBudget } from "@/app/store/budgetProject";
 
-export default function CardProject({project, token}:
-                      {project:ProjectMin, token:string}){
+export default function CardProject({project, token}: {project:ProjectMin, token:string}){
 
   const {updateProject, updateIndexStepper} = useNewBudget();
 
@@ -40,10 +37,6 @@ export default function CardProject({project, token}:
         </div>
         <div className="text-right flex flex-col justify-between">
           <p className="text-base">
-            {/* {CurrencyFormatter({
-              currency: "MXN",
-              value: project.amount
-            })} */}
             {MoneyFormatter(project.amount)}
           </p>
           <p>{ project.date? 

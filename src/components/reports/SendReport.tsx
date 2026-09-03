@@ -4,7 +4,6 @@ import { Report } from "@/interfaces/Reports";
 import Chip from "../providers/Chip";
 import Label from "../Label";
 import TextArea from "../TextArea";
-//import Button from "../Button";
 import { Node, Relation } from "@/interfaces/Nodes";
 import { insertMovementsInReport } from "@/app/api/routeReports";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -13,21 +12,27 @@ import ButtonColor from "../ButtonColor";
 import { getNode, getNodes } from "@/app/api/routeNodes";
 import { updateReport } from "@/app/api/routeReports";
 import { useOneReportStore } from "@/app/store/reportsStore";
+import { Mfe } from "@/interfaces/Reports";
+import { UsrBack } from "@/interfaces/User";
 
-export default function SendReport({send, report, node, 
-              user, token, isClose}: 
-          {send:Function, report:Report, node:(Node | undefined), 
-            user:string, token:string, isClose:boolean }){
+type Props = {
+  send:Function, 
+  report:Report, 
+  node:(Node | undefined), 
+  user: UsrBack, 
+  token:string, 
+  isClose:boolean 
+}
 
-  const {oneReport, updateOneReportStore} = useOneReportStore();
+export default function SendReport({send, report, node, user, token, isClose}: Props){
+
+  const {oneReport} = useOneReportStore();
   const [heightPage, setHeightPage] = useState<number>(900);
   const [notes, setNotes] = useState<string>();
   const [isSend, setIsSend] = useState<boolean>(true);
   const refRequest = useRef(true);
-  //console.log('is close => ', isClose);
 
   const handleResize = () => {
-    //setHeightPage(window.outerHeight);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -46,7 +51,6 @@ export default function SendReport({send, report, node,
   }, []);
 
   const sendReport = async (relation:Relation) => {
-    //console.log(relation);
     if(refRequest.current){
       refRequest.current = false;
       if(notes && notes !== ''){
@@ -56,12 +60,10 @@ export default function SendReport({send, report, node,
               const data = {wached: false};
               const res = await updateReport(token, oneReport?._id || '', data);
               if(typeof(res)==='string'){
-                //refRequest.current = true;
                 showToastMessageError(res);
               }
             }
           } catch (error) {
-            //refRequest.current = true;
             showToastMessageError('Ocurrio un problema al actualizar estado visto!!');
           }
           try {
@@ -74,8 +76,9 @@ export default function SendReport({send, report, node,
                 moves: [{
                     condition: relation.relation.glossary._id,
                     notes,
-                    user,
-                    department: res.department._id
+                    user: user._id,
+                    department: res.department._id,
+                    date: new Date()
                 }]
               };
       
@@ -113,7 +116,6 @@ export default function SendReport({send, report, node,
   }
 
   const closeReport = async () => {
-    //console.log(relation);
     if(refRequest.current){
       refRequest.current = false;
       if(notes && notes !== ''){
@@ -126,11 +128,11 @@ export default function SendReport({send, report, node,
             const node = res.find(n => n.relations.length===0)
             const data = {
               moves: [{
-                  //condition: relation.relation.glossary._id,
                   condition: node?.glossary._id,
                   notes,
-                  user,
-                  department: node?.department._id
+                  user: user._id,
+                  department: node?.department._id,
+                  date: new Date()
               }]
             };
     
@@ -167,30 +169,30 @@ export default function SendReport({send, report, node,
   }
 
   const total = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: oneReport?.total || 0
   });
 
   let button: JSX.Element = <></>;
 
+  // const canSend=(typeof(user.department)!=='string'? report.department.id===user.department.id : report.department.id===user.department);
+
   if(isClose){
     button = (
       <div className="mt-3 flex justify-center gap-x-3">
         <ButtonColor 
-            // className="bg-red-600 text-white font-normal text-sm rounded-xl w-36 h-9 py-2 hover:bg-red-400" 
             className="text-white font-normal text-sm rounded-xl w-36 h-9 py-2 bg-black hover:bg-slate-600" 
             type="button"
-            //style={{backgroundColor: rel.relation.glossary.color}}
             onClick={() => closeReport()}>Cerrar</ButtonColor>
       </div>
     )
   }else{
+    // if(node && canSend){
     if(node){
       button = (
         <div className="mt-3 flex justify-center gap-x-3">
           {node.relations.map((rel) => (
             <ButtonColor 
-              // className="bg-red-600 text-white font-normal text-sm rounded-xl w-36 h-9 py-2 hover:bg-red-400" 
               className="text-white font-normal text-sm rounded-xl w-36 h-9 py-2" 
               type="button" key={rel._id} 
               style={{backgroundColor: rel.relation.glossary.color}}
@@ -200,7 +202,6 @@ export default function SendReport({send, report, node,
       )
     }
   }
-  
   return(
     <>
       <div className="z-10 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0"
@@ -211,8 +212,8 @@ export default function SendReport({send, report, node,
             <XMarkIcon className="w-6 h-6 text-slate-500 
                 hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => send(false, false)} />
           </div>
-          <div className="grid grid-cols-2 gap-x-3">
-            <div className="col-span-1 mt-2 p-3">
+          <div className="grid grid-cols-2 gap-x-2">
+            <div className="col-span-1 mt-2 p-0">
               <p className=" text-3xl text-slate-500">{oneReport?.name}</p>
               <div className="bg-slate-500 p-4">
                 <p className="text-4xl text-white">{total}</ p>
@@ -230,15 +231,15 @@ export default function SendReport({send, report, node,
             <p className=" ml-10">Cantidad de gastos del informe</p>
             <p className=" ml-10">{oneReport?.quantity}</p>
 
-            <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
-              <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700">
-                {oneReport?.moves.map((mov) => (
+            {/* <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
+              <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700"> */}
+                {/* {oneReport?.moves.map((mov) => (
                   <div role="button"
                     key={mov._id}
                     className="flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
                     <div className="flex items-center ">
                       <div className="grid mr-4 place-items-center">
-                        <img alt="responsable" src={mov.user.photo || '/img/users/default.jpg'}
+                        <img alt="responsable" src={mov.user?.photo || '/img/users/default.jpg'}
                           className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                       </div>
                       <div className="w-full max-w-72">
@@ -258,6 +259,14 @@ export default function SendReport({send, report, node,
                         className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                     </div>
                   </div>
+                ))} */}
+            {/* <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border h-[calc(100vh-188px)]"> */}
+            <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[450px]">
+              <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+                overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+                {oneReport?.moves.map((mov, index:number) => (
+                  <CardReport mov={mov} key={mov._id+index} />
                 ))}
 
               </nav>
@@ -274,21 +283,6 @@ export default function SendReport({send, report, node,
               </div>
             )}
             {button}
-
-            {/* {
-              node && (
-                <div className="mt-3 flex justify-center gap-x-3">
-                  {node.relations.map((rel) => (
-                    <ButtonColor 
-                      // className="bg-red-600 text-white font-normal text-sm rounded-xl w-36 h-9 py-2 hover:bg-red-400" 
-                      className="text-white font-normal text-sm rounded-xl w-36 h-9 py-2" 
-                      type="button" key={rel._id} 
-                      style={{backgroundColor: rel.relation.glossary.color}}
-                      onClick={() => sendReport(rel)}>{rel.relation.glossary.name}</ButtonColor>
-                  ))}
-                </div>
-              )
-            } */}
           </div>
 
         </div>
@@ -298,7 +292,6 @@ export default function SendReport({send, report, node,
 }
 
 function Card(relation: Relation){
-  //console.log('relation card ', relation);
   return(
     <div className="mt-2 p-3 flex flex-col items-center">
       <p className="text-xs">Enviar informe a:</p>
@@ -306,8 +299,41 @@ function Card(relation: Relation){
       <img src={typeof(relation.relation.nextnodo)==='string'? "/img/users/default.jpg": relation.relation.nextnodo?.department.company.logo || "/img/users/default.jpg"}
        className="w-12 h-auto rounded-full" alt="responsable" />
       <p className="text-xs text-center">{typeof(relation.relation.nextnodo)=== 'string'? '': relation.relation.nextnodo?.department.name || 'Depto'}</p>
-      <Chip label={relation.relation.glossary.name} />
-      {/* <Chip label={report.moves[report.moves.length-1].condition.name} /> */}
+      <Chip label={relation.relation.glossary.name} darktext={false} />
+    </div>
+  )
+}
+
+const CardReport = ({mov}: {mov:Mfe}) => {
+  return(
+    <div role="button"
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={mov.user?.photo || '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+        </div>
+        <div className="w-full max-w-72">
+          <h6
+            className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
+            {mov.condition.name}
+          </h6>
+          <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700">
+            {mov.notes}
+          </p>
+        </div>
+      </div>
+      <div className="grid place-items-center justify-center w-28">
+        <p className="block font-sans text-sm antialiased font-normal 
+            leading-normal text-gray-700">{mov.department.name}</p>
+        <img alt="responsable" src={mov.department.company.logo || '/img/users/default.jpg'}
+          className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+      </div>
     </div>
   )
 }

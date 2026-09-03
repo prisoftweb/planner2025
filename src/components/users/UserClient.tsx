@@ -10,23 +10,14 @@ import { Options } from "@/interfaces/Common"
 import NavResponsive from "./NavResponsive"
 import { UsrBack } from "@/interfaces/User"
 import { useUserStore } from "@/app/store/userStore"
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function UserClient({user, token, departments, optQuery, optsRole}: 
-                  {user:UsrBack, token:string, departments:Options[], 
-                    optQuery: number, optsRole:Options[]}){
+export default function UserClient({user, token, departments, optsRole, optTab, permissions}: 
+  {user:UsrBack, token:string, departments:Options[], optsRole:Options[], optTab: number, permissions:IPermissionsAndComponents}) {
   
-  // const [view, setView] = useState<JSX.Element>
-  //               (<UpdateProfile departments={departments} user={user} 
-  //                     token={token} optsRoles={optsRole} />)
-
-  const [opt, setOpt] = useState<number>(optQuery);
-  const [open, setOpen] = useState<boolean>(false);
+  //se importan metodos y propiedades del estado global de usuario
   const {updateUser, name, _id, department, email, photo, role, status, __v, 
-      createAt, passwordChangedAt, rol} = useUserStore();
-
-  const handleOpenNav = (value: boolean) => {
-    setOpen(value);
-  }
+      createAt, passwordChangedAt, rol, profile} = useUserStore();
 
   const usr: UsrBack = {
     __v,
@@ -39,48 +30,45 @@ export default function UserClient({user, token, departments, optQuery, optsRole
     photo,
     rol,
     status, 
-    role
+    role,
+    profile
   }
 
-  const handleChangeOpt = (value:number) => {
-    setOpt(value);
-  }
-
+  //se actualiza el estado global de user con los datos del usuario recibido del backend
   useEffect(() => {
     updateUser(user);
   }, []);
 
   let view: JSX.Element;
+
+  //se asignan en variables los componentes dependiendo de si el usuario tiene permiso o no
+  const configUser=permissions.components.includes("deleteuser")? <ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />: <></>
+  const basicData=permissions.components.includes("personaldata")? <UpdateProfile departments={departments} user={usr.name ===''? user: usr} token={token} optsRoles={optsRole} />: <></>
+  const changePhoto=permissions.components.includes("updatephoto")? <ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />: <></>
+  const changePassword=permissions.components.includes("updatepassword")? <ChangePassword token={token} name={user.name} id={user._id} />: <></>
+
+  console.log('optTab => ', optTab);
+
+  optTab===2? view = (changePhoto) : 
+      (optTab===3? view = (changePassword): 
+        (optTab===5? view = (configUser): 
+          view = (basicData)))
   
-  opt===2? view = (<ChangePhoto id={user._id} token={token} />) : 
-      (opt===3? view = (<ChangePassword token={token} name={user.name} id={user._id} />): 
-        (opt===4? view = (<ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />): 
-          view = (<UpdateProfile departments={departments} user={usr.name ===''? user: usr} 
-                      token={token} optsRoles={optsRole} />) ))
-
-  // opt===2? setView(<ChangePhoto id={user._id} token={token} />) : 
-  //     (opt===3? setView(<ChangePassword token={token} name={user.name} id={user._id} />): 
-  //       (opt===4? setView(<ConfigUser token={token} user={user} status={user.status} />): 
-  //         setView(<UpdateProfile departments={departments} user={user} 
+  // optTab===2? view = (<ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />) : 
+  //     (optTab===3? view = (<ChangePassword token={token} name={user.name} id={user._id} />): 
+  //       (optTab===5? view = (<ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />): 
+  //         view = (<UpdateProfile departments={departments} user={usr.name ===''? user: usr} 
   //                     token={token} optsRoles={optsRole} />) ))
-
-  // useEffect(() => {
-  //   opt===2? setView(<ChangePhoto id={user._id} token={token} />) : 
-  //     (opt===3? setView(<ChangePassword token={token} name={user.name} id={user._id} />): 
-  //       (opt===4? setView(<ConfigUser token={token} user={user} status={user.status} />): 
-  //         setView(<UpdateProfile departments={departments} user={user} 
-  //                     token={token} optsRoles={optsRole} />) ))
-  // }, [opt])
 
   return(
     <>
       <div className={`flex`}>
-        <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
+        {/* <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={handleOpenNav} changeOption={handleChangeOpt} option={opt} />
           </div>
-        </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+        </div> */}
+        <div className="flex w-full max-w-5xl md:px-2 flex-wrap md:space-x-2" 
           style={{'backgroundColor': '#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <Profile />

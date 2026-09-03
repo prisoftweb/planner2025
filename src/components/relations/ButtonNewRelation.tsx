@@ -3,24 +3,40 @@ import Button from "../Button"
 import { useState } from "react";
 import { Options } from "@/interfaces/Common";
 import NewRelation from "./NewRelation";
+import ContainerSideNav from "../ContainerSideNav";
+
+type Props = {
+  token:string, 
+  user:string, 
+  glossaries:Options[], 
+  nodes:Options[], 
+  descGlossaries:Options[]
+}
 
 export default function ButtonNewRelation({token, user, nodes, 
-              glossaries, descGlossaries}: 
-          {token:string, user:string, glossaries:Options[], 
-            nodes:Options[], descGlossaries:Options[]}){
+  glossaries, descGlossaries}: Props){
+  
   const [newRelation, setNewRelation] = useState<boolean>(false);
 
   const handleClick = (value: boolean) => {
     setNewRelation(value);
   }
   
-
   return(
     <>
       <Button type="button" onClick={() => handleClick(true)}>Nuevo</Button>
-          {newRelation && <NewRelation showForm={handleClick} token={token} 
+          {/* {newRelation && (
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+              <NewRelation showForm={handleClick} token={token} 
                           nodes={nodes} glossaries={glossaries}
-                          descGlossaries={descGlossaries} />}
+                          descGlossaries={descGlossaries} />
+            </div>
+          )} */}
+      <ContainerSideNav width="w-full max-w-md" open={newRelation} >
+        <NewRelation showForm={handleClick} token={token} 
+                          nodes={nodes} glossaries={glossaries}
+                          descGlossaries={descGlossaries} />
+      </ContainerSideNav>
     </>
   )
 }

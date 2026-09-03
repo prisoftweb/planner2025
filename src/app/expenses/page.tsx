@@ -1,12 +1,13 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
-import WithOut from "@/components/WithOut";
-import ButtonNew from "@/components/expenses/ButtonNew";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-import { getAllCostsByCondition } from "../api/routeCost";
+import { getAllCostsByConditionAndUser } from "../api/routeCost";
 import ContainerClient from "@/components/expenses/ContainerClient";
 import { ExpenseDataToTableData } from "../functions/CostsFunctions";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page() {
   
@@ -17,59 +18,51 @@ export default async function Page() {
   const role = user.rol?.name || '';
   const isViewReports = role.toLowerCase().includes('residente')? false: true;
   
-  let expenses: Expense[] = [];
-  try {
-    expenses = await getAllCostsByCondition(token);
-    if(typeof(expenses)=== 'string')
-      return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
-  } catch (error) {
-    console.log('page expanses ', error);
-    return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
+  // let expenses: Expense[] = await getAllCostsByConditionAndUser(token, user._id);
+
+  const [expenses, resresource, rescomponents] = await Promise.all([
+    getAllCostsByConditionAndUser(token, user._id),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'expenses', ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
 
-  // let optConditions: Options[] = [];
-  // try {
-  //   optConditions = await getCatalogsByNameAndCondition(token, 'cost');
-  //   if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
-  // } catch (error) {
-  //   return <h1>Error al consultar catalogos!!</h1>
-  // }
-
-  // const idValidado = optConditions.find((cond) => cond.label.toLowerCase().includes('validado'))?.value || '';
-  //const idValidado = '';
-  //let labour:string = '';
-  //let ticket:string = '';
-
-  //labour = optCategories.find((cat) => cat.label.toLowerCase().includes('mano de obra'))?.value || '';
-  //ticket = optCategories.find((cat) => cat.label.toLowerCase().includes('ticket'))?.value || '';
-
-  //labour = '';
-  //ticket = '';
-
-  // if(!expenses || expenses.length <= 0){
-  //   return (
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-  //         <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
-  //           text="Agrega el costo de mano de obra,
-  //                 caja chica o proveedor desde esta
-  //                 seccion a un determinado proyecto"
-  //           title="Gastos">
-  //             <ButtonNew token={token} user={user} />
-  //         </WithOut>
-  //       </div>
-  //     </>
-  //   )
-  // }
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
+      </>
+    )
+  }
+  
+  if(typeof(expenses)=== 'string')
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page="/expenses" message={expenses} />
+      </>
+    )
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   return(
     <>
-      <Navigation user={user} />
-      <ContainerClient data={table} expenses={expenses}
-        token={token} user={user} isViewReports={isViewReports} />
+      <Navigation user={user} token={token} resources={resresource} />
+      <ContainerClient data={table} expenses={expenses} permissions={result}
+        token={token} user={user} isViewReports={isViewReports} company={user.profile} />
     </>
   )
 }

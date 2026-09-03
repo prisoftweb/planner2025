@@ -2,52 +2,76 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
-import Header from "@/components/Header";
+import { ResponsiveHeader as Header } from "@/components/Header";
 import { Options } from "@/interfaces/Common";
 import { getGlossaries } from "../api/routeGlossary";
-import { Glossary } from "@/interfaces/Glossary";
 import { getRelations } from "../api/routeRelations";
 import ButtonNewRelation from "@/components/relations/ButtonNewRelation";
 import { getNodes } from "../api/routeNodes";
-import { Node } from "@/interfaces/Nodes";
 import TableRelations from "@/components/relations/TableRelation";
-import { RelationTable, Relation } from "@/interfaces/Relation";
+import { RelationTable } from "@/interfaces/Relation";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page() {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let relations: Relation[] = [];
-  try {
-    relations = await getRelations(token);
-    if(typeof(relations) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{relations}</h1>
+  const [relations, glossaries, nodes, resresource] = await Promise.all([
+    getRelations(token), 
+    getGlossaries(token), 
+    getNodes(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+      return (
+        <>
+          <ComponentError page="/" message={resresource} />
+        </>
+      )
     }
-  } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar relaciones!!</h1>
+  
+  if(typeof(relations) ==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-xl text-center">{relations}</h1>
+        </div> */}
+        <ComponentError page="/relations" message={relations} />
+      </>
+    )
   }
 
-  let glossaries: Glossary[] = [];
-  try {
-    glossaries = await getGlossaries(token);
-    if(typeof(glossaries) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar glosarios!!</h1>
+  if(typeof(glossaries) ==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
+        </div> */}
+        <ComponentError page="/relations" message={glossaries} />
+      </>
+    )
   }
 
-  // const optGlossaries: Options[] = [];
-  // glossaries.map(glossary => {
-  //   optGlossaries.push({
-  //     label: glossary.name,
-  //     value: glossary._id
-  //   });
-  // });
+  if(typeof(nodes) ==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
+        </div> */}
+        <ComponentError page="/relations" message={nodes} />
+      </>
+    )
+  }
+
   const optGlossaries: Options[] = [];
   const optDescGlossaries: Options[] = [];
-  glossaries.map(glossary => {
+  glossaries.map((glossary:any) => {
     optGlossaries.push({
       label: glossary.name,
       value: glossary._id
@@ -58,18 +82,8 @@ export default async function Page() {
     });
   });
 
-  let nodes: Node[] = [];
-  try {
-    nodes = await getNodes(token);
-    if(typeof(nodes) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar nodos!!</h1>
-  }
-
   const optNodes: Options[] = [];
-  nodes.map(node => {
+  nodes.map((node:any) => {
     optNodes.push({
       label: node.department.name,
       value: node._id
@@ -79,7 +93,7 @@ export default async function Page() {
   if(!relations || relations.length <= 0){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/costs/costs.svg" subtitle="Relaciones"
             text="Agrega relacion, para el control del flujo de los nodos"
@@ -94,7 +108,7 @@ export default async function Page() {
   }
 
   const dataTable: RelationTable[] = [];
-  relations.map((relation) => {
+  relations.map((relation:any) => {
     dataTable.push({
       condition: relation.glossary.name,
       description: relation.description,
@@ -105,7 +119,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Nodos" placeHolder="Buscar nodo.." >
         <ButtonNewRelation glossaries={optGlossaries} nodes={optNodes} 

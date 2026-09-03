@@ -1,8 +1,9 @@
 import IconText from "./IconText";
-import { Provider } from "@/interfaces/Providers";
 import { useOneProviderStore } from "@/app/store/providerStore";
+import { MoneyFormatter } from "@/app/functions/Globals";
+import { ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers"
 
-export default function ProfileProvider(){
+export default function ProfileProvider({costPayment}: {costPayment:ICostTOTALPendingPAYGroupByPROVIDER}){
   
   const {oneProviderStore} = useOneProviderStore();
 
@@ -17,7 +18,8 @@ export default function ProfileProvider(){
           <p className="text-xl text-gray-800 text-center">{oneProviderStore?.name}</p>
           <p className="text-sm text-gray-500 leading-5 md:leading-6">{oneProviderStore?.tradename}</p>
           <p className="text-sm text-gray-500 leading-5 md:leading-6">{oneProviderStore?.rfc}</p>
-          <p className="text-sm text-gray-500 leading-5 md:leading-6">{oneProviderStore?.account}</p>
+          {/* <p className="text-sm text-gray-500 leading-5 md:leading-6">{oneProviderStore?.account?.bankAccount?? ''}</p> */}
+          <p className="text-sm text-gray-500 leading-5 md:leading-6">{oneProviderStore?.account?? ''}</p>
         </div>
         <div className="flex justify-center bg-white p-3 rounded-lg shadow-md mt-3">
           <div className="flex pl-4 text-center">
@@ -31,42 +33,14 @@ export default function ProfileProvider(){
                 </div>
               </div>
               <div className="w-40">
-                <p>$ {oneProviderStore?.tradeline.currentbalance}</p>
+                {/* <p>$ {oneProviderStore?.tradeline.currentbalance}</p> */}
+                {/* <p>{MoneyFormatter(oneProviderStore?.tradeline?.currentbalance || 0)}</p> */}
+                <p>{MoneyFormatter(costPayment?.totalCost?? 0)}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className="bg-white p-3 rounded-lg shadow-md mt-3">
-        <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-          flex py-2 items-center mt-3 ${option===1? 'bg-slate-200': ''}`}
-          onClick={() => changeOption(1)}
-        >
-          <Squares2X2Icon className="w-4 h-4 mr-2 text-slate-500" />
-          Resumen
-        </div>
-        <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-          flex py-2 items-center ${option===2? 'bg-slate-200': ''}`}
-          onClick={() => changeOption(2)}  
-        >
-          <CalendarDaysIcon className="w-4 h-4 mr-2 text-slate-500" />
-          Datos basicos
-        </div>
-        <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-          flex py-2 items-center ${option===3? 'bg-slate-200': ''}`}
-          onClick={() => changeOption(3)}
-        >
-          <CreditCardIcon className="w-4 h-4 mr-2 text-slate-500" />
-          Linea de credito
-        </div>
-        <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-          flex py-2 items-center ${option===4? 'bg-slate-200': ''}`}
-          onClick={() => changeOption(4)}
-        >
-          <IdentificationIcon className="w-4 h-4 mr-2 text-slate-500" />
-          Contactos
-        </div>
-      </div> */}
     </>
   )
 }

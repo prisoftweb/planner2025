@@ -2,7 +2,6 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -12,18 +11,24 @@ import AddConcept from "./AddConcept"
 import { CreateCostoCenter, getCostoCenter, DeleteConceptInCostCenter, 
   InsertConceptInCostCenter, UpdateCostoCenter } from "@/app/api/routeCostCenter"
 import { CostCenter, CostCenterTable } from "@/interfaces/CostCenter"
-//import DeleteElement from "../DeleteElement"
 import DeleteConceptCC from "./DeleteConcept"
 import { CreateConcept } from "@/app/api/routeConcepts"
 import { Concept } from "@/interfaces/Concepts"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 interface ConceptCostCenter {
   "name": string,
   "account": string
 }
 
-export default function NewCostCenter({showForm, token, costCenter}: 
-                    {showForm:Function, token:string, costCenter:(CostCenterTable | string)}){
+type NewCostCenterProps = {
+  showForm:(value: boolean) => void, 
+  token:string, 
+  costCenter:(CostCenterTable | string),
+  company:string
+}
+
+export default function NewCostCenter({showForm, token, costCenter, company}: NewCostCenterProps){
 
   const [heightPage, setHeightPage] = useState<number>(900);
   
@@ -122,13 +127,9 @@ export default function NewCostCenter({showForm, token, costCenter}:
 
   useEffect(() => {
     if(indexDeleteConcept !== -1){
-      // console.log('index del => ', indexDeleteConcept);
-      // console.log('leng => ', concetpsCostCenter.length);
       const arrConcepts = concetpsCostCenter;
       arrConcepts.splice(indexDeleteConcept, 1);
-      console.log('res => ', arrConcepts.length);
       setConceptsCostCenter(arrConcepts);
-      console.log(arrConcepts);
     }
   }, [indexDeleteConcept]);
   
@@ -148,17 +149,8 @@ export default function NewCostCenter({showForm, token, costCenter}:
       if(refRequest.current){
         refRequest.current = false;
         try {
-          // const categorys: CategoryCostCenter[] = []; 
-          // concepts.map((concept, index:number) => {
-          //   categorys.push({
-          //     account: accounts[index],
-          //     name: concept
-          //   })
-          // });
-
           const arrConcepts: ConceptCostCenter[] = []; 
           concepts.map((concept, index:number) => {
-            //create concept
             arrConcepts.push({
               name: concept,
               account : accounts[index]
@@ -181,7 +173,8 @@ export default function NewCostCenter({showForm, token, costCenter}:
             const data = {
               name: category,
               code,
-              categorys: arrIdConcepts
+              categorys: arrIdConcepts,
+              company
             }
             const res = await CreateCostoCenter(token, data);
             if(res===201){
@@ -196,8 +189,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
               showToastMessageError(res);
             }
           }else{
-            //agregar conceptos
-             const data = {
+            const data = {
               categorys: arrIdConcepts
             }
             const res = await UpdateCostoCenter(token, costCenter.id, valores);
@@ -231,16 +223,15 @@ export default function NewCostCenter({showForm, token, costCenter}:
 
   return(
     <>
-      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <form className="z-10 absolute bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0 h-screen"
         onSubmit={formik.handleSubmit}
         style={{height: `${heightPage}px`}}
       >
-        <div className="flex justify-between">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <HeaderForm img="/img/company.svg" subtitle="Ingresa nueva categoria y concepto" 
             title="Nuevo centro de costo"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>
@@ -276,10 +267,6 @@ export default function NewCostCenter({showForm, token, costCenter}:
           ))}
         </div>
         <div>
-          {/* <div className=" flex justify-around">
-            <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Concepto</p></Label>
-            <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cuenta</p></Label>
-          </div> */}
           <div className="mt-1">
             {addConcepts.map((concept) => (
               concept

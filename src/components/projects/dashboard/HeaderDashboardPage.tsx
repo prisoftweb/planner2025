@@ -1,57 +1,39 @@
 'use client'
 
-import { DateRangePicker } from '@tremor/react';
 import { es } from "date-fns/locale"
 import { useState, useRef } from 'react';
-import { DateRangePickerValue, ProgressCircle } from '@tremor/react';
+import { DateRangePicker, DateRangePickerValue, ProgressCircle } from '@tremor/react';
 import Label from '@/components/Label';
 import { CurrencyFormatter } from '@/app/functions/Globals';
 import { TotalAmountProjects, ConfigMin, DashboardTotalCost } from '@/interfaces/DashboardProjects';
 import { Options } from '@/interfaces/Common';
-// import MultiSelectReact from '@/components/MultiSelectReact';
 import SelectMultipleReact from '@/components/SelectMultipleReact';
 import { MoneyFormatter } from '@/app/functions/Globals';
 import {Tooltip} from "@nextui-org/react";
-// import { ChartBarIcon } from '@heroicons/react/24/solid';
+import { propsTooltip } from "@/libs/animations";
+import { getDate } from "@/libs/dates";
+
+type Params = {
+  handleDate: Function, 
+  amountProjects: TotalAmountProjects[], 
+  projects:Options[], 
+  projectsTotalCost: DashboardTotalCost[], 
+  configMin: ConfigMin[], 
+  activeProjects: number
+}
 
 export default function HeaderDashboardPage({handleDate, amountProjects, 
-    projectsTotalCost, configMin, activeProjects, projects}: 
-  {handleDate: Function, amountProjects: TotalAmountProjects[], projects:Options[], 
-    projectsTotalCost: DashboardTotalCost[], configMin: ConfigMin[], activeProjects: number}) {
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-  
+    projectsTotalCost, configMin, activeProjects, projects}: Params) {
+ 
   const refHability = useRef(true);
   const [project, setProject] = useState<string[]>([projects[0].value]);
+  
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-    from: new Date('2024-01-02'),
-    to: new Date('2024-10-30'),
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
   });
 
   const handleProjects = (value: string[]) => {
-    // const aux: string[] = [];
-    // value.map((v) => {
-    //   aux.push(v.value);
-    // });
-    //console.log('value => ', value);
-    //console.log('aux handle pro => ', value);
     setProject(value);
     if(rangeDate?.from && rangeDate.to){
       handleDate(getDate(rangeDate.from), getDate(rangeDate.to), value);
@@ -60,17 +42,14 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
 
   let progress;
   if(amountProjects.length > 0){
-    progress = (((amountProjects[0]?.totalAmount || 0) / configMin[0].lastmeta.amount) * 100).toFixed(2);
+    progress = (((amountProjects[0]?.totalAmount || 0) / (Array.isArray(configMin)? (configMin[0]?.lastmeta?.amount?? 0.1): 0.1)) * 100).toFixed(2);
   }else{
-    progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
+    progress = ((0 / (Array.isArray(configMin)? (configMin[0]?.lastmeta?.amount?? 0.1): 0.1)) * 100).toFixed(2);
   }
 
-  console.log('total amount -> ', amountProjects[0].totalAmount);
-  console.log('total cost => ', projectsTotalCost[0].totalCost);
-  console.log('res => ', amountProjects[0].totalAmount - projectsTotalCost[0].totalCost);
-  
-  // console.log('projects total cost dashboard => ', projectsTotalCost);
-  // console.log('proyects => => ', project);
+  console.log('configMin', configMin);
+  console.log('prj tot cost => ', projectsTotalCost); 
+
   return (
     <div>
       <div>
@@ -97,13 +76,12 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
           </div>
         </div>
       </div>
-      <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-3'>
-        {/* <div className='w-full bg-cyan-500 text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1  */}
-        <div className='w-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
-            style={{backgroundColor: '#8EA7FF'}}>
+      <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-3'>
+        {/* <div className='w-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
+            style={{backgroundColor: '#8EA7FF'}}> */}
+        <div className='w-full border border-slate-300 bg-white rounded-xl p-3 sm:p-1 h-full min-h-20'>
           {amountProjects.length > 0 && (
             <>
-              {/* <p className='text-lg'>{amountProjects[0].projects}</p> */}
               <p className='text-lg'>{amountProjects[0].projects}</p>
               <p className='text-xs'>PROYECTOS TODOS</p>
               <p className='text-lg text-right mt-2'>{activeProjects}</p>
@@ -111,120 +89,104 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </>
           )}
         </div>
-        <div className="flex items-center bg-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+        <div className="flex w-full h-full min-h-20 items-center bg-white border  border-slate-300 rounded-xl  p-1 
             justify-center gap-x-5">
+        {/* <div className='w-full border border-slate-300 bg-white rounded-xl p-1 h-full'> */}
           <ProgressCircle value={Number(progress)}>
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
               {progress}%
             </span>
           </ProgressCircle>
           <div>
-            <Tooltip closeDelay={0} delay={100} motionProps={props} 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                 content={CurrencyFormatter({
                   currency: 'USD',
-                  value: configMin[0].lastmeta.amount
+                  value: (Array.isArray(configMin)? configMin[0]?.lastmeta?.amount?? 0: 0)
                 })} 
-                className="text-slate-900 bg-white" placement="top">
+                className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
               <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
-                {MoneyFormatter(configMin[0].lastmeta.amount)}
+                {MoneyFormatter((Array.isArray(configMin)? configMin[0]?.lastmeta?.amount?? 0: 0))}
               </p>
-              {/* <ChartBarIcon className='text-white w-32 h-6' /> */}
             </Tooltip>
             <p className="text-sm text-gray-500 dark:text-gray-500">
-              META {configMin[0].lastmeta.year}
+              META {Array.isArray(configMin)? configMin[0]?.lastmeta?.year?? 0: 0}
             </p>
           </div>
         </div>
-        <div className='w-full h-full border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-            flex flex-col justify-center items-center' style={{backgroundColor: '#86DDFS'}}>
+        {/* <div className='w-full h-full border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+            flex flex-col justify-center items-center' style={{backgroundColor: '#86DDFS'}}> */}
+        <div className='w-full h-full min-h-20 border  border-slate-300 p-1 
+            flex flex-col justify-center items-center rounded-xl' >
           {projectsTotalCost.length > 0 && (
             <>
-              {/* <p className=' text-lg sm:text-xl'>
-                {MoneyFormatter(projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA)}
-              </p> */}
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: projectsTotalCost[0].subtotalCost
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className='text-slate-700 text-sm'>
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost)}
                 </p>
-                {/* <ChartBarIcon className='w-32 h-6' style={{color: '#86DDFS'}} /> */}
               </Tooltip>
               <p className='text-xs'>COSTO TOTAL</p>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className='text-slate-700 text-sm'>
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA)}
                 </p>
               </Tooltip>
-              {/* <p className='text-xs'> + Iva</p> */}
             </>
           )}
         </div>
-        <div className='w-full h-full bg-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-            flex flex-col justify-center items-center'>
+        {/* <div className='w-full h-full bg-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+            flex flex-col justify-center items-center'> */}
+        <div className='w-full h-full min-h-20 bg-white border  border-slate-300  p-1 
+            flex flex-col justify-center items-center rounded-xl'>
           {amountProjects.length > 0 && (
             <>
-              {/* <p className='text-xs'>MX 1.2M</p> */}
               <p className='text-xs'>UTILIDAD</p>
-              {/* <p className='text-xs'>$1,205,704</p> */}
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
-                    value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
+                    value: amountProjects[0].totalAmount - (Array.isArray(projectsTotalCost) && projectsTotalCost.length>0? projectsTotalCost[0].totalCost: 0)
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className='text-xs'>
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
-                  })} */}
-                  {MoneyFormatter(amountProjects[0].totalAmount - projectsTotalCost[0].totalCost)}
+                  {MoneyFormatter(amountProjects[0].totalAmount - (Array.isArray(projectsTotalCost) && projectsTotalCost.length>0? projectsTotalCost[0].totalCost: 0))}
                 </p>
-                {/* <ChartBarIcon className='text-white w-32 h-6' /> */}
               </Tooltip>
             </>
           )}
         </div>
-        <div className='w-full h-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-              flex flex-col justify-center items-center' style={{backgroundColor: '#FF9C89'}}>
+        {/* <div className='w-full h-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+              flex flex-col justify-center items-center' style={{backgroundColor: '#FF9C89'}}> */}
+        <div className='w-full h-full min-h-20 border  border-slate-300  p-1 
+              flex flex-col justify-center items-center rounded-xl' >
           {amountProjects.length > 0 && (
             <>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: amountProjects[0].totalAmount
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
-                {/* <ChartBarIcon className='w-32 h-6' style={{color: '#FF9C89'}} /> */}
-                <p className=' text-lg sm:text-xl'>
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: amountProjects[0].totalAmount
-                  })} */}
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
+                <p className=' text-lg sm:text-xl text-slate-900'>
                   {MoneyFormatter(amountProjects[0].totalAmount)}
                 </p>
               </Tooltip>
-              <p className='text-xs'>VENTA TOTAL</p>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <p className='text-xs text-slate-900'>VENTA TOTAL</p>
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: amountProjects[0].totalAmountTotal
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
-                {/* <ChartBarIcon className='w-32 h-6' style={{color: '#FF9C89'}} /> */}
-                <p className=' text-lg sm:text-sm'>
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: amountProjects[0].totalAmount
-                  })} */}
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
+                <p className=' text-lg sm:text-sm text-slate-900'>
                   {MoneyFormatter(amountProjects[0].totalAmountTotal)}
                 </p>
               </Tooltip>
@@ -235,18 +197,4 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
       </div>
     </div>
   )
-}
-
-function getDate(date: Date){
-  let day = date.getDate()
-  let month = date.getMonth() + 1
-  let year = date.getFullYear()
-
-  if(month < 10){
-    // console.log(`${day}-0${month}-${year}`);
-    return `${year}-0${month}-${day}`;
-  }else{
-    // console.log(`${day}-${month}-${year}`)
-    return `${year}-${month}-${day}`;
-  }
 }

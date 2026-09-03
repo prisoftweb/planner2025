@@ -3,80 +3,143 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { getClients } from "../api/routeClients";
 import { Options } from "@/interfaces/Common";
-import { ClientBack } from "@/interfaces/Clients";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCompaniesLV } from "../api/routeCompany";
-import { getActiveProjectsMin } from "../api/routeProjects";
-import { ProjectsTable, ProjectMin } from "@/interfaces/Projects";
-import { ProjectDataToTableDataMin } from "../functions/SaveProject";
+import { getActiveProjectsMin, GetCollectionsAccumByProjectMin, 
+  GetCostsAccumByProjectMin, getProjectsMinFinishedUser, getProjectsMinInEjecucionUser, 
+  getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT, getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT } from "../api/routeProjects";
+import { ProjectsTable } from "@/interfaces/Projects";
+import { ProjectDataToTableDataWithUtilitiesMin } from "../functions/SaveProject";
 import ContainerClient from "@/components/projects/ContainerClient";
+import { getDate } from "@/libs/dates";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let projects: ProjectMin[];
-  try {
-    projects = await getActiveProjectsMin(token);
-    if(typeof(projects)==='string') return <h1 className="text-red-500 text-center text-lg">{projects}</h1>
-  } catch (error) {
-    return <h1>Error al consultar los proyectos!!</h1>
+  let role = user.rol?.name || '';
+
+  const now=getDate(new Date());
+  const first=new Date(new Date().getFullYear(), 0, 1);
+  const firstString=getDate(first);
+
+  const [projects, finished, clients, costs, collections, catalogs, optCompanies, prjsCB, totalCB, prjsCBtrue, totalCBtrue, resresource, rescomponents] = await Promise.all([
+    role.toLowerCase().includes('residente') ? getProjectsMinInEjecucionUser(token, user._id) : getActiveProjectsMin(token),
+    getProjectsMinFinishedUser(token, user._id),
+    getClients(token), 
+    GetCostsAccumByProjectMin(token),
+    GetCollectionsAccumByProjectMin(token),
+    getCatalogsByName(token, 'projects'),
+    getCompaniesLV(token),
+    getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "false", firstString, now),
+    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "false", firstString, now), //agregar parametro /?full=false para imprimir 
+                                                                        //global o por proyecto
+    getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", firstString, now),
+    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", firstString, now),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
 
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients)==='string') return <h1 className="text-red-500 text-center text-lg">{clients}</h1>
-  } catch (error) {
-    return <h1>Error al consultar clientes!!</h1>
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects`} message={rescomponents} />
+      </>
+    )
+  }
+  
+  if(typeof(projects)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <div className="p-10">
+          <h1 className="text-red-500 text-center text-lg">{projects}projects</h1>
+        </div> */}
+        <ComponentError page="/projects" message={projects} />
+      </>
+    )
+  }
+  
+  if(typeof(clients)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{clients}clients</h1> */}
+        <ComponentError page="/projects" message={clients} />
+      </>
+    )
+  }
+
+  if(typeof(costs)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{costs}costs</h1> */}
+        <ComponentError page="/projects" message={costs} />
+      </>
+    )
+  }
+
+  if(typeof(collections)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{collections}collections</h1> */}
+        <ComponentError page="/projects" message={collections} />
+      </>
+    )
   }
 
   const optClients: Options[] = [];
-  clients.map((client) => {
+  clients.map((client: any) => {
     optClients.push({
       label: client.name,
       value: client._id
     })
   })
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+  if(typeof(catalogs)==='string'){
+    // return <h1 className="text-red-500 text-center text-lg">{catalogs}catalogs</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{catalogs}catalogs</h1> */}
+        <ComponentError page="/projects" message={catalogs} />
+      </>
+    )
   }
 
   const condition = catalogs[0].condition[0].glossary._id;
   
-  let optCompanies: Options[] = [];
-  try {
-    optCompanies = await getCompaniesLV(token);
-    if(typeof(optCompanies)==='string') return <h1 className="text-red-500 text-center text-lg">{optCompanies}</h1>
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al consultar compañias!!</h1>
+  if(typeof(optCompanies)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{optCompanies}comapies</h1> */}
+        <ComponentError page="/projects" message={optCompanies} />
+      </>
+    )
   }
-
-  // if(companies.length <= 0){
-  //   <h1 className="text-red-500 text-center text-lg">Error no hay compañias!!</h1>
-  // }
-
-  // const optCompanies: Options[] = [];
-  // companies.map((company) => {
-  //   optCompanies.push({
-  //     label: company.name,
-  //     value: company._id
-  //   })
-  // })
 
   const optCategories: Options[] = [{
     label: 'Todas',
     value: 'all'
   }];
   const optsCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category: any) => {
     optsCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -92,7 +155,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
+  catalogs[0].types.map((type: any) => {
     optsTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -108,7 +171,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optsConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id
@@ -117,36 +180,28 @@ export default async function Page(){
       label: condition.glossary.name,
       value: condition.glossary._id
     })
-  })
+  });
 
-  // if(!projects || projects.length <= 0){
-  //   return (
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-  //         <WithOut img="/img/projects.jpg" subtitle="Proyectos"
-  //           text="Aqui puedes agregar nuevos proyectos
-  //                   para la gestion desde Planner"
-  //           title="Proyectos">
-  //             <ButtonNew token={token} optClients={optClients} 
-  //                     optCategories={optCategories} optTypes={optTypes}
-  //                     user={user._id} optCompanies={optCompanies} 
-  //                     condition={condition}  />
-  //         </WithOut>
-  //       </div>
-  //     </>
-  //   )
-  // }
-
-  const table: ProjectsTable[] = ProjectDataToTableDataMin(projects);
+  const allPrjs = (role.toLowerCase().includes('residente')? [...projects, ...finished]: projects);
   
+  const table: ProjectsTable[] = ProjectDataToTableDataWithUtilitiesMin(allPrjs, collections, costs);
+
+  const result={
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
+  //pendiente
+
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
-        optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
-        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user} 
-        condition={condition} />
+          optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
+          optTypes={optsTypes} optTypesFilter={optTypes} projects={allPrjs} token={token} user={user} 
+          condition={condition} prjsCBparam={prjsCB} benTotparam={totalCB[0]} cosBenparam={totalCB[2]} costTotparam={totalCB[1]}
+          benTottrueparam={totalCBtrue[0]} cosBentrueparam={totalCBtrue[2]} costTottrueparam={totalCBtrue[1]} 
+          prjsCBtrueparam={prjsCBtrue} company={user.profile} />
     </>
   )
 }

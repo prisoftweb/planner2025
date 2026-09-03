@@ -22,13 +22,21 @@ interface NewProjectState {
   percentage: string,
   dateG: string,
   amountG: string
-  updateBasicData: (name:string, code:string, description:string) => void,
+  amountCharge: string
+  dateCharge: string
+  percentageCharge: string
+  hasamountChargeOff: boolean
+  includesTaxes: boolean,
+  responsible:string[],
+  updateBasicData: (name:string, code:string, description:string, responsible:string[]) => void,
   updateExtraData: (amount: string, date:string, category:string,type:string, 
-    client:string, user:string, haveAddress:boolean, company:string, hasguaranteefund:boolean
+    client:string, user:string, haveAddress:boolean, company:string, hasguaranteefund:boolean, 
+    haveChargeOff:boolean, includeVat:boolean
    ) => void,
   updateAddress: (community: string, country:string, cp: string, municipy:string, 
     stateA:string, street:string,) => void,
   updateGuarantee: (percentage:string, dateG:string, amountG:string) => void,
+  updateChargeOff: (percentage:string, date:string, amount:string) => void,
 }
 
 export const useNewProject = create<NewProjectState>((set) => ({
@@ -53,14 +61,22 @@ export const useNewProject = create<NewProjectState>((set) => ({
   amountG: '',
   dateG: '',
   percentage: '',
-  updateBasicData: (name:string, code:string, description:string) => set(state => ({
+  amountCharge: '',
+  dateCharge: '',
+  hasamountChargeOff: false,
+  percentageCharge: '',
+  includesTaxes: true,
+  responsible: [],
+  updateBasicData: (name:string, code:string, description:string, responsible:string[]) => set(state => ({
     ...state,
     title: name,
     code: code,
-    description: description
+    description: description,
+    responsible: responsible
   })),
   updateExtraData: (amount: string, date:string, category:string,type:string, 
-    client:string, user:string, haveAddress:boolean, company:string, hasguaranteefund:boolean
+    client:string, user:string, haveAddress:boolean, company:string, hasguaranteefund:boolean, 
+    haveChargeOff:boolean, includeVat:boolean
    ) => set (state => ({
     ...state,
     amount:amount,
@@ -71,7 +87,9 @@ export const useNewProject = create<NewProjectState>((set) => ({
     user: user,
     haveAddress: haveAddress,
     company: company,
-    hasguaranteefund: hasguaranteefund
+    hasguaranteefund: hasguaranteefund,
+    hasamountChargeOff: haveChargeOff,
+    includesTaxes: includeVat
   })),
   updateAddress: (community: string, country:string, cp: string, municipy:string, stateA:string, 
     street:string,) => set(state => ({
@@ -88,5 +106,11 @@ export const useNewProject = create<NewProjectState>((set) => ({
     dateG: dateG,
     amountG: amountG, 
     percentage: percentage
+  })),
+  updateChargeOff: (percentage:string, date:string, amount:string) => set(state => ({
+    ...state,
+    dateCharge: date,
+    amountCharge: amount, 
+    percentageCharge: percentage
   })),
 }))

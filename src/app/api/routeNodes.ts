@@ -11,7 +11,6 @@ export async function getNodes(auth_token:string) {
     if(res.status === 200) return res.data.data.data;
     return res.status;
   } catch (error) {
-    //console.log(error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar nodos!!';
     }
@@ -59,15 +58,12 @@ export async function createNode(auth_token:string, data:Object) {
 export async function updateNode(auth_token:string, data:object, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/nodos/${id}`;
   try {
-    //console.log(url);
-    //console.log(JSON.stringify(data));
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     });
-    //console.log('res = ', res);
     if(res.status === 200) return res.status;
     return res.statusText;
   } catch (error) {
@@ -99,26 +95,22 @@ export async function removeNode(auth_token:string, id:string) {
 export async function insertRelationsInNode(auth_token:string, data:object, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/nodos/insertRelationsInNodes/${id}`;
   try {
-    //console.log(url);
-    //console.log(JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     });
-    console.log('res = ', res);
     if(res.status === 200) return res.status;
     return res.statusText;
   } catch (error) {
-    console.log('error ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al insertar relaciones en nodo!!';
     }
     return 'Error al insertar relaciones en nodo!!';
   }
 }
-//nodos/getAllNodosByDepto
+
 export async function getNodesByDepto(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/nodos/getAllNodosByDepto/${id}`;
   try {
@@ -130,7 +122,6 @@ export async function getNodesByDepto(auth_token:string, id:string) {
     if(res.status === 200) return res.data.data.data;
     return res.status;
   } catch (error) {
-    //console.log(error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar nodos del departamento!!';
     }

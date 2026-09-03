@@ -6,7 +6,8 @@ import FormContact from "./FormContact";
 import BasicBarStepper from "./BasicBarStepper";
 import { useProviderStore } from "@/app/store/providerStore";
 
-export default function ContactsStepper({id, token, user}: {id:string, token:string, user: string}){
+export default function ContactsStepper({id, token, user, company}: 
+  {id:string, token:string, user: string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const [contacts, setContacts] = useState<string[]>([]);
@@ -17,17 +18,19 @@ export default function ContactsStepper({id, token, user}: {id:string, token:str
   const onClickSave = async () => {
     if(refRequest.current){
       refRequest.current = false;
-      const {name, rfc, suppliercredit, tradename} = state.databasic;
+      const {name, rfc, suppliercredit, tradename, type} = state.databasic;
       let tradeline = {};
+      let cat;
 
       if(suppliercredit){
-        const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
+        const {creditdays, creditlimit, currentbalance, percentoverduedebt, category} = state.creditline;
         tradeline = {
           creditdays: parseInt(creditdays),
           creditlimit: parseInt(creditlimit),
           currentbalance: parseInt(currentbalance),
           percentoverduedebt: parseInt(percentoverduedebt)
         }
+        cat=category;
       }
       
       try {
@@ -40,22 +43,35 @@ export default function ContactsStepper({id, token, user}: {id:string, token:str
             suppliercredit,
             tradeline,
             contact: contacts,
-            user: id,
+            user: user,
+            type,
+            category:cat,
+            company,
             condition: [{
               glossary: '663d2fe61d1c43ae98d77bc3',
               user
-            }]
+            },
+              ...(suppliercredit
+                ? [{
+                    glossary: "6746442a734d5ab78ab98ddd",
+                    user
+                  }]
+                : [])],
           }
 
+          // console.log('supplier credit => ', suppliercredit);
+          // console.log('data => ', JSON.stringify(data));
           const res = await SaveProvider(data, token);
           if(res.status){
+            // console.log('res provider', res.prov);
             refRequest.current = true;
             showToastMessage(res.message);
             updateProviderStore([...providerStore, res.prov]);
             updateHaveNewProvider(true);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
+            dispatch({ type: 'SET_BASIC_DATA', data: null });
+            dispatch({ type: 'SET_CREDIT_DATA', data: null });
+            dispatch({ type: 'SET_CONTACTS', data: [] });
+            dispatch({type: 'INDEX_STEPPER', data: 0})
           }else{
             refRequest.current = true;
             showToastMessageError(res.message);
@@ -90,15 +106,8 @@ export default function ContactsStepper({id, token, user}: {id:string, token:str
         <div className="mx-5">
           <BasicBarStepper index={2} />
         </div>
-        {/* <button type="button" 
-          onClick={onClickSave}
-          className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
-              hover:bg-slate-600"
-        >
-          Guardar
-        </button> */}
         <FormContact addNewContact={newContact} token={token} contact={''} 
-            updateContact={updateContact} >
+            updateContact={updateContact} company={company} >
           <button type="button" 
             onClick={onClickSave}
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl

@@ -8,14 +8,20 @@ import { Provider } from "@/interfaces/Providers";
 import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import CurrencyInput from "react-currency-input-field";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useOneProviderStore } from "@/app/store/providerStore";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
+import { getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
 
 export default function CreditLine({provider, id, token}: 
-        {provider:Provider, id:string, token:string}){
+  {provider:Provider, id:string, token:string}){
   
   const refRequest = useRef(true);
   const {oneProviderStore, updateOneProviderStore} = useOneProviderStore();
+
+  const [category, setCategory]=useState<Options>();
+  const [optCategories, setOptCategories] = useState<Options[]>([]);
 
   const formik = useFormik({
     initialValues: {
@@ -45,14 +51,16 @@ export default function CreditLine({provider, id, token}:
             currentbalance: parseInt(currentbalance? currentbalance.replace(/[$,%,]/g, ""): '0'),
             percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0')
           }
-          const res = await updateProvider(id, token, {tradeline});
+          const data={
+            tradeline,
+            category
+          }
+          // const res = await updateProvider(id, token, {tradeline});
+          const res = await updateProvider(id, token, data);
           if(typeof(res)!=='string'){
             refRequest.current = true;
             showToastMessage('Los datos han sido actualizados!!!');
             updateOneProviderStore(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -60,13 +68,40 @@ export default function CreditLine({provider, id, token}:
         } catch (error) {
           refRequest.current = true;
           showToastMessageError('Error al actualizar informacion!!');
-          console.log(error);
         }
       }else{
         showToastMessageError('Ya hay una solicitud en proceso..!!!');
       }
     },       
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [resc] = await Promise.all([
+        // getCatalogsByNameAndType(token, 'Providers'),
+        getCatalogsByNameAndCategory(token, 'Providers')
+      ]) 
+      
+      if(typeof(resc)==='string'){
+        showToastMessageError(resc);
+      }else{
+        setOptCategories(resc);
+        setCategory(resc[0]);
+      }
+    }
+    fetch();
+  }, [])
+
+  const handleCategory=(value:Options) => {
+    setCategory(value);
+  }
+
+  // console.log('categories => ', optCategories);
+  // console.log('category => ', provider.category);
+
+  const indexCategory=optCategories.findIndex(c => c.value===provider.category)
+
+  // console.log('index cat => ', indexCategory);
   
   return(
     <div className="w-full">
@@ -81,11 +116,8 @@ export default function CreditLine({provider, id, token}:
             name="creditlimit"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
-            //defaultValue={provider.tradeline.creditlimit?.toString() || 0}
             defaultValue={formik.values.creditlimit || 0}
             decimalsLimit={2}
             prefix="$"
@@ -94,13 +126,7 @@ export default function CreditLine({provider, id, token}:
             } catch (error) {
               formik.values.creditlimit='0';
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="creditlimit" autoFocus 
-            value={formik.values.creditlimit}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.creditlimit && formik.errors.creditlimit ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.creditlimit}</p>
@@ -127,11 +153,8 @@ export default function CreditLine({provider, id, token}:
             name="currentbalance"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
-            //defaultValue={provider.tradeline.currentbalance?.toString() || 0}
             defaultValue={formik.values.currentbalance || 0}
             decimalsLimit={2}
             prefix="$"
@@ -140,13 +163,7 @@ export default function CreditLine({provider, id, token}:
             } catch (error) {
               formik.values.currentbalance='0';
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="currentbalance" 
-            value={formik.values.currentbalance}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.currentbalance && formik.errors.currentbalance ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.currentbalance}</p>
@@ -160,32 +177,28 @@ export default function CreditLine({provider, id, token}:
             name="percentoverduedebt"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
-            //defaultValue={provider.tradeline.percentoverduedebt?.toString() || 0}
             defaultValue={formik.values.percentoverduedebt || 0}
             decimalsLimit={2}
-            //prefix="%"
             suffix="%"
             onValueChange={(value) => {try {
               formik.values.percentoverduedebt=parseFloat(value || '0').toString();
             } catch (error) {
               formik.values.percentoverduedebt='0';
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="percentoverduedebt" 
-            value={formik.values.percentoverduedebt}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.percentoverduedebt && formik.errors.percentoverduedebt ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.percentoverduedebt}</p>
               </div>
           ) : null}
+        </div>
+        <div>
+          <Label>Categoria</Label>
+          {optCategories.length>0 && (
+            <SelectReact index={indexCategory>=0? indexCategory: 0} opts={optCategories} setValue={handleCategory} />
+          )}
         </div>
         <div className="flex justify-center mt-4">
           <Button type="submit">Guardar cambios</Button>

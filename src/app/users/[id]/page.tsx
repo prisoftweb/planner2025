@@ -8,9 +8,11 @@ import Selectize from "@/components/Selectize";
 import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
 import ArrowReturn from "@/components/ArrowReturn";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params, searchParams }: 
-                  { params: { id: string }, searchParams: { tab: string, opt: string } }){
+  { params: { id: string }, searchParams: { tab: string, opt: string } }){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
@@ -23,23 +25,58 @@ export default async function Page({ params, searchParams }:
   try {
     user = await getUser(params.id, token);
     if(typeof(user) === "string")
-      return <h1 className="text-center text-red-500">{user}</h1>
+      return(
+        <>
+          {/* <Navigation user={userLog} token={token} resources={resresource} /> */}
+          <ComponentError page={`/users/${params.id}`} message={user} />
+          {/* <h1 className="text-center text-red-500">{user}</h1> */}
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>  
+    return(
+      <>
+        {/* <Navigation user={userLog} token={token} /> */}
+        <ComponentError page={`/users/${params.id}`} message="Ocurrio un error al obtener datos del usuario!!" />
+        {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1> */}
+      </>
+    )
   }
+
+  const [resresource] = await Promise.all([
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+  ]);
 
   try {
     users = await getUsers(token);
     if(typeof(users) === "string")
-      return <h1 className="text-center text-red-500">{users}</h1>
+      return(
+        <>
+          <Navigation user={userLog} token={token} resources={resresource} />
+          <ComponentError page={`/users/${params.id}`} message={users} />
+          {/* <h1 className="text-center text-red-500">{users}</h1> */}
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>  
+    return(
+      <>
+        <Navigation user={userLog} token={token} resources={resresource} />
+        <ComponentError page={`/users/${params.id}`} message="Ocurrio un error al obtener datos de los usuarios!!" />
+        {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1> */}
+      </>
+    ) 
+  }
+  
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
 
   const photo=user.photo
   const name=user.name
-  const email=user.email
-
+  
   let options: Options[] = [];
   
   users.map((usr: any) => {
@@ -55,22 +92,20 @@ export default async function Page({ params, searchParams }:
     else if(searchParams.opt==='4') opt = 4;
       else opt = 1;
 
-  let res;
-  if(searchParams.tab==='2') res=<></>
-  else if(searchParams.tab==='3') res=<></>
-    else res=<TabUser user={user} opt={opt} />;
+  // let res;
+  // if(searchParams.tab==='2') res=<></>
+  // else if(searchParams.tab==='3') res=<></>
+  //   else res=<TabUser user={user} opt={opt} />;
 
   return(
     <>
-      <Navigation user={userLog} />
+      <Navigation user={userLog} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center">
             <ArrowReturn link="/users" />
-            {/* <Link href={'/users'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link> */}
             <Image 
               src={photo? photo: '/img/default.jpg'}
-              //src={'/img/default.jpg'}
               alt="profile"
               width={50}
               height={50}
@@ -80,10 +115,6 @@ export default async function Page({ params, searchParams }:
           </div>
           <Selectize options={options} routePage="users" subpath="" />
         </div>
-        <div className="mt-3">
-          <NavTab idUser={params.id} tab={searchParams.tab} />
-        </div>
-        {res}
       </div>
     </>
   )

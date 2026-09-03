@@ -1,5 +1,4 @@
 import Label from "../Label"
-//import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
@@ -16,19 +15,25 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useOneProjectsStore } from "@/app/store/projectsStore";
 import { ParseProjectToOneProjectMin } from "@/app/functions/SaveProject";
 
+type Props = {
+  token:string, 
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  id:string,
+  project:OneProjectMin
+}
+
 export default function ExtraData({token, optClients, optCategories, 
-                          optTypes, id, project}:
-                        {token:string, optClients:Options[], optCategories:Options[], 
-                          optTypes:Options[], id:string,
-                          project:OneProjectMin}){
+  optTypes, id, project}: Props){
 
   const [client, setClient] = useState<string>(project.client._id);
   const [type, setType] = useState<string>(optTypes[0].value);
   const [category, setCategory] = useState<string>(optCategories[0].value);
-  //const [company, setCompany] = useState<string>(optCompanies[0].value);
   const [guarantee, setGuarantee] = useState<boolean>(project.hasguaranteefund);
-  // const [haveAddress, setHaveAddress] = useState<boolean>(false);
   const refRequest = useRef(true);
+
+  const [includeVat, setIncludeVat] = useState<boolean>(project?.includesTaxes || true);
 
   const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
 
@@ -57,8 +62,12 @@ export default function ExtraData({token, optClients, optCategories,
   })
 
   const [startDate, setStartDate] = useState<string>(oneProjectStore?.date? 
-                oneProjectStore?.date.substring(0,10) : 
-                    project.date? project.date.substring(0,10): '');
+                oneProjectStore?.date?.substring(0,10) : 
+                    project.date? project.date.substring(0,10): new Date().toISOString().substring(0, 10));
+
+  const [endDate, setEndDate] = useState<string>(oneProjectStore?.endDate? 
+                oneProjectStore?.endDate?.substring(0,10) : 
+                    project.endDate? project.endDate.substring(0,10): new Date().toISOString().substring(0, 10));
 
   const formik = useFormik({
     initialValues: {
@@ -72,28 +81,43 @@ export default function ExtraData({token, optClients, optCategories,
       if(refRequest.current){
         refRequest.current = false;
         const {amount} = valores;
-        const data= {
-          amount: amount.toString().replace(/[$,]/g, ""),
-          date: startDate,
-          //categorys: category,
-          category,
-          //types: type,
-          glossary: type,
-          client,
-          hasguaranteefund: guarantee
+        let data;
+        if(includeVat){
+          data= {
+            amount: amount.toString().replace(/[$,]/g, ""),
+            date: startDate,
+            category,
+            glossary: type,
+            client,
+            hasguaranteefund: guarantee,
+            amountotal: Number((Number(amount.toString().replace(/[$,]/g, "")) * 1.16).toFixed(2)),
+            includesTaxes: includeVat,
+            endDate
+          }
+        }else{
+          data= {
+            amount: amount.toString().replace(/[$,]/g, ""),
+            amountotal: amount.toString().replace(/[$,]/g, ""),
+            date: startDate,
+            category,
+            glossary: type,
+            client,
+            hasguaranteefund: guarantee,
+            includesTaxes: includeVat,
+            endDate
+          }
         }
         try {
           const res = await UpdateProject(token, id, data);
           if(typeof(res)!=='string'){
             refRequest.current = true;
-            console.log('res router => ', res);
             const r = ParseProjectToOneProjectMin(res);
-            console.log('parse res => ', r);
-            updateOneProjectStore(r);
-            showToastMessage('Proyecto actualizado satisfactoriamente!!');
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
+            if(typeof(r)==='string'){
+              showToastMessageError(r);
+            }else{
+              updateOneProjectStore(r);
+              showToastMessage('Proyecto actualizado satisfactoriamente!!');
+            }
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -129,10 +153,8 @@ export default function ExtraData({token, optClients, optCategories,
             name="amount"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={project.guaranteefund?.amount || 0}
             decimalsLimit={2}
             prefix="$"
@@ -141,7 +163,6 @@ export default function ExtraData({token, optClients, optCategories,
             } catch (error) {
               formik.values.amount=0;
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
           {formik.touched.amount && formik.errors.amount ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -153,18 +174,25 @@ export default function ExtraData({token, optClients, optCategories,
           <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
           <SelectReact opts={optTypes} setValue={setType} index={idType} />
         </div>
-        <div>
-          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-          <DatePicker
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            focus:border-slate-700 outline-0 outline-none" 
-            //showIcon
-            selected={new Date(startDate)} onChange={(date:Date) => {
-                setStartDate(date.toDateString()) 
-                console.log(date); console.log(date.toDateString())}} 
-          />
+        <div className=" flex gap-x-3 justify-between flex-wrap">
+          <div className="max-w-40">
+            <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
+            <DatePicker
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              focus:border-slate-700 outline-0 outline-none" 
+              selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
+            />
+          </div>
+          <div className="max-w-40">
+            <Label htmlFor="dateend"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha termino</p></Label>
+            <DatePicker
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              focus:border-slate-700 outline-0 outline-none" 
+              selected={new Date(endDate)} onChange={(date:Date) => setEndDate(date.toDateString())} 
+            />
+          </div>
         </div>
-        <div className=" flex gap-x-3">
+        <div className=" flex gap-x-3 justify-between">
           <div>
             <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>
             <div className="inline-flex rounded-md shadow-sm mx-2">
@@ -177,6 +205,24 @@ export default function ExtraData({token, optClients, optCategories,
               <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
                         ${!guarantee? 'bg-red-500 text-white': ''}`}
                 onClick={() => setGuarantee(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Incluye IVA</p></Label>
+            <div className="inline-flex rounded-md shadow-sm mx-2">
+              <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
+                        ${includeVat? 'bg-green-500 text-white': ''}`}
+                onClick={() => setIncludeVat(true)}
+              >
+                Si
+              </button>
+              <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
+                        ${!includeVat? 'bg-red-500 text-white': ''}`}
+                onClick={() => setIncludeVat(false)}
               >
                 No
               </button>

@@ -21,14 +21,12 @@ export async function getPayments(auth_token:string) {
 
 export async function getPaymentsProvider(auth_token:string, provider:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/getAllPaymentsByProviderMIN/${provider}`;
-  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     });
-    console.log('router payments prov => ', res);
     if(res.status===200)
       return res.data.data.resdata;
     return 'Error al obtener los pagos!!';
@@ -43,7 +41,6 @@ export async function getPaymentsProvider(auth_token:string, provider:string) {
 export async function getPayment(auth_token:string, provider:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/${provider}`;
   try {
-    console.log('url, => ', url);
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -102,14 +99,12 @@ export async function createPaymentsWithVoucher(auth_token:string, data:FormData
 
 export async function getCostsPayment(auth_token:string, payment:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/getAllCostByPaymentMIN/${payment}`;
-  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     });
-    console.log('router payments prov => ', res);
     if(res.status===200)
       return res.data.data.resdata;
     return 'Error al obtener los pagos!!';
@@ -137,7 +132,6 @@ export async function removePayment(id:string, auth_token:string, data:Object) {
   //   }]        
   // }
 
-  console.log('data elimina send => ', data);
   try {
     const res = await axios.delete(url, {
       headers: {
@@ -146,7 +140,6 @@ export async function removePayment(id:string, auth_token:string, data:Object) {
       }, 
       data: data
     });
-    console.log('res eliminar => ', res);
     if(res.status===204)
       return res.status;
     return 'Error al eliminar pago!!';
@@ -166,7 +159,6 @@ export async function getPendingPaymentProvider(id:string, auth_token:string) {
         'Authorization': `Bearer ${auth_token}`,
       }
     });
-    // console.log('res eliminar => ', res);
     if(res.status===200)
       return res.data.data.stats;
     return 'Error al consultar total pendiente!!';
@@ -181,7 +173,6 @@ export async function getPendingPaymentProvider(id:string, auth_token:string) {
 export async function getAllCostsPaymentByID(auth_token:string, payment:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/getAllCostByPaymentIDMIN/${payment}`;
   try {
-    console.log('url, => ', url);
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,

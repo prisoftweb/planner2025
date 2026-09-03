@@ -6,17 +6,54 @@ import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
 import { Provider } from "@/interfaces/Providers";
-import { useState, useRef } from "react";
-import { updateProvider } from "@/app/api/routeProviders";
+import { useState, useRef, useEffect } from "react";
+import { updateProvider, insertConditionInProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import CardContact from "./CardContact";
+// import CardContact from "./CardContact";
 import { useOneProviderStore } from "@/app/store/providerStore";
+import { getCatalogsByNameAndType, getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
 
-export default function DataBasic({id, token, provider}:{id:string, token:string, provider:Provider}){
+export default function DataBasic({id, token, provider, user}:{id:string, token:string, provider:Provider, user:string}){
   
   const refRequest = useRef(true);
 
   const {updateOneProviderStore, oneProviderStore} = useOneProviderStore();
+
+  const [type, setType]=useState<string>();
+  const [optTypes, setOptTypes] = useState<Options[]>([]);
+
+  const [category, setCategory]=useState<string>();
+  const [optCategories, setOptCategories] = useState<Options[]>([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [res, resc] = await Promise.all([
+        getCatalogsByNameAndType(token, 'Providers'),
+        getCatalogsByNameAndCondition(token, 'Providers')
+      ]) 
+      
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setOptTypes(res);
+        if(Array.isArray(res) && res.length>0){
+          setType(res[0].value);
+        }
+      }
+
+      if(typeof(resc)==='string'){
+        showToastMessageError(resc);
+      }else{
+        setOptCategories(resc);
+        if(Array.isArray(resc) && resc.length>0){
+          setCategory(resc[0].value);
+        }
+      }
+    }
+    fetch();
+  }, [])
 
   const [suppliercredit, setSuppliercredit] = useState<boolean>(oneProviderStore? oneProviderStore.suppliercredit : provider.suppliercredit);
 
@@ -42,7 +79,12 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
           name, 
           tradename,
           rfc,
-          "suppliercredit": suppliercredit
+          suppliercredit: suppliercredit,
+          type,
+          condition: [{
+            glossary: category,
+            user
+          }]
         }
 
         try {
@@ -51,16 +93,12 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
             refRequest.current = true;
             showToastMessage('La informacion del proveedor ha sido actualizada!!');
             updateOneProviderStore(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
           }
         } catch (error) {
           refRequest.current = true;
-          console.log(typeof(error))
           showToastMessageError('Error al actualizar informacion del proveedor!!');
         }
       }else{
@@ -68,23 +106,54 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
       }
     },       
   });
-  
-  let showContacts: JSX.Element[] =[];
 
-  if(provider.contact){
-    provider.contact.map((contact) => {
-      showContacts.push(<CardContact contact={contact} idProv={provider._id} token={token} />)
-    })
+  const handleSupplierCredit = async (value:boolean) => {
+    setSuppliercredit(value);
+    if(value){
+      const data ={
+        condition: [
+          {                        
+            glossary: "6746442a734d5ab78ab98ddd",
+            user                    
+          }
+        ]    
+      }
+      const res = await insertConditionInProvider(id, token, data);
+      if(typeof(res) !== 'string'){
+        showToastMessage('El proveedor ahora tiene linea de credito!!');
+      }else{
+        showToastMessageError(res);
+      }
+    }
   }
 
+  const handleType=(value:string) => {
+    setType(value);
+  }
+
+  const handleCategory=(value:string) => {
+    setCategory(value);
+  }
+  
+  // let showContacts: JSX.Element[] =[];
+
+  // if(provider.contact){
+  //   provider.contact.map((contact) => {
+  //     showContacts.push(<CardContact contact={contact} idProv={provider._id} token={token} />)
+  //   })
+  // }
+
+  const indexType=optTypes.findIndex(t => t.value===provider?.type)
+  const indexStatus= Array.isArray(provider.condition) && provider.condition.length>0 ? optCategories.findIndex(c => c.value===provider.condition[0].glossary): 0;
+
   return(
-    <div className="w-full">
+    <div className="w-full md:max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
       <HeaderForm img="/img/provider.svg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"
       />
-      <div className="flex flex-wrap gap-x-3 gap-y-2 mt-3">
+      {/* <div className="flex flex-wrap gap-x-3 gap-y-2 mt-3">
         {showContacts}
-      </div>
+      </div> */}
       <form onSubmit={formik.handleSubmit} className="mt-4 bg-white border border-gray-200 rounded-lg shadow p-4 space-y-5">
         <div className="">
           <LabelRed htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></LabelRed>
@@ -125,12 +194,22 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
             </div>
           ) : null}
         </div>
+        <div>
+          <Label>Tipo</Label>
+          {optTypes.length>0 && (
+            <SelectReact index={indexType>=0? indexType: 0} opts={optTypes} setValue={handleType} />
+          )}
+        </div>
+        <div>
+          <Label>Estatus</Label>
+          {optCategories.length>0 && (
+            <SelectReact index={indexStatus>=0? indexStatus: 0} opts={optCategories} setValue={handleCategory} />
+          )}
+        </div>
         <div className="inline-flex items-center">
-        {/* <p className="mr-3 text-gray-500 text-sm">Linea de credito</p> */}
-
           <Label>Linea de credito</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-            <input checked={suppliercredit} onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
+            <input checked={suppliercredit} onClick={() => handleSupplierCredit(!suppliercredit)} id="switch-3" type="checkbox"
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 peer-checked:border-green-500 peer-checked:before:bg-green-500" />
             <label htmlFor="switch-3"
               className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">

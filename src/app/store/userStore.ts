@@ -1,42 +1,7 @@
 import {create} from 'zustand'
 import { UsrBack } from '@/interfaces/User'
 
-// interface NewExpenseState {
-//   costCenter: string,
-//   folio:string, 
-//   taxFolio:string,
-//   description:string,
-//   amount: string, 
-//   date:string, 
-//   vat:string, 
-//   discount:string, 
-//   typeExpense: string
-//   typeCFDI: string
-//   proveedor: string
-//   responsible: string
-//   category:string
-//   idVat: string
-//   type: string
-  
-//   voucher: (File | null),
-//   CFDI: (File | null)
-
-//   refresh: boolean
-// }
-
-// interface PettyCashState{
-//   isPettyCash: boolean,
-//   isCard: boolean
-// }
-
-// interface ProjectState{
-//   project: string,
-//   indexStepper: number,
-//   report: string,
-//   condition: string,
-//   isDeductible: boolean
-// }
-
+//Se declaran interfaces para no escribir todo el codigo en la funcions
 interface Actions {
   updateUser: (usr: UsrBack) => void,
   pushUser: (usr: UsrBack) => void,
@@ -45,6 +10,7 @@ interface Actions {
   reset: () => void,
 }
 
+// Se declara un valor inicial, como le pasamos el tipo UsrBack hay que llenar todos sus campos
 const initialState: UsrBack = {
   _id: '',
   department: '',
@@ -56,17 +22,21 @@ const initialState: UsrBack = {
   __v: 0,
   createAt: '',
   passwordChangedAt: '',
-  rol: undefined
+  rol: undefined,
+  profile: '',
 }
 
 interface ArrUsers {
   users: UsrBack[],
 }
 
+//este es el estado inicial para multiples usuarios
 const initialUsers: ArrUsers = {
   users: [],
 };
 
+//aqui se agregan los valores iniciales y se declaran las funcionalidades de los metodos
+//que es puro set pero es ir  asignando los valores de cada uno
 export const useUserStore = create<UsrBack & Actions & ArrUsers>((set) => ({
   ...initialState,
   ...initialUsers,

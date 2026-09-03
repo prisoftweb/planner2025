@@ -1,15 +1,10 @@
 'use client'
 
-import { ExpensesTableProvider } from "@/interfaces/Providers"
-// import { Expense, ExpensesTable } from "@/interfaces/Expenses"
-//import TableCostsProvider from "./TableCostsProvider"
-//import Selectize from "../Selectize"
 import ArrowReturn from "../ArrowReturn"
 import IconText from "./IconText"
-// import { Provider } from "@/interfaces/Providers"
 import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import TableCostsDetailProvider from "./TableCostsDetailProvider"
 import { DetailExpensesTableProvider } from "@/interfaces/Providers"
 import { CostPayment } from "@/interfaces/Payments"
@@ -23,86 +18,90 @@ import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs"
 import ReportPaymentPDF from "./ReportPaymentPDF"
 import { UsrBack } from "@/interfaces/User"
-import { ProviderMin } from "@/interfaces/Providers"
+import { IProviderMin } from "@/interfaces/Providers"
+import { propsTooltip } from "@/libs/animations"
+import {ITotalAcumulatedPendingPaymentResumeProviderPDF} from "@/interfaces/Payments"
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+import { showToastMessage, showToastMessageError } from "@/components/Alert";
+
+
+type Props = {
+  data:DetailExpensesTableProvider[], 
+  token:string, 
+  expenses:CostPayment[], 
+  user: UsrBack, 
+  provider: IProviderMin, 
+  payment: OnePayment, 
+  pending:ITotalAcumulatedPendingPaymentResumeProviderPDF[]
+}
 
 export default function ContainerTableDetailsExpenseProvider({data, token, expenses, user, 
-    provider, payment}:
-  {data:DetailExpensesTableProvider[], token:string, expenses:CostPayment[], 
-    user: UsrBack, provider: ProviderMin, payment: OnePayment}) {
+  provider, payment, pending}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
-  // const [expensesSelected, setExpensesSelected] = useState<ExpensesTableProvider[]>([]);
-  //const [paidExpenses, setPaidExpenses] = useState<boolean>(false);
+ 
+  const [satCompany, setSatCompany]=useState<Company>();
 
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, user.profile),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
+  
   const handleFilter = (value: boolean) => {
     setFilter(value);
-  }
-
-  // useEffect(() => {
-  //   console.log('costos => ', expenses);
-  //   console.log('data tabla => ', data);
-  // }, []);
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
   }
 
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap gap-y-3">
-        <div className="flex items-center my-2">
+        <div className="flex items-center my-2 gap-x-2">
           <ArrowReturn link={`/providers/${provider._id}/payments`} />
           <IconText text={provider?.tradename || ''} size="w-8 h-8" sizeText="" />
           <p className="text-slate-500 mx-3">{provider.name}</p>
         </div>
-        {/* <Selectize options={options} routePage="providers" subpath="/invoiceHistory" /> */}
         <div className="flex gap-x-2">
           <SearchInTable placeH={"Buscar gasto.."} />
-          <div className={`w-24`}>
+          <div className={`w-auto`}>
             <div className="flex gap-x-4 justify-end items-center">
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
               
-              <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider}
-                                            payment={payment} user={user} />} fileName={`${provider.name}.pdf`} >
-              {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
-                {({loading, url, error, blob}) => 
-                  loading? (
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                      {/* // <button type="button">Loading document...</button> */}
-                    </Tooltip>
-                  ) : (
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                    </Tooltip>
-                    // <button type="button">Download now!</button>
-                  ) }
-              </PDFDownloadLink>
+              {satCompany && (
+                <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider} satCompany={satCompany}
+                                              payment={payment} user={user} pending={pending} />} fileName={`${provider.name}.pdf`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                      </Tooltip>
+                    ) }
+                </PDFDownloadLink>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-x-3 gap-y-3">
+      <div className="mt-2 md:mt-0 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-x-3 gap-y-3">
         <div className="bg-white col-span-3 p-3">
           <div className="flex gap-x-2 items-center">
             <IconText text={provider?.name || ''} size="w-8 h-8" sizeText="" />
@@ -115,7 +114,7 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
             <div>
               <p className="text-sm text-slate-500">Monto pagado</p>
               <p className="text-sm text-green-500">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: payment.payout
               })}</p>
             </div>
@@ -123,7 +122,7 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
             <div>
               <p className="text-sm text-slate-500">Pendiente por pagar</p>
               <p className="text-sm text-red-500">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: payment.pending
               })}</p>
             </div>
@@ -155,7 +154,7 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
 
         <div className="bg-white col-span-1 p-3">
           <div className="mb-2">
-            <Chip label="Pagado" color="#0f0" />
+            <Chip label="Pagado" color="#0f0" darktext={false} />
           </div>
           <ProgressCircle value={(payment.payout / (payment.payout + payment.pending)) * 100}>
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">

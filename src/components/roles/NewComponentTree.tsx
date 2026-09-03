@@ -1,7 +1,6 @@
 'use client'
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
@@ -9,14 +8,22 @@ import Select from 'react-select'
 import AddComponents from "./AddElements"
 import { useState, useEffect, useRef } from "react"
 import { insertComponentsTree } from "@/app/api/routeRoles"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
-export default function NewComponentTree({showForm, token, optResources, 
-                          optRoutes, descComponents, optComponents, idTree, 
-                          routesPerResource, descRoutes}: 
-                        {showForm:Function, token:string, optResources:Options[], 
-                        optRoutes:Options[], optComponents: Options[]
-                        descComponents: Options[], idTree:string,
-                        routesPerResource:Options[], descRoutes: Options[]}){
+type Props = {
+  showForm:(value: boolean) => void, 
+  token:string, 
+  optResources:Options[], 
+  optRoutes:Options[], 
+  optComponents: Options[]
+  descComponents: Options[], 
+  idTree:string,
+  routesPerResource:Options[], 
+  descRoutes: Options[]
+}
+
+export default function NewComponentTree({showForm, token, optResources, optRoutes, 
+  descComponents, optComponents, idTree, routesPerResource, descRoutes}: Props){
                           
   const [components, setComponents] = useState<string[]>([]);
   const [indexDelete, setIndexDelete] = useState<number>(-1);
@@ -140,15 +147,15 @@ export default function NewComponentTree({showForm, token, optResources,
 
   return(
     <>
-      <div className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0"
+    {/* top-16 */}
+      <div className="z-10 absolute bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0"
         style={{height: `${heightPage}px`}}
       >
-      <div className="flex justify-between">
+      <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
         <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando componentes" 
           title="Agregar componente a nuevo arbol"
         />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         <div>
           <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>

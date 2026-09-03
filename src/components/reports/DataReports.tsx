@@ -1,34 +1,26 @@
 import ProfileReport from "./ProfileReport"
 import UpdateReport from "./UpdateReport"
-import { Options } from "@/interfaces/Common"
 import { Report, DateReport } from "@/interfaces/Reports"
 import { useState, useRef } from "react"
 import SendReport from "./SendReport"
 import { Node } from "@/interfaces/Nodes"
-//import { Expense } from "@/interfaces/Expenses"
 import { UsrBack } from "@/interfaces/User"
-import { useOneReportStore } from "@/app/store/reportsStore"
+// import ContainerSideNav from "../ContainerSideNav"
 
 export default function DataReports({token, report, user, node, id, dates}:
-                              {token:string, report:Report, user:UsrBack, 
-                                node:Node, id:string, dates: DateReport[] }) {
+  {token:string, report:Report, user:UsrBack, node:Node, id:string, dates: DateReport[] }) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
   const refClose = useRef(false);
 
-  const {oneReport} = useOneReportStore();
-  //const [isClose, setIsClose] = useState<boolean>(false);
-
   const handleSend = (value: boolean, valueClose: boolean) => {
     refClose.current = valueClose;
-    console.log('handle send close ', valueClose);
     setIsSend(value);
-    //setIsClose(valueClose);
   }
 
   return (
     <>
-      <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+      <div className="flex w-full max-w-5xl px-2 flex-wrap sm:space-x-2" 
         style={{'backgroundColor': '#F8FAFC'}}>
         <div className={`w-full max-w-md`}>
           <ProfileReport report={report} send={handleSend} token={token}
@@ -40,7 +32,11 @@ export default function DataReports({token, report, user, node, id, dates}:
         </div>
       </div>
       {isSend && <SendReport report={report} send={handleSend} 
-                    token={token} user={user._id} node={node} isClose={refClose.current} />}
+                    token={token} user={user} node={node} isClose={refClose.current} />}
+        {/* <ContainerSideNav open={isSend} width="w-full sm:max-w-lg">
+          <SendReport report={report} send={handleSend} 
+                    token={token} user={user._id} node={node} isClose={refClose.current} />
+        </ContainerSideNav> */}
     </>
   )
 }

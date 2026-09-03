@@ -29,7 +29,7 @@ export function BarChartComponent({data, colors, categories}:
               <p className="text-tremor-content">{category.dataKey}</p>
               <p className="font-medium text-tremor-content-emphasis">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: category.value
                 })}
               </p>
@@ -41,18 +41,12 @@ export function BarChartComponent({data, colors, categories}:
   };
   return (
     <>
-      {/* <h3 className="text-lg font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-        GASTOS POR MES
-      </h3> */}
       <BarChart
         className="mt-4 h-72"
-        //data={chartdata}
         data={data}
         index="label"
-        //categories={['Running']}
         categories={categories}
         colors={colors}
-        //colors={['blue']}
         yAxisWidth={76}
         customTooltip={customTooltip}
       />

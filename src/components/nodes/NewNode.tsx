@@ -1,7 +1,7 @@
 'use client'
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect, useRef } from "react"
@@ -9,12 +9,19 @@ import { Options } from "@/interfaces/Common"
 import { createNode } from "@/app/api/routeNodes"
 import SelectReact from "../SelectReact"
 import SelectReactWithDescription from "../SelectReactWithDescription"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
+
+type Params = {
+  showForm:(value: boolean) => void, 
+  token:string, 
+  glossaries:Options[], 
+  departments:Options[], 
+  workFlows:Options[], 
+  descGlossaries:Options[]
+}
 
 export default function NewNode({showForm, token, departments, glossaries, 
-                          workFlows, descGlossaries}: 
-                    {showForm:Function, token:string, glossaries:Options[], 
-                      departments:Options[], workFlows:Options[], 
-                      descGlossaries:Options[]}){
+                          workFlows, descGlossaries}: Params){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [department, setDepartment] = useState<string>(departments[0].value);
@@ -75,15 +82,16 @@ export default function NewNode({showForm, token, departments, glossaries,
 
   return(
     <>
-      <div className="z-10 top-16 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
-        style={{height: `${heightPage}px`}}
+      <div className="z-10 w-full h-full max-w-md absolute bg-white space-y-5 p-5 right-0"
+        // style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevo nodo" 
             title="Agregar nuevo nodo"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>
@@ -94,10 +102,6 @@ export default function NewNode({showForm, token, departments, glossaries,
           <Label htmlFor="department"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Departamento</p></Label>
           <SelectReact index={0} opts={departments} setValue={handleDepartment} />
         </div>
-        {/* <div>
-          <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
-          <SelectReact index={0} opts={glossaries} setValue={handleGlossary} />
-        </div> */}
         <div>
           <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
           <SelectReactWithDescription index={0} opts={glossaries} 

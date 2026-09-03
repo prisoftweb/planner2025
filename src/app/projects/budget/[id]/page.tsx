@@ -2,60 +2,75 @@ import { getBudget } from "@/app/api/routeBudget"
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
-import { FullBudget } from "@/interfaces/BudgetProfile";
 import BudgetCli from "@/components/projects/budget/BudgetClient";
-//import Header from "@/components/HeaderPage";
-import { CostoCenterLV, CostCenter } from "@/interfaces/CostCenter";
-import { getCostoCentersLV, getCostoCenters } from "@/app/api/routeCostCenter";
+import { getCostoCenters } from "@/app/api/routeCostCenter";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
-export default async function page({ params }: { params: { id: string }}) {
+export default async function page({ params, searchParams }: 
+  { params: { id: string }, searchParams: { project: string }}) {
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let budget: FullBudget;
-  try {
-    budget = await getBudget(token, params.id);
-    if(typeof(budget)==='string'){
-      return <h1 className="text-red-500 text-center">{budget}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-center">Ocurrio un problema al consultar presupuesto!!</h1>
+  const [budget, costoCenters, resresource, rescomponents] = await Promise.all([
+    getBudget(token, params.id),
+    getCostoCenters(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'budget/id'),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
 
-  // let costoCenterLV: CostoCenterLV[] = [];
-  
-  // try {
-  //   costoCenterLV = await getCostoCentersLV(token);
-  //   if(typeof(costoCenterLV)==='string'){
-  //     return <p>{costoCenterLV}</p>
-  //   }
-  // } catch (error) {
-  //   return <p>Error al consultas los centros de costos!!!</p>
-  // }
-
-  let costoCenters: CostCenter[] = [];
-  
-  try {
-    costoCenters = await getCostoCenters(token);
-    if(typeof(costoCenters)==='string'){
-      return <p>{costoCenters}</p>
-    }
-  } catch (error) {
-    return <p>Error al consultas los centros de costos!!!</p>
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/budget`} message={rescomponents} />
+      </>
+    )
   }
+  
+  if(typeof(budget)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center">{budget}</h1> */}
+        <ComponentError page={`/projects/budget/${params.id}`} message={budget} />
+      </>
+    )
+  }
+  
+  if(typeof(costoCenters)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <p>{costoCenters}</p> */}
+        <ComponentError page={`/projects/budget/${params.id}`} message={costoCenters} />
+      </>
+    )
+  }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        {/* <Header title={budget.title} previousPage="/projects/budget">
-          <></>
-        </Header> */}
         <BudgetCli budget={budget} id={params.id} token={token} 
-          costoCenters={costoCenters} user={user._id} />
+          costoCenters={costoCenters} user={user._id} projectQuery={searchParams.project} />
       </div>
     </>
   )

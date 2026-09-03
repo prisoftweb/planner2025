@@ -2,52 +2,27 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect, useRef } from "react"
+import { useRef } from "react"
 import { CreateDepartment, UpdateDepartment } from "@/app/api/routeDepartments"
-import Select from 'react-select'
 import { Options } from "@/interfaces/Common"
 import { DepartmentTable } from "@/interfaces/Departments"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
-export default function NewDepartment({showForm, token, OptionsCompany, dept}: 
-                    {showForm:Function, token:string, OptionsCompany:Options[],
-                      dept: (DepartmentTable | string)
-                    }){
+type NewDepartmentProps = {
+  showForm:(value: boolean) => void, 
+  token:string, 
+  OptionsCompany:Options[],
+  dept: (DepartmentTable | string),
+  company:string
+}
 
-  const [company, setCompany] = useState(OptionsCompany[0].value);
-  const [optCompany, setOptCompany] = useState<Options>(OptionsCompany[0]);
+export default function NewDepartment({showForm, token, OptionsCompany, dept, company}: NewDepartmentProps ){
+
   const refRequest = useRef(true);
-
-  const [heightPage, setHeightPage] = useState<number>(900);
-  
-  const handleResize = () => {
-    setHeightPage(document.body.offsetHeight);
-  }
-  
-  useEffect (() => {
-    window.addEventListener("resize", handleResize, false);
-    setHeightPage(document.body.offsetHeight - 70);
-    // console.log('useefect');
-    // console.log(heightPage, '   ', window.outerHeight );
-
-    if(typeof(dept) !== 'string'){
-      OptionsCompany.map((optC) => {
-        if(optC.value === dept.company.id){
-          setCompany(optC.value);
-          setOptCompany(optC);
-        }
-      })
-    }
-    return () => window.removeEventListener('scroll', handleResize);
-  }, [])
-  
-  // useEffect(() => {
-  //   console.log('inner ', window.outerHeight)
-  // }, [window.outerHeight]);
 
   const formik = useFormik({
     initialValues: {
@@ -115,16 +90,14 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
 
   return(
     <>
-      <form className={`z-10 top-16 absolute bg-white space-y-5 p-3 right-0`}
-        style={{height: `${heightPage}px`}}
+      <form className={`z-10 h-full absolute bg-white space-y-5 p-5 right-0`}
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/department.svg" subtitle="Agregar nuevos departamentos de compañias" 
             title="Agregar nuevo departamento"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>
@@ -153,15 +126,6 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
               <p>{formik.errors.abbr}</p>
             </div>
           ) : null}
-        </div>
-        <div>
-          <Label htmlFor="companies"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Compañias</p></Label>
-          <Select
-            name="companies"
-            options={OptionsCompany}
-            value={optCompany}
-            onChange={(e:any) => {setCompany(e.value); setOptCompany(e)}}
-          />
         </div>
         <div className="flex justify-center mt-2">
           <Button type="submit">Guardar</Button>

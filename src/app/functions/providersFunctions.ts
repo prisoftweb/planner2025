@@ -2,17 +2,19 @@ import { Expense } from "@/interfaces/Expenses";
 import { HistoryExpensesTable, ExpensesTableProvider, DetailExpensesTableProvider } from "@/interfaces/Providers";
 import { CurrencyFormatter } from "./Globals";
 import { Payment, PaymentProvider, CostPayment } from "@/interfaces/Payments";
+import { IConceptInvoice } from "@/interfaces/Invoices";
+import { ITableConceptsEstimate } from "@/interfaces/Estimate";
 
 export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
   const table: HistoryExpensesTable[] = [];
   
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.cost?.subtotal || 0
         });
     const total = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.cost?.total || 0
     })
     const elements: string[] = [];
@@ -82,7 +84,11 @@ export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
       discount: expense.cost.discount,
       iva: expense.cost.vat?.value || expense.cost.iva,
       typeCFDI: expense.typeCFDI.name,
-      conceptCostoCenter: expense.costocenter.concept.name
+      conceptCostoCenter: expense.costocenter.concept.name,
+      expiredDate: expense.expiredDate?? '',
+      daysExpired: expense.daysExpired?? 0,
+      code: expense.code?? '',
+      isCfdisRelations: expense.isCfdisRelations?? false
     });
   });
 
@@ -128,7 +134,7 @@ export function getTypeFiles(expense:Expense) {
   
 //   expenses.map((expense) => {
 //     const dollar = CurrencyFormatter({
-//           currency: "MXN",
+//           currency: "USD",
 //           value: expense.cost?.subtotal || 0
 //         })
 //     const elements: string[] = [];
@@ -201,79 +207,35 @@ export function getTypeFiles(expense:Expense) {
 
 export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvider[]){
   const table: ExpensesTableProvider[] = [];
-  
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.payout || 0
         })
     const pending = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.pending || 0
     })
-    // const elements: string[] = [];
-    // if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
-    //   const typeFiles = getTypeFiles(expense);
-    //   if(typeFiles.includes('xml')){
-    //     elements.push('xml');
-    //   }else{
-    //     elements.push('none');
-    //   }
-
-    //   if(typeFiles.includes('pdf')){
-    //     elements.push('pdf');
-    //   }else{
-    //     elements.push('none');
-    //   }
-    // }else{
-    //   if(expense.category && expense.category?.name.toLowerCase().includes('xml')){
-    //     const typeFiles = getTypeFiles(expense);
-    //     if(typeFiles.includes('xml')){
-    //       elements.push('xml');
-    //     }else{
-    //       elements.push('none');
-    //     }
-    //   }else{
-    //     if(expense.category && expense.category?.name.toLowerCase().includes('pdf')){
-    //       const typeFiles = getTypeFiles(expense);
-    //       if(typeFiles.includes('pdf')){
-    //         elements.push('pdf');
-    //       }else{
-    //         elements.push('none');
-    //       }
-    //     }else{
-    //       const typeFiles = getTypeFiles(expense);
-    //       if(typeFiles.includes('xml')){
-    //         elements.push('xml');
-    //       }
-    
-    //       if(typeFiles.includes('pdf')){
-    //         elements.push('pdf');
-    //       }
-
-    //       if(elements.length === 0){
-    //         elements.push('none');
-    //       }
-    //     }
-    //   }
-    // }
     table.push({
       id: expense._id,
-      //Estatus: expense.estatus,
       Estatus: expense.status,
+      condition: expense.condition,
+      // Estatus: expense.
       date: expense.date,
+      datePaid: expense.paymentplugin.date.substring(0, 10),
+      methodofpayment: expense.methodofpayment,
       Responsable: {
         responsible: expense.user.name,
         photo: expense.user.photo
       },
       archivos: (!expense.voucher || expense.voucher.includes('default.svg')? false: true),
       notes: expense.notes,
-      //paid: expense.cost.subtotal.toString(),
       paid: dollar,
       pending: pending,
       Quantity: expense.quantity.length.toString(),
       range: 'sin rango de fechas',
-      reference: expense.reference
+      reference: expense.reference,
+      paymentplugin: expense.paymentplugin
     });
   });
 
@@ -284,35 +246,35 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
   const table: DetailExpensesTableProvider[] = [];
   
   expenses.map((expense, index:number) => {
-    console.log('expense completo => ', expense);
-    console.log('pay parse => ', JSON.stringify(expense));
-    console.log('expense pay => ', expense.costs.pay);
     let dollar = '0';
+    let d=0;
     if(expense.costs.pay){
       dollar =CurrencyFormatter({
-        currency: "MXN",
+        currency: "USD",
         // value: expense.costs.cost.subtotal || 0
         // value: expense.costos.costito || 0
         value: expense.costs.pay[0]?.previousbalanceamount || 0
       });
+      d = expense.costs.pay[0]?.previousbalanceamount || 0;
     }else{
       dollar=CurrencyFormatter({
-        currency: "MXN",
+        currency: "USD",
         // value: expense.costs.cost.subtotal || 0
         // value: expense.costos.costito || 0
         value: 0
       });
     }
-    
+    let t = expense.costs.pay? expense.costs.pay[0]?.payout : 0 || 0;
     const total = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       // value: expense.costs.cost.total || 0
       // value: expense.payout || 0
       value: expense.costs.pay? expense.costs.pay[0]?.payout : 0 || 0
     })
 
+    const u = expense.costs.pay? expense.costs.pay[0]?.unpaidbalanceamount : 0 || 0;
     const unpaid = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       // value: expense.costs.cost.subtotal || 0
       // value: expense.costos.costito || 0
       value: expense.costs.pay? expense.costs.pay[0]?.unpaidbalanceamount : 0 || 0
@@ -345,10 +307,14 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
       paid: expense.costs.ispaid, 
       project: expense.costs.project.title,
       report: expense.costs.report.name,
-      previoudbalanceamount: dollar,
-      payout: total,
+      // previoudbalanceamount: dollar,
+      previoudbalanceamount: d,
+      // payout: total,
+      payout: t,
       partitialnumber: expense.costs.pay? expense.costs.pay[0]?.partialitynumber: 1 || 1,
-      unpaidbalanceamount: unpaid
+      // unpaidbalanceamount: unpaid,
+      unpaidbalanceamount: u,
+      folio: expense.costs.folio,
     });
   });
   return table;
@@ -359,7 +325,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
   
 //   expenses.map((expense) => {
 //     const dollar = CurrencyFormatter({
-//           currency: "MXN",
+//           currency: "USD",
 //           value: expense.payout || 0
 //         })
 //     const elements: string[] = [];

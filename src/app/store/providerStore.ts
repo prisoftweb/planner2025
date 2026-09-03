@@ -1,8 +1,8 @@
 import {create} from 'zustand'
-import { Provider } from '@/interfaces/Providers'
+import { Provider, IProviderMin } from '@/interfaces/Providers'
 
 interface providerState {
-  providerStore: Provider[],
+  providerStore: IProviderMin[],
   haveNewProvider: boolean,
   haveDeleteProvider: boolean,
 }
@@ -14,14 +14,14 @@ const providerInitial: providerState = {
 }
 
 interface ActionsProvider {
-  updateProviderStore: (prov: Provider[]) => void,
+  updateProviderStore: (prov: IProviderMin[]) => void,
   updateHaveDeleteProvider: (value: boolean) => void,
   updateHaveNewProvider: (value: boolean) => void,
 }
 
 export const useProviderStore = create<providerState & ActionsProvider >((set) => ({
   ...providerInitial,
-  updateProviderStore: (prov: Provider[]) => set(state => ({
+  updateProviderStore: (prov: IProviderMin[]) => set(state => ({
     ...state,
     providerStore: prov
   })),

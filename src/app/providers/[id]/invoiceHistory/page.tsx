@@ -1,20 +1,16 @@
 import NavTab from "@/components/providers/NavTab";
 import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
-import Selectize from "@/components/Selectize";
-import IconText from "@/components/providers/IconText";
 import { getProvider, getProviders, GetCostsMIN } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { HistoryExpensesTable, Provider } from "@/interfaces/Providers";
-import ArrowReturn from "@/components/ArrowReturn";
+import { HistoryExpensesTable } from "@/interfaces/Providers";
 import { Options } from "@/interfaces/Common";
-import { Expense } from "@/interfaces/Expenses";
-import TableExpenses from "@/components/expenses/TableExpenses";
-// import { ExpensesTable } from "@/interfaces/Expenses";
-// import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableHistoryCosts from "@/components/providers/ContainerTableHistoryCosts";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -23,45 +19,86 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let provider: any;
-  try {
-    provider = await getProvider(params.id, token);
-    if(typeof(provider) === "string")
-      return <h1 className="text-center text-red-500">{provider}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
+  const perm=((user.rol?._id?? '') + ('/providers/id%2FinvoiceHistory'));
+  
+  console.log('per => ', perm);
+
+  const [provider, providers, costs, optTypes, resresource, rescomponents] = await Promise.all([
+    getProvider(params.id, token),
+    getProviders(token),
+    GetCostsMIN(token, params.id),
+    getCatalogsByNameAndType(token, 'payments'),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'providers', '/id/invoiceHistory'),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
 
-  let providers: Provider[];
-  try {
-    providers = await getProviders(token);
-    if(typeof(providers) === "string")
-      return <h1 className="text-center text-red-500">{providers}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+      </>
+    )
+  }
+  
+  if(typeof(provider) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{provider}</h1> */}
+        <ComponentError page={`/providers/${params.id}/invoiceHistory`} message={provider} />
+      </>
+    )
   }
 
-  let costs: Expense[];
-  try {
-    costs = await GetCostsMIN(token, params.id);
-    if(typeof(costs) === "string")
-      return <h1 className="text-center text-red-500">{costs}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
+  if(typeof(providers) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{providers}</h1> */}
+        <ComponentError page={`/providers/${params.id}/invoiceHistory`} message={providers} />
+      </>
+    )
   }
 
-  let optTypes: Options[] = [];
-  try {
-    optTypes = await getCatalogsByNameAndType(token, 'payments');
-    if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos de pagos!!</h1>
+  if(typeof(costs) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{costs}</h1> */}
+        <ComponentError page={`/providers/${params.id}/invoiceHistory`} message={costs} />
+      </>
+    )
+  }
+
+  if(typeof(optTypes)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-center text-lg">{optTypes}</h1> */}
+        <ComponentError page={`/providers/${params.id}/invoiceHistory`} message={optTypes} />
+      </>
+    )
   }
 
   let options: Options[] = [];
 
   if(providers.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">Error al obtener proveedores...</h1> */}
+        <ComponentError page={`/providers/${params.id}/invoiceHistory`} message="Error al obtener proveedores..." />
+      </>
+    )
   }
 
   providers.map((prov: any) => {
@@ -71,15 +108,19 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   });
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   const table: HistoryExpensesTable[] = ExpenseDataToTableHistoryProviderData(costs);
   const cond = "67318a51ceaf47ece0d3aa72";
-  // const cond = "674643dd734d5ab78ab98ddb";
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <NavTab idProv={params.id} tab='2' />
-        <ContainerTableHistoryCosts data={table} expenses={costs} token={token} 
+        <NavTab idProv={params.id} tab='3' />
+        <ContainerTableHistoryCosts data={table} expenses={costs} token={token} permissions={result}
           user={user._id} optTypes={optTypes} provider={provider} condition={cond} />
       </div>
     </>

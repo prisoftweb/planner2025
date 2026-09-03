@@ -5,7 +5,7 @@ import Button from "../Button"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "@/components/Alert";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import HeaderForm from "../HeaderForm"
 import { updateUser as updateApiUser } from "@/app/api/routeUser"
 import { setCookie } from "cookies-next"
@@ -14,42 +14,30 @@ import Select from 'react-select'
 import { UsrBack } from "@/interfaces/User"
 import { useUserStore } from "@/app/store/userStore"
 import { useRef } from "react"
+import { updateWorkSpace, getWorkSpaces } from "@/app/api/routeWorkspace"
+import { IWorkSpaceMin } from "@/interfaces/WorkSpaces"
 
 export default function UpdateProfile({user, departments, token, optsRoles}: 
-                  {user:UsrBack, departments:Options[], token:string, optsRoles:Options[]}){
+  {user:UsrBack, departments:Options[], token:string, optsRoles:Options[]}){
 
-
-  // let optionsDepartments:Options[] = [];
-  // departments.map((dept:any) => {
-  //   optionsDepartments.push({
-  //     label: dept.name,
-  //     value: dept._id
-  //   });
-  // });
-
-  // let indexRol: number = 0;
-  // if(user.rol){
-  //   optsRoles.map((optRol, index:number) => {
-  //     if(user.rol._id === optRol.value){
-  //       indexRol = index;
-  //     }
-  //   });
-  // }
-
-  // let indexDepto: number = 0;
-  // optionsDepartments.map((dept, index:number) => {
-  //   if(dept.value === user.department._id){
-  //     indexDepto = index;
-  //   }
-  // });
-  
   const {updateUser} = useUserStore();
   const [rolS, setRolS] = useState<string>(user.rol?._id ?? '');
-  //const [optRole, setOptRole] = useState<Options>(optsRoles[indexRol]);
   const [depto, setDepto] = useState<string>
                         (typeof(user.department)==='string'? user.department: user.department._id);
-  //const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[indexDepto]);
   const refRequest = useRef(true);
+  const [workspaces, setWorkspaces] = useState<IWorkSpaceMin[]>([]);
+
+  useEffect(() => {
+    const fetchWorkSpaces = async () => {
+      const res = await getWorkSpaces(token);
+      if(Array.isArray(res)){
+        setWorkspaces(res);
+      }else{
+        showToastMessageError('Error al obtener los workspaces');
+      }
+    }
+    fetchWorkSpaces();
+  }, []);
 
   let optRol = optsRoles[0];
   const opRol = optsRoles.find((opt) => opt.value===rolS);
@@ -59,29 +47,6 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
   const opDep = departments.find((opt) => opt.value===depto);
   if(opDep) optDepto = opDep;
 
-  // const [rol, setRol] = useState<string>(optsRoles[0].value);
-  // const [optRole, setOptRole] = useState<Options>(optsRoles[0]);
-  // const [department, setDepartment] = useState<string>(departments[0]._id);
-  // const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
-
-  // useEffect(() => {
-  //   optsRoles.map((optRol) => {
-  //     if(user.rol){
-  //       if(user.rol._id === optRol.value){
-  //         setOptRole(optRol);
-  //         setRol(optRol.value);
-  //       }
-  //     }
-  //   });
-
-  //   optionsDepartments.map((dept) => {
-  //     if(dept.value === user.department._id){
-  //       setDepartment(dept.value);
-  //       setOptDepts(dept);
-  //     }
-  //   });
-  // }, []);
-
   const emailU:string = user.email;
   const nameU:string = user.name;
   const formik = useFormik({
@@ -90,23 +55,23 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
       name:nameU,
     }, 
     validationSchema: Yup.object({
-      email: Yup.string()
-                  .email('El email no es valido')
-                  .required('El email no puede ir vacio'),
+      // email: Yup.string()
+      //             .email('El email no es valido')
+      //             .required('El email no puede ir vacio'),
       name: Yup.string()
                   .required('El nombre es obligatorio'),        
     }),
     onSubmit: async (valores) => {            
       if(refRequest.current){
         refRequest.current = false;
-        const {email, name} = valores;
+        const {name} = valores;
       
         const data = {
-          name, email, rol:rolS, department: depto
+          name, rol:rolS, department: depto
+          // , email
         }
 
         try {
-          //let res = await updateMeUser(user._id, formData, token);
           const res = await updateApiUser(data, token, user._id);
           if(typeof(res) === 'string'){
             refRequest.current = true;
@@ -114,11 +79,46 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
           }else{
             refRequest.current = true;
             showToastMessage(`Usuario ${name} modificado exitosamente!`);            
-            setCookie('user', res);
+            // setCookie('user', res); //Queda pendiente como se maneja esta situacion
             updateUser(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
+
+            const trimmedName = name.trim();
+            const nameParts = trimmedName.split(/\s+/);
+
+            let firstName = "";
+            let lastName = "";
+
+            if (nameParts.length >= 4) {
+                // 4 o más palabras: los 2 primeros son nombre, lo demás apellido
+                firstName = nameParts.slice(0, 2).join(' ');
+                lastName = nameParts.slice(2).join(' ');
+            } else if (nameParts.length === 3) {
+                // 3 palabras: 1 nombre, 2 apellidos
+                firstName = nameParts[0];
+                lastName = nameParts.slice(1).join(' ');
+            } else if (nameParts.length === 2) {
+                // 2 palabras: 1 nombre, 1 apellido
+                firstName = nameParts[0];
+                lastName = nameParts[1];
+            } else {
+                // 1 palabra: solo nombre, sin apellido
+                firstName = nameParts[0];
+                lastName = "";
+            }
+            const wsToUpdate = workspaces.filter((ws) => ws.email === user.email);
+            const dataws = {
+              name: firstName,
+              surname:lastName,
+            }
+
+            const resws = await updateWorkSpace(dataws, wsToUpdate[0]?._id?? '', token);
+            if(typeof(resws)==='string'){
+              refRequest.current = true;
+              showToastMessageError(resws);
+            }else{
+              showToastMessage('Workspace actualizado satisfactoriamente!!!');
+            }
+
           } 
         } catch (error) {
           refRequest.current = true;
@@ -156,6 +156,7 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
+              disabled={true}
             />
             {formik.touched.email && formik.errors.email ? (
                 <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">

@@ -1,5 +1,6 @@
 import {z} from 'zod'
 
+//con zod se agrega validacion para que antes de hacer la peticion al backend se valide si el objeto cumple con los requerimientos
 export const clientValidation = z.object({
   name: z.string({
     required_error : 'El nombre del cliente es obligatorio!!',
@@ -17,6 +18,21 @@ export const clientValidation = z.object({
   }).min(3, {
     message: 'Nombre comercial  debe tener minimo 3 caracteres'
   }),
+  // taxregime: z.string({
+  //   required_error : 'El regimen fiscal del cliente es obligatorio!!',
+  //   invalid_type_error: 'El regimen fiscal no es valido!!',
+  // }).min(2, {
+  //   message: 'El regimen fiscal debe de tener un minimo de 2 caracteres!!',
+  // }).max(60, {
+  //   message: 'El regimen fiscal no debe de tener mas de 60 caracteres!!',
+  // }),
+  taxregime: z.object({
+    id: z.string({
+      required_error: 'El regimen fiscal del cliente es obligatorio!!',
+      invalid_type_error: 'El regimen fiscal no es valido!!',
+    }),
+    regimen: z.string().optional(),
+  }),
   rfc: z.string({
     required_error: 'El RFC es obligatorio!!',
     invalid_type_error: 'El rfc no es valido!!',
@@ -25,6 +41,7 @@ export const clientValidation = z.object({
   }).min(12, {
     message: 'RFC debe tener minimo 12 caracteres'
   }),
+  capitalregime: z.string().optional(),
   //account: z.string().optional(),
   logo: z.object({}).optional(),
   // link: z.string({required_error: 'EL link de la pagina es obligatorio!!'}).max(80, {
@@ -98,6 +115,10 @@ export const clientValidation = z.object({
   user: z.string({
     required_error: 'Falta el usuario que da de alta el cliente!!',
     invalid_type_error: 'El usuario no es valido!!',
+  }),
+  company: z.string({
+    required_error: 'Falta la empresa a la que pertenece el cliente!!',
+    invalid_type_error: 'La empresa no es valida!!',
   }),
   status: z.boolean().optional(),
 })

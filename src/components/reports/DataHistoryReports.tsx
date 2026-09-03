@@ -1,5 +1,4 @@
 import ProfileReport from "./ProfileReport"
-//import { Options } from "@/interfaces/Common"
 import { Report, DateReport } from "@/interfaces/Reports"
 import { useState } from "react"
 import SendReport from "./SendReport"
@@ -7,8 +6,7 @@ import { UsrBack } from "@/interfaces/User"
 import HistoryReportData from "./HistoryReportData"
 
 export default function DataHistoryReports({report, user, id, token, dates}:
-                              {report:Report, user:UsrBack, id:string, 
-                                token:string, dates: DateReport[] }) {
+  {report:Report, user:UsrBack, id:string, token:string, dates: DateReport[] }) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
 
@@ -30,7 +28,7 @@ export default function DataHistoryReports({report, user, id, token, dates}:
         </div>
       </div>
       {isSend && <SendReport report={report} send={handleSend} 
-                    token='' user={user._id} node={undefined} isClose={false} />}
+                    token='' user={user} node={undefined} isClose={false} />}
     </>
   )
 }

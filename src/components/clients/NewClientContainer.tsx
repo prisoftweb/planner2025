@@ -1,18 +1,27 @@
 import { useRegFormContext } from "./StepperClientProvider";
 import HeaderForm from "../HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 import ContainerClientStepper from "./ContainerClientStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
 import { Options } from "@/interfaces/Common";
 import { useState, useEffect } from "react";
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
-export default function NewClientContainer({token, id, showForm, tags}: 
-                            {token:string, id:string, showForm:Function, tags:Options[]}){
+type NewClientContainerProps = {
+  token:string, 
+  id:string, 
+  showForm:Function, 
+  tags:Options[],
+  company:string
+}
+
+export default function NewClientContainer({token, id, showForm, tags, company}: NewClientContainerProps ){
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);
-  
+ 
+  // console.log('new client container tags => ', tags);
+
   const handleResize = () => {
     setHeightPage(window.outerHeight);
   }
@@ -33,8 +42,6 @@ export default function NewClientContainer({token, id, showForm, tags}:
         {
           label: 'Si',
           onClick: () => {
-            //let res = undefined;
-  
             switch('user'){
               case 'user':
                 showForm(false);
@@ -70,17 +77,16 @@ export default function NewClientContainer({token, id, showForm, tags}:
     }
   }
 
-  return(
-    <div className={`z-10 w-full sm:max-w-2xl absolute top-16 bg-white p-3 right-0`}
+  return(//top-16
+    <div className={`z-10 w-full sm:max-w-2xl absolute bg-white px-2 py-2 sm:py-5 sm:px-7 right-0`}
       style={{height: `${heightPage}px`}} >
-      <div className="flex justify-between">
+      <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
         <HeaderForm img="/img/clientes.svg" subtitle="Ingresa nuevo cliente" 
           title="Nuevo cliente"
         />
-        <XMarkIcon className="w-6 h-6 text-slate-500
-          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+        <TooltipCloseIcon handleClose={closeForm} />
       </div>
-      <ContainerClientStepper token={token} id={id} tags={tags} />
+      <ContainerClientStepper token={token} id={id} tags={tags} company={company} />
     </div>
   )
 }

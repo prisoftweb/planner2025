@@ -11,8 +11,8 @@ import { createBudget } from "@/app/api/routeBudget";
 import { useBudgetStore } from "@/app/store/budgetProject";
 import { getBudgetsMin } from "@/app/api/routeBudget";
 
-export default function AddCostCenter({token, user, closeForm}: 
-  {token:string, user: string, closeForm: Function}) {
+export default function AddCostCenter({token, user, closeForm, company}: 
+  {token:string, user: string, closeForm: Function, company:string}) {
 
   const {project} = useNewBudget();
   const {updateBudgetsStore} = useBudgetStore();
@@ -75,7 +75,7 @@ export default function AddCostCenter({token, user, closeForm}:
   }
 
   const amount = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: project?.amount || 0
   });
 
@@ -87,19 +87,16 @@ export default function AddCostCenter({token, user, closeForm}:
         date: new Date(),
         amount: amountBudget,
         conditionStatus:"CREADO",
-        // condition: [
-        //     {glossary:"66db72ccd86ee6cdaa075a53", user}
-        // ],
         condition: [
           {glossary:"66e657bed63098c324d45464", user}
         ],
         progressAverage:0,
         project: project?._id,
-        user
+        user,
+        company
       }
 
       try {
-        //console.log('save budget => ', JSON.stringify(data));
         const res = await createBudget(token, data);
         if(typeof(res)==='string'){
           showToastMessageError(res);
@@ -115,9 +112,7 @@ export default function AddCostCenter({token, user, closeForm}:
   }
 
   const keyDown = (event: any) => {
-    console.log(event.key);
     if(event.key==='Tab'){
-      console.log('entrooo')
       tabRef?.current?.focus();
       setBandTab(!bandTab);
     }
@@ -125,7 +120,7 @@ export default function AddCostCenter({token, user, closeForm}:
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-x-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3">
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
             <div>
@@ -177,7 +172,7 @@ export default function AddCostCenter({token, user, closeForm}:
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-3 mt-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 mt-3">
         <div>
           <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
           <Input 
@@ -223,40 +218,6 @@ export default function AddCostCenter({token, user, closeForm}:
       <div className="flex justify-center">
         <Button onClick={saveBudget}>Guardar</Button>
       </div>
-      {/* <div className="grid grid-cols-2 gap-x-3 mt-3">
-        <div>
-          <Select options={options} className="mt-2" onChange={(value:any) => onChange(value.value)} />
-          
-          <div className="overflow-y-auto h-32">
-            {costoCentersLV.map((cclv) => (
-              <div key={cclv.value} 
-                className="p-2 shadow-md shadow-slate-400"
-              >
-                <p>{cclv.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        <div className="p-5">
-          <Label htmlFor="total"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Total</p></Label>
-          <CurrencyInput
-            suffix="$"
-            value={total}
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
-                      focus:border-slate-700 outline-0"
-            onChange={(e) => onChangeTotal(e.target.value)}
-          />
-          <Label htmlFor="percentage"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentage</p></Label>
-          <CurrencyInput 
-            suffix="%"
-            value={percentage}
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
-                focus:border-slate-700 outline-0"
-            onChange={(e) => onChangePercentage(e.target.value)}
-          />
-        </div>
-      </div> */}
     </>
   )
 }

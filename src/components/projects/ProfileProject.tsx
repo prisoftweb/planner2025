@@ -2,40 +2,48 @@ import Label from "../Label";
 import { OneProjectMin } from "@/interfaces/Projects";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { useOneProjectsStore } from "@/app/store/projectsStore";
+import Chip from "../providers/Chip";
 
 export default function ProfileProject({project}: 
   {project:OneProjectMin}){
   
-  const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
+  const {oneProjectStore} = useOneProjectsStore();
 
   const amount = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: oneProjectStore?.amount || 0
   });
 
   const amountGuarantee = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: oneProjectStore?.guaranteefund?.amount? parseFloat(oneProjectStore.guaranteefund.amount) : 0
   });
 
   return(
     <>
       <div className="w-full h-full mt-3">
-        <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
-          <div>
-            <img src={oneProjectStore?.photo? oneProjectStore?.photo: '/img/projects/default.svg'} alt="logo" 
-              className="max-w-28 h-auto" />
+        <div className="flex flex-wrap sm:flex-nowrap justify-between">
+          <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
+            <div>
+              <img src={oneProjectStore?.photo? oneProjectStore?.photo: '/img/projects/default.svg'} alt="logo" 
+                className="max-w-28 h-auto" />
+            </div>
+            <div>
+              <p className="text-blue-500">{oneProjectStore?.title || ''}</p>
+              <p className="text-slate-500">{oneProjectStore?.code || ''}</p>
+              <p className="text-slate-500">{oneProjectStore?.type? oneProjectStore?.type.name : ''}</p>
+              <p className="text-slate-500">{oneProjectStore?.account || ''}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-blue-500">{oneProjectStore?.title || ''}</p>
-            <p className="text-slate-500">{oneProjectStore?.code || ''}</p>
-            <p className="text-slate-500">{oneProjectStore?.type? oneProjectStore?.type.name : ''}</p>
-            <p className="text-slate-500">{oneProjectStore?.account || ''}</p>
+          
+          <div className="w-36 mr-3">
+            <Chip label={oneProjectStore?.category?.name || ''} color={oneProjectStore?.category?.color} 
+              darktext={oneProjectStore?.category?.darktext ?? false} />
           </div>
         </div>
         
         <div className="my-2 bg-white p-3 rounded-lg shadow-md py-2">
-          <div className="flex gap-x-2">
+          <div className="flex flex-wrap sm:flex-nowrap gap-x-2">
             <div>
               <img src={ oneProjectStore?.client? oneProjectStore.client.logo: '/img/clients.svg'} alt="logo" className="w-20 h-20" />
             </div>
@@ -45,27 +53,34 @@ export default function ProfileProject({project}:
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-x-2 my-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-2 my-2">
             <div className="">
-              <p className="text-slate-500">Monto de obra</p>
+              <p className="text-slate-500">Monto de proyecto</p>
               <p className="text-green-600">{amount}</p>
             </div>
             <div className="">
-              <p className="text-slate-500">Costo de obra</p>
+              <p className="text-slate-500">Costo de proyecto</p>
               <p>{''}</p>
             </div>
-          </div>
-          <div className="my-2">
-            <p className="text-slate-500">Fecha ({oneProjectStore?.date?.substring(0, 10) || 'sin fecha'})</p>
+            <div className="">
+              <p className="text-slate-500">Fecha ({oneProjectStore?.date?.substring(0, 10) || 'sin fecha'})</p>
+            </div>
+            <div className=" font-bold text-slate-600">
+              <p className="text-slate-500">Monto de obra con IVA</p>
+              <p className="text-red-600 font-bold">{CurrencyFormatter({
+                currency: 'USD',
+                // value: (oneProjectStore?.amount || 0) * 1.16
+                value: oneProjectStore?.amountotal || 0
+              })}</p>
+            </div>
           </div>
         </div>
         
         <div className="my-2 mt-2 bg-white p-3 rounded-lg 
             shadow-md py-2">
-          <div className="grid grid-cols-2 gap-x-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-2">
             <div className="border-r-1 border-gray-700">
               <p className="text-slate-500">Fondo de garantia</p>
-              {/* <p className="text-blue-600">{oneProjectStore?.progress? oneProjectStore.progress: '' || '0'}</p> */}
               <p className="text-blue-600">{oneProjectStore?.guaranteefund?.porcentage || '0'} %</p>
             </div>
             <div>
@@ -75,7 +90,26 @@ export default function ProfileProject({project}:
           </div>
         </div>
 
-        <div className="mt-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg 
+        {project.hasamountChargeOff && (
+          <div className="my-2 mt-2 bg-white p-3 rounded-lg 
+              shadow-md py-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-2">
+              <div className="border-r-1 border-gray-700">
+                <p className="text-slate-500">Anticipo</p>
+                <p className="text-blue-600">{oneProjectStore?.amountChargeOff.porcentage || '0'} %</p>
+              </div>
+              <div>
+                <p className="text-slate-500">Monto</p>
+                <p className="text-blue-600">{CurrencyFormatter({
+                  currency: 'USD',
+                  value: oneProjectStore?.amountChargeOff?.amount? parseFloat(oneProjectStore.amountChargeOff?.amount.toString()) : 0
+                })}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-2 bg-white p-3 rounded-lg 
             shadow-md py-2">
           <div className="mt-3">
             <Label>Direccion</Label>

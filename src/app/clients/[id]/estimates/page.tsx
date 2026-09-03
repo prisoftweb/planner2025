@@ -7,6 +7,9 @@ import { UsrBack } from "@/interfaces/User"
 import { getClient, getClients } from "@/app/api/routeClients"
 import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import ComponentError from "@/components/ComponentError"
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
 
@@ -14,29 +17,62 @@ export default async function Page({ params }: { params: { id: string }}){
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+ 
+  const [client, clients, resresource, rescomponents] = await Promise.all([
+    getClient(token, params.id),
+    getClients(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'clients', 'id/estimates'),
+  ]);
 
-  let client: ClientBack;
-  try {
-    client = await getClient(token, params.id);
-    if(typeof(client) === "string")
-      return <h1 className="text-center text-red-500">{client}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del cliente!!</h1>  
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
+      </>
+    )
+  }
+  
+  if(typeof(client) === "string"){
+    return (
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{client}</h1> */}
+        <ComponentError page="/" message={client} />
+      </>
+    )
   }
 
   let options: Options[] = [];
 
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients) === "string")
-      return <h1 className="text-center text-red-500">{clients}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>  
+  if(typeof(clients) === "string"){
+    return (
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{clients}</h1> */}
+        <ComponentError page="/" message={clients} />
+      </>
+    )
   }
+      
 
   if(clients.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener clientes...</h1>
+    return (
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1> */}
+        <ComponentError page="/" message="Ocurrio un error al obtener datos de los clientes!!" />
+      </>
+    )
   }
 
   clients.map((cli: ClientBack) => {
@@ -46,9 +82,16 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
+  //pendiente
+
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">

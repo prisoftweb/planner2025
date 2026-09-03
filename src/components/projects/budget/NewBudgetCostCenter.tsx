@@ -2,18 +2,16 @@ import { useEffect, useState, useRef } from "react";
 import { useOneBudget } from "@/app/store/budgetProject";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import HeaderForm from "@/components/HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 import Select from 'react-select'
 import { Options } from "@/interfaces/Common";
-import { CostoCenterLV } from "@/interfaces/CostCenter";
 import Label from "@/components/Label";
 import CurrencyInput from "react-currency-input-field";
 import Button from "@/components/Button";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { InsertNewBudgetInBudgetByID } from "@/app/api/routeBudget";
 import { getBudget } from "@/app/api/routeBudget";
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 
-//import DonutChartt from "@/components/expenses/dashboard/DonutChart";
 import DonutChartBudget from "./DonutChartBudget";
 import { CostCenter } from "@/interfaces/CostCenter";
 
@@ -23,7 +21,7 @@ interface OptionsDashboard {
 }
 
 export default function NewBudgetCostCenter({closeForm, costoCenters, user, token, id}: 
-  {closeForm:Function, costoCenters: CostCenter[], user:string, token: string, id: string}) {
+  {closeForm:(value: boolean) => void, costoCenters: CostCenter[], user:string, token: string, id: string}) {
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const {oneBudget, updateOneBudget} = useOneBudget();
@@ -34,8 +32,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   const [category, setCategory] = useState<string>('');
   const [concept, setConcept] = useState<string>('');
 
-  //const [focusInput, setFocusInput] = useState<boolean>(true);
-  // const inputRef = useRef<CurrencyInputProps>(null);
+
   const inputRef = useRef<any>(null);
 
   const options: Options[] = [];
@@ -43,7 +40,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   costoCenters.map((cc) => {
     cc.categorys.map((cat) => {
       options.push({
-        //label: cclv.categoryname,
         label: (cc.name) + ' ' + cat.concept.name,
         value: cc._id+'/'+cat.concept._id
       });
@@ -60,9 +56,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
         setTotal('0');
         setPercentage('0');
       }else{
-        //setTotal(Number(value.replace(/[$,]/g, "")));
         const t = Number(value.replace(/[$,]/g, ""));
-        //const p = Number(percentage.replace(/[$,]/g, ""));
         const p = (t / (oneBudget?.amount || 1)) * 100;
         setTotal(value);
         setPercentage(p.toFixed(2));
@@ -91,7 +85,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   }
   
   const handleResize = () => {
-    //setHeightPage(window.outerHeight);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -101,7 +94,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
 
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
-    //setHeightPage(document.body.offsetHeight - 110);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -111,12 +103,12 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   }, []);
 
   const amount = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: oneBudget?.amount || 0
   });
 
   const budgeted = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: oneBudget?.budgeted || 0
   })
 
@@ -205,25 +197,23 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
 
   oneBudget?.newbudget.map((newB) => {
     optsChart.push({
-      //costo: newB.cost,
       costo: newB.percent,
       label: newB.costocenter.concept.name
     });
     categoriesConcepts.push(newB.costocenter.concept.name);
   });
   
-  return (
-    <div className="z-10 w-full sm:max-w-5xl absolute top-16 bg-white p-3 right-0"
+  return (//top-16
+    <div className="z-10 w-full sm:max-w-5xl absolute bg-white px-2 py-2 sm:py-5 sm:px-7 right-0"
       style={{height: `${heightPage}px`}}
     >
-      <div className="flex justify-between">
+      <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
         <HeaderForm img="/img/projects.jpg" subtitle="Selecciona el centro de costos y el monto del presupuesto" 
           title="Nuevo presupuesto"
         />
-        <XMarkIcon className="w-6 h-6 text-slate-500
-          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => closeForm(false)} />
+        <TooltipCloseIcon handleClose={closeForm} />
       </div>
-      <div className="grid grid-cols-3 gap-x-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-2">
         <div className="bg-white p-3 rounded-lg shadow-md h-full">
           <div className="flex gap-x-2">
             <div>
@@ -280,31 +270,51 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-3 mt-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2 mt-3">
         <div>
           <Select options={options} className="mt-2" 
             onChange={(value:any) => onChangeCostoCenter(value)}
             value={optSel} />
-          <div className="overflow-y-auto h-64 mt-5">
-            {costoCenters.map((cclv) => (
-              cclv.categorys.map((conc) => (
-                <div key={conc.concept._id} 
-                  className={`p-3 border border-slate-700 flex cursor-pointer hover:bg-slate-200 text-slate-700 hover:text-slate-700
-                    ${optSel.value.includes(conc.concept._id)? 'bg-blue-700 text-white': 'text-slate-700 bg-white'} 
-                    shadow-md shadow-slate-400 justify-between items-center`}
-                    onClick={() => onChangeCardCostoCenter(conc.concept._id)}
-                >
-                  <div className="flex gap-x-2">
-                    <img className="w-6 h-6" src={cclv.icon} alt="icono" />
-                    <p>{cclv.name}</p>
+          <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
+            <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
+                overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+              {costoCenters.map((cclv) => (
+                cclv.categorys.map((conce) => (
+                  <div role="button"
+                    key={conce.concept._id}
+                    className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+                      outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+                      focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+                      active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300
+                      ${optSel.value.includes(conce.concept._id)? 'bg-blue-700 text-white': 'text-slate-700 bg-white'}`}
+                    onClick={() => onChangeCardCostoCenter(conce.concept._id)}
+                  >
+                    <div className="flex items-center ">
+                      <div className="grid mr-4 place-items-center">
+                        <img alt="responsable" src={ conce?.concept?.icon || '/img/users/default.jpg'}
+                          className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+                      </div>
+                      <div className="w-full">
+                        <div className="flex justify-between items-center">
+                          <h6
+                            className="block font-sans text-lg antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
+                            {cclv.name}
+                          </h6>
+                          {/* <p className="text-slate-500 text-sm">{conce.code}</p> */}
+                        </div>
+                        <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                          {conce.concept.name}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <p>{conc.concept.name}</p>
-                </div>
-              ))
-            ))}
+                ))
+              ))}
+
+            </nav>
           </div>
         </div>
-        
+
         <div className="p-5">
           <Label htmlFor="total"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Total</p></Label>
           <CurrencyInput

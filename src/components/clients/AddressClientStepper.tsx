@@ -8,10 +8,9 @@ import Input from "../Input";
 import SaveClient, {SaveClientLogo} from "@/app/functions/SaveClient";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { useRef } from "react";
-//import { clientValidation } from "@/schemas/client.schema";
 import { useClientStore } from "@/app/store/clientStore";
 
-export default function AddressClientStepper({token}:{token:string}){
+export default function AddressClientStepper({token, company}:{token:string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -43,18 +42,18 @@ export default function AddressClientStepper({token}:{token:string}){
       stateS: stateSI,
     }, 
     validationSchema: Yup.object({
-      stret: Yup.string()
-                  .required('La calle no puede ir vacia'),
+      // stret: Yup.string()
+      //             .required('La calle no puede ir vacia'),
       cp: Yup.string()
                   .required('El codigo postal es obligatorio'),
-      municipy: Yup.string()
-                  .required('El municipio no puede ir vacio'),
-      country: Yup.string()
-                  .required('El pais no puede ir vacio'),
-      community: Yup.string()
-                    .required('La colonia no puede ir vacia'),
-      stateS: Yup.string()
-                  .required('El estado no puede ir vacio'),
+      // municipy: Yup.string()
+      //             .required('El municipio no puede ir vacio'),
+      // country: Yup.string()
+      //             .required('El pais no puede ir vacio'),
+      // community: Yup.string()
+      //               .required('La colonia no puede ir vacia'),
+      // stateS: Yup.string()
+      //             .required('El estado no puede ir vacio'),
     }),
     onSubmit: async (valores) => {            
       const {country, cp, municipy, stret, community, stateS} = valores;
@@ -68,7 +67,6 @@ export default function AddressClientStepper({token}:{token:string}){
         stateS
       }
 
-      //dispatch({ type: 'SET_ADDRESS_DATA', data: valores });
       dispatch({ type: 'SET_ADDRESS_DATA', data: data });
       dispatch({type: 'INDEX_STEPPER', data: 3})
     },       
@@ -81,24 +79,19 @@ export default function AddressClientStepper({token}:{token:string}){
       if(state.databasic){
         data.append('name', state.databasic.name);
         data.append('tradename', state.databasic.tradename);
+        data.append('taxregime', state.databasic.taxregime);
         if(state.databasic.email){
           data.append('email', state.databasic.email);
         }
+        if(state.databasic.capitalregime){
+          data.append('capitalregime', state.databasic.capitalregime);
+        }
         data.append('rfc', state.databasic.rfc);
         data.append('source', state.databasic.source);
-        //data.append('tags', state.databasic.tags);
-        // if(state.databasic.tags){
-        //   state.databasic.tags.map((tag: string) => {
-        //     data.append('tags', tag);
-        //   })
-        // }
         data.append('regime', state.databasic.regime);
         if(state.databasic.user){
           data.append('user', state.databasic.user);
         }
-        // if(state.databasic.phone){
-        //   data.append('phone', state.databasic.phone);
-        // }
       }
       if(state.extradata){
         data.append('logo', state.extradata.photo);
@@ -117,13 +110,6 @@ export default function AddressClientStepper({token}:{token:string}){
         state: stateS,
         stret
       }
-
-      // if(state.contacts){
-      //   state.contacts.map((contact: string) => {
-      //     data.append('contact', contact);
-      //   })
-      // }
-
       try {
         const res = await SaveClientLogo(data, token, location, 
                       state.databasic.tags? state.databasic.tags: [], 
@@ -133,9 +119,6 @@ export default function AddressClientStepper({token}:{token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -144,20 +127,15 @@ export default function AddressClientStepper({token}:{token:string}){
         refRequest.current = true;
         showToastMessageError('Error al crear cliente!!');
       }
-      // const newdata = Object.fromEntries(data);
-      // try {
-      //   const res = clientValidation.safeParse(newdata);
-      //   console.log(res);
-      //  } catch (error) {
-      //   console.log(error);
-      //  }
     }else{
-      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
+      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='', taxregime='', capitalregime='';
       if(state.databasic){
         name=state.databasic.name? state.databasic.name : '';
         tradename=state.databasic.tradename? state.databasic.tradename : '';
         email=state.databasic.email? state.databasic.email : '';
         rfc=state.databasic.rfc? state.databasic.rfc : '';
+        taxregime=state.databasic.taxregime? state.databasic.taxregime : '';
+        capitalregime=state.databasic.capitalregime? state.databasic.capitalregime : '';
         phone=state.databasic.phone? state.databasic.phone : '';
         source=state.databasic.source? state.databasic.source : '';
         tags=state.databasic.tags? state.databasic.tags : '';
@@ -181,17 +159,20 @@ export default function AddressClientStepper({token}:{token:string}){
         name, 
         tradename, 
         email, 
-        rfc, 
+        rfc,
+        taxregime, 
+        capitalregime, 
         phone, 
         source,
         tags, 
         user,
+        company,
         link,
-        //photo,
         regime,
         location: {
           stret,
           cp: parseInt(cp),
+          // cp,
           municipy, 
           country,
           community,
@@ -201,14 +182,12 @@ export default function AddressClientStepper({token}:{token:string}){
       }
 
       try {
+        // console.log('data client', data);
         const res = await SaveClient(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -228,30 +207,30 @@ export default function AddressClientStepper({token}:{token:string}){
       <form onSubmit={formik.handleSubmit} className="mt-4 w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="">
-            <Label htmlFor="stret"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Calle y numero</p></Label>
+            <Label htmlFor="stret"><p >Calle y numero</p></Label>
             <Input type="text" name="stret" autoFocus 
               value={formik.values.stret}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
             />
-            {formik.touched.stret && formik.errors.stret ? (
+            {/* {formik.touched.stret && formik.errors.stret ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.stret}</p>
               </div>
-            ) : null}
+            ) : null} */}
           </div>
           <div className="">
-            <Label htmlFor="community"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Colonia / Localidad</p></Label>
+            <Label htmlFor="community"><p >Colonia / Localidad</p></Label>
             <Input type="text" name="community" 
               value={formik.values.community}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
             />
-            {formik.touched.community && formik.errors.community ? (
+            {/* {formik.touched.community && formik.errors.community ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.community}</p>
               </div>
-            ) : null}
+            ) : null} */}
           </div>
           <div className="">
             <Label htmlFor="cp"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Codigo postal</p></Label>
@@ -267,43 +246,43 @@ export default function AddressClientStepper({token}:{token:string}){
             ) : null}
           </div>
           <div className="">
-            <Label htmlFor="municipy"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Municipio / Delegacion</p></Label>
+            <Label htmlFor="municipy"><p >Municipio / Delegacion</p></Label>
             <Input type="text" name="municipy"
               value={formik.values.municipy}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
             />
-            {formik.touched.municipy && formik.errors.municipy ? (
+            {/* {formik.touched.municipy && formik.errors.municipy ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.municipy}</p>
               </div>
-            ) : null}
+            ) : null} */}
           </div>
           <div className="">
-            <Label htmlFor="stateS"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estado</p></Label>
+            <Label htmlFor="stateS"><p >Estado</p></Label>
             <Input type="text" name="stateS"
               value={formik.values.stateS}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
             />
-            {formik.touched.stateS && formik.errors.stateS ? (
+            {/* {formik.touched.stateS && formik.errors.stateS ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.stateS}</p>
               </div>
-            ) : null}
+            ) : null} */}
           </div>
           <div className="">
-            <Label htmlFor="country"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Pais</p></Label>
+            <Label htmlFor="country"><p>Pais</p></Label>
             <Input type="text" name="country"
               value={formik.values.country}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
             />
-            {formik.touched.country && formik.errors.country ? (
+            {/* {formik.touched.country && formik.errors.country ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.country}</p>
               </div>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
         

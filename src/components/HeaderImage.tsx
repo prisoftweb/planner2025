@@ -1,21 +1,21 @@
 'use client'
-import Link from "next/link"
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import Image from "next/image";
+import TooltipContainerIcon from "./tooltipIcons/TooltipContainerIcon";
 
 export default function HeaderImage({children, title, previousPage, image}: 
-                    {children:JSX.Element, title:string, 
-                      previousPage:string, image:string}){
+  {children:JSX.Element, title:string, previousPage:string, image:string}){
+
   return(
     <>
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          {/* <Link href={previousPage}>
-            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-          </Link> */}
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600 cursor-pointer" 
-            onClick={() => window.location.replace(previousPage)}
-          />
+          <TooltipContainerIcon label="Regresar">
+            <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer hover:bg-blue-100" onClick={() => window.location.replace(previousPage)}>
+              <TbArrowNarrowLeft className="w-10 h-10 text-slate-600 cursor-pointer" 
+              />
+            </div>
+          </TooltipContainerIcon>
           <Image 
               src={image}
               alt="profile"

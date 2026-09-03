@@ -6,12 +6,12 @@ import { useUserStore } from "@/app/store/userStore"
 import { UsrBack } from "@/interfaces/User";
 import { useEffect } from "react";
 
+//Componente intermedio para actualizar en el estado global los usuarios que fueron recibidos de la peticion en el page
 export default function UsersConstext({departments, optionsRoles, token, users}: 
-                        {token:string, departments:Options[], 
-                          optionsRoles:Options[], users:UsrBack[]}){
+  {token:string, departments:Options[], optionsRoles:Options[], users:UsrBack[]}){
 
+  //se importa setusers y con un usefect para que al cargar componente se actualice el estado de users
   const {setUsers} = useUserStore();
-  //setUsers(users);
   useEffect(() => {
     setUsers(users);
   }, []);

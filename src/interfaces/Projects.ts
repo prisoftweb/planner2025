@@ -8,15 +8,22 @@ export interface ProjectsTable{
   code: string, 
   project:string,
   imgProject: string,
-  //status:boolean, 
   condition: string,
   category:string, 
   client:string, 
   date:string,
-  amount:string,
+  amount:number
   percentage: string
   account: string
-  total: string
+  total: number
+  totalCosts?: number
+  totalColections?: number
+  utilities?: number,
+  hasamountChargeOff: boolean, 
+  hasguaranteefund: boolean, 
+  includesTaxes: boolean,
+  imgUser: string,
+  darktext:boolean
 }
 
 export interface ProjectsBudgetTable{
@@ -28,10 +35,14 @@ export interface ProjectsBudgetTable{
   },
   status: boolean
   segment: string
-  amountBudget:string,
-  pending:string,
-  budgeted: string,
-  color: string  
+  // amountBudget:string,
+  // pending:string,
+  // budgeted: string,
+  amountBudget:number,
+  pending:number,
+  budgeted: number,
+  color: string,
+  darktext: boolean
 }
 
 export interface Project {
@@ -44,6 +55,7 @@ export interface Project {
   date: string
   counter: number
   amount: number
+  amountotal?: number
   photo: string
   haslocation: boolean
   hasguaranteefund: boolean
@@ -61,6 +73,12 @@ export interface Project {
   category: Glossary
   // types: Glossary
   // categorys: Glossary
+  hasamountChargeOff: boolean
+  amountChargeOff: {
+    date: string,
+    amount: number,
+    porcentage: number
+  }
 }
 
 export interface OneProjectMin {
@@ -74,6 +92,7 @@ export interface OneProjectMin {
   title: string
   code: string
   amount: number
+  amountotal?: number
   date: string
   photo: string
   account: string
@@ -82,25 +101,16 @@ export interface OneProjectMin {
   segment: Glossary
   progress: number
   status: boolean
+  hasamountChargeOff: boolean
+  amountChargeOff: {
+    date: string,
+    amount: number,
+    porcentage: number
+  }
+  includesTaxes?: boolean,
+  estimatedProject?: boolean
+  endDate?:string
 }
-
-// export interface ProjectMin {
-//   _id: string
-//   title: string
-//   code: string
-//   amount: number
-//   date: string
-//   photo: string
-//   account: string
-//   hasguaranteefund: boolean
-//   client: ClientBack
-//   company: Company
-//   type: Glossary
-//   segment: Glossary
-//   category: Glossary
-//   progress: number
-//   status: boolean
-// }
 
 export interface ProjectMin {
   _id: string
@@ -109,19 +119,31 @@ export interface ProjectMin {
   date: string
   amount: number
   photo: string
-  hasguaranteefund: boolean
+  hasguaranteefund: boolean,
+  hasamountChargeOff?: boolean, 
+  includesTaxes?: boolean,
   company: Company
   client: ClientBack
   status: boolean
   account: string
-  // category: Category
-  // type: Type
-  // segment: Segment
+  description?: string
   category: Glossary
   type: Glossary
   segment: Glossary
   progress: number
   amountotal: number
+  amountChargeOff?: {
+    date: string
+    porcentage: number,
+    amount: number
+  }
+  guaranteefund: {
+    date: string
+    porcentage: number,
+    amount: number
+  },
+  user?: UsrBack,
+  endDate?:string
 }
 
 export interface Location {
@@ -156,4 +178,223 @@ export interface Condition {
   status: boolean
   _id: string
   id: string
+}
+
+export interface ITimeLineProject {
+  _id: string
+  conditionstatus: {
+    _id: string
+    condition: {
+      _id: string
+      name: string
+      color: string
+      darktext: boolean
+    }
+    user: {
+      _id: string
+      name: string
+      photo: string
+    }
+    date: string
+    status: boolean
+  }
+}
+
+export interface IProjectWithEstimateMin {
+  _id: string
+  title: string
+  amountPayable: number
+  amountPayableVAT: number
+  account: string
+  amount: number
+  amountotal: number
+  porcentage: number
+  estimates: number
+  client: string
+  projectInfoStatusInfo: {
+    _id: string
+    name: string
+    description: string
+    color: string
+    status: boolean
+    __v: number
+    darktext: boolean
+  }
+}
+
+export interface ICostsByProject {
+  _id: string
+  folio: string
+  taxfolio: string
+  description: string
+  date: string
+  taxapply: boolean
+  isticket: boolean
+  ispaid: boolean
+  iscard: boolean
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+    discount: any
+    exempttax: any
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  project: {
+    _id: string
+    title: string
+  }
+  report: {
+    _id: string
+    name: string
+  }
+  provider: {
+    _id: string
+    name: string
+  }
+  costocenter: {
+    _id: string
+    category: string
+    concept: {
+      _id: string
+      name: string
+    }
+  }
+  typeCFDI: {
+    _id: string
+    name: string
+  }
+  category: {
+    _id: string
+    name: string
+  }
+  files: {
+    file: string
+    types: string
+    _id: string
+  }[]
+  estatus: {
+    _id: string
+    name: string
+    color: string
+    darktext: boolean
+  }
+  status: boolean
+}
+
+export interface IBudgetByProject {
+  _id: string
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  project: {
+    _id: string
+    title: string
+    photo: string
+  }
+  title: string
+  description: string
+  date: string
+  account: string
+  budgeted: number
+  pending: number
+  amount: number
+  conditionStatus: string
+  progressAverage: number
+  company: {
+    _id: string
+    name: string
+    logo: string
+  }
+  costocenter: {
+    _id: string
+    category: string
+    concept: {
+      _id: string
+      name: string
+      namefull: string
+    }
+  }
+  status: boolean
+}
+
+export interface ICostsAccumByProject {
+  _id: string
+  title: string
+  quantity: number
+  ivaCost: number
+  subtotalCost: number
+  totalCost: number
+}
+
+export interface ICollectionAccumByProject {
+  id: string
+  title: string
+  quantity: number
+  totalPayments: number
+}
+
+export interface IConditionProject {
+  _id: string
+  conditionstatus: {
+    _id: string
+    condition: {
+      _id: string
+      name: string
+      color: string
+      darktext: boolean
+    }
+    user: {
+      _id: string
+      name: string
+      photo: string
+    }
+    date: string
+    status: boolean
+  }
+}
+
+export interface IProyectCostBen {
+  project: string
+  quantityCost: number
+  ivaCost: number
+  subtotalCost: number
+  totalCost: number
+  amountotal: number
+  pendingToSpent: number
+  porcentageSpent: number
+  porcentagePendingToSpend: number
+  quantityInvoices: number
+  fullyCharged: number
+  pendingPayment: number
+  porcentagePayment: number
+  porcentagePendingPayment: number
+  costobeneficio: number
+  rentabilidad: number
+  date: string
+}
+
+export interface IBeneficiosTotales {
+  quantityInvoices: number
+  fullyCharged: number
+  label: string
+}
+
+export interface ICostosTotales {
+  quantityCost: number
+  ivaCost: number
+  subtotalCost: number
+  totalCost: number
+  label: string
+}
+
+export interface ICosBen {
+  rentabilidad: number
+  costobeneficio: number
 }

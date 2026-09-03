@@ -1,19 +1,21 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { ClientBack } from "@/interfaces/Clients";
-import { getClient, getClients } from "@/app/api/routeClients";
+import { getClient, getClients, getAllTOTALsProjectsByCLIENT, 
+  getAllTOTALAccountReceivablesOnlyByOneClientMINRESUME, 
+  getAllTOTALEstimatesPendingByOneClientMINRESUME, getAllTOTALChargedByOneCLIENT } from "@/app/api/routeClients";
 import { getTags } from "@/app/api/routeClients";
 import { Options } from "@/interfaces/Common";
 import { Tag } from "@/interfaces/Clients";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import ClientCli from "@/components/clients/Clientcli";
 import Navigation from "@/components/navigation/Navigation";
-//import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTab from "@/components/clients/NavTab";
 import HeaderImage from "@/components/HeaderImage";
-import WithOut from "@/components/WithOut";
-import { Resource2 } from "@/interfaces/Roles";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -21,57 +23,108 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let client: ClientBack;
-  try {
-    client = await getClient(token, params.id);
-    if(typeof(client) === "string")
-      return <h1 className="text-center text-red-500">{client}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del cliente!!</h1>  
+  const [client, clients, tags, totalprj, totalColl, totalPenBil, totalpay, resresource, rescomponents] = await Promise.all([
+    getClient(token, params.id),
+    getClients(token),
+    getTags(token),
+    getAllTOTALsProjectsByCLIENT(token, params.id), 
+    getAllTOTALAccountReceivablesOnlyByOneClientMINRESUME(token, params.id),
+    getAllTOTALEstimatesPendingByOneClientMINRESUME(token, params.id),
+    getAllTOTALChargedByOneCLIENT(token, params.id),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'clients', 'id/profile'),
+  ]);
+ 
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
-
-  const clientCookie = cookieStore.get('clients')?.value;
-  let permisionsClient: Resource2 | undefined;
-  if(clientCookie){
-    permisionsClient = JSON.parse(clientCookie);
-  }
-
-  if(!permisionsClient){
+  
+  if(typeof(rescomponents) === "string"){
     return(
       <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-            text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
-            title="Clientes"><></></WithOut>
-        </div>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/history/${params.id}`} message={rescomponents} />
       </>
     )
   }
 
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients) === "string")
-      return <h1 className="text-center text-red-500">{clients}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>  
-  }
+  if(typeof(client) === "string")
+    return (
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page="/" message={client} />
+        {/* <h1 className="text-center text-red-500">{client} client</h1> */}
+      </>
+  )
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
+  if(typeof(clients) === "string")
+    return (
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{clients} clients</h1> */}
+        <ComponentError page="/" message={clients} />
+      </>
+    )
 
   let options: Options[] = [];
 
   if(clients.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener clientes...</h1>
+    return (
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">Error al obtener clientes...</h1> */}
+        <ComponentError page="/" message={'Error al obtener clientes...'} />
+      </>
+    )
   }
 
-  let tags = [];
-  try {
-    tags = await getTags(token);
-    if(typeof(tags)==='string'){
-      return <h1 className="text-center text-red-500">{tags}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Error al obtener etiquetas!!</h1>
+  if(typeof(tags)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{tags} tags</h1> */}
+        <ComponentError page="/" message={tags} />
+      </>
+    )
+  }
+
+  if(typeof(totalprj)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{totalprj} proyecto</h1> */}
+        <ComponentError page="/" message={totalprj} />
+      </>
+    )
+  }
+
+  if(typeof(totalPenBil)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{totalPenBil} fact</h1> */}
+        <ComponentError page="/" message={totalPenBil} />
+      </>
+    )
+  }
+
+  if(typeof(totalpay)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-center text-red-500">{totalpay}</h1> */}
+        <ComponentError page="/" message={totalpay} />
+      </>
+    )
   }
 
   let arrTags: Options[] = [];
@@ -83,7 +136,13 @@ export default async function Page({ params }: { params: { id: string }}){
       })
     })
   }else{
-    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+    return (
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1> */}
+        <ComponentError page="/" message={'Error al obtener etiquetas!!'} />
+      </>
+    )
   }
   
   clients.map((cli: ClientBack) => {
@@ -93,30 +152,27 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
-  console.log('permission client => ', permisionsClient);
-  
+  console.log('result => ', result);
+
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderImage image={client.logo? client.logo: '/img/clients.svg'} 
               previousPage="/clients" title={client.name}>
-          {permisionsClient.permission.searchfull? (
+          {/* {permisionsClient.permission.searchfull? (
             <Selectize options={options} routePage="clients" subpath="/profile" />
-          ): <></>}
+          ): <></>} */}
+          {result.components.includes('findall') && (
+            <Selectize options={options} routePage="clients" subpath="/profile" />
+          )}
+          {/* <Selectize options={options} routePage="clients" subpath="/profile" /> */}
         </HeaderImage>
-        {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
-          <div className="flex items-center my-2">
-            <ArrowReturn link="/clients" />
-            <img src={client.logo? client.logo: '/img/clients.svg'} 
-                      alt="logo cliente" className="w-12 h-12" />
-            <p className="text-slate-500 mx-3">{client.name}</p>
-          </div>
-          <Selectize options={options} routePage="clients" subpath="/profile" />
-        </div> */}
         <NavTab idCli={params.id} tab='1' />
         <NextUiProviders>
-          <ClientCli client={client} token={token} id={params.id} tags={arrTags} clientPermissions={permisionsClient} />
+          <ClientCli client={client} token={token} id={params.id} tags={arrTags} totalPenBil={totalPenBil}
+            totalprj={totalprj} totalColl={totalColl} 
+            totalpay={totalpay} company={user.profile} permissions={result} />
         </NextUiProviders>
       </div>
     </>

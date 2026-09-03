@@ -19,6 +19,25 @@ export async function getProviders(auth_token:string){
   }
 }
 
+export async function getAllProvidersMin(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getAllProvidersMin`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Error al obtener proveedores';
+    }
+  }
+}
+
 export async function getProvidersLV(auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getAllProvidersLV`;
   try {
@@ -71,7 +90,6 @@ export async function getProvider(id:string, auth_token:string) {
     if(axios.isAxiosError(error)){
       return error.message
     }else{
-      console.log(error);
       return 'Ocurrio un problema al consultar proveedor';
     }
   }
@@ -79,6 +97,7 @@ export async function getProvider(id:string, auth_token:string) {
 
 export async function getProviderMin(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getProviderMIN/${id}`;
+
   try {
     const res = await axios.get(url, {
       'headers': {
@@ -91,7 +110,6 @@ export async function getProviderMin(id:string, auth_token:string) {
     if(axios.isAxiosError(error)){
       return error.message
     }else{
-      console.log(error);
       return 'Ocurrio un problema al consultar proveedor min';
     }
   }
@@ -100,6 +118,8 @@ export async function getProviderMin(id:string, auth_token:string) {
 export async function updateProvider(id:string, auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/${id}`;
 
+  console.log('url => ', url);
+  console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       'headers': {
@@ -107,13 +127,13 @@ export async function updateProvider(id:string, auth_token:string, data:Object) 
         'Content-Type': 'application/json',
       }
     });    
+    console.log('res => ', res);
     if(res.status===200) return res.data.data.data;
       return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
       return error.message;
     }else{
-      console.log(typeof(error));
       return 'Ocurrio un error al actualizar proveedor';
     }
   }
@@ -133,7 +153,6 @@ export async function RemoveProvider(id:string, auth_token:string) {
     if(axios.isAxiosError(error)){
       return error.message;
     }else{
-      console.log(error);
       return 'Ocurrio un error al eliminar proveedor';
     }
   }
@@ -141,7 +160,8 @@ export async function RemoveProvider(id:string, auth_token:string) {
 
 export async function createProvider(data:Object, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
-  
+  console.log('url => ', url);
+  console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -149,9 +169,11 @@ export async function createProvider(data:Object, auth_token:string) {
         'Content-Type': 'Application/json',
       }
     })
+    console.log('res => ', res);
     if(res.status===201) return res.data.data.data;
       return res.statusText;
   } catch (error) {
+    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.message;
     }else{
@@ -163,8 +185,6 @@ export async function createProvider(data:Object, auth_token:string) {
 export async function createNewProvider(data:Object, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
   
-  console.log('new provider => ', url);
-  console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -172,7 +192,6 @@ export async function createNewProvider(data:Object, auth_token:string) {
         'Content-Type': 'Application/json',
       }
     })
-    console.log('res => ', res);
     if(res.status===201) return res.data.data.data;
       return res.statusText;
   } catch (error) {
@@ -199,8 +218,6 @@ export async function updateContactProvider(data:Object, id:string, auth_token:s
     if(axios.isAxiosError(error)){
       return error.message;
     }
-    console.log(typeof(error));
-    console.log(error);
     return 'Ocurrio un error al actulizar contacto del proveedor!!';
   }
 }
@@ -217,10 +234,211 @@ export async function GetCostsMIN(auth_token:string, id:string){
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
+  }
+}
+
+export async function GetCostsProviderMINWithoutPay(auth_token:string, id:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostByProviderMINWithoutPAY/${id}`;
+  // console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'application-type': 'application/json',
+      },
+      data: {
+        filter: "67318a51ceaf47ece0d3aa72"
+      }
+    });
+    // console.log('res => ', res); 
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText
+  } catch (error) {
+    // console.log('error => ', error); 
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos sin pago!!';
+    }
+    return 'Error al consultar costos sin pago!!';
+  }
+}
+
+export async function getProviderByRFC(auth_token:string, prov: string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getProviderByRFCMIN/${prov}`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status===200){
+      if(res.data.data.stats.length > 0){
+        return res.data.data.stats[0]._id;
+      }else{
+        return 'No se encontro el proveedor!!';
+      }
+    }
+    return res.statusText;
+  } catch (error) {
+    return 'No se encontro el proveedor!!';
+  }
+}
+
+export async function getCostTOTALPendingPAYGroupByPROVIDER(id:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostTOTALPendingPAYGroupByPROVIDER/${id}`;
+
+  const data={
+    conditionCost: ["PAGADO", "DIFERIDO", "NO PAGADO"]
+  }
+
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });    
+    if(res.status===200) return res.data.data.stats[0];
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al obtener costos pendientes de pago por proveedor';
+    }
+  }
+}
+
+export async function getAllCostsAdvancesByProviderMIN(auth_token:string, id:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsAdvancesByProviderMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error?.message?? 'Error al obtener anticipos del proveedor';
+    }else{
+      return 'Error al obtener anticipos del proveedor';
+    }
+  }
+}
+
+export async function insertConditionInProvider(id:string, auth_token:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/insertConditionInProvider/${id}`;
+
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });    
+    if(res.status===200) return res.data.data.data;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al actualizar condicion del proveedor';
+    }
+  }
+}
+
+export async function getAllPaymentsByProviderMIN(id:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/getAllPaymentsByProviderMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    // console.log('res => ', res);
+    // console.log('res json => ', JSON.stringify(res.data.data));
+    if(res.status===200) return res.data.data.resdata;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al obtener pagos del proveedor';
+    }
+  }
+}
+
+export async function getAllPaymentsByProviderAndDateMIN(id:string, auth_token:string, dateInitial:string, dateFinal:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/getAllPaymentsByProviderAndDateMIN/${id}/${dateInitial}/${dateFinal}`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    // console.log('res => ', res);
+    // console.log('res json => ', JSON.stringify(res.data.data));
+    if(res.status===200) return res.data.data.resdata;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al obtener pagos del proveedor';
+    }
+  }
+}
+
+export async function createAccount(data:Object, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/accounts`;
+  console.log('url => ', url);
+  console.log('data => ', JSON.stringify(data));
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'Application/json',
+      }
+    })
+    console.log('res => ', res);
+    if(res.status===201) return res.data.data;
+      return res.statusText;
+  } catch (error) {
+    console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al crear cuenta!!';
+    }
+  }
+}
+
+export async function updateAccount(id:string, auth_token:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/accounts/${id}`;
+
+  console.log('url => ', url);
+  console.log('data => ', JSON.stringify(data));
+  try {
+    const res = await axios.patch(url, JSON.stringify(data), {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });    
+    console.log('res => ', res);
+    if(res.status===200) return res.data.data.data;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al actualizar cuenta';
+    }
   }
 }

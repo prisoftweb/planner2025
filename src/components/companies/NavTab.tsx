@@ -1,6 +1,4 @@
 'use client'
-// import { BuildingOffice2Icon, BuildingOfficeIcon, 
-//   NewspaperIcon, FolderOpenIcon, Battery50Icon } from "@heroicons/react/24/solid"
 import  { SiAwsorganizations } from "react-icons/si"
 import  { GoOrganization } from "react-icons/go"
 import { LiaListAlt } from "react-icons/lia";
@@ -9,109 +7,127 @@ import { TfiLayoutAccordionList } from "react-icons/tfi";
 import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 import Link from "next/link";
+import { propsTooltip } from "@/libs/animations";
 
 export default function NavTab({option}: {option:number}){
 
-  let props = {
-    variants: {
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: 0.1,
-        ease: "easeIn",
-      }
-    },
-    enter: {
-      opacity: 1,
-      transition: {
-        duration: 0.15,
-        ease: "easeOut",
-      }
-    },
-    },
-  }
-
   const [isHover, setIsHover] = useState<number>(-1);
 
-  const nav =(<div>
-                <div className="bg-white fixed top-12 left-0  p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
-                <Link href='/catalogs'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md" content='Listas'
-                      placement="right"
-                    >
-                      <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
-                        <GrCatalog className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                          text-slate-500 my-1 bg-white rounded-md" 
-                          onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
-                          style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
-                                  color: isHover===3 || option===3 ? 'white' : '',}}
-                        />
-                      </div>
-                    </Tooltip>
-                  </Link>
-                  <Link href='/departments'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white mx-3" content='Departamentos'
-                      placement="right" 
-                    >
-                      <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
-                        <SiAwsorganizations className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                          text-slate-500 my-1 bg-white rounded-md" 
-                          onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
-                          style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
-                                  color: isHover===1 || option===1 ? 'white' : '',}}
-                        />
-                      </div>
-                    </Tooltip>
-                  </Link>
-                  <Link href='/companies'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white rounded-md" content='Compañia'
-                      placement="right"
-                    >
-                      <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
-                        <GoOrganization className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                          text-slate-500 my-1 bg-white rounded-md" 
-                          onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
-                          style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
-                                  color: isHover===2 || option===2 ? 'white' : '',}}
-                        />
-                      </div>
-                    </Tooltip>
-                  </Link>
-                  <Link href='/glossary'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white mx-3" content='Glosarios'
-                      placement="right"
-                    >
-                      <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
-                        <LiaListAlt className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                          text-slate-500 my-1 bg-white rounded-md" 
-                          onMouseEnter={() => setIsHover(4)} onMouseLeave={() => setIsHover(-1)}
-                          style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
-                                  color: isHover===4 || option===4 ? 'white' : '',}}
-                        />
-                      </div>
-                    </Tooltip>
-                  </Link>
-                  <Link href='/status'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white" content='Catalogos'
-                      placement="right"  
-                    >
-                      <div className="p-1" style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
-                        <TfiLayoutAccordionList className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                          text-slate-500 my-1 bg-white rounded-md" 
-                          onMouseEnter={() => setIsHover(5)} onMouseLeave={() => setIsHover(-1)}
-                          style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
-                                  color: isHover===5 || option===5 ? 'white' : '',}}
-                        />
-                      </div>
-                    </Tooltip>
-                  </Link>
-                </div>
-              </div>);
+  const nav =(
+  <>
+    <div className="hidden sm:block">
+      {/* <div className="bg-white fixed top-12 left-0  p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md"> */}
+      <div className="bg-white fixed top-14 left-0 pt-1 sm:pt-0 p-2 flex flex-row sm:flex-col items-center 
+                        space-x-4 sm:space-x-0 sm:space-y-4 rounded-md shadow-md w-full h-auto
+                        sm:w-auto sm:h-screen">
+      {/* <div className="bg-white fixed bottom-0 left-0 w-full h-auto md:top-12 md:bottom-auto
+                        md:w-auto md:h-screen p-2 flex flex-row md:flex-col
+                        items-center space-x-4 md:space-x-0 md:space-y-4 rounded-md shadow-md"> */}
+        <Link href='/catalogs'>
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+            className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" 
+            content='Listas' placement="right"
+          >
+            <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
+              <GrCatalog className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                text-slate-500 my-1 bg-white rounded-md" 
+                onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
+                style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
+                        color: isHover===3 || option===3 ? 'white' : '',}}
+              />
+            </div>
+          </Tooltip>
+        </Link>
+        <Link href='/departments'>
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+            className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" content='Departamentos'
+            placement="right" 
+          >
+            <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
+              <SiAwsorganizations className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                text-slate-500 my-1 bg-white rounded-md" 
+                onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
+                style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
+                        color: isHover===1 || option===1 ? 'white' : '',}}
+              />
+            </div>
+          </Tooltip>
+        </Link>
+        {/* <Link href='/companies'>
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+            className="text-blue-500 text-sm font-thin bg-white rounded-md border border-slate-400" content='Compañia'
+            placement="right"
+          >
+            <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
+              <GoOrganization className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                text-slate-500 my-1 bg-white rounded-md" 
+                onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
+                style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
+                        color: isHover===2 || option===2 ? 'white' : '',}}
+              />
+            </div>
+          </Tooltip>
+        </Link> */}
+        <Link href='/glossary'>
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+            className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" content='Glosarios'
+            placement="right"
+          >
+            <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
+              <LiaListAlt className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                text-slate-500 my-1 bg-white rounded-md" 
+                onMouseEnter={() => setIsHover(4)} onMouseLeave={() => setIsHover(-1)}
+                style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
+                        color: isHover===4 || option===4 ? 'white' : '',}}
+              />
+            </div>
+          </Tooltip>
+        </Link>
+        <Link href='/status'>
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+            className="text-blue-500 text-sm font-thin bg-white rounded-md border border-slate-400" content='Catalogos'
+            placement="right"  
+          >
+            <div className="p-1" style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
+              <TfiLayoutAccordionList className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                text-slate-500 my-1 bg-white rounded-md" 
+                onMouseEnter={() => setIsHover(5)} onMouseLeave={() => setIsHover(-1)}
+                style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
+                        color: isHover===5 || option===5 ? 'white' : '',}}
+              />
+            </div>
+          </Tooltip>
+        </Link>
+      </div>
+    </div>
+
+    <div className="grid grid-cols-4 mt-3 border-t pt-2 sm:hidden">
+      <Link href="/catalogs" className="flex flex-col items-center">
+        <GrCatalog className={`w-6 h-6 ${option===3 ? 'text-green-500' : 'text-slate-500'}`} />
+        <span className="text-xs">Listas</span>
+      </Link>
+
+      <Link href="/departments" className="flex flex-col items-center">
+        <SiAwsorganizations className={`w-6 h-6 ${option===1 ? 'text-green-500' : 'text-slate-500'}`} />
+        <span className="text-xs">Departamentos</span>
+      </Link>
+
+      {/* <Link href="/companies" className="flex flex-col items-center">
+        <GoOrganization className={`w-6 h-6 ${option===2 ? 'text-green-500' : 'text-slate-500'}`} />
+        <span className="text-xs">Compañia</span>
+      </Link> */}
+
+      <Link href="/glossary" className="flex flex-col items-center">
+        <LiaListAlt className={`w-6 h-6 ${option===4 ? 'text-green-500' : 'text-slate-500'}`} />
+        <span className="text-xs">Glosarios</span>
+      </Link>
+
+      <Link href="/status" className="flex flex-col items-center">
+        <TfiLayoutAccordionList className={`w-6 h-6 ${option===5 ? 'text-green-500' : 'text-slate-500'}`} />
+        <span className="text-xs">Catalogos</span>
+      </Link>
+    </div>
+  </>);
   return(
     <>
       {nav}

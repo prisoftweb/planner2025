@@ -3,131 +3,158 @@ import { cookies } from "next/headers";
 import WithOut from "@/components/WithOut";
 import ButtonNewClient from "@/components/clients/ButtonNewClient";
 import Navigation from "@/components/navigation/Navigation";
-import { ClientBack, TableClient, Tag } from "@/interfaces/Clients";
+import { TableClient, Tag } from "@/interfaces/Clients";
 import { UsrBack } from "@/interfaces/User";
-import Header from "@/components/Header";
-//import Header from "@/components/HeaderPage";
+// import Header from "@/components/Header";
+// import { ResponsiveHeader } from "@/components/Header";
 import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
 import { ClientDataToTableClient } from "../functions/ClientFunctions";
-import { Resource2 } from "@/interfaces/Roles";
+// import { Resource2 } from "@/interfaces/Roles";
+import ComponentError from "@/components/ComponentError";
+import { getCompany } from "../api/routeCompany";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function clients(){
   
   const cookieStore = cookies();
-  //const allCookies = cookieStore.getAll();
-  //console.log('all cookies => ', allCookies);
   const token = cookieStore.get('token')?.value || '';
   
-  const clientCookie = cookieStore.get('clients')?.value;
-  let permisionsClient: Resource2 | undefined;
-  if(clientCookie){
-    permisionsClient = JSON.parse(clientCookie);
-  }
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-  //console.log('user back => ', user);
-  //console.log('client cookie => ', clientCookie, ' typeof => ', typeof(clientCookie));
 
-  if(!permisionsClient){
-    return(
+  const [tags, clients, company, resresource, rescomponents]=await Promise.all([
+    getTags(token),
+    getClients(token),
+    getCompany(token, user.profile),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'clients', ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
       <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-            text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
-            title="Clientes"><></></WithOut>
-        </div>
+        <ComponentError page="/" message={resresource} />
       </>
     )
   }
 
-  let tags;
-  try {
-    tags = await getTags(token);
-    if(typeof(tags)==='string'){
-      return <h1 className="text-red-500 text-2xl text-center">{tags}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
+      </>
+    )
   }
   
-  let arrTags: Options[] = [];
-  if(tags.length > 0){
-    tags.map((tag:Tag) => {
-      arrTags.push({
-        'label': tag.name,
-        'value': tag._id,
-      })
-    })
-  }else{
-    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
-  }
-
-  let clients;
-  try {
-    clients = await getClients(token);
-    if(typeof(clients)==='string'){
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-          text={clients} 
-          title="Clientes"><></></WithOut>
-      </div>
-    }
-  } catch (error) {
-    return <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-            text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
-            title="Clientes"><ButtonNewClient token={token} id={user._id} tags={tags} /></WithOut>
-        </div>
+  if(typeof(tags)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-2xl text-center">{tags}</h1> */}
+        <ComponentError page="/clients" message={tags} />
       </>
+    )
   }
-
-  // let permission = false;
-
-  // if(!permission){
-  //   return (
+  
+  // console.log('tags => ', tags);
+  let arrTags: Options[] = [];
+  if(Array.isArray(tags) && tags.length > 0){
+    arrTags = tags.map((tag:Tag) => ({
+      'label': tag.name,
+      'value': tag._id,
+    }));
+    // console.log('arrTags => ', arrTags);
+  }else{
+    arrTags = [];
+    // return(
+    //   <>
+    //     <Navigation user={user} token={token} resources={resresource} />
+    //     <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+    //   </>
+    // )
+  }
+  // if(tags.length > 0){
+  //   tags.map((tag:Tag) => {
+  //     arrTags.push({
+  //       'label': tag.name,
+  //       'value': tag._id,
+  //     })
+  //   });
+  //   console.log('arrTags => ', arrTags);
+  // }else{
+  //   return(
   //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-  //           text="Lo sentimos, no tienes acceso a esta informacion!!!" 
-  //           title="Clientes"><></></WithOut>
-  //       </div>
+  //       <Navigation user={user} token={token} resources={resresource} />
+  //       <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
   //     </>
   //   )
   // }
 
+  if(typeof(clients)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-2xl text-center">{clients}</h1> */}
+        <ComponentError page="/clients" message={clients} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+            text={clients} 
+            title="Clientes"><></></WithOut>
+        </div> */}
+      </>
+    )
+  }
+
+  if(typeof(company)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <h1 className="text-red-500 text-2xl text-center">{clients}</h1> */}
+        <ComponentError page="/clients" message={company} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+            text={clients} 
+            title="Clientes"><></></WithOut>
+        </div> */}
+      </>
+    )
+  }
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
+
   if(!clients || clients.length<= 0){
     return <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <WithOut img="/img/clientes.svg" subtitle="Clientes" 
             text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
-            title="Clientes"><ButtonNewClient token={token} id={user._id} tags={tags} /></WithOut>
+            title="Clientes">
+                {result.permission.create && <ButtonNewClient id={user._id} token={token} tags={arrTags} company={user.profile} />}
+          </WithOut>
         </div>
       </>
   }
   
   let data:TableClient[] = ClientDataToTableClient(clients);
 
-  //console.log('permissions client => ', permisionsClient.permission);
+  // console.log('server tags => ', arrTags);
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
-        <Header title="Clientes" placeHolder="Buscar cliente.." >
-          {permisionsClient.permission.create? (
-            <ButtonNewClient id={user._id} token={token} tags={arrTags} />
-          ): (
-            <></>
-          )}
-        </Header>
+        {/* <ResponsiveHeader title="Clientes" placeHolder="Buscar cliente.." >
+          <ButtonNewClient id={user._id} token={token} tags={arrTags} company={user.profile} />
+        </ResponsiveHeader> */}
         <div className="mt-5">
-          <TableClients data={data} token={token} deletePermission={permisionsClient.permission.delete}
-            selectPermission={permisionsClient.permission.select} />
+          <TableClients data={data} token={token} clientsData={clients} 
+            company={company} tags={arrTags} user={user._id} permissions={result}
+          />
         </div>
       </div>
     </>

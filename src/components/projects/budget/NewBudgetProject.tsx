@@ -1,27 +1,21 @@
-//import { useRegFormContext } from "./StepperProjectProvider";
 import HeaderForm from "@/components/HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
-//import ContainerProjectStepper from "./ContainerProjectStepper";
-import { showToastMessageInfo, showToastMessageWarning } from "@/components/Alert";
-import {confirmAlert} from 'react-confirm-alert';
-import { Options } from "@/interfaces/Common";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { ProjectMin } from "@/interfaces/Projects";
 import SelectBudgetProject from "./SelectBudgetProject";
 import NavBudgetStepper from "./NavBudgetStepper";
 import { useNewBudget } from "@/app/store/budgetProject";
 import AddCostCenter from "./AddCostCenter";
-import { CostoCenterLV } from "@/interfaces/CostCenter";
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 
-export default function NewBudgetProject({token, showForm, user, projects}: 
-                            {token:string, showForm:Function, user:string, projects: ProjectMin[] }){
+export default function NewBudgetProject({token, showForm, user, projects, company}: 
+  {token:string, showForm:Function, user:string, projects: ProjectMin[], company:string }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
 
-  const {indexStepper, updateIndexStepper} = useNewBudget();
+  const {indexStepper} = useNewBudget();
   
   const handleResize = () => {
-    //setHeightPage(window.outerHeight);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -31,7 +25,6 @@ export default function NewBudgetProject({token, showForm, user, projects}:
 
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
-    //setHeightPage(document.body.offsetHeight - 110);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -45,27 +38,23 @@ export default function NewBudgetProject({token, showForm, user, projects}:
   }
 
   //filtrados por projectos que no sean presupuestados!!!
-  // console.log('projects len => ', projects.length);
   const projectsWithOutBudget = projects.filter((p) => p.category._id !== '66350d80144933050f66a194');
-  // console.log('proyect wit len => ', projectsWithOutBudget.length);
-
+  
   const component = 
-    // indexStepper === 0? <SelectBudgetProject projects={projects} token={token} />:
     indexStepper === 0? <SelectBudgetProject projects={projectsWithOutBudget} token={token} />: 
-    indexStepper === 1? <AddCostCenter token={token} user={user} closeForm={showForm} />:
+    indexStepper === 1? <AddCostCenter token={token} user={user} closeForm={showForm} company={company} />:
       <></>;
 
-  return(
-    <div className="z-10 w-full sm:max-w-4xl absolute top-16 bg-white p-3 right-0"
+  return(//top-16
+    <div className="z-10 w-full sm:max-w-4xl absolute bg-white px-2 py-2 sm:py-5 sm:px-7 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">
-        <div className="flex justify-between">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <HeaderForm img="/img/projects.jpg" subtitle="Selecciona el centro de costos y el monto del presupuesto" 
             title="Nuevo presupuesto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+          <TooltipCloseIcon handleClose={closeForm} />
         </div>
         <NavBudgetStepper />
         {component}

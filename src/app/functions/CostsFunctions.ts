@@ -11,19 +11,19 @@ export function ExpenseDataToTableData(expenses:Expense[]){
   
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.cost?.subtotal || 0
         })
     const discount = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.cost?.discount || 0
     })
     const vat = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.cost?.iva || 0
     })
     const total = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       //value: (expense.cost?.subtotal + expense.cost?.iva - expense.cost?.discount) || 0
       value: expense.cost?.total || 0,
     })
@@ -91,7 +91,9 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       Fecha: expense.date,
       //costcenter: typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter?.name,
       costcenter: expense.costocenter.concept.name,
-      Importe: dollar,
+      // Importe: dollar,
+      Importe: expense.cost?.subtotal || 0,
+      ImporteMoneda: dollar,
       Informe: expense.report?.name || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
@@ -102,11 +104,19 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       //condition: expense.condition?.length > 0 ? expense.condition[expense.condition?.length -1]?.glossary?.name: 'sin status',
       condition: expense.estatus.name,
       archivos: elements,
-      vat,
-      discount,
-      total,
+      // vat,
+      vat: expense.cost?.iva || 0,
+      vatMoneda: vat,
+      // discount,
+      discount: expense.cost?.discount || 0,
+      discountMoneda: discount,
+      // total,
+      total: expense.cost?.total || 0,
+      totalMoneda: total,
       taxFolio: expense.taxfolio || '',
-      color: expense.estatus.color || 'gray'
+      color: expense.estatus.color || 'gray',
+      darktext: expense.estatus.darktext || false,
+      isCfdisRelations: expense.isCfdisRelations ?? false
     });
   });
 
@@ -118,15 +128,12 @@ export function getTypeFiles(expense:Expense) {
   expense.files.map((f) => {
       if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
         || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-        || f.types.includes('PNG') || f.types.includes('pdf') || f.types === 'a'){
+        || f.types.includes('PNG') || f.types.includes('pdf') || f.types === 'a' 
+        || f.types.includes('peg') || f.types.includes('PEG')){
           typeFiles.push('pdf');
-          //console.log('aqui entro => ', f);
-          //tiene factura
       }else{
         if(f.types.includes('xml') || f.types.includes('XML') || f.types === 't'){
           typeFiles.push('xml');
-          //console.log('aqui entro => ', f);
-          //tiene xml    
         }
       }
     });

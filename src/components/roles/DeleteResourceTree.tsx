@@ -8,7 +8,7 @@ import { TreeTable } from '@/interfaces/Roles';
 import { RemoveResourceTree } from '@/app/api/routeRoles';
 
 export default function DeleteResourceTree({token, resource, idTree} : 
-                                {token : string, resource:TreeTable, idTree:string}){
+  {token : string, resource:TreeTable, idTree:string}){
   
   const deleteResource = async (id:string, name:string)  => {
   
@@ -35,7 +35,6 @@ export default function DeleteResourceTree({token, resource, idTree} :
                   //router.refresh()
                 }
               } catch (error) {
-                console.log('Error al eliminar recurso');
               }
             break;
           }

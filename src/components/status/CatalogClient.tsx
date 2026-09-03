@@ -1,10 +1,9 @@
 'use client'
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useListsStore } from "@/app/store/listStore"
 import { Catalog } from "@/interfaces/Catalogs";
 import WithOut from "../WithOut";
-import { Glossary } from "@/interfaces/Glossary";
 import CompanyClient from "../companies/CompanyClient";
 import { StatusTable } from "@/interfaces/Status";
 import { Options } from "@/interfaces/Common";
@@ -14,11 +13,19 @@ import { TbArrowNarrowLeft } from "react-icons/tb";
 import SearchInTable from "@/components/SearchInTable";
 import TableStatus from "./TableStatuses";
 import ButtonNew from "@/components/status/ButtonNew";
+import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
+import { BsType } from "react-icons/bs";
+import { MdCategory } from "react-icons/md";
+import { GrStatusInfo } from "react-icons/gr";
 
 export default function CatalogClient({catalogs, token, descGlossaries, glosariesOptions}: 
     {token:string, catalogs:Catalog[], glosariesOptions:Options[], descGlossaries:Options[] }) {
 
   const {listsStore, updateListsStore} = useListsStore();
+
+  const [optFilter, setOptFilter]=useState<number>(1);
 
   useEffect(() => {
     updateListsStore(catalogs);
@@ -32,8 +39,6 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
             text="Aqui puedes agregar los estatus a los catalogos"
             title="Estatus">
                 <></>
-                {/* <ButtonNew catalogOptions={catalogOptions} token={token}
-          descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} /> */}
           </WithOut>
         </CompanyClient>
       </>
@@ -51,7 +56,6 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
     let statuses = '';
     let arrStatuses: string[] = [];
     let arrColors: string[] = [];
-    console.log('cat catclient => ', cat);
     cat.condition?.map((cond) => {
       statuses += cond.glossary.name + ', ';
       arrStatuses.push(cond.glossary.name);
@@ -66,14 +70,10 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
       types += type.glossary.name + ', ';
     });
 
-    //console.log('arr statuses => ', arrStatuses);
-    //console.log('arr colors => ', arrColors);
-
     table.push({
       catalog: cat.name,
       collection: cat.collection,
       id: cat._id,
-      //statuses: statuses,
       statuses: {
         arrStatuses,
         arrColors
@@ -83,33 +83,30 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
     })
   });
 
-  // const glosariesOptions:Options[] = [];
-  // const descGlossaries:Options[] = [];
-  // glosaries.map((gloss) => {
-  //   glosariesOptions.push({
-  //     label: gloss.name,
-  //     value: gloss._id
-  //   });
-  //   descGlossaries.push({
-  //     label: gloss.description,
-  //     value: gloss.id
-  //   })
-  // });
-
   return(
     <>
-      <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">  
-        <div className="flex mt-5 gap-x-3">
+      <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">
+        <div className="block sm:hidden">
           <NavTab option={5} />
-          <div className="">
+        </div>  
+        <div className="flex mt-5 gap-x-3">
+          <div className="hidden sm:block">
+            <NavTab option={5} />
+          </div>
+          <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0">
             <div className="sm:flex gap-x-3 md:justify-between flex-wrap md:flex-nowrap items-center">
               <div className="flex items-center">
-                <Link href={'/'}>
-                  <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-                </Link>
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
+                    placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                  <Link href={'/'}>
+                    <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-slate-100" >
+                      <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+                    </div>
+                  </Link>
+                </Tooltip>
                 <p className="text-xl ml-4 font-medium">Catalogos</p>
               </div>
-              <div className="sm:flex gap-x-3 gap-y-2 flex-wrap md:flex-nowrap">
+              <div className="mt-2 md:mt-0 sm:flex gap-x-3 gap-y-2 flex-wrap md:flex-nowrap pr-2 sm:pr-0">
                 <SearchInTable placeH='Buscar catalogo..' />
                 <div className="mt-2 sm:mt-0" >
                   <div className="flex gap-x-2">
@@ -119,12 +116,23 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
                       descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
                     <ButtonNew catalogOptions={catalogOptions} token={token} opt={3}
                       descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
+                    <div className="flex md:hidden gap-x-3 items-center w-full justify-end">
+                      <TooltipContainerIcon label="Estatus">
+                        <GrStatusInfo className="w-6 h-6 text-slate-600 cursor-pointer" onClick={() => setOptFilter(1)} />
+                      </TooltipContainerIcon>
+                      <TooltipContainerIcon label="Categorias">
+                        <MdCategory className="w-6 h-6 text-slate-600 cursor-pointer" onClick={() => setOptFilter(2)} />
+                      </TooltipContainerIcon>
+                      <TooltipContainerIcon label="Tipos">
+                        <BsType className="w-6 h-6 text-slate-600 cursor-pointer" onClick={() => setOptFilter(3)} />
+                      </TooltipContainerIcon>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div className="mt-5">
-              <TableStatus  data={table}  token={token} />
+              <TableStatus data={table} token={token} optFilter={optFilter} />
             </div>
           </div>
         </div>

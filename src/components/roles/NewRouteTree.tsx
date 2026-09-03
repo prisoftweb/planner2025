@@ -1,8 +1,6 @@
 'use client'
 import HeaderForm from "../HeaderForm"
-//import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
@@ -11,11 +9,19 @@ import AddRoutes from "./AddElements"
 import { useState, useEffect } from "react"
 import { insertResourceTree } from "@/app/api/routeRoles"
 import { useRef } from "react"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
+
+type Props = {
+  showForm:(value: boolean) => void, 
+  token:string, 
+  optResources:Options[], 
+  optRoutes:Options[], 
+  descRoutes: Options[], 
+  idTree:string
+}
 
 export default function NewRouteTree({showForm, token, optResources, 
-                                        optRoutes, descRoutes, idTree}: 
-                              {showForm:Function, token:string, optResources:Options[], 
-                                optRoutes:Options[], descRoutes: Options[], idTree:string}){
+  optRoutes, descRoutes, idTree}: Props){
 
   const [routes, setRoutes] = useState<string[]>([]);
   const [indexDelete, setIndexDelete] = useState<number>(-1);
@@ -123,15 +129,15 @@ export default function NewRouteTree({showForm, token, optResources,
 
   return(
     <>
-      <div className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0"
+    {/* top-16 */}
+      <div className="z-10 absolute bg-white space-y-5 px-2 py-2 sm:py-5 sm:px-7 right-0"
         style={{height: `${heightPage}px`}}
       >
-      <div className="flex justify-between">
+      <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
         <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando rutas" 
           title="Agregar ruta a nuevo arbol"
         />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         <div>
           <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>

@@ -1,23 +1,21 @@
 import axios from "axios";
 
 export async function createUserPhoto(user:FormData, auth_token:string){
+  //se guarda la url a la que se hace la peticion
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/userWithPhoto`;
-  try {
+  try {//se hace la peticion al endpoint con el metodo requerido, se le pasan los encabezados, data si lleva, 
     const res = await axios.post(url, user, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'multipart/form-data',
       }
     })
-    if(res.status === 201){
-      //return res.status;
-      //console.log('res back ', res);
+    if(res.status === 201){//se valida con el codigo de status si fue exitosa o no y se regresa la informacion o se regresa un string que es el que se valida cuando se hace una peticion
       return res.data.data.data;
     }else{
       return res.statusText;
     }
   } catch (error) {
-    //console.log('error api ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Ocurrio un problema al crear usuario con foto';
     }
@@ -28,22 +26,21 @@ export async function createUserPhoto(user:FormData, auth_token:string){
 export async function createUser(user:any, auth_token:string){
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`;
   try {
-    //console.log(url);
-    //console.log(JSON.stringify(user));
     const res = await axios.post(url, JSON.stringify(user), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     })
-    //console.log(res);
     if(res.status === 201){
-      //return res.status;
       return res.data.data.data;
     }else{
       return res.statusText;
     }
   } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un error al crear usuario..';
+    }
     return 'Ocurrio un error al crear usuario..'
   }
 }
@@ -67,8 +64,6 @@ export async function getUser(id:string, auth_token:string) {
 
 export async function updateMeUser(id:string, userData:FormData, auth_token:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/updateMe/${id}`;
-  console.log(url);
-  //console.log(userData.get('photo'));
   try {
     const res = await axios.patch(url, userData, {
       headers: { 
@@ -76,7 +71,6 @@ export async function updateMeUser(id:string, userData:FormData, auth_token:stri
         'Authorization': `Bearer ${auth_token}`
       },
     });
-    console.log(res); 
     if(res.status === 200) return res.data.data.user;
       return res.statusText;
   } catch {
@@ -102,7 +96,6 @@ export async function updateMePassword(id:string, passwordCurrent:string, passwo
       if(res.status===200) return res.status;
         return res.statusText;    
   } catch (error:any) {
-    console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message;
     }
@@ -117,12 +110,13 @@ export async function setLogin(email:string, password:string) {
     password
   };      
   const url=`${process.env.NEXT_PUBLIC_API_URL}/login`;
+  console.log('url => ', url);
   try {
     const response = await axios.post(url, userData);
+    console.log('response');
     return response.data;
-
   } catch (error:any) {
-    
+    console.log('error => ', error);
     const errorMsg : string = error.message;
 
     if(errorMsg.includes('401'))
@@ -166,7 +160,6 @@ export async function resetPassword(id:string, data:any) {
 export async function getUsers(auth_token:string){
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`;
 
-  //console.log(auth_token);
   try{
     const res = await axios.get(url, {
       headers: {
@@ -174,12 +167,26 @@ export async function getUsers(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     })
-    
     if(res.status===200) return res.data.data.data;
     return res.statusText;
   }catch(e:any){
-    //console.log(e.response.data.message);
-    //return 'Ocurrio un problema al consultar usuarios!!';
+    return e.response.data.message;
+  }
+}
+
+export async function getUsersMin(auth_token:string){
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/getAllUsers`;
+
+  try{
+    const res = await axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  }catch(e:any){
     return e.response.data.message;
   }
 }
@@ -204,8 +211,6 @@ export async function getUsersLV(auth_token:string){
 
 export async function removeUser(id:string, auth_token:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/${id}`;
-  
-  console.log('url', url);
 
   try {
     const res = await axios.delete(url, {
@@ -213,11 +218,9 @@ export async function removeUser(id:string, auth_token:string) {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    console.log('res', res);
     if(res.status=== 204) return 204;
     else return res.statusText;
   } catch (error) {
-    console.log('catch', error);
     return 'Ocurrio un error al eliminar usuario!';
   }
 }
@@ -231,11 +234,9 @@ export async function updateUser(data:any, auth_token:string, id:string) {
         'Content-Type': 'application/json',
       }
     })
-    console.log(res);
     if(res.status===200) return res.data.data.data;
       return res.statusText;
   } catch (error) {
-    console.log(error);
     return 'Error al editar usuario'   
   }
 }

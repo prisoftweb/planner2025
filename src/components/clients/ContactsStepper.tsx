@@ -6,10 +6,9 @@ import NavClientsStepper from "./NavClientsStepper";
 import SaveClient, {SaveClientLogo} from "@/app/functions/SaveClient";
 import { useClientStore } from "@/app/store/clientStore";
 
-export default function ContactsStepper({id, token}: {id:string, token:string}){
+export default function ContactsStepper({id, token, company}: {id:string, token:string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
-  //const [contacts, setContacts] = useState<string[]>();
   const [contacts, setContacts] = useState<string[]>(state.contacts? state.contacts: []);
   const refRequest = useRef(true);
 
@@ -22,8 +21,12 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
       if(state.databasic){
         data.append('name', state.databasic.name);
         data.append('tradename', state.databasic.tradename);
+        data.append('taxregime', state.databasic.taxregime);
         if(state.databasic.email){
           data.append('email', state.databasic.email);
+        }
+        if(state.databasic.capitalregime){
+          data.append('capitalregime', state.databasic.capitalregime);
         }
         data.append('rfc', state.databasic.rfc);
         data.append('source', state.databasic.source);
@@ -31,9 +34,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         if(state.databasic.user){
           data.append('user', state.databasic.user);
         }
-        // if(state.databasic.phone){
-        //   data.append('phone', state.databasic.phone);
-        // }
       }
       if(state.extradata){
         data.append('logo', state.extradata.photo);
@@ -54,7 +54,8 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
       const location = {
         community,
         country,
-        cp: cp,
+        // cp: cp,
+        cp: parseInt(cp),
         municipy,
         state: stateS,
         stret
@@ -67,9 +68,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -79,12 +77,14 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         showToastMessageError('Error al crear cliente!!');
       }
     }else{
-      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
+      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='', taxregime='', capitalregime='';
       if(state.databasic){
         name=state.databasic.name? state.databasic.name : '';
         tradename=state.databasic.tradename? state.databasic.tradename : '';
         email=state.databasic.email? state.databasic.email : '';
         rfc=state.databasic.rfc? state.databasic.rfc : '';
+        taxregime=state.databasic.taxregime? state.databasic.taxregime : '';
+        capitalregime=state.databasic.capitalregime? state.databasic.capitalregime : '';
         phone=state.databasic.phone? state.databasic.phone : '';
         source=state.databasic.source? state.databasic.source : '';
         tags=state.databasic.tags? state.databasic.tags : '';
@@ -112,17 +112,20 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         name, 
         tradename, 
         email, 
-        rfc, 
+        rfc,
+        taxregime, 
+        capitalregime, 
         phone, 
         source,
         tags, 
         user,
+        company,
         link,
-        //photo,
         regime,
         location: {
           stret,
-          cp,
+          // cp,
+          cp: parseInt(cp),
           municipy, 
           country,
           community,
@@ -137,9 +140,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -169,7 +169,7 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
           <NavClientsStepper index={3} />
         </div>
         <FormContact addNewContact={newContact} token={token} contact={''} 
-            updateContact={updateContact} >
+            updateContact={updateContact} company={company} >
           <button type="button" 
             onClick={() => {
               if(refRequest.current){

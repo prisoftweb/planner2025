@@ -2,7 +2,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { useState, useEffect, useRef } from "react";
-import { Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
@@ -11,27 +10,27 @@ import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/pr
 import { DetailExpensesTableProvider } from "@/interfaces/Providers";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 import { CostPayment } from "@/interfaces/Payments";
+import { CurrencyFormatter } from "@/app/functions/Globals";
+import ContainerSideNav from "../ContainerSideNav";
+
+type Props = {
+  data:DetailExpensesTableProvider[], 
+  token:string, 
+  expenses:CostPayment[], 
+  user: string, 
+  isFilter:boolean, 
+  setIsFilter:Function 
+}
 
 export default function TableCostsDetailProvider({data, token, expenses, 
-                          user, isFilter, setIsFilter }:
-                        {data:DetailExpensesTableProvider[], token:string, expenses:CostPayment[], 
-                        user: string, isFilter:boolean, setIsFilter:Function }){
+  user, isFilter, setIsFilter }: Props){
   
   const columnHelper = createColumnHelper<DetailExpensesTableProvider>();
   const refExpenses = useRef(expenses);
   
   const [dataExpenses, setDataExpenses] = useState(data);
-  const [expensesFiltered, setExpensesFiltered] = useState<CostPayment[]>(expenses);
   
   const handleIsFilter = (value: boolean) => {
-    // if(value){
-    //   if(!refFilter.current){
-    //     refFilter.current = true;
-    //     setDataExpenses(ExpenseDataToTableData(refExpenses.current));
-    //   }
-    // }else{
-    //   refFilter.current = false;
-    // }
     setIsFilter(value);
   }
 
@@ -111,15 +110,6 @@ export default function TableCostsDetailProvider({data, token, expenses,
         )
       ),
     }),
-    // columnHelper.accessor('paid', {
-    //   header: 'Pagado',
-    //   id: 'Pagado',
-    //   cell: ({row}) => (
-    //     <div className="cursor-pointer" >
-    //         <Chip label={row.original.paid? 'Pagado': 'No pagado'} color={row.original.paid? '#0f0': '#f00'} />
-    //     </div>
-    //   ),
-    // }),
     columnHelper.accessor('date', {
       header: 'Fecha',
       id: 'fecha',
@@ -133,7 +123,8 @@ export default function TableCostsDetailProvider({data, token, expenses,
       id: 'Estatus',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        ><Chip label={row.original.Estatus.name} color={row.original.Estatus.color} /></p>
+        ><Chip label={row.original.Estatus.name} color={row.original.Estatus.color} 
+            darktext={row?.original?.Estatus?.darktext?? false} /></p>
       ),
     }),
     columnHelper.accessor('previoudbalanceamount', {
@@ -141,7 +132,12 @@ export default function TableCostsDetailProvider({data, token, expenses,
       id: 'saldo anterior',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.previoudbalanceamount}</p>
+        >
+          {CurrencyFormatter({
+            currency: "USD",
+            value: row.original.previoudbalanceamount
+          })}
+        </p>
       )
     }),
     columnHelper.accessor('payout', {
@@ -149,7 +145,12 @@ export default function TableCostsDetailProvider({data, token, expenses,
       id: 'pagado',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.payout}</p>
+        >
+          {CurrencyFormatter({
+            currency: 'USD',
+            value: row.original.payout
+          })}
+        </p>
       )
     }),
     columnHelper.accessor('unpaidbalanceamount', {
@@ -157,7 +158,12 @@ export default function TableCostsDetailProvider({data, token, expenses,
       id: 'pendiente',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.unpaidbalanceamount}</p>
+        >
+          {CurrencyFormatter({
+            currency: 'USD',
+            value: row.original.unpaidbalanceamount
+          })}
+        </p>
       )
     }),
     columnHelper.accessor('partitialnumber', {
@@ -187,30 +193,13 @@ export default function TableCostsDetailProvider({data, token, expenses,
   }, [])
 
   const paidValidation = (exp:CostPayment, isPaid:number) => {
-    // if(isPaid===1){
-    //   return true;
-    // }else{
-    //   if(isPaid===2){
-    //     if(exp.ispaid){
-    //       return true;
-    //     }
-    //     return false;
-    //   }else{
-    //     if(!exp.ispaid){
-    //       return true;
-    //     }
-    //     return false;
-    //   }
-    // }
     return true;
   }
 
   const dateValidation = (exp:CostPayment, startDate:number, endDate:number, isPaid: number) => {
     let d = new Date(exp.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
       return paidValidation(exp, isPaid);
-      //return true;
     }
     return false;
   }
@@ -223,49 +212,13 @@ export default function TableCostsDetailProvider({data, token, expenses,
     return false;
   }
 
-  // const projectValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
-  //                     startDate:number, endDate:number, projects:string[], 
-  //                     isPaid: number) => {
-  //   if(projects.includes('all')){
-  //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-  //   }else{
-  //     if(exp.costs.project){
-  //       if(projects.includes(exp.costs.project._id)){
-  //         return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // const reportValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
-  //             startDate:number, endDate:number, projects:string[], 
-  //             reports:string[], isPaid: number) => {
-  //   if(reports.includes('all')){
-  //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
-  //   }else{
-  //     if(exp.costs.report){
-  //       if(reports.includes(exp.costs.report._id)){
-  //         return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
-
   const conditionValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, conditions:string[], isPaid: number) => {
 
     if(conditions.includes('all')){
-      // return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-      //               reports, categories, types, costcenters);
-      // }
       if(conditions.includes(exp.costs.estatus._id)){
-        // return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
         return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
       }
     }
@@ -283,22 +236,106 @@ export default function TableCostsDetailProvider({data, token, expenses,
       }
     });
 
-    //console.log(filtered);
-    //setFilteredExpenses(filtered);
-    setExpensesFiltered(filtered);
-    //setDataExpenses(ExpenseDataToTableData(filtered));
+    // setExpensesFiltered(filtered);
     setDataExpenses(ExpenseDataToTableDetailExpensesProviderData(filtered));
-    //setFilter(true);
   }
 
   return(
     <>
-      <div className="flex justify-end my-5">
+      {/* <div className="flex justify-end my-5">
         {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} token={token} showPaidValidation={false} />}
+      </div> */}
+
+      <ContainerSideNav width="w-full max-w-md" open={isFilter}>
+        <FilteringExpensesProvider showForm={handleIsFilter}  
+                          FilterData={filterData} maxAmount={maxAmount} 
+                          minAmount={minAmount} token={token} showPaidValidation={false} />
+      </ContainerSideNav>
+      
+      <div className="hidden xl:block w-full">
+        {view}
       </div>
-      {view}
+      <div className="block xl:hidden">
+        <ListData data={dataExpenses} />
+      </div>
     </>
+  )
+}
+
+const ListData = ({data}: {data: DetailExpensesTableProvider[]}) => {
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full max-w-2xl rounded-xl bg-clip-border] h-[calc(100vh-264px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {data.map((e) => (
+            <CardInvoices expense={e} key={e.id} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardInvoices = ({expense }: 
+  {expense:DetailExpensesTableProvider }) => {
+
+  return(
+    <div role="button"
+      key={expense.id}
+      // onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
+      className={`flex flex-col w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ expense.Responsable?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+          {/* <DeleteElement id={expense.id} name={expense.name} remove={RemoveCompany} token={token} /> */}
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3"
+            // onClick={() => window.location.replace(`/expenses/${expense.id}/profile?prov=${idProv}`)}
+          >
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {expense.project}
+              </h6>
+              {/* <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {expense.description}
+              </p> */}
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'USD',
+                  value: expense.payout
+                })}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {CurrencyFormatter({
+                  currency: 'USD', 
+                  value: expense.unpaidbalanceamount?? 0
+                })}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+        {expense.description}
+      </p>
+
+    </div>
   )
 }

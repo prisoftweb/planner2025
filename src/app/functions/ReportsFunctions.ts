@@ -8,7 +8,7 @@ export function ReportDataToTableData(reports:Report[]){
   const table: ReportTable[] = [];
   reports.map((report) => {
     const dollar = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: report.total
     })
     
@@ -26,21 +26,30 @@ export function ReportDataToTableData(reports:Report[]){
       color: report.moves[report.moves.length - 1].condition.color || '',
       account: report.account,
       isPettyCash: report.ispettycash,
+      moveRep: true,
+      darktext: report.moves[report.moves.length - 1]?.condition?.darktext ?? false
     })
   });
 
   return table;
 }
 
-export function ReportParseDataToTableData(reports:ReportParse[]){
+export function ReportParseDataToTableData(reports:ReportParse[], isHistory:boolean=false){
   const table: ReportTable[] = [];
   reports.map((report) => {
-    //console.log(report.total);
     const dollar = CurrencyFormatter({
-      currency: "MXN",
-      value: report.total
+      currency: "USD",
+      value: isHistory? report.total : report.totalok
     })
     
+    let mov=true;
+    if(report.lastmove?.condition?.name?.toLowerCase().includes('aprobado') || 
+        report.lastmove?.condition?.name?.toLowerCase().includes('pendiente de pago') ||
+        report.lastmove?.condition?.name?.toLowerCase().includes('cerrado') ||
+        report.lastmove?.condition?.name?.toLowerCase().includes('pagado')){
+      mov=false;
+    }
+
     table.push({
       //Company: report._id.company.logo,
       Company: report.company?.logo || 'sin logo',
@@ -56,7 +65,9 @@ export function ReportParseDataToTableData(reports:ReportParse[]){
       color: report.lastmove?.condition.color || '',
       account: report.account,
       isPettyCash: report.ispettycash,
-    })
+      moveRep: mov,
+      darktext: report?.lastmove?.condition?.darktext ?? false
+    });
   });
   return table;
 }
@@ -65,7 +76,7 @@ export function CostsDataToTableData(expenses:Expense[]){
   const table: CostsTable[] = [];
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.cost?.total || 0
         })
     table.push({
@@ -81,6 +92,8 @@ export function CostsDataToTableData(expenses:Expense[]){
         photo: expense.user.photo
       },
       condition: expense.estatus.name,
+      color: expense.estatus.color?? '#000',
+      darktext: expense.estatus.darktext?? false
       //condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
     })
   });
@@ -92,7 +105,7 @@ export function CostsDataToTableDataMin(expenses:CostReport[]){
   const table: CostsTable[] = [];
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.costo.total || 0
           //value: expense.cost.subtotal || 0
         })
@@ -110,7 +123,9 @@ export function CostsDataToTableDataMin(expenses:CostReport[]){
         photo: expense.user.photo
       },
       //condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
-      condition: expense.estatus?.name || 'sin status'
+      condition: expense.estatus?.name || 'sin status',
+      color: expense?.estatus?.color?? '#000',
+      darktext: expense?.estatus?.darktext?? false
     })
   });
 

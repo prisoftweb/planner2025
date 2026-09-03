@@ -1,7 +1,14 @@
 import Image from "next/image"
 
-export default function ContainerForm({children, title, subtitle, img, style}: 
-          {children:JSX.Element, title:string, subtitle:string, img:string, style:string}){
+type FormProps={
+  children:JSX.Element, 
+  title:string, 
+  subtitle:string, 
+  img:string, 
+  style:string
+}
+
+export default function ContainerForm({children, title, subtitle, img, style}: FormProps ){
   
   let header;
 

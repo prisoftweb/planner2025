@@ -12,8 +12,8 @@ export const projectValidation = z.object({
     required_error: 'El codigo es obligatorio!!'
   }).min(3, {
     message: 'Codigo  debe tener minimo 3 caracteres'
-  }).max(20, {
-    message: 'Codigo debe tener maximo 20 caracteres'
+  }).max(50, {
+    message: 'Codigo debe tener maximo 50 caracteres'
   }),
   description: z.string().min(10, {
     message: 'Descripcion debe tener minimo 10 caracteres'
@@ -25,7 +25,8 @@ export const projectValidation = z.object({
     required_error: 'Monto del proyecto es obligatorio',
   }),
   photo: z.string().optional(),
-  categorys: z.string({
+  // categorys: z.string({
+  category: z.string({
     required_error: 'La categoria del proyecto es obligatoria'
   }),
   types: z.string({
@@ -49,14 +50,20 @@ export const projectValidation = z.object({
     amount: z.string().optional(),
     date: z.string().optional(),
   }).optional(),
-  user: z.string({
-    required_error: 'El usuario es obligatorio'
-  }),
+  // user: z.string({
+  //   required_error: 'El usuario es obligatorio'
+  // }),
+  users: z.array(z.object({
+    user: z.string({
+      required_error: 'El usuario es obligatorio'
+    })
+  })).optional(),
   company: z.string({
     required_error: 'La compañia es obligatoria'
   }).optional(),
   client: z.string().optional(),
   datets: z.string().optional(),
+  includesTaxes: z.boolean().optional(),
 })
 
   // condition: [

@@ -1,7 +1,7 @@
 'use client'
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect } from "react"
@@ -11,13 +11,20 @@ import AddElements from "../roles/AddElements"
 import { useRef } from "react"
 import { useListsStore } from "@/app/store/listStore"
 import { Catalog } from "@/interfaces/Catalogs"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
+
+type Props = {
+  showForm:(value: boolean) => void, 
+  token:string, 
+  catalogOptions:Options[], 
+  glosariesOptions:Options[], 
+  descGlossaries:Options[], 
+  insertFunction:Function, 
+  opt:number
+}
 
 export default function NewStatus({showForm, token, catalogOptions, 
-                                    descGlossaries, glosariesOptions, 
-                                    insertFunction, opt}: 
-                    {showForm:Function, token:string, 
-                      catalogOptions:Options[], glosariesOptions:Options[], 
-                      descGlossaries:Options[], insertFunction:Function, opt:number}){
+  descGlossaries, glosariesOptions, insertFunction, opt}: Props){
   
   const [optCat, setOptCat] = useState<Options>(catalogOptions[0]);
   const [catalog, setCatalog] = useState<string>(catalogOptions[0].value);
@@ -116,9 +123,6 @@ export default function NewStatus({showForm, token, catalogOptions,
               })
               updateListsStore(arrCats);
               showForm(false);
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -142,9 +146,6 @@ export default function NewStatus({showForm, token, catalogOptions,
                 });
                 updateListsStore(arrCats);
                 showForm(false);
-                // setTimeout(() => {
-                //   window.location.reload();
-                // }, 500);
               }else{
                 refRequest.current = true;
                 showToastMessageError(res);
@@ -158,7 +159,6 @@ export default function NewStatus({showForm, token, catalogOptions,
                 refRequest.current = true;
                 showToastMessage('Tipos agregados exitosamente!!!');
                 const arrCats: Catalog[] = [];
-                //console.log('list store add type => ', listsStore);
                 listsStore.map((lis) => {
                   if(lis._id!==catalog){
                     arrCats.push(lis);
@@ -166,12 +166,8 @@ export default function NewStatus({showForm, token, catalogOptions,
                     arrCats.push(res);
                   }
                 });
-                //console.log('es este map? = >');
                 updateListsStore(arrCats);
                 showForm(false);
-                // setTimeout(() => {
-                //   window.location.reload();
-                // }, 500);
               }else{
                 refRequest.current = true;
                 showToastMessageError(res);
@@ -190,15 +186,16 @@ export default function NewStatus({showForm, token, catalogOptions,
   
   return(
     <>
-      <div className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <div className="z-10 absolute bg-white space-y-5 p-5 right-0 h-screen"
         style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevos status, categorys, types" 
             title={`Agregar ${opt===2? 'nueva categoria': (opt===3? 'nuevo status' : 'nuevo tipo')}`}
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         <div>
           <Label htmlFor="catalogs"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Catalogo</p></Label>

@@ -2,7 +2,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { useNewExpense } from "@/app/store/newExpense";
@@ -10,20 +10,31 @@ import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { GetCosts } from "@/app/api/routeCost";
 import { showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
-import { Options } from "@/interfaces/Common";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
+import { CurrencyFormatter } from "@/app/functions/Globals";
+import {Tooltip} from "@nextui-org/react";
+import ContainerSideNav from "../ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
+import { IoIosLink } from "react-icons/io";
+import { useTableStates } from "@/app/store/tableStates";
+
+interface Props {
+  data:ExpensesTable[], 
+  token:string, 
+  expenses:Expense[], 
+  isFilter:boolean, 
+  setIsFilter:(value: boolean) => void, 
+  isViewReports: boolean,
+  company: string,
+}
 
 export default function TableHistoryExpenses({data, token, expenses, 
-                            isFilter, setIsFilter, isViewReports}:
-                        {data:ExpensesTable[], token:string, 
-                        expenses:Expense[], isFilter:boolean, setIsFilter:Function, 
-                        isViewReports: boolean}){
+  isFilter, setIsFilter, isViewReports, company}:Props){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
-  //const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
@@ -56,9 +67,38 @@ export default function TableHistoryExpenses({data, token, expenses,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-6 h-auto rounded-full" alt="user" />
-          {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
-          {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
-          {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
+          {row.original.archivos.includes('xml') && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='XML' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <span>
+                <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+              </span>
+            </Tooltip>
+          )}
+          {row.original.archivos.includes('pdf') && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='PDF' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <span>
+                <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+              </span>
+            </Tooltip>
+          )}
+          {row.original.archivos.includes('none') && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Sin archivo' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <span>
+                <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
+              </span>
+            </Tooltip>
+          )}
+          {row.original.isCfdisRelations && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI relacionado' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <span>
+                <IoIosLink className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+              </span>
+            </Tooltip>
+          )}
         </div>
       ),
       enableSorting:false,
@@ -123,7 +163,7 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'estatus',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <Chip label={row.original.condition} color={row.original.color} />
+          <Chip label={row.original.condition} color={row.original.color} darktext={row.original.darktext} />
         </Link>
       ),
     }),
@@ -141,7 +181,12 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'importe',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <p className="">{row.original.Importe}</p>
+          <p className="">
+            {CurrencyFormatter({
+              currency: 'USD',
+              value: row.original.Importe
+            })}
+          </p>
         </Link>
       ),
     }),
@@ -150,7 +195,12 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'iva',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <p className="">{row.original.vat}</p>
+          <p className="">
+            {CurrencyFormatter({
+              currency: "USD",
+              value: row.original.vat
+            })}
+          </p>
         </Link>
       ),
     }),
@@ -159,7 +209,12 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'descuento',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <p className="">{row.original.discount}</p>
+          <p className="">
+            {CurrencyFormatter({
+              currency: 'USD',
+              value: row.original.discount
+            })}
+          </p>
         </Link>
       ),
     }),
@@ -168,7 +223,12 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'total',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <p className="">{row.original.total}</p>
+          <p className="">
+            {CurrencyFormatter({
+              currency: 'USD',
+              value: row.original.total
+            })}
+          </p>
         </Link>
       ),
     }),
@@ -176,9 +236,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       header: 'Folio fiscal',
       id: 'Folio fiscal',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.taxFolio}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/expenses/history/${row.original.id}/profile`)}
         >{row.original.taxFolio}</p>
@@ -224,20 +281,15 @@ export default function TableHistoryExpenses({data, token, expenses,
       const aux = async () =>{
         try {
           const res = await GetCosts(token);
-          //console.log('res');
           if(typeof(res) !== 'string'){
             const d = ExpenseDataToTableData(res);
             setDataExpenses(d);
-            setView(<></>);
-            setTimeout(() => {
-              setView(<Table columns={columns} data={d} 
-                    placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
-            }, 500);
+            setView(<Table columns={columns} data={d} 
+              placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
           }else{
             showToastMessageError(res);
           }
         } catch (error) {
-          console.log('catch table expenses => ', error);
           showToastMessageError('Error al actualizar tabla!!');
         }
       }
@@ -248,10 +300,8 @@ export default function TableHistoryExpenses({data, token, expenses,
 
   useEffect(() => {
     if(filter){
-      //console.log('data exp ', dataExpenses);
       setView(<></>);
       setTimeout(() => {
-        // const total = da
         setView(<Table columns={columns} data={dataExpenses} 
           placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
       }, 100);
@@ -260,10 +310,6 @@ export default function TableHistoryExpenses({data, token, expenses,
   }, [filter]);
 
   const paidValidation = (exp:Expense, isPaid:number) => {
-    // if(exp.ispaid === isPaid){
-    //   return true;
-    // }
-    // return false;
     if(isPaid===1){
       return true;
     }else{
@@ -283,9 +329,7 @@ export default function TableHistoryExpenses({data, token, expenses,
 
   const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid:number) => {
     let d = new Date(exp.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
-      //return true;
       return paidValidation(exp, isPaid);
     }
     return false;
@@ -301,11 +345,9 @@ export default function TableHistoryExpenses({data, token, expenses,
 
   const providerValidation = (exp:Expense, minAmount:number, maxAmount:number, 
     startDate:number, endDate:number, providers:string[], isPaid:number) => {
-      //console.log('providers => ', providers);
     if(providers.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-    //console.log('cost center filter => ', costcenters);
       if(exp.provider){
         if(typeof(exp.provider)==='string'){
           if(providers.includes(exp.provider)){
@@ -324,18 +366,15 @@ export default function TableHistoryExpenses({data, token, expenses,
   const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, isPaid:number, 
                       startDate:number, endDate:number, costcenters:string[], providers:string[]) => {
     if(costcenters.includes('all')){
-      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
     }else{
       if(exp.costocenter){
         if(typeof(exp.costocenter)==='string'){
           if(costcenters.includes(exp.costocenter)){
-            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
             return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
           }
         }else{
           if(costcenters.some((cc) => cc === (exp.costocenter._id + '/' + exp.costocenter.concept._id))){
-            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
             return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
           }
         }
@@ -348,13 +387,11 @@ export default function TableHistoryExpenses({data, token, expenses,
                       startDate:number, endDate:number, projects:string[], 
                       costcenters:string[], providers:string[], isPaid:number) => {
     if(projects.includes('all')){
-      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return costCenterValidation(exp, minAmount, maxAmount, isPaid, startDate, endDate, costcenters, providers);
     }else{
       if(exp.project){
         if(projects.includes(exp.project._id)){
           return costCenterValidation(exp, minAmount, maxAmount, isPaid, startDate, endDate, costcenters, providers);
-          //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
         }
       }
     }
@@ -420,10 +457,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                 reports, categories, types, costcenters, providers, isPaid);
     }else{
-      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-      //               reports, categories, types, costcenters);
-      // }
       if(conditions.includes(exp.estatus._id)){
         return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                     reports, categories, types, costcenters, providers, isPaid);
@@ -438,7 +471,6 @@ export default function TableHistoryExpenses({data, token, expenses,
     endDate:number, costcenters:string[], providers:string[], isPaid:number) => {
   
     let filtered: Expense[] = [];
-    //console.log('expenses lenght => ', expenses.length);
     expenses.map((expense) => {
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
           endDate, projects, reports, categories, types, conditions, costcenters, providers, isPaid)){
@@ -446,7 +478,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       }
     });
 
-    //console.log(filtered);
     setFilteredExpenses(filtered);
     
     setDataExpenses(ExpenseDataToTableData(filtered));
@@ -456,11 +487,104 @@ export default function TableHistoryExpenses({data, token, expenses,
   return(
     <>
       <div className="flex justify-end my-5">
-        {isFilter && <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} 
+        {isFilter && (
+          <ContainerSideNav width="w-full max-w-[550px]">
+            <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} company={company} token={token}
                         minAmount={minAmount} expensesFiltered={filteredExpenses} isViewReports={isViewReports} 
-                      />}
+                      />
+          </ContainerSideNav>
+        )}
       </div>
-      {view}
+      
+      <div className="hidden md:block w-full">
+        {view}
+      </div>
+      <div className="block md:hidden w-full">
+        <ListData data={data} queryParam={''} />
+      </div>
     </>
+  )
+}
+
+const ListData = ({data, queryParam}: 
+  {data: ExpensesTable[], queryParam:string}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  const {search} = useTableStates();
+
+  const filterData = useMemo(() => {
+    if(search.trim() === ''){
+      return data;
+    }else{
+      const d = data.filter(item => item.Descripcion.toLowerCase().includes(search.toLowerCase()));
+      return d;
+    }
+  }, [search]);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-264px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {filterData.map((e) => (
+            <CardExpense expense={e} key={e.id} queryParam={queryParam} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardExpense = ({expense, queryParam}: 
+  {expense:ExpensesTable, queryParam:string}) => {
+  
+  return(
+    <div role="button"
+      key={expense.id}
+      className={`flex flex-col w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+      onClick={() => window.location.replace(`/expenses/${expense.id}/profile${queryParam}`)}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ expense.Responsable?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {expense.Proyecto}
+              </h6>
+              {/* <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {expense.Descripcion}
+              </p> */}
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'USD',
+                  value: expense.Importe
+                })}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {expense.Informe}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+        {expense.Descripcion}
+      </p>
+
+    </div>
   )
 }

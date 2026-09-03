@@ -11,14 +11,22 @@ import NewCompoentTree from "./NewComponentTree";
 import { Resource } from "@/interfaces/Roles";
 import { CreateTree } from "@/app/api/routeRoles";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
+
+type Props = {
+  token:string, 
+  opt:number, 
+  optResources:Options[], 
+  optRoutes:Options[], 
+  optComponents: Options[]
+  descRoutes: Options[], 
+  descComponents: Options[],
+  idTree:string, 
+  routesPerResource:Options[]
+}
 
 export default function ButtonNew({token, opt, optResources, optRoutes, 
-                                  descRoutes, descComponents,optComponents, 
-                                  idTree, routesPerResource}: 
-                        {token:string, opt:number, optResources:Options[], 
-                          optRoutes:Options[], optComponents: Options[]
-                          descRoutes: Options[], descComponents: Options[],
-                          idTree:string, routesPerResource:Options[]}){
+  descRoutes, descComponents,optComponents, idTree, routesPerResource}: Props){
   const [newRole, setNewRole] = useState<boolean>(false);
   
   let showButton;
@@ -50,45 +58,87 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
     case 1: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewRole showForm={setNewRole} token={token} />}
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+              <NewRole showForm={setNewRole} token={token} />
+            </div>
+          )}
       </>
     break;
     case 2: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewRoute showForm={setNewRole} token={token} resource={dataIni} />}
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+              <NewRoute showForm={setNewRole} token={token} resource={dataIni} />
+            </div>
+          )}
       </>
     break;
     case 3: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewSubPath showForm={setNewRole} token={token} route={dataIni} />}
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+              <NewSubPath showForm={setNewRole} token={token} route={dataIni} />
+            </div>
+          )}
       </>
     break;
     case 4: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewComponent showForm={setNewRole} token={token} component={dataIni} />}
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+              <NewComponent showForm={setNewRole} token={token} component={dataIni} />
+            </div>
+          )}
       </>
     break;
     case 5: 
       showButton = <>
-        <Button type="button" onClick={() => setNewRole(true)}>Asignar ruta</Button>
-          {newRole && 
-            <NewRouteTree showForm={setNewRole} token={token} 
+        <div className="hidden sm:block">
+          <Button type="button" onClick={() => setNewRole(true)}>Asignar ruta</Button>
+        </div>
+        <div className="sm:hidden">
+          <div  className="flex flex-col items-center">
+            <PlusCircleIcon onClick={() => setNewRole(true)}
+              className={`w-6 h-6 cursor-pointer text-slate-600`}
+            />
+            <span className="text-xs">Ruta</span>
+          </div >
+        </div>
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+              <NewRouteTree showForm={setNewRole} token={token} 
                     optResources={optResources} optRoutes={optRoutes}
-                    descRoutes={descRoutes} idTree={idTree} />}
+                    descRoutes={descRoutes} idTree={idTree} />
+            </div>
+          )}
       </>
     break;
     case 6: 
       showButton = <>
-        <Button type="button" onClick={() => setNewRole(true)}>Asignar componente</Button>
-          {newRole && 
-            <NewCompoentTree showForm={setNewRole} token={token} 
+        <div className="hidden sm:block">
+          <Button type="button" onClick={() => setNewRole(true)}>Asignar componente</Button>
+        </div>
+        <div className="sm:hidden">
+          <div  className="flex flex-col items-center">
+            <PlusCircleIcon onClick={() => setNewRole(true)}
+              className={`w-6 h-6 cursor-pointer text-slate-600`}
+            />
+            <span className="text-xs">Componente</span>
+          </div >
+        </div>
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+              <NewCompoentTree showForm={setNewRole} token={token} 
                     optResources={optResources} optRoutes={optRoutes}
                     descComponents={descComponents} optComponents={optComponents} 
                     idTree={idTree} routesPerResource={routesPerResource}
-                    descRoutes={descRoutes} />}
+                    descRoutes={descRoutes} />
+            </div>
+          )}
       </>
     break;
     case 7: 

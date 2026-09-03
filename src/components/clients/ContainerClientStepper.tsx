@@ -1,6 +1,5 @@
 'use client';
 
-//import { useEffect, useState } from "react";
 import { useRegFormContext } from "./StepperClientProvider";
 import DataBasicStepper from "./DataBasicStepper";
 import ContactsStepper from "./ContactsStepper";
@@ -8,54 +7,27 @@ import ExtraDataStepper from "./ExtraDataStepper";
 import { Options } from "@/interfaces/Common";
 import AddressClientStepper from "./AddressClientStepper";
 
-export default function ContainerClientStepper({token, id, tags}: {token:string, id:string, tags:Options[]}){
+export default function ContainerClientStepper({token, id, tags, company}: 
+  {token:string, id:string, tags:Options[], company:string}){
   
   const [state] = useRegFormContext();
   
-  // const [stepform, setStepForm] = useState<JSX.Element>(
-  //                         <DataBasicStepper id={id} token={token} tags={tags} />)
-
-  // useEffect(() => {
-  //   setStepForm(<DataBasicStepper token={token} id={id} tags={tags} />)
-  // }, [])
-
   let stepform: JSX.Element = <></>;
+  // console.log('container client stepper tags => ', tags);
 
   if(state.indexstepper || state.indexstepper>=0){
     if(state.indexstepper===1){
-      stepform = (<ExtraDataStepper token={token} />)
+      stepform = (<ExtraDataStepper token={token} company={company} />)
     }else if(state.indexstepper===2){
-      stepform = (<AddressClientStepper token={token} />)
+      stepform = (<AddressClientStepper token={token} company={company} />)
       }else if(state.indexstepper===3){
-        stepform = (<ContactsStepper id={id} token={token} />)
+        stepform = (<ContactsStepper id={id} token={token} company={company} />)
         }else{
-          stepform = (<DataBasicStepper token={token} id={id} tags={tags} />)
+          stepform = (<DataBasicStepper token={token} id={id} tags={tags} company={company} />)
         }
   }else{
-    stepform = <DataBasicStepper token={token} id={id} tags={tags} />
+    stepform = <DataBasicStepper token={token} id={id} tags={tags} company={company} />
   }
-
-  // try {
-  //   useEffect(() => {
-  //     try {
-  //       if(state.indexstepper || state.indexstepper>=0){
-  //         if(state.indexstepper===1){
-  //           setStepForm(<ExtraDataStepper token={token} />)
-  //         }else if(state.indexstepper===2){
-  //           setStepForm(<AddressClientStepper token={token} />)
-  //           }else if(state.indexstepper===3){
-  //             setStepForm(<ContactsStepper id={id} token={token} />)
-  //             }else{
-  //               setStepForm(<DataBasicStepper token={token} id={id} tags={tags} />)
-  //             }
-  //       }
-  //     } catch (error) {
-  //       setStepForm(<DataBasicStepper token={token} id={id} tags={tags} />)
-  //     }
-  //   }, [state.indexstepper])
-  // } catch (error) {
-  //   console.log(error);
-  // }
 
   return(
     <>

@@ -1,10 +1,10 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
-import { RemoveCost, getAllCostsByCondition, CloneCost } from "@/app/api/routeCost";
+import { RemoveCost, getAllCostsByConditionAndUser, CloneCost, GetCostsByUserMIN } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -14,14 +14,32 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import RemoveElement from "../RemoveElement";
 import {IoMdCopy} from 'react-icons/io';
+import { CurrencyFormatter } from "@/app/functions/Globals";
+import {Tooltip} from "@nextui-org/react";
+import ContainerSideNav from "../ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
+import { IoIosLink } from "react-icons/io";
+import { useTableStates } from "@/app/store/tableStates";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
+
+type Props = {
+  data:ExpensesTable[], 
+  token:string, 
+  expenses:Expense[], 
+  user: string, 
+  isFilter:boolean, 
+  setIsFilter:Function, 
+  idValidado: string, 
+  handleExpensesSelected:Function, 
+  isViewReports: boolean, 
+  isPending:boolean,
+  company: string,
+  permissions:IPermissionsAndComponents
+}
 
 export default function TableExpenses({data, token, expenses, 
-                            handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
-                        isViewReports }:
-                        {data:ExpensesTable[], token:string, expenses:Expense[], 
-                        user: string, isFilter:boolean, setIsFilter:Function, 
-                        idValidado: string, handleExpensesSelected:Function, 
-                        isViewReports: boolean}){
+  handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
+  isViewReports, isPending, company, permissions }: Props){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
   const refExpenses = useRef(expenses);
@@ -40,7 +58,7 @@ export default function TableExpenses({data, token, expenses,
         showToastMessageError(res);
       }else{
         showToastMessage('Costo copiado exitosamente!!!');
-        const fetchCosts = await getAllCostsByCondition(token);
+        const fetchCosts = await GetCostsByUserMIN(token, user);
         if(typeof(fetchCosts)==='string'){
           showToastMessageError("Error al actulizar tabla!!!");
         }else{
@@ -77,31 +95,34 @@ export default function TableExpenses({data, token, expenses,
     setIsFilter(value);
   }
 
-  console.log('data expesnes => ');
-  data.map((c) => !c.Descripcion || typeof(c.Descripcion) !== 'string' ? console.log('desc => ', c) : '');
+  const queryParam= isPending? '?status=pending': '';
 
   const columns = [
     columnHelper.accessor(row => row.id, {
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2 justify-center">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-            className="w-24 cursor-pointer"
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+              className="w-24 cursor-pointer"
+            />
+          )}
         </div>
       ),
       enableSorting:false,
       header: ({table}:any) => (
         <div className="w-8">
-          <input type="checkbox"
-            className="w-24 cursor-pointer"
-            checked={table.getIsAllRowsSelected()}
-            onClick={()=> {
-              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-            }}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox"
+              className="w-24 cursor-pointer"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
         </div>
       )
     }),
@@ -110,16 +131,50 @@ export default function TableExpenses({data, token, expenses,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
-          {/* <DeleteElement id={row.original.id} name={row.original.Descripcion} 
-            remove={RemoveCost} token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
-          <RemoveElement id={row.original.id} name={row.original.Descripcion} 
+          {permissions.permission.delete && (
+            <RemoveElement id={row.original.id} name={row.original.Descripcion} 
               remove={RemoveCost} removeElement={delCost} 
               token={token} colorIcon="text-slate-500 hover:text-slate-300" />
-          <IoMdCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer" onClick={() => cloneCost(row.original.id)} />
+          )}
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Copiar' 
+              placement="right" className="text-black bg-white rounded-md border border-slate-400">
+            <span>
+              <IoMdCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer hover:bg-blue-100" onClick={() => cloneCost(row.original.id)} />
+            </span>
+          </Tooltip>
           <div className="w-20 flex gap-x-1 items-center">
-            {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
-            {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
-            {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
+            {row.original.archivos.includes('xml') && (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='XML' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <span>
+                  <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+                </span>
+              </Tooltip>
+            )}
+            {row.original.archivos.includes('pdf') && (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='PDF' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <span>
+                  <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+                </span>
+              </Tooltip>
+            )}
+            {row.original.archivos.includes('none') && (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Sin archivo' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <span>
+                  <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
+                </span>
+              </Tooltip>
+            )}
+            {row.original.isCfdisRelations && (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI relacionado' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <span>
+                  <IoIosLink className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+                </span>
+              </Tooltip>
+            )}
           </div>
         </div>
       ),
@@ -131,11 +186,8 @@ export default function TableExpenses({data, token, expenses,
     columnHelper.accessor('Proyecto', {
       id: 'Proyecto',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="py-2 font-semibold">{row.original.Proyecto}</p>
-        // </Link>
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Proyecto}</p>
       ),
       enableSorting:false,
@@ -147,11 +199,8 @@ export default function TableExpenses({data, token, expenses,
       header: 'Informe',
       id: 'Informe',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="py-2 font-semibold">{row.original.Informe}</p>
-        // </Link>
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Informe}</p>
       )
     }),
@@ -159,11 +208,8 @@ export default function TableExpenses({data, token, expenses,
       header: 'Centro de costos',
       id: 'Centro de costos',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="py-2 font-semibold">{row.original.costcenter}</p>
-        // </Link>
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.costcenter}</p>
       )
     }),
@@ -175,11 +221,11 @@ export default function TableExpenses({data, token, expenses,
           <>
             {row.original.Descripcion.length < 100? (
               <p className="cursor-pointer" 
-                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
               >{row.original.Descripcion}</p>
             ): (
               <p className="cursor-pointer" 
-                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
               >{row.original.Descripcion.substring(0, 100)}</p>
             )}
           </>
@@ -190,11 +236,8 @@ export default function TableExpenses({data, token, expenses,
       header: 'Proveedor',
       id: 'proveedor',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.Proveedor}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Proveedor}</p>
       ),
     }),
@@ -202,12 +245,9 @@ export default function TableExpenses({data, token, expenses,
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <Chip label={row.original.condition} color={row.original.color} />
-        // </Link>
         <div className="cursor-pointer" 
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}>
-            <Chip label={row.original.condition} color={row.original.color} />
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}>
+            <Chip label={row.original.condition} color={row.original.color} darktext={row.original.darktext} />
         </div>
       ),
     }),
@@ -215,11 +255,8 @@ export default function TableExpenses({data, token, expenses,
       header: 'Fecha',
       id: 'fecha',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Fecha?.substring(0, 10) || ''}</p>
       ),
     }),
@@ -227,59 +264,64 @@ export default function TableExpenses({data, token, expenses,
       header: 'Importe',
       id: 'importe',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.Importe}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.Importe}</p>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
+        >
+          {CurrencyFormatter({
+            currency: 'USD',
+            value: row.original.Importe
+          })}
+        </p>
       ),
     }),
     columnHelper.accessor('vat', {
       header: 'IVA',
       id: 'iva',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.vat}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.vat}</p>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
+        >
+          {CurrencyFormatter({
+            currency: 'USD',
+            value: row.original.vat
+          })}
+        </p>
       ),
     }),
     columnHelper.accessor('discount', {
       header: 'Descuento',
       id: 'descuento',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.discount}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.discount}</p>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
+        >
+          {CurrencyFormatter({
+            currency: 'USD',
+            value: row.original.discount
+          })}
+        </p>
       ),
     }),
     columnHelper.accessor('total', {
       header: 'Total',
       id: 'total',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.total}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.total}</p>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
+        >
+          {CurrencyFormatter({
+            currency: "USD",
+            value: row.original.total
+          })}
+        </p>
       ),
     }),
     columnHelper.accessor('taxFolio', {
       header: 'Folio fiscal',
       id: 'Folio fiscal',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.taxFolio}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.taxFolio}</p>
       ),
     }),
@@ -328,13 +370,10 @@ export default function TableExpenses({data, token, expenses,
   if(refresh){
     const aux = async () =>{
       try {
-        const res = await getAllCostsByCondition(token);
+        const res = await getAllCostsByConditionAndUser(token, user);
         if(typeof(res) !== 'string'){
           refExpenses.current = res;
           const d = ExpenseDataToTableData(res);
-          // if(d.length > 0){
-          //   //
-          // }
           setDataExpenses(d);
         }else{
           showToastMessageError(res);
@@ -364,18 +403,12 @@ export default function TableExpenses({data, token, expenses,
         return false;
       }
     }
-    // if(exp.ispaid === isPaid){
-    //   return true;
-    // }
-    // return false;
   }
 
   const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid: number) => {
     let d = new Date(exp.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
       return paidValidation(exp, isPaid);
-      //return true;
     }
     return false;
   }
@@ -390,11 +423,9 @@ export default function TableExpenses({data, token, expenses,
 
   const providerValidation = (exp:Expense, minAmount:number, maxAmount:number, 
         startDate:number, endDate:number, providers:string[], isPaid: number) => {
-          //console.log('providers => ', providers);
     if(providers.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-    //console.log('cost center filter => ', costcenters);
       if(exp.provider){
         if(typeof(exp.provider)==='string'){
           if(providers.includes(exp.provider)){
@@ -413,25 +444,15 @@ export default function TableExpenses({data, token, expenses,
   const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                       startDate:number, endDate:number, costcenters:string[], providers:string[], isPaid: number) => {
     if(costcenters.includes('all')){
-      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
     }else{
-      //console.log('cost center filter => ', costcenters);
       if(exp.costocenter){
         if(typeof(exp.costocenter)==='string'){
           if(costcenters.includes(exp.costocenter)){
-            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
             return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
           }
         }else{
-          // if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
-          //   return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-          // }
-          // if(costcenters.includes(exp.costocenter.concept.id)){
-          //console.log('concept cc => ', exp.costocenter.concept._id);
           if(costcenters.some((cc) => cc === (exp.costocenter._id + '/' + exp.costocenter.concept._id))){
-            //console.log('entrooo???');
-            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
             return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
           }
         }
@@ -444,13 +465,11 @@ export default function TableExpenses({data, token, expenses,
                       startDate:number, endDate:number, projects:string[], 
                       costcenters:string[], providers:string[], isPaid: number) => {
     if(projects.includes('all')){
-      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters, providers, isPaid);
     }else{
       if(exp.project){
         if(projects.includes(exp.project._id)){
           return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters, providers, isPaid);
-          //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
         }
       }
     }
@@ -516,10 +535,6 @@ export default function TableExpenses({data, token, expenses,
       return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                 reports, categories, types, costcenters, providers, isPaid);
     }else{
-      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-      //               reports, categories, types, costcenters);
-      // }
       if(conditions.includes(exp.estatus._id)){
         return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                     reports, categories, types, costcenters, providers, isPaid);
@@ -541,27 +556,123 @@ export default function TableExpenses({data, token, expenses,
       }
     });
 
-    //console.log(filtered);
-    //setFilteredExpenses(filtered);
     setExpensesFiltered(filtered);
     setDataExpenses(ExpenseDataToTableData(filtered));
-    //setFilter(true);
   }
 
   return(
     <>
       <div className="flex justify-end my-5">
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-        {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
-          className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-        /> */}
-          {isFilter && <Filtering showForm={handleIsFilter}  
+          {isFilter && permissions.permission.filter && (
+            <ContainerSideNav width="w-full max-w-[550px]">
+              <Filtering showForm={handleIsFilter} company={company} token={token}
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
-                        />}
+                        />
+            </ContainerSideNav>
+          )}
       </div>
-      {/* <Button onClick={changeConditionInCost}>Validar</Button> */}
-      {view}
+      
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            {view}
+          </div>
+          <div className="block md:hidden w-full">
+            <ListData data={data} token={token} delCost={delCost} queryParam={queryParam} permissions={permissions} />
+          </div>
+        </>
+      )}
     </>
+  )
+}
+
+const ListData = ({data, token, delCost, queryParam, permissions}: 
+  {data: ExpensesTable[], token:string, delCost: (id: string) => Promise<void>, queryParam:string, permissions:IPermissionsAndComponents}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  const {search} = useTableStates();
+
+  const filterData = useMemo(() => {
+    if(search.trim() === ''){
+      return data;
+    }else{
+      const d = data.filter(item => item.Descripcion.toLowerCase().includes(search.toLowerCase()));
+      return d;
+    }
+  }, [search]);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-264px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {filterData.map((e) => (
+            <CardExpense expense={e} key={e.id} delCost={delCost} token={token} queryParam={queryParam} permissions={permissions} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardExpense = ({expense, token, delCost, queryParam, permissions}: 
+  {expense:ExpensesTable, token:string, delCost: (id: string) => Promise<void>, queryParam:string, permissions:IPermissionsAndComponents}) => {
+  
+  return(
+    <div role="button"
+      key={expense.id}
+      className={`flex flex-col w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+      onClick={() => window.location.replace(`/expenses/${expense.id}/profile${queryParam}`)}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ expense.Responsable?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
+              remove={RemoveGlossary} removeElement={delGlossary} /> */}
+            {permissions.permission.delete && (
+              <RemoveElement id={expense.id} name={expense.Descripcion} 
+                remove={RemoveCost} removeElement={delCost} 
+                token={token} colorIcon="text-slate-500 hover:text-slate-300" />
+            )}
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {expense.Proyecto}
+              </h6>
+              {/* <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {expense.Descripcion}
+              </p> */}
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'USD',
+                  value: expense.Importe
+                })}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {expense.Informe}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+        {expense.Descripcion}
+      </p>
+
+    </div>
   )
 }

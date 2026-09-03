@@ -6,15 +6,12 @@ export const useRegFormContext = () => {
 }
 
 const reducer = (state:any, action:any) => {
-  console.log('action type = ', action.type);
     switch (action.type) {
       case 'SET_BASIC_DATA': {
           return { ...state, databasic: { ...action.data } };
       }
       break;
       case 'SET_EXTRA_DATA': {
-            console.log('helppp');
-            console.log(action.data);
           return { ...state, extradata: { ...action.data } };
       }
       break;

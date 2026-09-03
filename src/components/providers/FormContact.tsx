@@ -11,9 +11,18 @@ import { createContact } from "@/app/api/routeContacts";
 import { contactValidation } from "@/schemas/contact.schema";
 import { insertPhoneContact } from "@/app/api/routeContacts";
 
-export default function FormContact({addNewContact, token, contact, updateContact, children, editContact=true}: 
-                  {addNewContact:Function, token:string, contact:(Contact | string), 
-                  updateContact:Function, children:JSX.Element, editContact?:boolean}){
+type Props = {
+  addNewContact:Function, 
+  token:string, 
+  contact:(Contact | string), 
+  updateContact:Function, 
+  children:JSX.Element, 
+  editContact?:boolean,
+  company:string
+}
+
+export default function FormContact({addNewContact, token, contact, 
+  updateContact, children, editContact=true, company}: Props){
   
   let emailContactI = '';
   let nameContactI = '';
@@ -63,15 +72,13 @@ export default function FormContact({addNewContact, token, contact, updateContac
           name: nameContact,
           companyemail: emailCompany,
           phoneNumber,
+          company
         }
         
         if(newContact.email==='' || !newContact.email)
           delete newContact.email;
         if(newContact.companyemail==='' || !newContact.companyemail)
           delete newContact.companyemail;
-
-        // console.log('new contact')
-        // console.log(newContact);
 
         const validation = contactValidation.safeParse(newContact);
         if(validation.success){
@@ -82,8 +89,6 @@ export default function FormContact({addNewContact, token, contact, updateContac
               showToastMessageError(res);
             }else{
               refRequest.current = true;
-              // console.log('contacto creado');
-              // console.log(res);
               
               addNewContact(res._id);
               formik.values.emailCompany = '';
@@ -211,7 +216,6 @@ export default function FormContact({addNewContact, token, contact, updateContac
           email: emailContact,
           name: nameContact,
           companyemail: emailCompany,
-          //phoneNumber,
         }
         
         if(!newContact.companyemail || newContact.companyemail===''){
@@ -294,7 +298,6 @@ export default function FormContact({addNewContact, token, contact, updateContac
   }
   
   const validationUpdateContact = () => {
-    //validar cuaando se eliminen  y se editen telefonos (despues de mostrar los telefonos en pantalla)
     const {emailCompany, emailContact, nameContact} = formik.values;
     if(emailCompanyI !== emailCompany || emailContact !== emailContactI 
           || nameContact !== nameContactI || phones.length > 0){
@@ -307,7 +310,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
   let button = typeof(contact)==='string'? 
                       <Button type="submit">Guardar contacto</Button> : 
                       <Button type="button" onClick={() => validationUpdateContact()}>Actualizar contacto</Button>
-                      // <Button type="button" onClick={() => onUpdateContact()}>Actualizar contacto</Button>
+
   return(
     <>
       <form onSubmit={formik.handleSubmit} className="mt-2 space-y-5">

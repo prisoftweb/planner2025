@@ -1,18 +1,21 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import DeleteElement from "../DeleteElement";
 import { PencilIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { CatalogTable } from "@/interfaces/Catalogs";
 import { RemoveCatalog } from "@/app/api/routeCatalogs";
 import NewCatalog from "./NewCatalog";
 import RemoveElement from "../RemoveElement";
 import { useListsStore } from "@/app/store/listStore";
 import { showToastMessageError } from "../Alert";
+import {Tooltip} from "@nextui-org/react";
+import ContainerSideNav from "../ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
+import { useTableStates } from "@/app/store/tableStates";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function TableCatalogs({data, token}:
-                        {data:CatalogTable[], token:string}){
+export default function TableCatalogs({data, token, permissions}: {data:CatalogTable[], token:string, permissions:IPermissionsAndComponents}){
   
   const columnHelper = createColumnHelper<CatalogTable>();
 
@@ -35,32 +38,44 @@ export default function TableCatalogs({data, token}:
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {permissions.permission.select && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
         </div>
       ),
       enableSorting:false,
       header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
+        <>
+          {permissions.permission.select && (
+            <input type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onClick={()=> {
+                table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+              }}
+            />
+          )}
+        </>
       )
     }),
     columnHelper.accessor(row => row.id, {
       id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
-            onClick={() => {setCatEdit(row.original); setEditCat(true);}}
-          />
-          {/* <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveCatalog} token={token} /> */}
-          <RemoveElement id={row.original.id} name={row.original.name} token={token} 
+          {permissions.permission.update && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
+                onClick={() => {setCatEdit(row.original); setEditCat(true);}}
+              />
+            </Tooltip>
+          )}
+          {permissions.permission.delete && (
+            <RemoveElement id={row.original.id} name={row.original.name} token={token} 
               remove={RemoveCatalog} removeElement={delReport} />
+          )}
         </div>
       ),
       enableSorting:false,
@@ -86,8 +101,88 @@ export default function TableCatalogs({data, token}:
   
   return(
     <>
-      {editCat && <NewCatalog token={token} catalog={catEdit || ''} showForm={setEditCat} />}
-      <Table columns={columns} data={data} placeH="Buscar catalogo.." />
+      {editCat && permissions.permission.update && (
+        <ContainerSideNav width="w-full max-w-xs">
+          <NewCatalog token={token} catalog={catEdit || ''} showForm={setEditCat} />
+        </ContainerSideNav>
+      )}
+      {permissions.permission.readfull && (
+        <>
+          <div className="hidden md:block w-full">
+            <Table columns={columns} data={data} placeH="Buscar catalogo.." />
+          </div>
+          <div className="block md:hidden w-full">
+            <ListData data={data} token={token} delReport={delReport} />
+          </div>
+        </>
+      )}
     </>
+  )
+}
+
+const ListData = ({data, token, delReport}: 
+  {data: CatalogTable[], token:string, delReport: (id: string) => Promise<void>}) => {
+
+  const {search} = useTableStates();
+
+  const filterData = useMemo(() => {
+    if(search.trim() === ''){
+      return data;
+    }else{
+      const d = data.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
+      return d;
+    }
+  }, [search]);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-264px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {filterData.map((c) => (
+            <CardCatalog company={c} key={c.id} token={token} delReport={delReport} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardCatalog = ({company, token, delReport}: 
+  {company:CatalogTable, token:string, delReport: (id: string) => Promise<void>}) => {
+  
+  return(
+    <div role="button"
+      key={company.id}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ '/img/catalog.svg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+          <RemoveElement id={company.id} name={company.name} token={token} 
+              remove={RemoveCatalog} removeElement={delReport} />
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {company.name}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {company.collection}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

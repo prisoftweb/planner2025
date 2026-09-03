@@ -6,14 +6,19 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Button from "../Button";
 import { updateContact } from "@/app/api/routeContacts";
 import { updateContactClient } from "@/app/api/routeClients";
-//import CardContact from "../providers/CardContact";
-//import CardContactClient from "./CardContactClient";
 import { contactUpdateValidation } from "@/schemas/contact.schema";
 import CardContacts from "../CardContacts";
 import DeleteContactClient from "./DeleteContactClient";
 
-export default function Contacts({id, token, contacts, editInfo}: 
-    {id:string, token:string, contacts:(Contact[]), editInfo:boolean}){
+type ContactsProps = {
+  id:string, 
+  token:string, 
+  contacts:Contact[], 
+  editInfo:boolean,
+  company:string
+}
+
+export default function Contacts({id, token, contacts, editInfo, company}: ContactsProps){
   
   const [index, setIndex] = useState(0);
   const numberContacts = 1;
@@ -76,18 +81,18 @@ export default function Contacts({id, token, contacts, editInfo}:
 
   const showNewContact = () => {
     setShowContacts(<FormContact token={token} addNewContact={newContact} 
-        contact={''} updateContact={updateContactt} editContact={editInfo} >
+        contact={''} updateContact={updateContactt} editContact={editInfo} company={company} >
         <></>
       </FormContact>)
   }
   
   const [showContacts, setShowContacts] = useState<JSX.Element>(contacts.length > 0? 
     <FormContact token={token} addNewContact={newContact} contact={contacts[0]} 
-      updateContact={updateContactt} editContact={editInfo} >
+      updateContact={updateContactt} editContact={editInfo} company={company} >
         <></>
     </FormContact> : 
     <FormContact token={token} addNewContact={newContact} contact={''} 
-      updateContact={updateContactt} editContact={editInfo} >
+      updateContact={updateContactt} editContact={editInfo} company={company} >
         {editInfo? (
           <Button onClick={showNewContact}>
             Nuevo contacto
@@ -98,7 +103,7 @@ export default function Contacts({id, token, contacts, editInfo}:
   useEffect(() => {
     if(contacts.length === 0){
       setShowContacts(<FormContact token={token} addNewContact={newContact} 
-        contact={''} updateContact={updateContactt} editContact={editInfo} >
+        contact={''} updateContact={updateContactt} editContact={editInfo} company={company} >
           <></>
         </FormContact>);
     }else{
@@ -130,7 +135,7 @@ export default function Contacts({id, token, contacts, editInfo}:
                 {filter.map((contact: Contact, index:number) => (
                   <div className='' key={index}>
                     <FormContact token={token} addNewContact={newContact} contact={contact} 
-                      updateContact={updateContactt} editContact={editInfo}
+                      updateContact={updateContactt} editContact={editInfo} company={company}
                     >
                       {editInfo? (
                         <button 

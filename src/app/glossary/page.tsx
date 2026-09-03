@@ -1,64 +1,82 @@
-import WithOut from "@/components/WithOut";
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-
 import CompanyClient from "@/components/companies/CompanyClient";
-import Header from "@/components/Header";
+import { ResponsiveHeader } from "@/components/Header";
 import ButtonNew from "@/components/glossary/ButtonNew";
 import TableGlossary from "@/components/glossary/TableGlossary";
 import {getGlossaries} from "../api/routeGlossary";
 import { Glossary, GlossaryTable } from "@/interfaces/Glossary";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let glossaries: Glossary[];
-  try {
-    glossaries = await getGlossaries(token);
-    if(typeof(glossaries)=== 'string'){
-      return <h1 className="text-center text-red-500 text-lg">{glossaries}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500 text-lg">Error al consultar glosarios!!</h1>
-  } 
+  // let glossaries: Glossary[] = await getGlossaries(token);
 
-  // if(!glossaries || glossaries.length <= 0){
-  //   return (
-  //     <div>
-  //       <Navigation user={user} />
-  //       <CompanyClient option={1} >
-  //         <WithOut img="/img/clientes.svg" subtitle="Glosarios"
-  //           text="Aqui puedes agregar los glosarios"
-  //           title="Glosarios">
-  //               <ButtonNew token={token} glossary={''} />
-  //         </WithOut>
-  //       </CompanyClient>
-  //     </div>
-  //   )
-  // }
+  const [resresource, glossaries, rescomponents] = await Promise.all([
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getGlossaries(token),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'glossary', ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/glossary`} message={rescomponents} />
+      </>
+    )
+  }
+  
+  if(typeof(glossaries)=== 'string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-center text-red-500 text-lg">{glossaries}</h1>
+        </div> */}
+        <ComponentError page="/glossary" message={glossaries} />
+      </>
+    )
+  }
 
   const table: GlossaryTable[] = [];
 
-  glossaries.map((gloss) => {
+  glossaries.map((gloss:Glossary) => {
     table.push({
       color: gloss.color || '#fff',
       description: gloss.description,
       id: gloss._id,
       name: gloss.name  
     })
-  })
+  });
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <CompanyClient option={4} >
-        <div>
-          <Header title="Glosarios" placeHolder="Buscar glosario.." >
+        <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
+          <ResponsiveHeader title="Glosarios" placeHolder="Buscar glosario.." >
             <ButtonNew token={token} glossary={''} />
-          </Header>
+          </ResponsiveHeader>
           <div className="mt-5">
             <TableGlossary data={table} token={token} glossaries={glossaries} />
           </div>

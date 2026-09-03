@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { Options } from "@/interfaces/Common"
-//import NavResponsive from "../projects/NavResponsive"
 import ProfileExpense from "./ProfileExpense"
 import { OneExpense } from "@/interfaces/Expenses"
 import UpdateExpense from "@/components/expenses/UpdateExpense";
@@ -11,69 +9,106 @@ import UpdateExtraExpense from "./UpdateExtraExpenses"
 import UpdateVoucher from "./UpdateVoucher"
 import UpdateCFDI from "./UpdateCFDI"
 import { useNewExpense } from "@/app/store/newExpense"
+import AddCFDIRelations from "./AddCFDIRelations";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default function ExpenseClient({token, user, id, expense, isHistory=false}: 
-                            { token:string, id:string, user:string, 
-                              expense:OneExpense, isHistory?:boolean}){
+export default function ExpenseClient({token, user, id, expense, isHistory=false, permissions}: 
+  { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean, permissions:IPermissionsAndComponents}){
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {
-    console.log('new expense => ', expense);
     updateCurrentExpense(expense);
 
     return () => updateCurrentExpense(null);
   }, []);
 
   const [opt, setOpt] = useState<number>(1);
+  const [widhtPage, setWidhtPage] = useState<number>(900);
+
+  const handleResize = () => {
+    setWidhtPage(Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    ));
+  }
+
+   useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setWidhtPage(Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    ));
+    return () => window.removeEventListener('scroll', handleResize);
+  }, []);
+
+  const files = expense.files;
+
+  const pdfFile = files.find(f => f.types.includes('pdf') || f.types.includes('PDF') || f.types.includes('jpg') || f.types.includes('JPG') || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png') || f.types.includes('PNG'));
+
+  const isadvanceapp= expense.costocenter.concept._id==="6691a5f9c14942310b52ac0e";
 
   const view = (
-    opt===1? (<div className="mt-3 w-full max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" 
-      style={{borderColor:'#F8FAFC'}}>
-        <div className=" max-w-2xl">
-          <UpdateExpense id={id} token={token} expense={expense} 
-            isticket={expense.isticket} isHistory={isHistory} />
-        </div>
-      </div>) : 
-    (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+    opt===1? (<div className="mt-3 w-full gap-y-3 flex sm:space-x-2 flex-wrap 2xl:flex-nowrap" >
+                <div className="w-full sm:max-w-xl bg-white rounded-lg shadow-md sm:pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                  <UpdateExpense id={id} token={token} expense={expense} 
+                    isticket={expense.isticket} isHistory={isHistory} updatePermission={permissions.permission.update} />
+                </div>
+                {pdfFile?.file && (<div className=" w-full h-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                    <iframe className="w-full h-full flex-grow overflow-auto mt-4" src={pdfFile.file} />
+                  </div>)}
+              </div>) : 
+    (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md sm:pl-2 px-3" 
                     style={{borderColor:'#F8FAFC'}}>
                       <div className=" max-w-lg">
-                        <UpdateExtraExpense expense={expense} id={id} 
-                          isHistory={isHistory} token={token}
+                        <UpdateExtraExpense expense={expense} id={id} updatePermission={permissions.permission.update} 
+                          isHistory={isHistory} token={token} isticket={expense.isticket}
                         />
                       </div>
-            </div>): 
-    (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+            </div>): //max w-md antes abajo
+    (opt===3? (<div className="mt-3 w-full max-w-[1800px] bg-white rounded-lg shadow-md sm:pl-2 px-3 h-screen" 
                       style={{borderColor:'#F8FAFC'}}>
-                        <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} />
+                        <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} updatePermission={permissions.permission.update} />
                       </div>): 
-      (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+      (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md sm:pl-2 px-3 h-screen" 
                           style={{borderColor:'#F8FAFC'}}>
-                              <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} />
+                              <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} updatePermission={permissions.permission.update} />
                         </div>): 
-              (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+          (opt===5? (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md sm:pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
                           <div className=" max-w-lg">
-                            <UpdateExpense id={id} token={token} expense={expense} 
-                              isticket={expense.isticket} isHistory={isHistory}  />
+                            <AddCFDIRelations cost={expense._id} token={token} idProv={expense.provider._id} />
                           </div>
-                      </div>))))
+                      </div>): (<div className="mt-3 w-full sm:flex sm:space-x-2 gap-y-3" >
+                                  <div className=" w-full sm:max-w-xl bg-white rounded-lg shadow-md sm:pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                                    <UpdateExpense id={id} token={token} expense={expense} 
+                                      isticket={expense.isticket} isHistory={isHistory} updatePermission={permissions.permission.update} />
+                                  </div>
+                                  {pdfFile?.file && widhtPage > 1500 && (<div className=" max-w-md bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                                      <iframe className="w-full flex-grow overflow-auto mt-4" src={pdfFile.file} />
+                                    </div>)}
+                                </div>)))))
   )
-
+  
   const [open, setOpen] = useState<boolean>(false);
 
   return(
     <>
+      <div className=" sm:hidden">
+        <NavResponsive open={open} setOpen={setOpen} isadvanceapp={isadvanceapp}
+                  changeOption={setOpt} option={opt} isticket={expense.isticket} />
+      </div>
       <div className={`flex`}>
-        <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
+        <div className={`bg-white hidden sm:block ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
-            <NavResponsive open={open} setOpen={setOpen} 
+            <NavResponsive open={open} setOpen={setOpen} isadvanceapp={isadvanceapp}
                   changeOption={setOpt} option={opt} isticket={expense.isticket} />
           </div>
         </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap lg:flex-nowrap space-x-2" 
+        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap sm:space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
-            {/* <ProfileProject project={project} /> */}
             <ProfileExpense expense={expense} />
           </div>
           {view}

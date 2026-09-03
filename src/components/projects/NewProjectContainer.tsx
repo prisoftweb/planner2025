@@ -1,17 +1,28 @@
 import { useRegFormContext } from "./StepperProjectProvider";
 import HeaderForm from "../HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 import ContainerProjectStepper from "./ContainerProjectStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
 import { Options } from "@/interfaces/Common";
 import { useState, useEffect } from "react";
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
+
+type Props = {
+  token:string, 
+  showForm:Function, 
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  user:string,
+  optCompanies: Options[], 
+  condition: string,
+  company:string 
+}
 
 export default function NewProjectContainer({token, showForm, optClients, 
-                              optCategories, optTypes, user, optCompanies, condition}: 
-                            {token:string, showForm:Function, optClients:Options[], 
-                              optCategories:Options[], optTypes:Options[], user:string,
-                              optCompanies: Options[], condition: string }){
+  optCategories, optTypes, user, optCompanies, condition, company}: Props){
+
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -73,21 +84,20 @@ export default function NewProjectContainer({token, showForm, optClients,
     }
   }
 
-  return(
-    <div className="z-10 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0"
+  return(//top-16
+    <div className="z-10 w-full max-w-xl absolute bg-white px-2 py-2 sm:py-5 sm:px-7 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">
-        <div className="flex justify-between">
+        <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
           <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del nuevo proyecto" 
             title="Nuevo proyecto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+          <TooltipCloseIcon handleClose={closeForm} />
         </div>
         <ContainerProjectStepper token={token} optClients={optClients} 
             optCategories={optCategories} optTypes={optTypes} showForm={showForm}
-            user={user} optCompanies={optCompanies} condition={condition} />
+            user={user} optCompanies={optCompanies} condition={condition} company={company} />
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import { Inter, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { Suspense } from "react";
 import Loading from "./Loading";
 
@@ -18,15 +19,25 @@ export const metadata: Metadata = {
   },
 };
 
+// const metadata = children.props?.metadata;
+//   const disablePadding = metadata?.layoutPadding === false;
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{  children: React.ReactNode;}>) {
+
+  // // tomar la propiedad custom
+  // const disablePadding =
+  // typeof children === "object" &&
+  // children !== null &&
+  // "props" in children &&
+  // children.props?.layoutPadding === false;
+
   return (
     <html lang="en">
       {/* <body className={inter.className}> */}
       <body className={`${ibm.className} pt-16 lg:pt-12`}>
+      {/* <body className={` pt-16 lg:pt-12`}> */}
         <ToastContainer
           position="top-center"
           autoClose={5000}

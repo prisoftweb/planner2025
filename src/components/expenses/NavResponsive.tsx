@@ -1,36 +1,16 @@
 import { ArrowDownTrayIcon} from "@heroicons/react/24/solid"
 import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
-
-//import { PiInvoiceFill } from "react-icons/pi";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { FaFilePdf } from "react-icons/fa6";
 import { BsFiletypeXml } from "react-icons/bs";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
+import { propsTooltip } from "@/libs/animations";
+import {ClipboardDocumentCheckIcon} from "@heroicons/react/24/solid";
 
-export default function NavResponsive({open, setOpen, option, 
-                  changeOption, isticket}: 
-                {open:boolean, setOpen:Function, option:number, 
-                  changeOption:Function, isticket:boolean}){
-
-  let props = {
-  variants: {
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.1,
-      ease: "easeIn",
-    }
-  },
-  enter: {
-    opacity: 1,
-    transition: {
-      duration: 0.15,
-      ease: "easeOut",
-    }
-  },
-  },
-  }
+export default function NavResponsive({open, setOpen, option, changeOption, isticket, isadvanceapp}: 
+  {open:boolean, setOpen:Function, option:number, changeOption:Function, isticket:boolean,
+    isadvanceapp:boolean}){
 
   const [isHover, setIsHover] = useState<number>(-1);
 
@@ -41,8 +21,8 @@ export default function NavResponsive({open, setOpen, option,
         <div className="rotate-180 p-1"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                 text-slate-500 my-1 bg-white rounded-md rotate-90" 
             onClick={() => setOpen(true)} /></div>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
-          className="text-blue-500 bg-white" placement="right">
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informacion basica' 
+          className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
               <FaMoneyCheckDollar className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md
@@ -53,9 +33,9 @@ export default function NavResponsive({open, setOpen, option,
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
-          className="text-blue-500 bg-white" placement="right">
-            <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informacion extra' 
+          className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
+            <div className={`p-1`} style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
               <FaFileInvoiceDollar className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md
                 ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
@@ -65,8 +45,8 @@ export default function NavResponsive({open, setOpen, option,
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Comprobante' 
-          className="text-blue-500 bg-white" placement="right">
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Comprobante' 
+          className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
               <FaFilePdf className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md
@@ -77,14 +57,25 @@ export default function NavResponsive({open, setOpen, option,
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='CFDI' 
-          className={`text-blue-500 bg-white`} placement="right">
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI' 
+          className={`text-blue-500 bg-white rounded-md border border-slate-400`} placement="right">
             <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
               <BsFiletypeXml className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                 text-slate-500 my-1 bg-white rounded-md ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
                 onMouseEnter={() => {setIsHover(4)} } onMouseLeave={() => setIsHover(-1)}
                 style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
                   color: isHover===4 || option===4 ? 'white' : '',}}
+              />
+            </div>
+        </Tooltip>
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI relacionadas' 
+          className={`text-blue-500 bg-white rounded-md border border-slate-400`} placement="right">
+            <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
+              <ClipboardDocumentCheckIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                text-slate-500 my-1 bg-white rounded-md ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
+                onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
+                style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
+                  color: isHover===5 || option===5 ? 'white' : '',}}
               />
             </div>
         </Tooltip>
@@ -119,19 +110,75 @@ export default function NavResponsive({open, setOpen, option,
           Comprobante
         </div>
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-          flex py-2 items-center ${option===4? 'bg-slate-200': ''}`}
+          flex py-2 items-center ${isticket? 'hidden': ''} ${option===4? 'bg-slate-200': ''}`}
           onClick={() => changeOption(4)}
         >
           <BsFiletypeXml className="w-4 h-4 mr-2 text-slate-500" />
           CFDI
         </div>
+        {isadvanceapp && (
+          <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
+            flex py-2 items-center ${isticket? 'hidden': ''} ${option===5? 'bg-slate-200': ''}`}
+            onClick={() => changeOption(5)}
+          >
+            <ClipboardDocumentCheckIcon className="w-4 h-4 mr-2 text-slate-500" />
+            CFDI relacionadas
+          </div>
+        )}
       </div>
     )
   }
 
+  const navResponsive=(
+    <div className={`grid ${isadvanceapp? 'grid-cols-5': 'grid-cols-4'} mt-3 border-t pt-2 sm:hidden`}>
+      <div className="flex flex-col items-center">
+        <FaMoneyCheckDollar 
+          className={`w-6 h-6 cursor-pointer ${option===1 ? 'text-green-500' : 'text-slate-500'}`}
+          onClick={() => changeOption(1)} />
+        <span className="text-xs">Datos basicos</span>
+      </div>
+
+      <div className="flex flex-col items-center">
+        <FaFileInvoiceDollar 
+          className={`w-6 h-6 cursor-pointer ${option===2 ? 'text-green-500' : 'text-slate-500'}`}
+          onClick={() => changeOption(2)} />
+        <span className="text-xs">Datos extras</span>
+      </div>
+
+      <div className="flex flex-col items-center">
+        <FaFilePdf 
+          className={`w-6 h-6 cursor-pointer ${option===3 ? 'text-green-500' : 'text-slate-500'}`}
+          onClick={() => changeOption(3)} />
+        <span className="text-xs">Comprobante</span>
+      </div>
+
+      <div className="flex flex-col items-center">
+        <BsFiletypeXml 
+          className={`w-6 h-6 cursor-pointer ${option===4 ? 'text-green-500' : 'text-slate-500'}`}
+          onClick={() => changeOption(4)} />
+        <span className="text-xs">CFDI</span>
+      </div>
+
+      {isadvanceapp && (
+        <div className="flex flex-col items-center">
+          <ClipboardDocumentCheckIcon 
+            className={`w-6 h-6 cursor-pointer ${option===5 ? 'text-green-500' : 'text-slate-500'}`}
+            onClick={() => changeOption(5)} />
+          <span className="text-xs">CFDI relacionadas</span>
+        </div>
+      )}
+      
+    </div>
+  )
+
   return(
     <>
-      {nav}
+      <div className="hidden sm:block">
+        {nav}
+      </div>
+      <div className="sm:hidden">
+        {navResponsive}
+      </div>
     </>
   )
 }

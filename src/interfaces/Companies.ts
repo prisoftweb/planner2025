@@ -15,7 +15,39 @@ export interface Company {
   phoneNumber: string
   address: string
   logo: string
+  isologo?: string
   status: boolean
   __v: number
   id: string
+  tradename?:string
+  contact?:string,
+  location?: {
+    stret?: string,
+    cp?: string,
+    community?: string,
+    municipy?: string,
+    state?: string,
+    country?: string,
+    addressref?: string
+  },
+  rfc?:string,
+  taxregime?:string,
+  capitalregime:string
+  password?:string
+  tax: {
+    // taxregime: string
+    taxregime: {
+      id: string
+      regime: string
+    }
+    name: string
+    rfc: string
+    capitalregime: string
+    cp: number
+    files: {
+      file: string
+      _id: string
+      id: string
+    }[]
+  }
 }

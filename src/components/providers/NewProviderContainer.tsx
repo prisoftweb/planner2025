@@ -1,13 +1,16 @@
 import { useRegFormContext } from "./StepperProvider";
 import HeaderForm from "../HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 import ContainerStepper from "./ContainerStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
 import { useState, useEffect } from "react";
 import { useProviderStore } from "@/app/store/providerStore";
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
-export default function NewProviderContainer({token, id, showForm, user}: {token:string, id:string, showForm:Function, user: string}){
+export default function NewProviderContainer({token, id, showForm, user, open, company}: 
+  {token:string, id:string, showForm:Function, user: string, open:boolean, company:string}){
+  
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -38,8 +41,6 @@ export default function NewProviderContainer({token, id, showForm, user}: {token
         {
           label: 'Si',
           onClick: () => {
-            //let res = undefined;
-  
             switch('user'){
               case 'user':
                 showForm(false);
@@ -75,18 +76,24 @@ export default function NewProviderContainer({token, id, showForm, user}: {token
     }
   }
 
-  return(
-    <div className="z-10 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0 h-screen"
+  return(//top-16
+    // <div className={`z-10 w-full sm:max-w-lg absolute bg-white p-5 right-0 h-screen
+    //                 transform transition-transform duration-300
+    //                 ${open ? "translate-x-0" : "translate-x-full"}`}
+    //   style={{height: `${heightPage}px`}}
+    // >
+    <div className={`z-10 w-full sm:max-w-lg absolute bg-white px-2 py-2 sm:py-5 sm:px-7 right-0 h-screen`}
       style={{height: `${heightPage}px`}}
     >
-      <div className="flex justify-between">
+      <div className="flex justify-between p-2 rounded-md" style={{backgroundColor:'#F8FAFC', border:'0.5px solid #D3D3D3'}}>
         <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
           title="Nuevo proveedor"
         />
-        <XMarkIcon className="w-6 h-6 text-slate-500
-          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+        {/* <XMarkIcon className="w-6 h-6 text-slate-500
+          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
+        <TooltipCloseIcon handleClose={closeForm} />
       </div>
-      <ContainerStepper token={token} id={id} user={user} />
+      <ContainerStepper token={token} id={id} user={user} company={company} />
     </div>
   )
 }

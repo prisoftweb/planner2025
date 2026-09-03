@@ -2,15 +2,16 @@ import WithOut from "@/components/WithOut";
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import Header from "@/components/Header";
-//import Header from "@/components/HeaderPage";
+import { ResponsiveHeader } from "@/components/Header";
 import { Options } from "@/interfaces/Common";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import ButtonNew from "@/components/costcenter/ButtonNew";
-import { CostCenterTable, CostCenter } from "@/interfaces/CostCenter";
+import { CostCenterTable } from "@/interfaces/CostCenter";
 import { getCostoCenters } from "../api/routeCostCenter";
 import TableCostCenter from "@/components/costcenter/TableCostCenter";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   
@@ -18,43 +19,76 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+  const perm=((user.rol?._id?? '') + ('/providers/id%2Fadvances'));
+  
+  console.log('per => ', perm);
+
+  const [catalogs, costs, resresource, rescomponents] = await Promise.all([
+    getCatalogsByName(token, 'projects'), 
+    getCostoCenters(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'costcenter', ''),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
+  }
+
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/catalogs`} message={rescomponents} />
+      </>
+    )
+  }
+
+  if(typeof(catalogs)==='string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </div> */}
+        <ComponentError page="/costcenter" message={catalogs} />
+      </>
+    )
   }
 
   const optCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category:any) => {
     optCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
     })
   })
 
-  let costs: CostCenter[];
-  try {
-    costs = await getCostoCenters(token);
-    //console.log('cost => ', costs);
-    if(typeof(costs)=== 'string')
-      return <h1 className="text-lg text-red-500 text-center">{costs}</h1>
-  } catch (error) {
-    return <h1 className="text-lg text-red-500 text-center">Error al obtener centro de costos!!</h1>
+  if(typeof(costs)=== 'string'){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-lg text-red-500 text-center">{costs}</h1>
+        </div> */}
+        <ComponentError page="/costcenter" message={costs} />
+      </>
+    )
   }
 
-  
   if(!costs || costs.length <= 0){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} resources={resresource} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/projects.jpg" subtitle="Centro de costos"
             text="Aqui se personalizan las categorias y
                     conceptos del centro de costos"
             title="Centro de costos">
-              <ButtonNew token={token} id="" />
+              <ButtonNew token={token} id="" company={user.profile} />
           </WithOut>
         </div>
       </>
@@ -62,10 +96,9 @@ export default async function Page(){
   }
 
   const table: CostCenterTable[] = [];
-  costs.map((cost) => {
+  costs.map((cost:any) => {
     let concept = '';
-    cost.categorys.map((conc) => {
-      //concept += conc.name + ', ';
+    cost.categorys.map((conc:any) => {
       concept += conc.concept.name + ', ';
     })
     table.push({
@@ -76,17 +109,25 @@ export default async function Page(){
       concept 
     })
   })
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>
-      <Navigation user={user} />
-      
+      <Navigation user={user} token={token} resources={resresource} />     
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
-        <Header title="Centro de costos" placeHolder="Buscar centro de costos..">
-          <ButtonNew token={token} id="" /></Header>
+        <ResponsiveHeader other={false} title="Centro de costos" placeHolder="Buscar centro de costos..">
+          <>
+            {result.permission.create && (
+              <ButtonNew token={token} id="" company={user.profile} />
+            )}
+          </>
+        </ResponsiveHeader>
         <div className="mt-5">
-          {/* <TableClients data={data} token={token} /> */}
-          <TableCostCenter data={table} token={token} />
+          <TableCostCenter data={table} token={token} company={user.profile} permissions={result} />
         </div>
       </div>
     </>

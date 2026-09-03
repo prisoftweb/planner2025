@@ -1,0 +1,22 @@
+import { ITableCollection, ICollectionMin } from "@/interfaces/Collections";
+
+export function CollectionDataToTableData(collections:ICollectionMin[]){
+  const table: ITableCollection[] = [];
+  collections.map((col) => {
+    table.push({
+      Accion: col._id,
+      Cuenta: col.account,
+      Estimacion: '',
+      Facturas: [col.invoices],
+      Fecha: col.date,
+      id: col._id,
+      Importe: col.amount,
+      Referencia: col.reference,
+      status: col.condition,
+      concept: col.concept,
+      confirm: col.condition.name.toLowerCase().includes('confirmado')
+    })
+  });
+
+  return table;
+}

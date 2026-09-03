@@ -9,8 +9,9 @@ import ButtonNewBudget from "./ButtonNewBudget"
 import { CostCenter } from "@/interfaces/CostCenter"
 import Header from "@/components/HeaderPage";
 
-export default function BudgetCli({budget, token, id, user, costoCenters}: 
-  {budget: FullBudget, token:string, id:string, user: string, costoCenters: CostCenter[]}){
+export default function BudgetCli({budget, token, id, user, costoCenters, projectQuery}: 
+  {budget: FullBudget, token:string, id:string, user: string, 
+    costoCenters: CostCenter[], projectQuery:string | undefined}){
 
   const [opt, setOpt] = useState<number>(1);
   const [open, setOpen] = useState<boolean>(false);
@@ -46,22 +47,20 @@ export default function BudgetCli({budget, token, id, user, costoCenters}:
 
   return(
     <>
-      <Header title={budget.title} previousPage="/projects/budget">
-        {/* <Selectize options={options} routePage="projects" subpath="/profile" /> */}
+      <Header title={budget.title} previousPage={projectQuery? `/projects/${projectQuery}/budgets`: "/projects/budget"}>
         <ButtonNewBudget handleNewBudget={handleNewBudget} openNewBudget={newBudget} 
           token={token} user={user} costoCenters={costoCenters} id={id} />
       </Header>
-      {/* <div className="mt-5 flex justify-end items-center gap-x-10">
-        <ButtonNewBudget handleNewBudget={handleNewBudget} openNewBudget={newBudget} 
-          token={token} user={user} costoCenters={costoCenters} id={id} />
+      {/* <div className="md:hidden">
+        <NavResponsive open={open} setOpen={handleOpen} changeOption={handleOpt} option={opt} />
       </div> */}
       <div className={`flex mt-5`}>
-        <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
+        {/* <div className={`hiiden md:block bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={handleOpen} changeOption={handleOpt} option={opt} />
           </div>
-        </div>
-        <div className="flex w-full px-2 space-x-2" 
+        </div> */}
+        <div className="flex w-full lg:px-2 lg:space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full`}>
             <ProfileBudget budget={oneBudget} token={token} id={id} user={user} />

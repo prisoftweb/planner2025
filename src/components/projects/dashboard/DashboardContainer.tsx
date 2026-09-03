@@ -1,29 +1,34 @@
 'use client'
 import { useState } from "react"
-import DonutChartComponent from "./DonutChartComponent"
-import { BarChartComponent } from "./BarChartComponent"
+// import DonutChartComponent from "./DonutChartComponent"
+import { DonutStatusChartComponent } from "./DonutChartComponent"
+// import { BarChartComponent } from "./BarChartComponent"
 import PieChartComponent from "./PieChartComponent"
 import { ProgressBarComponent } from "./ProgressBarComponent"
-import HeaderDashboardPage from "./HeaderDashboardPage"
-import { BarChartTreeInOne } from "./BarChartTreeInOne"
+// import HeaderDashboardPage from "./HeaderDashboardPage"
+import HeaderDashboardPrjPage from "./HeaderDashboardPrjPage"
+// import { BarChartTreeInOne } from "./BarChartTreeInOne"
 import { LineChartComponent } from "./LineChartComponent"
-import NewDonutChartComponent from "./NewDonutChartComponent"
+// import NewDonutChartComponent from "./NewDonutChartComponent"
+import { DonutChartComponentWithDescription } from "./NewDonutChartComponent"
 import { Options } from "@/interfaces/Common"
 import { showToastMessageError } from "@/components/Alert"
+import { MoneyFormatter } from "@/app/functions/Globals"
 
-import { getDashboardProjectsAmount, getDashboardListProjects, 
+import { getDashboardProjectsAmount,  
   getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
   getDashboardProjectsByPROGRESS, getDashboardProjectsBySEGMENT,
-  getDashboardByProjectAndType, getDashboardListProjectsNotComplete, 
+  getDashboardListProjectsNotComplete, 
   getDashboardListProjectsByDate, getDashboardListProjectsTop10, 
-  getDashboardProjectTotalCost, getConfigMin, getProjectsBudgeted, 
-  getProjectsControlBudgeted, getProjectsSpent } 
+  getDashboardProjectTotalCost, getConfigMin, getDashboardProjectsByFeaturesGuaranteeFund, 
+  getDashboardProjectsByFeaturesAmountCharge, getDashboardProjectsByFeaturesTaxes} 
 from "@/app/api/routeProjects";
 
-import { ProjectsByClient, ListProjects, ProjectsByProgress, 
+import { ProjectsByClient, ProjectsByProgress, 
   ProjectsBySegment, ProjectsByStatus, TotalAmountProjects, 
   CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate, 
-  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted, DonutChartJS, Dataset } 
+  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted, DonutChartJS, 
+  ITotalDashboardProjectsByFeatures } 
 from "@/interfaces/DashboardProjects";
 
 interface OptionsDashboard {
@@ -31,8 +36,14 @@ interface OptionsDashboard {
   costo: number
 }
 
+interface OptionsDashboardStatus {
+  label: string,
+  percentaje: number
+  total: number,
+  count: number
+}
+
 export interface DataProjectsByType {
-  //project: "PROVEEDOR" | "MANO DE OBRA" | "OTROS"
   project: string
   issues: Issue[]
 }
@@ -43,37 +54,49 @@ export interface Issue {
   percentage: number
 }
 
-function transformProjectsTypesToDataChart(dataProjects: CostsByProjectAndType[][]){
-  const res: DataProjectsByType[] = [];
-  dataProjects.map((arrData) => {
-    const r: Issue[] = [];
-    arrData.map((prj) => {
-      r.push({
-        percentage: prj.porcentage,
-        status: prj.type,
-        value: prj.subtotalCost
-      });
-    });
-    res.push({
-      project: arrData[0].project,
-      issues: r,
-    });
-  });
+// function transformProjectsTypesToDataChart(dataProjects: CostsByProjectAndType[][]){
+//   const res: DataProjectsByType[] = [];
+//   dataProjects.map((arrData) => {
+//     const r: Issue[] = [];
+//     arrData.map((prj) => {
+//       r.push({
+//         percentage: prj.porcentage,
+//         status: prj.type,
+//         value: prj.subtotalCost
+//       });
+//     });
+//     res.push({
+//       project: arrData[0].project,
+//       issues: r,
+//     });
+//   });
 
-  return res;
+//   return res;
+// }
+
+type Params = {
+  token: string, 
+  amountProjects: TotalAmountProjects[], 
+  listProjects: ListProjectsByDate[], 
+  projectsClient: ProjectsByClient[], 
+  projectsSegment: ProjectsBySegment[], 
+  projectsStatus: ProjectsByStatus[], 
+  projectsProgress: ProjectsByProgress[], 
+  listProjectsnotCompleted: ProjectsNotCompleted[], 
+  projectsTop10: ProjectsTop10[], 
+  projectsTotalCost: DashboardTotalCost[], 
+  configMin: ConfigMin[], 
+  projects:Options[],
+  numEvaluado: number,
+  totalFeaturesGF: ITotalDashboardProjectsByFeatures[],
+  totalFeaturesAC: ITotalDashboardProjectsByFeatures[],
+  totalFeaturesT: ITotalDashboardProjectsByFeatures[] 
 }
 
 export default function DashBoardContainer({token, amountProjects, listProjects, projectsTop10, projectsTotalCost, 
     projectsClient, projectsProgress, projectsSegment, projectsStatus, listProjectsnotCompleted, 
-    projectsandTypes, configMin, projectsBudgeted, projectsControlBudgeted, projectsSpent, projects }:
-  {token: string, amountProjects: TotalAmountProjects[], listProjects: ListProjectsByDate[], 
-    projectsClient: ProjectsByClient[], projectsSegment: ProjectsBySegment[], projectsStatus: ProjectsByStatus[], 
-    projectsProgress: ProjectsByProgress[], listProjectsnotCompleted: ProjectsNotCompleted[], 
-    projectsandTypes: CostsByProjectAndType[], projectsTop10: ProjectsTop10[], 
-    projectsTotalCost: DashboardTotalCost[], configMin: ConfigMin[], projectsBudgeted: ControlBudgeted[], 
-    projectsSpent: ControlBudgeted[], projectsControlBudgeted: ControlBudgeted[], projects:Options[] }) {
+    configMin, projects, numEvaluado, totalFeaturesAC, totalFeaturesGF, totalFeaturesT }: Params) {
   
-  // const [dataProjectsStatus, setDataProjectsStatus] = useState<OptionsDashboard[]>([]);
   const [stateListProjects, setStateListProjects] = useState<ListProjectsByDate[]>(listProjects);
   const [stateProjectsClient, setStateProjectsClient] = useState<ProjectsByClient[]>(projectsClient);
   const [stateProjectsSegment, setStateProjectsSegment] = useState<ProjectsBySegment[]>(projectsSegment);
@@ -81,410 +104,216 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   const [stateProjectsStatus, setStateProjectsStatus] = useState<ProjectsByStatus[]>(projectsStatus);
   const [stateProjectsProgress, setStateProjectsProgress] = useState<ProjectsByProgress[]>(projectsProgress);
   const [stateProjectsNotCompleted, setStateProjectsNotCompleted] = useState<ProjectsNotCompleted[]>(listProjectsnotCompleted);  
-  const [stateProjectsAndType, setStateProjectsAndType] = useState<CostsByProjectAndType[]>(projectsandTypes);
   const [stateProjectsTop10, setStateProjectsTop10] = useState<ProjectsTop10[]>(projectsTop10);
   const [stateTotalCost, setStateTotalCost] = useState<DashboardTotalCost[]>(projectsTotalCost);
   const [stateConfiMin, setStateConfiMin] = useState<ConfigMin[]>(configMin);
-  const [stateProjectsBudgeted, setStateProjectsBudgeted] = useState<ControlBudgeted[]>(projectsBudgeted);
-  const [stateProjectsSpent, setStateProjectsSpent] = useState<ControlBudgeted[]>(projectsSpent);
-  const [stateProjectscontrolBudgeted, setStateProjectsControlBudgeted] = useState<ControlBudgeted[]>(projectsControlBudgeted);
-
+  const [stateTotalFeatureAmountChargeOff, setStateTotalFeatureAmountChargeOff] = useState<ITotalDashboardProjectsByFeatures[]>(totalFeaturesAC);
+  const [stateTotalFeatureGuaranteeFund, setStateTotalFeatureGuaranteeFund] = useState<ITotalDashboardProjectsByFeatures[]>(totalFeaturesGF);
+  const [stateTotalFeatureTaxes, setStateTotalFeatureTaxes] = useState<ITotalDashboardProjectsByFeatures[]>(totalFeaturesT);
+  
   const fetchData = async (dateS: string, dateE: string, prj: string[]) => {
-    let amountPrjs: TotalAmountProjects[] = [];
-    
-    // let listPrjs: ListProjects[] = [];
-    // try {
-    //   listPrjs = await getDashboardListProjects(token, dateS, dateE);
-    //   if(typeof(listPrjs)==='string'){
-    //     return <h1>{listPrjs}</h1>
-    //   }
-    // } catch (error) {
-    //   return <h1>Error al obtener lista de proyectos!!!</h1>
-    // }
-
-    let listPrjsDate: ListProjectsByDate[] = [];
-    
-    let prjsClient: ProjectsByClient[] = [];
-    
-    let prjsSegment: ProjectsBySegment[] = [];
-    
-    let prjStatus: ProjectsByStatus[] = [];
-    
-    let prjsProgress: ProjectsByProgress[] = [];
-    
-    let listprjnotCompleted: ProjectsNotCompleted[] = [];
-    
-    let prjandTypes: CostsByProjectAndType[] = [];
-    
-    let prjsTop10: ProjectsTop10[] = [];
-    
-    let totalCost: DashboardTotalCost[] = [];
-    
-    let confMin: ConfigMin[] = [];
-    
-    let prjsBudgeted: ControlBudgeted[] = [];
-    
-    let prjsSpent: ControlBudgeted[] = [];
-    
-    let prjsControlBudgeted: ControlBudgeted[] = [];
     
     if(prj.includes('all')){
-      try {
-        amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
-        // console.log('amountPrjs => => ', amountPrjs);
-        if(typeof(amountPrjs)==='string'){
-          showToastMessageError(amountPrjs);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener monto total de proyectos!!!');
+
+      const [amountPrjs, listPrjsDate, prjsClient, prjsSegment, prjStatus,
+        prjsProgress, listprjnotCompleted, prjsTop10,
+        totalCost, confMin, totGuaranteeFund, totAmountCharge, totTaxes] = await Promise.all([
+          getDashboardProjectsAmount(token, dateS, dateE, []),
+          getDashboardListProjectsByDate(token, dateS, dateE, []),
+          getDashboardProjectsByClient(token, dateS, dateE, []),
+          getDashboardProjectsBySEGMENT(token, dateS, dateE, []),
+          getDashboardProjectsByESTATUS(token, dateS, dateE, []),
+          getDashboardProjectsByPROGRESS(token, dateS, dateE, []),
+          getDashboardListProjectsNotComplete(token, dateS, dateE, []),
+          getDashboardListProjectsTop10(token, dateS, dateE, []),
+          getDashboardProjectTotalCost(token, dateS, dateE, []),
+          getConfigMin(token),
+          getDashboardProjectsByFeaturesGuaranteeFund(token, dateS, dateE, []),
+          getDashboardProjectsByFeaturesAmountCharge(token, dateS, dateE, []),
+          getDashboardProjectsByFeaturesTaxes(token, dateS, dateE, [])
+        ]); 
+      
+      if(typeof(amountPrjs)==='string'){
+        showToastMessageError(amountPrjs);
       }
 
-      // let listPrjs: ListProjects[] = [];
-      // try {
-      //   listPrjs = await getDashboardListProjects(token, dateS, dateE);
-      //   if(typeof(listPrjs)==='string'){
-      //     return <h1>{listPrjs}</h1>
-      //   }
-      // } catch (error) {
-      //   return <h1>Error al obtener lista de proyectos!!!</h1>
-      // }
-
-      try {
-        listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, []);
-        if(typeof(listPrjsDate)==='string'){
-          showToastMessageError(listPrjsDate);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener lista de proyectos!!!');
+      if(typeof(listPrjsDate)==='string'){
+        showToastMessageError(listPrjsDate);
       }
 
-      try {
-        prjsClient = await getDashboardProjectsByClient(token, dateS, dateE, []);
-        if(typeof(prjsClient)==='string'){
-          showToastMessageError(prjsClient);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos agrupados por clientes!!!');
+      if(typeof(prjsClient)==='string'){
+        showToastMessageError(prjsClient);
       }
 
-      try {
-        prjsSegment = await getDashboardProjectsBySEGMENT(token, dateS, dateE, []);
-        if(typeof(prjsSegment)==='string'){
-          showToastMessageError(prjsSegment);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos agrupados por segmento!!!');
+      if(typeof(prjsSegment)==='string'){
+        showToastMessageError(prjsSegment);
       }
 
-      try {
-        prjStatus = await getDashboardProjectsByESTATUS(token, dateS, dateE, []);
-        if(typeof(prjStatus)==='string'){
-          showToastMessageError(prjStatus);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos agrupados por estatus!!!');
+      if(typeof(prjStatus)==='string'){
+        showToastMessageError(prjStatus);
       }
 
-      try {
-        prjsProgress = await getDashboardProjectsByPROGRESS(token, dateS, dateE, []);
-        if(typeof(prjsProgress)==='string'){
-          showToastMessageError(prjsProgress);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos agrupados por progreso!!!');
+      if(typeof(prjsProgress)==='string'){
+        showToastMessageError(prjsProgress);
       }
 
-      try {
-        listprjnotCompleted = await getDashboardListProjectsNotComplete(token, dateS, dateE, []);
-        if(typeof(listprjnotCompleted)==='string'){
-          showToastMessageError(listprjnotCompleted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener lista de proyectos no completos!!!');
+      if(typeof(listprjnotCompleted)==='string'){
+        showToastMessageError(listprjnotCompleted);
       }
 
-      try {
-        prjsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
-        if(typeof(prjsTop10)==='string'){
-          showToastMessageError(prjsTop10);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos top 10!!!');
+      if(typeof(prjsTop10)==='string'){
+        showToastMessageError(prjsTop10);
       }
 
-      try {
-        totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, []);
-        if(typeof(totalCost)==='string'){
-          showToastMessageError(totalCost);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costo total de los proyectos!!!');
+      if(typeof(totalCost)==='string'){
+        showToastMessageError(totalCost);
       }
 
-      try {
-        confMin = await getConfigMin(token);
-        if(typeof(confMin)==='string'){
-          showToastMessageError(confMin);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener configuracion!!!');
+      if(typeof(confMin)==='string'){
+        showToastMessageError(confMin);
       }
 
-      try {
-        prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, []);
-        if(typeof(prjsBudgeted)==='string'){
-          showToastMessageError(prjsBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos presupuestados!!!');
+      if(typeof(totAmountCharge)==='string'){
+        showToastMessageError(totAmountCharge);
       }
 
-      try {
-        prjsSpent = await getProjectsSpent(token, dateS, dateE, []);
-        if(typeof(prjsSpent)==='string'){
-          showToastMessageError(prjsSpent);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por gastos!!!');
+      if(typeof(totGuaranteeFund)==='string'){
+        showToastMessageError(totGuaranteeFund);
       }
 
-      try {
-        prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, []);
-        if(typeof(prjsControlBudgeted)==='string'){
-          showToastMessageError(prjsControlBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
+      if(typeof(totTaxes)==='string'){
+        showToastMessageError(totTaxes);
       }
 
-      try {
-        prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, []);
-        if(typeof(prjandTypes)==='string'){
-          showToastMessageError(prjandTypes);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
-      }
+      setStateListProjects(listPrjsDate);
+      setStateProjectsClient(prjsClient);
+      setStateProjectsSegment(prjsSegment);
+      setTotalAmount(amountPrjs);
+      setStateProjectsStatus(prjStatus);
+      setStateProjectsProgress(prjsProgress);
+      setStateProjectsNotCompleted(listprjnotCompleted);
+      // setStateProjectsAndType(prjandTypes);
+      setStateProjectsTop10(prjsTop10);
+      setStateTotalCost(totalCost);
+      setStateConfiMin(confMin);
+      setStateTotalFeatureAmountChargeOff(totAmountCharge);
+      setStateTotalFeatureGuaranteeFund(totGuaranteeFund);
+      setStateTotalFeatureTaxes(totTaxes);
+
     }else{
-      try {
-        amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
-        // console.log('amountPrjs => ', amountPrjs);
-        if(typeof(amountPrjs)==='string'){
-          showToastMessageError(amountPrjs);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener monto total de proyectos!!!');
+      const [amountPrjs, listPrjsDate, prjsClient, prjsSegment, prjStatus,
+        prjsProgress, listprjnotCompleted, prjsTop10,
+        totalCost, confMin, totGuaranteeFund, totAmountCharge, totTaxes] = await Promise.all([
+          getDashboardProjectsAmount(token, dateS, dateE, prj),
+          getDashboardListProjectsByDate(token, dateS, dateE, prj),
+          getDashboardProjectsByClient(token, dateS, dateE, prj),
+          getDashboardProjectsBySEGMENT(token, dateS, dateE, prj),
+          getDashboardProjectsByESTATUS(token, dateS, dateE, prj),
+          getDashboardProjectsByPROGRESS(token, dateS, dateE, prj),
+          getDashboardListProjectsNotComplete(token, dateS, dateE, prj),
+          getDashboardListProjectsTop10(token, dateS, dateE, prj),
+          getDashboardProjectTotalCost(token, dateS, dateE, prj),
+          getConfigMin(token),
+          getDashboardProjectsByFeaturesGuaranteeFund(token, dateS, dateE, []),
+          getDashboardProjectsByFeaturesAmountCharge(token, dateS, dateE, []),
+          getDashboardProjectsByFeaturesTaxes(token, dateS, dateE, [])
+        ]);
+
+      if(typeof(amountPrjs)==='string'){
+        showToastMessageError(amountPrjs);
       }
 
-      // let listPrjs: ListProjects[] = [];
-      // try {
-      //   listPrjs = await getDashboardListProjects(token, dateS, dateE);
-      //   if(typeof(listPrjs)==='string'){
-      //     return <h1>{listPrjs}</h1>
-      //   }
-      // } catch (error) {
-      //   return <h1>Error al obtener lista de proyectos!!!</h1>
-      // }
-
-      try {
-        listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, prj);
-        if(typeof(listPrjsDate)==='string'){
-          showToastMessageError(listPrjsDate);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener lista de proyectos!!!');
+      if(typeof(listPrjsDate)==='string'){
+        showToastMessageError(listPrjsDate);
       }
 
-      try {
-        prjsClient = await getDashboardProjectsByClient(token, dateS, dateE, prj);
-        if(typeof(prjsClient)==='string'){
-          showToastMessageError(prjsClient);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos agrupados por clientes!!!');
+      if(typeof(prjsClient)==='string'){
+        showToastMessageError(prjsClient);
       }
 
-      try {
-        prjsSegment = await getDashboardProjectsBySEGMENT(token, dateS, dateE, prj);
-        if(typeof(prjsSegment)==='string'){
-          showToastMessageError(prjsSegment);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos agrupados por segmento!!!');
+      if(typeof(prjsSegment)==='string'){
+        showToastMessageError(prjsSegment);
       }
 
-      try {
-        prjStatus = await getDashboardProjectsByESTATUS(token, dateS, dateE, prj);
-        if(typeof(prjStatus)==='string'){
-          showToastMessageError(prjStatus);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos agrupados por estatus!!!');
+      if(typeof(prjStatus)==='string'){
+        showToastMessageError(prjStatus);
       }
 
-      try {
-        prjsProgress = await getDashboardProjectsByPROGRESS(token, dateS, dateE, prj);
-        if(typeof(prjsProgress)==='string'){
-          showToastMessageError(prjsProgress);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos agrupados por progreso!!!');
+      if(typeof(prjsProgress)==='string'){
+        showToastMessageError(prjsProgress);
       }
 
-      try {
-        listprjnotCompleted = await getDashboardListProjectsNotComplete(token, dateS, dateE, prj);
-        if(typeof(listprjnotCompleted)==='string'){
-          showToastMessageError(listprjnotCompleted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener lista de proyectos no completos!!!');
+      if(typeof(listprjnotCompleted)==='string'){
+        showToastMessageError(listprjnotCompleted);
       }
 
-      try {
-        prjsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', prj);
-        if(typeof(prjsTop10)==='string'){
-          showToastMessageError(prjsTop10);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos top 10!!!');
+      if(typeof(prjsTop10)==='string'){
+        showToastMessageError(prjsTop10);
       }
 
-      try {
-        totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, prj);
-        if(typeof(totalCost)==='string'){
-          showToastMessageError(totalCost);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costo total de los proyectos!!!');
+      if(typeof(totalCost)==='string'){
+        showToastMessageError(totalCost);
       }
 
-      try {
-        confMin = await getConfigMin(token);
-        if(typeof(confMin)==='string'){
-          showToastMessageError(confMin);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener configuracion!!!');
+      if(typeof(confMin)==='string'){
+        showToastMessageError(confMin);
       }
 
-      try {
-        prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, prj);
-        if(typeof(prjsBudgeted)==='string'){
-          showToastMessageError(prjsBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos presupuestados!!!');
+      if(typeof(totAmountCharge)==='string'){
+        showToastMessageError(totAmountCharge);
       }
 
-      try {
-        prjsSpent = await getProjectsSpent(token, dateS, dateE, prj);
-        if(typeof(prjsSpent)==='string'){
-          showToastMessageError(prjsSpent);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por gastos!!!');
+      if(typeof(totGuaranteeFund)==='string'){
+        showToastMessageError(totGuaranteeFund);
       }
 
-      try {
-        prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, prj);
-        if(typeof(prjsControlBudgeted)==='string'){
-          showToastMessageError(prjsControlBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
+      if(typeof(totTaxes)==='string'){
+        showToastMessageError(totTaxes);
       }
 
-      try {
-        prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, prj);
-        if(typeof(prjandTypes)==='string'){
-          showToastMessageError(prjandTypes);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
-      }
-      // let auxPrjProgress = prjsProgress.filter((p) => !prj.includes(p.title));
-      
-      // console.log('prjs progress => ', prjsProgress);
-      // console.log('aux prjs progress => ', auxPrjProgress);
-      // console.log('type data => ', prjsProgress[0]);
-      
-      // let auxListPrj = listPrjsDate.filter((p) => !prj.includes(p._id));
-      // let auxPrjCli = prjsClient.filter((p) => !prj.includes(p.client));
-      // let auxPrjSeg = prjsSegment.filter((p) => !prj.includes(p.client));
-      // // let auxTotalAmount = amountPrjs.filter((p) => !prj.includes(p.));
-      // let auxPrjStatus = prjStatus.filter((p) => !prj.includes(p.client));
-      // let auxPrjNotCompleted = listProjectsnotCompleted.filter((p) => !prj.includes(p._id));
-      // let auxPrjAntTypes = prjandTypes.filter((p) => !prj.includes(p.project));
-      // let auxPrjTop10 = prjsTop10.filter((p) => !prj.includes(p._id));
-      // let auxPrjSpent = prjsSpent.filter((p) => !prj.includes(p.id));
-      // let auxPrjCtrBud = prjsControlBudgeted.filter((p) => !prj.includes(p.id));
-      // let auxBud = prjsBudgeted.filter((p) => !prj.includes(p.id));
-
-      // // setStateListProjects(listPrjsDate);
-      // setStateListProjects(auxListPrj);
-      // // setStateProjectsClient(prjsClient);
-      // setStateProjectsClient(auxPrjCli);
-      // // setStateProjectsSegment(prjsSegment);
-      // setStateProjectsSegment(auxPrjSeg);
-      // setTotalAmount(amountPrjs);
-      // // setStateProjectsStatus(prjStatus);
-      // setStateProjectsStatus(auxPrjStatus);
-      // // setStateProjectsProgress(prjsProgress);
-      // setStateProjectsProgress(auxPrjProgress);
-      // // setStateProjectsNotCompleted(listprjnotCompleted);
-      // setStateProjectsNotCompleted(auxPrjNotCompleted);
-      // // setStateProjectsAndType(prjandTypes);
-      // setStateProjectsAndType(auxPrjAntTypes);
-      // // setStateProjectsTop10(prjsTop10);
-      // setStateProjectsTop10(auxPrjTop10);
-      // setStateTotalCost(totalCost);
-      // setStateConfiMin(confMin);
-      // // setStateProjectsSpent(prjsSpent);
-      // setStateProjectsSpent(auxPrjSpent);
-      // // setStateProjectsControlBudgeted(prjsControlBudgeted);
-      // setStateProjectsControlBudgeted(auxPrjCtrBud);
-      // // setStateProjectsBudgeted(prjsBudgeted);
-      // setStateProjectsBudgeted(auxBud);
+      setStateListProjects(listPrjsDate);
+      setStateProjectsClient(prjsClient);
+      setStateProjectsSegment(prjsSegment);
+      setTotalAmount(amountPrjs);
+      setStateProjectsStatus(prjStatus);
+      setStateProjectsProgress(prjsProgress);
+      setStateProjectsNotCompleted(listprjnotCompleted);
+      // setStateProjectsAndType(prjandTypes);
+      setStateProjectsTop10(prjsTop10);
+      setStateTotalCost(totalCost);
+      setStateConfiMin(confMin);
+      setStateTotalFeatureAmountChargeOff(totAmountCharge);
+      setStateTotalFeatureGuaranteeFund(totGuaranteeFund);
+      setStateTotalFeatureTaxes(totTaxes);
     }
-    setStateListProjects(listPrjsDate);
-    setStateProjectsClient(prjsClient);
-    setStateProjectsSegment(prjsSegment);
-    // console.log('amount prjs => ', amountPrjs);
-    setTotalAmount(amountPrjs);
-    setStateProjectsStatus(prjStatus);
-    setStateProjectsProgress(prjsProgress);
-    setStateProjectsNotCompleted(listprjnotCompleted);
-    setStateProjectsAndType(prjandTypes);
-    setStateProjectsTop10(prjsTop10);
-    setStateTotalCost(totalCost);
-    setStateConfiMin(confMin);
-    setStateProjectsSpent(prjsSpent);
-    setStateProjectsControlBudgeted(prjsControlBudgeted);
-    setStateProjectsBudgeted(prjsBudgeted);
   }
 
-  // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
-  const colorsBudgeted = ['green', 'red', 'blue'];
+  // const colorsBudgeted = ['green', 'red', 'blue'];
 
-  const dataProjectsStatus: OptionsDashboard[] = [];
+  const dataProjectsStatus: OptionsDashboardStatus[] = [];
   const categoriesStatus: string[] = [];
 
   stateProjectsStatus.map((prj) => {
     dataProjectsStatus.push({
-      costo: prj.porcentage,
-      label: prj.client
+      percentaje: prj.porcentage,
+      label: prj.client,
+      count: prj.quantity,
+      total: prj.totalAmount
     });
     categoriesStatus.push(prj.client);
   });
 
-  const dataProjectsSegment: OptionsDashboard[] = [];
+  // const dataProjectsSegment: OptionsDashboard[] = [];
+  const dataProjectsSegment: OptionsDashboardStatus[] = [];
   const categoriesSegment: string[] = [];
 
   stateProjectsSegment.map((prj) => {
     dataProjectsSegment.push({
-      costo: prj.porcentage,
-      label: prj.client
+      percentaje: prj.porcentage,
+      label: prj.client,
+      count: prj.quantity,
+      total: prj.totalAmount
     });
     categoriesSegment.push(prj.client);
   });
@@ -500,13 +329,15 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
   const values: number[] = [];
   const titles: string[] = [];
-  const colorsDonutClientChart: string[] = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)',
-    'rgb(255, 205, 86)', 'rgb(255, 132, 99)', 'rgb(54, 235, 162)', 'rgb(255, 86, 205)',
-    'rgb(132, 99, 255)', 'rgb(235, 162, 54)', 'rgb(86, 205, 255)']
+  const descriptions: string[] = [];
+  // const colorsDonutClientChart: string[] = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)',
+  //   'rgb(255, 205, 86)', 'rgb(255, 132, 99)', 'rgb(54, 235, 162)', 'rgb(255, 86, 205)',
+  //   'rgb(132, 99, 255)', 'rgb(235, 162, 54)', 'rgb(86, 205, 255)']
   
   stateProjectsClient.map((prj) => {
     titles.push(prj.client);
     values.push(prj.porcentage);
+    descriptions.push(MoneyFormatter(prj.totalAmount));
   });
 
   const dataProjectsClient: DonutChartJS = {
@@ -516,19 +347,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         label: 'Projectos por cliente',
         data: values,
         backgroundColor:[ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'],
-        // backgroundColor: [
-        //   'rgb(255, 99, 132)',
-        //   'rgb(54, 162, 235)',
-        //   'rgb(255, 205, 86)',
-
-        //   'rgb(255, 132, 99)',
-        //   'rgb(54, 235, 162)',
-        //   'rgb(255, 86, 205)',
-
-        //   'rgb(132, 99, 255)',
-        //   'rgb(235, 162, 54)',
-        //   'rgb(86, 205, 255)'
-        // ],
         hoverOffset: 4
       }
     ]
@@ -538,7 +356,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   
   stateProjectsProgress.map((prj) => {
     dataProjectsProgress.push({
-      //costo: prj.porcentage,
       costo: prj.progress?? 0,
       label: prj.title
     });
@@ -553,25 +370,25 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     });
   });
 
-  const dataProjectsAndTypes: OptionsDashboard[] = [];
-  const categoriesProjectsAndTypes: string[] = [];
+  // const dataProjectsAndTypes: OptionsDashboard[] = [];
+  // const categoriesProjectsAndTypes: string[] = [];
 
-  stateProjectsAndType.map((prj) => {
-    dataProjectsAndTypes.push({
-      costo: prj.subtotalCost,
-      label: prj.project
-    });
-    categoriesProjectsAndTypes.push(prj.project);
-  });
+  // stateProjectsAndType.map((prj) => {
+  //   dataProjectsAndTypes.push({
+  //     costo: prj.subtotalCost,
+  //     label: prj.project
+  //   });
+  //   categoriesProjectsAndTypes.push(prj.project);
+  // });
 
-  const groupedByProject = stateProjectsAndType.reduce((acc: any, prj) => {
-      const project = prj.project;
-      (acc[project] = acc[project] || []).push(prj);
-      return acc;
-  }, {});
+  // const groupedByProject = stateProjectsAndType.reduce((acc: any, prj) => {
+  //     const project = prj.project;
+  //     (acc[project] = acc[project] || []).push(prj);
+  //     return acc;
+  // }, {});
 
-  const resultArray: CostsByProjectAndType[][] = Object.values(groupedByProject);
-  const resParse = transformProjectsTypesToDataChart(resultArray);
+  // const resultArray: CostsByProjectAndType[][] = Object.values(groupedByProject);
+  // const resParse = transformProjectsTypesToDataChart(resultArray);
   const dataProjectsTop: OptionsDashboard[] = [];
 
   stateProjectsTop10.map((prj) => {
@@ -581,19 +398,16 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     });
   });
 
-  let dataControlBudgeted: DataControlBudgeted[] = [];
-  console.log('state projetcs budgeted => ', stateProjectsBudgeted);
-  console.log('state Projects control budjeted => ', stateProjectscontrolBudgeted);
-  console.log('state projects spent => ', stateProjectsSpent);
-  if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted.length && stateProjectsBudgeted.length >= stateProjectsSpent.length){
-    dataControlBudgeted = MoreProjectsBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
-  }else{
-    if(stateProjectscontrolBudgeted.length >= stateProjectsBudgeted.length && stateProjectscontrolBudgeted.length >= stateProjectsSpent.length){
-      dataControlBudgeted = MoreProjectsCtrBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
-    }else{
-      dataControlBudgeted = MoreProjectsSpent(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
-    }
-  }
+  // let dataControlBudgeted: DataControlBudgeted[] = [];
+  // if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted.length && stateProjectsBudgeted.length >= stateProjectsSpent.length){
+  //   dataControlBudgeted = MoreProjectsBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
+  // }else{
+  //   if(stateProjectscontrolBudgeted.length >= stateProjectsBudgeted.length && stateProjectscontrolBudgeted.length >= stateProjectsSpent.length){
+  //     dataControlBudgeted = MoreProjectsCtrBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
+  //   }else{
+  //     dataControlBudgeted = MoreProjectsSpent(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
+  //   }
+  // }
 
   const randomColors = [ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'];
 
@@ -603,18 +417,22 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     return Math.floor(Math.random() * max);
   }
 
-  const colorRandom = getRandomInt(10);
+  // const colorRandom = getRandomInt(10);
   const colorRandom2 = getRandomInt(10);
+
+
 
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-      <HeaderDashboardPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
-        projectsTotalCost={stateTotalCost} configMin={stateConfiMin} activeProjects={dataProjectsProgress.length} />
-      {/* <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
-        costsResumenType={costsByResumenType} /> */}
-      <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
-        <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+      <HeaderDashboardPrjPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
+        projectsTotalCost={stateTotalCost} configMin={stateConfiMin} 
+        activeProjects={dataProjectsProgress.length} numEvaluado={numEvaluado}
+        totalFeaturesAC={stateTotalFeatureAmountChargeOff} totalFeaturesGF={stateTotalFeatureGuaranteeFund}
+        totalFeaturesT={stateTotalFeatureTaxes} />
+      <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap lg:flex-nowrap">
+        {/* <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        <div className="w-full lg:w-2/3 border border-slate-300 bg-white rounded-xl p-5">
+          <div className="flex mb-3 gap-x-2 justify-between ">
             <p>AVANCE DE PROYECTOS ACTIVOS {dataProjectsProgress.length}</p>
           </div>
           {dataProjectsProgress.map((prj, index: number) => (
@@ -623,143 +441,59 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           ))}
         </div>
         
-        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>ESTATUS</p>
+        {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        <div className="hidden lg:block w-full lg:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
+          <div className="flex mb-3 gap-x-2 justify-between ">
+            <p>PROYECTOS POR ESTATUS</p>
           </div>
-          <DonutChartComponent data={dataProjectsStatus} colors={colors} category="costo"
-              categories={categoriesStatus}  />
+          {/* <DonutChartComponent data={dataProjectsStatus} colors={colors} category="costo"
+              categories={categoriesStatus}  /> */}
+          <DonutStatusChartComponent data={dataProjectsStatus} colors={colors} category="percentaje"
+            categories={categoriesStatus}  />
         </div>
       </div>
 
-      <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
-        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+      {/* <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap lg:flex-nowrap"> */}
+      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div className="lg:hidden border border-slate-300 bg-white rounded-xl p-5">
+          <div className="flex mb-3 gap-x-2 justify-between ">
+            <p>PROYECTOS POR ESTATUS</p>
+          </div>
+          <DonutStatusChartComponent data={dataProjectsStatus} colors={colors} category="percentaje"
+            categories={categoriesStatus}  />
+        </div>
+
+        {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        {/* <div className="w-full md:w-1/2 lg:w-1/3 border border-slate-300 bg-white rounded-xl p-5"> */}
+        <div className="border border-slate-300 bg-white rounded-xl p-5">
+          <div className="flex mb-3 gap-x-2 justify-between ">
             <p>PROYECTOS POR SEGMENTO</p>
           </div>
-          {/* <DonutChartComponent data={dataProjectsSegment} colors={colors} category="costo"
-              categories={categoriesSegment}  /> */}
-          <PieChartComponent data={dataProjectsSegment} colors={colorSegments} category="costo"
+          <PieChartComponent data={dataProjectsSegment} colors={colorSegments} category="percentaje"
             categories={categoriesSegment}  />
         </div>
 
-        <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>TOTAL PROJECTS   | Montos de proyectos</p>
-          </div>
-          {/* <BarChartComponent categories={['costo']} colors={colors} data={dataListProjects} /> */}
-          <BarChartComponent categories={['costo']} colors={[colors[colorRandom]]} data={dataListProjects} />
-        </div>
-      </div>
-
-      <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
-        <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+        {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        {/* <div className="w-full md:w-1/2 lg:w-1/3 border border-slate-300 bg-white rounded-xl p-5"> */}
+        <div className="border border-slate-300 bg-white rounded-xl p-5">
+          <div className="flex mb-3 gap-x-2 justify-between ">
             <p>TOP 10 PROYECTOS</p>
           </div>
           <LineChartComponent dataProjectsTop={dataProjectsTop} colors={[colors[colorRandom2]]} />
         </div>
 
-        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>PROYECTOS POR Cliente</p>
+        {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        {/* <div className="w-full md:w-1/2 lg:w-1/3 border border-slate-300 bg-white rounded-xl p-5"> */}
+        <div className="border border-slate-300 bg-white rounded-xl p-5">
+          <div className="flex mb-3 gap-x-2 justify-between ">
+            <p>PROYECTOS POR ClIENTE</p>
           </div>
-          <NewDonutChartComponent data={dataProjectsClient} />
+          {/* <NewDonutChartComponent data={dataProjectsClient} /> */}
+          <DonutChartComponentWithDescription data={dataProjectsClient} descriptions={descriptions} />
         </div>
       </div>
 
-      {/* <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5">
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>TOP 10 PROYECTOS</p>
-          </div>
-          <LineChartComponent dataProjectsTop={dataProjectsTop} colors={[colors[colorRandom2]]} />
-        </div>
-
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>PROYECTOS POR Cliente</p>
-          </div>
-          <NewDonutChartComponent data={dataProjectsClient} />
-        </div>
-      </div> */}
-      
-      <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-        <div className="mb-3">
-          <p>COSTO POR TIPO</p>
-        </div>
-        <BarChartTreeInOne data={resParse} />
-      </div>
-
-      <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-        <div className="mb-3">
-          <p>CONTROL PRESUPUESTAL</p>
-        </div>
-        <BarChartComponent categories={['Monto de obra', 'Gastado', 'Presupuestado']} colors={colorsBudgeted} data={dataControlBudgeted} />
-        {/* <BarChartTreeInOne data={resParse} /> */}
-      </div>
-      {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-        <BarChartComponent categories={['costo']} colors={colors} data={costsByDay} />
-      </div> */}
     </div>
   )
-}
-
-interface DataControlBudgeted {
-  //project: string,
-  label: string,
-  "Monto de obra": number,
-  Presupuestado: number,
-  Gastado: number
-}
-
-function MoreProjectsBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
-  const res: DataControlBudgeted[] = [];
-  prjBugeted.map((prj) => {
-    const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
-    const prjS = prjSpent.find((pr) => pr.title === prj.title);
-
-    res.push({
-      // project: prj.title,
-      label: prj.title,
-      "Monto de obra": prjCB?.total || 0,
-      Gastado: prjS?.total || 0,
-      Presupuestado: prj.total,
-    });
-  });
-  return res;
-}
-
-function MoreProjectsCtrBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
-  const res: DataControlBudgeted[] = [];
-  prjControlBudgeted.map((prj) => {
-    const prjB = prjBugeted.find((pr) => pr.title === prj.title);
-    const prjS = prjSpent.find((pr) => pr.title === prj.title);
-
-    res.push({
-      //project: prj.title,
-      label: prj.title,
-      "Monto de obra": prj.total,
-      Gastado: prjS?.total || 0,
-      Presupuestado: prjB?.total || 0,
-    });
-  });
-  return res;
-}
-
-function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
-  const res: DataControlBudgeted[] = [];
-  prjSpent.map((prj) => {
-    const prjB = prjBugeted.find((pr) => pr.title === prj.title);
-    const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
-
-    res.push({
-      //project: prj.title,
-      label: prj.title,
-      "Monto de obra": prjCB?.total || 0,
-      Gastado: prj.total,
-      Presupuestado: prjB?.total || 0,
-    });
-  });
-  return res;
 }

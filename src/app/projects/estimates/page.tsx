@@ -1,41 +1,75 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { ProjectsTable, ProjectMin } from "@/interfaces/Projects";
-import { getActiveProjectsMin } from "@/app/api/routeProjects";
-import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
+import { ProjectsTable } from "@/interfaces/Projects";
+import { getProjectsWithEstimatesMin, getProjectsForEstimatedByUser } from "@/app/api/routeProjects";
+import { ProjectEstimateDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerEstimatesClient from "@/components/projects/estimates/ContainerEstimatesClient";
 import { Options } from "@/interfaces/Common";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL, getAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/app/api/routeRoles";
+import { IAllComponentsByROUTESAndRESOURCESAndROLFULL } from "@/interfaces/Roles";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let projects: ProjectMin[];
-  try {
-    projects = await getActiveProjectsMin(token);
-    if(typeof(projects)==='string') return <h1 className="text-red-500 text-center text-lg">{projects}</h1>
-  } catch (error) {
-    return <h1>Error al consultar los proyectos!!</h1>
+  let role = user.rol?.name || '';
+
+  const [projects, catalogs, resresource, rescomponents] = await Promise.all([
+    role.toLowerCase().includes('residente') ? getProjectsForEstimatedByUser(token, user._id) : getProjectsWithEstimatesMin(token),
+    getCatalogsByName(token, 'projects'),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+    getAllComponentsByROUTESAndRESOURCESAndROLFULL(token, (user.rol?._id?? ''), 'projects', 'estimates'),
+  ]);
+
+  if(typeof(resresource)==='string'){
+    return (
+      <>
+        <ComponentError page="/" message={resresource} />
+      </>
+    )
   }
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+  if(typeof(rescomponents) === "string"){
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page={`/projects/budget`} message={rescomponents} />
+      </>
+    )
   }
+  
+  if(typeof(projects)==='string') 
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+        </div> */}
+        <ComponentError page="/projects/estimates" message={projects} />
+      </>
+    )
+  
+  if(typeof(catalogs)==='string') 
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </div> */}
+        <ComponentError page="/projects/estimates" message={catalogs} />
+      </>
+    )
 
   const optCategories: Options[] = [{
     label: 'Todas',
     value: 'all'
   }];
   const optsCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category: any) => {
     optsCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -51,7 +85,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
+  catalogs[0].types.map((type: any) => {
     optsTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -67,7 +101,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optsConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id
@@ -78,17 +112,19 @@ export default async function Page(){
     })
   })
 
-  const table: ProjectsTable[] = ProjectDataToTableDataMin(projects);
+  const table: ProjectsTable[] = ProjectEstimateDataToTableDataMin(projects);
+
+  const result = {
+    permission: rescomponents[0]?.permission ?? {},
+    components: rescomponents.map((item: IAllComponentsByROUTESAndRESOURCESAndROLFULL) => item.component)
+  };
   
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <ContainerEstimatesClient data={table} optCategories={optCategories} optConditionsFilter={optConditions} 
-        optTypes={optTypes} projects={projects} token={token} user={user} />
-      {/* <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
-        optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
-        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user} 
-        condition={condition} /> */}
+        optTypes={optTypes} projectsParam={projects} token={token} user={user} rol={role} company={user.profile}
+        permissions={result} />
     </>
   )
 }

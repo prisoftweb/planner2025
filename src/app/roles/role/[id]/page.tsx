@@ -3,12 +3,12 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
-import { Options } from "@/interfaces/Common";
 import RoleProfile from "@/components/roles/RoleProfile";
 import { getRole, getRolesLV, getTree } from "@/app/api/routeRoles";
-import { RoleUser } from "@/interfaces/Roles";
 import { Tree } from "@/interfaces/Roles";
 import PermissionResource from "@/components/roles/PermissionResource";
+import ComponentError from "@/components/ComponentError";
+import { getAllResourcesByROL } from "@/app/api/routeRoles";
 
 export default async function Page({ params, searchParams }: 
               { params: { id: string }, searchParams: { rs: string}}){
@@ -18,46 +18,48 @@ export default async function Page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let rol:RoleUser;
-  try {
-    rol = await getRole(token, params.id);
-    if(typeof(rol) === 'string'){
-      <h1 className="text-center text-lg text-red-500">{rol}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Ocurrio un error al obtener rol!!</h1>
-  }
+  const [rol, options, resresource] = await Promise.all([
+    getRole(token, params.id),
+    getRolesLV(token),
+    getAllResourcesByROL(token, user.rol?._id?? ''),
+  ]);
 
-  let options: Options[] = [];
-  try {
-    options = await getRolesLV(token);
-    if(typeof(options) === 'string'){
-      <h1 className="text-center text-lg text-red-500">{options}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Ocurrio un error al obtener roles!!</h1>
+  if(typeof(resresource)==='string'){
+        return (
+          <>
+            <ComponentError page="/" message={resresource} />
+          </>
+        )
+      }
+  
+  if(typeof(rol) === 'string'){
+    // <h1 className="text-center text-lg text-red-500">{rol}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page="/roles/role" message={rol} />
+      </>
+    )
   }
-
-  // const options: Options[] = [];
-  // roles.map((role) => {
-  //   options.push({
-  //     label: role.name,
-  //     value: role._id
-  //   })
-  // });
+  
+  if(typeof(options) === 'string'){
+    // <h1 className="text-center text-lg text-red-500">{options}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} resources={resresource} />
+        <ComponentError page="/roles/role" message={options} />
+      </>
+    )
+  }
 
   //660af0683b237344454ad085
   let tree: Tree;
-  try {
-    tree = await getTree(token, rol.tree? rol.tree: '660af0683b237344454ad085');
-    if(typeof(tree)=== 'string') return <h1 className="text-ccenter text-lg text-red-500">{tree}</h1>
-  } catch (error) {
-    return <h1 className="text-ccenter text-lg text-red-500">Ocurrio un error al obter arbol!!</h1>
-  }
+  tree = await getTree(token, rol.tree? rol.tree: '660af0683b237344454ad085');
+  if(typeof(tree)=== 'string') return <h1 className="text-ccenter text-lg text-red-500">{tree}</h1>
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} resources={resresource} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">
@@ -67,12 +69,12 @@ export default async function Page({ params, searchParams }:
           </div>
           <Selectize options={options} routePage="roles/role" subpath="" />
         </div>
-        <div className="flex gap-x-5 mt-5 w-full max-w-5xl px-2 flex-wrap" 
+        <div className="flex gap-x-5 mt-5 w-full max-w-5xl md:px-2 flex-wrap" 
           style={{'backgroundColor': '#F8FAFC'}}>
-          <div className="w-full max-w-sm">
+          <div className="w-full sm:max-w-sm">
             <RoleProfile role={rol} resources={tree.resources} idRole={params.id} />
           </div>
-          <div className="w-full max-w-md mt-3 pl-2 px-3">
+          <div className="w-full sm:max-w-md mt-3 md:pl-2 md:px-3">
             <PermissionResource rs={searchParams.rs} tree={tree} token={token} />
           </div>
         </div>

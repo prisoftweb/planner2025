@@ -1,4 +1,3 @@
-import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
@@ -11,6 +10,11 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import { useNewProject } from "@/app/store/newProject";
 import { useProjectsStore } from "@/app/store/projectsStore"
+import { useState, useEffect } from "react";
+import SelectReact from "../SelectReact"
+import { getUsersLV } from "@/app/api/routeUser";
+import { Options } from "@/interfaces/Common";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 export default function DataBasicStepper({token, user, condition, showForm}: 
   {token:string, user:string, condition: string, showForm:Function}){
@@ -20,19 +24,45 @@ export default function DataBasicStepper({token, user, condition, showForm}:
 
   const {updateBasicData, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, category, client, type, haveAddress, 
-    company, amountG, dateG, percentage} = useNewProject();
+    company, amountG, dateG, percentage, hasamountChargeOff, amountCharge, dateCharge,
+    percentageCharge, includesTaxes} = useNewProject();
 
   const {updateHaveNewProject} = useProjectsStore();
 
-  // let nameI = '';
-  // let keyProjectI = '';
-  // let descriptionI = '';
+  const [responsible, setResponsible]=useState<string>(user);
+  const [arrResponsibles, setArrResponsibles] = useState<string[]>([]);
+  const [optUsers, setOptUsers]=useState<Options[]>([]);
 
-  // if(state.databasic){
-  //   nameI = state.databasic.name;
-  //   keyProjectI = state.databasic.keyProject;
-  //   descriptionI = state.databasic.description;
-  // }
+  const indexUser = optUsers.findIndex((u) => u.value===responsible);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res = await getUsersLV(token);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setOptUsers(res);
+      }
+    }
+    fetch();
+  }, []);
+
+  const handleUser = (value:string) => {
+    setResponsible(value);
+  }
+
+  const addResponsible = () => {
+    if(arrResponsibles.includes(responsible)){
+      showToastMessageError('El responsable ya esta agregado!!');
+    }else{
+      if(responsible){
+        setArrResponsibles([...arrResponsibles, responsible]);
+        // showToastMessage('Responsable agregado!!');
+      }else{
+        showToastMessageError('Seleccione un responsable para agregar!!');
+      }
+    }
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -51,7 +81,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
     onSubmit: async (valores) => {            
       const {name, description, keyProject} = valores;
       
-      updateBasicData(name, keyProject, description);
+      updateBasicData(name, keyProject, description, arrResponsibles);
       dispatch({type: 'INDEX_STEPPER', data: 1})
     },       
   });
@@ -60,7 +90,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
     if(refRequest.current){
       refRequest.current = false;
       const {description, keyProject, name} = formik.values;
-      updateBasicData(name, keyProject, description);
+      updateBasicData(name, keyProject, description, arrResponsibles);
       
       const location = {
         community, country, cp, municipy, 
@@ -74,51 +104,90 @@ export default function DataBasicStepper({token, user, condition, showForm}:
         porcentage:percentage
       };
 
-      if(haveAddress && hasguaranteefund){
+      const amountChargeOff = {
+        amount:amountCharge.replace(/[$,%,]/g, ""),
+        date: dateCharge,
+        porcentage:percentageCharge.replace(/[$,%,]/g, "")
+      };
+
+      if(haveAddress && hasguaranteefund && hasamountChargeOff){
         data = {
-          amount, categorys:category, client, code, company, date, description, 
-          hasguaranteefund, title, types:type, user,
-          location,
+          // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
+          amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
+          hasguaranteefund, title, types:type, users: arrResponsibles.map(id => ({user: id})),
+          location, hasamountChargeOff, amountChargeOff, includesTaxes,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
-        if(haveAddress){
+        if(haveAddress && hasguaranteefund){
           data = {
-            amount, categorys:category, client, code, company, date, description, 
-            hasguaranteefund, title, types:type, user,
-            location, condition: [{glossary: condition, user}]
+            // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
+            amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
+            hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), guaranteefund: guaranteeData,
+            location, condition: [{glossary: condition, user}], includesTaxes
           }
         }else{
-          if(hasguaranteefund){
+          if(haveAddress && hasamountChargeOff){
             data = {
-              amount, categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user,
-              guaranteefund: guaranteeData, 
-              condition: [{glossary: condition, user}],
+              // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
+              amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
+              hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), amountChargeOff,
+              location, condition: [{glossary: condition, user}], includesTaxes
             }
           }else{
-            data = {
-              amount, categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user, 
-              condition: [
-                  {glossary: condition, user}
-              ],
+            if(haveAddress){
+              data = {
+                // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
+                amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
+                hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})),
+                location, condition: [{glossary: condition, user}], includesTaxes
+              }
+            }else{
+              if(hasguaranteefund && hasamountChargeOff){
+                data = {
+                  // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
+                  amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
+                  hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), amountChargeOff,
+                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}], includesTaxes
+                }
+              }else{
+                if(hasguaranteefund){
+                  data = {
+                    // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description,
+                    amount: amount.replace(/[$,]/g, ""), category, client, code, company, date: date, description, 
+                    hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), includesTaxes,
+                    location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
+                  }
+                }else{
+                  if(hasamountChargeOff){
+                    data = {
+                      // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description,
+                      amount: amount.replace(/[$,]/g, ""), category, client, code, company, date: date, description, 
+                      hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), includesTaxes,
+                      location, condition: [{glossary: condition, user}], amountChargeOff
+                    }
+                  }else{
+                    data = {
+                      // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description, 
+                      amount: amount.replace(/[$,]/g, ""), category, client, code, company, date: date, description,
+                      hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), 
+                      condition: [{glossary: condition, user}], includesTaxes,
+                    }
+                  }
+                }
+              }
             }
           }
         }
       }
+
       try {
-        console.log('date => ', date);
-        console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           updateHaveNewProject(true);
           showForm(false);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -137,7 +206,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
       <div className="my-5">
         <NavProjectStepper index={0} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-xl rounded-lg space-y-5">
         <div>
           <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
           <Input type="text" name="name" autoFocus 
@@ -164,6 +233,25 @@ export default function DataBasicStepper({token, user, condition, showForm}:
               </div>
           ) : null}
         </div>
+        <div>
+          <Label>Responsable</Label>
+          {optUsers.length > 0 && (
+            <div className="flex items-center gap-x-2">
+              <SelectReact index={indexUser} opts={optUsers} setValue={handleUser} />
+              <PlusCircleIcon className="w-6 h-6 text-slate-700 cursor-pointer mt-1" onClick={addResponsible} />
+            </div>
+          )}
+        </div>
+        { arrResponsibles.length > 0 && (
+          <div>
+            <Label>Responsables agregados</Label>
+            <div className="mt-2">
+              {arrResponsibles.map((a) => (
+                <Label key={a}>{optUsers.find((u) => u.value===a)?.label}</Label>
+              ))}
+            </div>
+          </div>
+        )}
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"

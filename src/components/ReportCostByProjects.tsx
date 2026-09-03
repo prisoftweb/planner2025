@@ -1,9 +1,15 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ReportByProject, CostGroupByType } from '@/interfaces/ReportsOfCosts'
+import { useMemo } from 'react'
+import { Company } from "@/interfaces/Companies"
 
-export default function ReportCostByProjects({reports, costsByTypes}: 
-                                {reports:ReportByProject[], costsByTypes: CostGroupByType[]}){
+export default function ReportCostByProjects({reports, costsByTypes, dateFinal, dateIni, satCompany}: 
+  {reports?:ReportByProject[], costsByTypes: CostGroupByType[], dateIni:Date, dateFinal: Date, satCompany:Company}){
+
+  // console.log('reportes por proyecto: ', reports);
+  // console.log('costos por tipo: ', costsByTypes);
+  const total=useMemo(() => costsByTypes.reduce((accum, item) => accum+=item?.totalCost?? 0, 0), costsByTypes);
   
   const style = StyleSheet.create({
     table: {
@@ -14,7 +20,6 @@ export default function ReportCostByProjects({reports, costsByTypes}:
     containerTable: {
       paddingVertical: '10px',
       borderBottom: '1px solid gray',
-      //borderTop: '1px solid gray'
     },
     header: {
       fontSize: '8px',
@@ -32,82 +37,85 @@ export default function ReportCostByProjects({reports, costsByTypes}:
       margin: '1px',
       color: 'black',
     },
+    title: {
+      fontSize: '14px',
+      padding: '2px',
+      borderBottom: '1px solid black',
+      fontWeight: 'bold',
+      color: 'black',
+    },
   })
-  const reportSorted = reports.sort((a, b) => {
-    const nameA = a.project.title.toUpperCase(); // ignore upper and lowercase
-    const nameB = b.project.title.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
+  // const reportSorted = reports?.sort((a, b) => {
+  //   const nameA = a.project?.title?.toUpperCase(); // ignore upper and lowercase
+  //   const nameB = b.project?.title?.toUpperCase(); // ignore upper and lowercase
+  //   if (nameA < nameB) {
+  //     return -1;
+  //   }
+  //   if (nameA > nameB) {
+  //     return 1;
+  //   }
   
-    // names must be equal
-    return 0;
-  });
+  //   return 0;
+  // });
+
+  // const costsSorted = costsByTypes.sort((a, b) => new Date(a.).getTime() - new Date(b.date).getTime());
 
   let totalTypes: number = 0;
   costsByTypes.map((costtype) => {
     totalTypes += costtype.totalCost;
   });
 
+  let bandtitle='';
+
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const date = new Date();
   return(
     <Document>
       <Page>
-        {/* <View style={{padding: '30px'}}> */}
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
+            <Image src={satCompany?.isologo?? satCompany.logo} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos por obras</Text>
-              {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text> */}
+              <Text style={[style.title, {textAlign:'right'}]}>Resumen de costos por Tipos</Text>
+              <Text style={[style.subTitle, {textAlign:'right'}]}>De {dateIni.getDate()} de {months[dateIni.getMonth()]} de {dateIni.getFullYear()} a {dateFinal.getDate()} de {months[dateFinal.getMonth()]} de {dateFinal.getFullYear()} </Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
             </View>
           </View>
           
           <View style={style.containerTable}>
             <View style={style.table}>
-              <View style={[style.header, {flex: 1}]}><Text style={{fontWeight: 'bold'}}>Obra</Text></View>
+              <View style={[style.header, {flex: 1}]}><Text style={{fontWeight: 'bold'}}>Proyecto</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Tipo</Text></View>
-              <View style={[style.header, {flex: 1}]}><Text>Monto de obra</Text></View>
-              <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
-              {/* <View style={[style.header, {flex: 1}]}><Text>Acumulado</Text></View> */}
+              <View style={[style.header, {flex: 1}]}><Text>Monto de proyecto</Text></View>
+              <View style={[style.header, {flex: 1}]}><Text>Costo</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Cantidad</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Porcentaje %</Text></View>
             </View>
-            {reportSorted.map((rep, index:number) => (
-              <View style={[style.table, index > 0 && reports[index-1].project.title !== rep.project.title? {borderTop: '1px solid gray'}: {}]} key={index}>
-                <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep.project.title}</Text></View>
+            {/* {reports && reportSorted?.map((rep, index:number) => (
+              <View style={[style.table, index > 0 && reports[index-1]?.project?.title !== rep.project?.title? {borderTop: '1px solid gray'}: {}]} key={index}>
+                <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep?.project?.title}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{rep.tipo ?? 'Sin tipo'}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
-                  value: rep.project.amount
+                  currency: 'USD',
+                  value: rep?.project?.amount?? 0
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
-                  value: rep.totalCost
+                  currency: 'USD',
+                  value: rep?.totalCost?? 0
                 })}</Text></View>
-                {/* <View style={[style.element, {flex: 1}]}>
-                  <Text>{CurrencyFormatter({
-                      currency: 'MXN',
-                      value: rep.project.costQuantity
-                    })}</Text>
-                </View> */}
-                <View style={[style.element, {flex: 1}]}><Text>{rep.quantity}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{((rep.totalCost / rep.project.amount) * 100).toFixed(2)}%</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{rep?.quantity}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{((rep?.totalCost / (rep?.project?.amount?? 1)) * 100).toFixed(2)}%</Text></View>
               </View>
-            ) )}
-            <View style={{borderTop: '1px solid gray', marginTop: '20px'}}>
+            ) )} */}
+            {/* <View style={{borderTop: '1px solid gray', marginTop: '20px'}}>
               {costsByTypes.map((costtype, index:number) => (
                 <View style={[style.table]} key={index}>
                   <View style={[style.element, {flex: 1}]}><Text style={{fontWeight: 'semibold'}}>TOTAL</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text style={{fontWeight: 'semibold'}}>{costtype.tipo}</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text></Text></View>
                   <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '11px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: costtype.totalCost
                   })}</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text style={{fontWeight: 'semibold'}}>{costtype.quantity}</Text></View>
@@ -120,8 +128,44 @@ export default function ReportCostByProjects({reports, costsByTypes}:
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalTypes
+              })}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+            </View> */}
+
+            
+            {costsByTypes?.map((rep, index:number) => {
+              let b=0;
+              if(bandtitle !== rep.project){
+                bandtitle = rep.project?? '';
+                b=1;
+              }
+              return(
+                <View style={[style.table, {borderTop: (b==1? '1px solid gray': '')}]} key={index}>
+                  <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep?.project}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{rep.type ?? 'Sin tipo'}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                    currency: 'USD',
+                    value: rep?.totalCost?? 0
+                  })}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                    currency: 'USD',
+                    value: rep?.totalCost?? 0
+                  })}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{rep?.quantity}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{(((rep?.totalCost?? 0) / ( rep?.amountotal?? 1)) * 100).toFixed(2)} %</Text></View>
+                </View>
+              )
+            } )}
+            <View style={[style.table, {borderTop: '1px solid gray'}]} >
+              <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                currency: 'USD',
+                value: total
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
@@ -132,38 +176,3 @@ export default function ReportCostByProjects({reports, costsByTypes}:
     </Document>
   )
 }
-
-// export interface CostByProjects{
-//   project: string,
-//   type: string,
-//   amount: number,
-//   total: number,
-//   accumulated: number,
-//   percentage: number,
-// }
-
-// const costs: CostByProjects[] = [{
-//     project: 'BMW 2024',
-//     type: 'MO',
-//     amount: 847613.71,
-//     total: 37035.19,
-//     accumulated: 142492.59,
-//     percentage: 37.035
-//   }, 
-//   {
-//     project: 'BMW PEASA',
-//     type: 'F',
-//     amount: 22042.71,
-//     total: 49000.19,
-//     accumulated: 4905.32,
-//     percentage: 4.9
-//   },
-//   {
-//     project: 'BUENAVISTA',
-//     type: 'MO',
-//     amount: 25000.71,
-//     total: 43035.19,
-//     accumulated: 43504.59,
-//     percentage: 17.035
-//   }
-// ]

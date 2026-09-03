@@ -13,11 +13,22 @@ interface OptionsDashboard {
   costo: number
 }
 
+type DashBoardContainerProps = {
+  token: string, 
+  costsConcepts: OptionsDashboard[], 
+  costsCategories: OptionsDashboard[], 
+  costsDays: OptionsDashboard[], 
+  projects:Options[],
+  categories:Options[], 
+  costsResumen:CostsGroupByResumen[], 
+  costsResumenType:CostsGroupResumenByType[], 
+  costsCat: CostsByConceptAndCategory[], 
+  costsCon: CostsByConceptAndCategory[],
+  company:string
+}
+
 export default function DashBoardContainer({token, costsCategories, costsConcepts, costsDays, 
-            projects, costsResumen, costsResumenType}:
-          {token: string, costsConcepts: OptionsDashboard[], costsCategories: OptionsDashboard[], 
-            costsDays: OptionsDashboard[], projects:Options[], costsResumen:CostsGroupByResumen[], 
-            costsResumenType:CostsGroupResumenByType[] }) {
+            projects, costsResumen, costsResumenType, costsCat, costsCon, company, categories}: DashBoardContainerProps ) {
   
   const [costsByConcept, setCostsByConcept] = useState<OptionsDashboard[]>(costsConcepts);
   const [costsByCategory, setCostsByCategory] = useState<OptionsDashboard[]>(costsCategories);
@@ -25,77 +36,61 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   const [costsByResumen, setCostsByResumen] = useState<CostsGroupByResumen[]>(costsResumen);
   const [costsByResumenType, setCostsByResumenType] = useState<CostsGroupResumenByType[]>(costsResumenType)
 
-  const fetchData = async (dateS: string, dateE: string, project:string) => {
-    let costsCategory: CostsByConceptAndCategory[] = [];
-    try {
-      // costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(token, dateIni, dateIni);
-      costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project);
-      if(typeof(costsCategory)==='string'){
-        return <h1>Error al obtener costos agrupados por categoria!!!</h1>
-      }
-    } catch (error) {
+  const [dataCostsCategory, setDataCostsCategory ] = useState<CostsByConceptAndCategory[]>(costsCat);
+  const [dataCostsConcept, setDataCostsConcept ] = useState<CostsByConceptAndCategory[]>(costsCon);
+
+  const fetchData = async (dateS: string, dateE: string, project:string, cats:string[]) => {
+    const [costsCategory, costsConcept, costsDays, costsRes, costsResType] = await Promise.all([
+      GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project, cats),
+      GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project, cats),
+      GetAllCostsGroupByDAYAndProject(token, dateS, dateE, project, cats),
+      GetAllCostsGroupByRESUMEN(token, dateS, dateE, project, cats),
+      GetAllCostsGroupByTYPERESUMEN(token, dateS, dateE, project, cats),
+    ]);
+    
+    if(typeof(costsCategory)==='string'){
       return <h1>Error al obtener costos agrupados por categoria!!!</h1>
     }
 
-    let costsConcept: CostsByConceptAndCategory[] = [];
-    try {
-      costsConcept = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project);
-      if(typeof(costsConcept)==='string'){
-        return <h1>Error al obtener costos agrupados por concepto!!!</h1>
-      }
-    } catch (error) {
+    setDataCostsCategory(costsCategory);
+
+    if(typeof(costsConcept)==='string'){
       return <h1>Error al obtener costos agrupados por concepto!!!</h1>
     }
 
-    let costsDays: CostsByDay[] = [];
-    try {
-      costsDays = await GetAllCostsGroupByDAYAndProject(token, dateS, dateE, project);
-      if(typeof(costsDays)==='string'){
-        return <h1>Error al obtener costos agrupados por dias!!!</h1>
-      }
-    } catch (error) {
+    setDataCostsConcept(costsConcept);
+
+    if(typeof(costsDays)==='string'){
       return <h1>Error al obtener costos agrupados por dias!!!</h1>
     }
 
-    let costsRes: CostsGroupByResumen[] = [];
-    try {
-      costsRes = await GetAllCostsGroupByRESUMEN(token, dateS, dateE, project);
-      if(typeof(costsRes)==='string'){
-        return <h1>{costsRes}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener costos agrupados por resumen!!!</h1>
+    if(typeof(costsRes)==='string'){
+      return <h1>{costsRes}</h1>
     }
 
-    let costsResType: CostsGroupResumenByType[] = [];
-    try {
-      costsResType = await GetAllCostsGroupByTYPERESUMEN(token, dateS, dateE, project);
-      if(typeof(costsResType)==='string'){
-        return <h1>{costsResType}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener costos agrupados por resumen y tipo!!!</h1>
+    if(typeof(costsResType)==='string'){
+      return <h1>{costsResType}</h1>
     }
 
     const optCategories: OptionsDashboard[] = [];
     const optConcepts: OptionsDashboard[] = [];
     const optDays: OptionsDashboard[] = [];
 
-    costsCategory.map((cc) => {
+    costsCategory.map((cc:any) => {
       optCategories.push({
         label: cc.costocenter.category ?? '',
         costo: cc.subtotalCost
       })
     });
 
-    costsConcept.map((cc) => {
+    costsConcept.map((cc:any) => {
       optConcepts.push({
         label: cc.costocenter.concept ?? '',
         costo: cc.subtotalCost
       })
     });
 
-    costsDays.map((cc) => {
+    costsDays.map((cc:any) => {
       optDays.push({
         label: cc.day?.toString() || ' ',
         costo: cc.subtotalCost
@@ -107,11 +102,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     setCostsByDay(optDays);
     setCostsByResumen(costsRes);
     setCostsByResumenType(costsResType);
-    //console.log('cost resumen => ', costsRes);
-    //console.log('cost res type => ', costsResType);
   }
 
-  // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const categoriesCategories: string[] = [];
@@ -124,35 +116,31 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     categoriesConcepts.push(cc.label);
   });
 
-  // const categoriesDays: string[] = [];
-  // costsByDay.map((cc) => {
-  //   categoriesDays.push(cc.label);
-  // });
+  console.log('dataCostsCategory => ', dataCostsCategory);
 
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-      <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
-        costsResumenType={costsByResumenType} />
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5">
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+      <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} company={company} token={token}
+        costsResumenType={costsByResumenType} dataCostsCatagory={dataCostsCategory} dataCostsConcept={dataCostsConcept} categories={categories} />
+      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+        <div className="bg-white border border-slate-300 py-5">
+          <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 px-5 pb-2">
             <p>CENTRO DE COSTOS</p>
             <p>Categorias</p>
           </div>
           <DonutChartt data={costsByCategory} colors={colors} category="costo"
               categories={categoriesCategories}  />
         </div>
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+        <div className="bg-white border border-slate-300 py-5">
+          <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 px-5 pb-2">
             <p>CENTRO DE COSTOS</p>
             <p>Conceptos</p>
           </div>
           <DonutChartt data={costsByConcept} colors={colors} category="costo"
-              //categories={['New York', 'London', 'Hong Kong', 'San Francisco', 'Singapore']} 
               categories={categoriesConcepts}  />
         </div>
       </div>
-      <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      <div className="mt-5 bg-white border border-slate-300 py-5">
         <BarChartComponent categories={['costo']} colors={colors} data={costsByDay} />
       </div>
     </div>

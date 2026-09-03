@@ -1,9 +1,9 @@
 import HeaderProvider from "./HeaderProvider"
 
-export default function WithOutProvider({id, token}: {id:string, token:string}){
+export default function WithOutProvider({id, token, company}: {id:string, token:string, company: string}){
   return(
     <>
-      <HeaderProvider id={id} token={token} />
+      <HeaderProvider id={id} token={token} company={company} />
       <div className="flex flex-col items-center">
         <p className="text-5xl mt-20 font-bold">Proveedores</p>
         <p className="text-xl mt-10 text-slate-700 font-bold">Aqui puedes gestionar tus proveedores con toda su informacion</p>

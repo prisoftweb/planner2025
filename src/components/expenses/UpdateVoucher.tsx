@@ -5,13 +5,12 @@ import { OneExpense } from "@/interfaces/Expenses";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
+import { GetCostMIN } from "@/app/api/routeCost";
 
-export default function UpdateVoucher({id, token, expense, isHistory}: 
-    {token: string, id:string, expense:OneExpense, isHistory:boolean}){
+export default function UpdateVoucher({id, token, expense, isHistory, updatePermission}: 
+    {token: string, id:string, expense:OneExpense, isHistory:boolean, updatePermission:boolean}){
   
   const [file, setFile] = useState<File | null>();
-  //const [urlFile, setUrlFile] = useState<string>();
-  //const [idFile, setIdFile] = useState<string>('');
   const refRequest = useRef(true);
   const {currentExpense, updateCurrentExpense} = useNewExpense();
 
@@ -21,28 +20,12 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
     currentExpense.files.map((f) => {
       if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
         || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-        || f.types.includes('PNG') || f.types.includes('pdf')){
-          //console.log('aqui entro => ', f);
-          //setIdFile(f._id);
-          //setUrlFile(f.file);
+        || f.types.includes('PNG') || f.types.includes('pdf') || f.types.includes('peg') || f.types.includes('PEG')){
           idFile = f._id;
           urlFile = f.file;
       }
     });
   }
-
-  // useEffect(() => {
-  //   //console.log('expense', expense);
-  //   expense.files.map((f) => {
-  //     if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
-  //       || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-  //       || f.types.includes('PNG')){
-  //         //console.log('aqui entro => ', f);
-  //         setIdFile(f._id);
-  //         setUrlFile(f.file);
-  //     }
-  //   });
-  // }, []);
 
   const sendFile = async () => {
     if(refRequest.current){
@@ -50,18 +33,20 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
       try {
         if(file){
           const data = new FormData();
-          //console.log('send file => ', file);
           data.append('file', file);
           data.append('types', file.type);
-          //console.log('append => ', data.get('file'));
           const res = await ADDNewFILE(token, id, data);
           if(typeof(res) !== 'string'){
             refRequest.current = true;
             showToastMessage('Archivo agregado satisfactoriamente');
-            updateCurrentExpense(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
+            // updateCurrentExpense(res);
+            const newcost = await GetCostMIN(token, id);
+            if(typeof(newcost) !== 'string'){
+              updateCurrentExpense(newcost);
+              // console.log('currentExpense actualizado', newcost);
+            }else{
+              showToastMessageError(newcost);
+            }
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -93,7 +78,6 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
       } catch (error) {
         showToastMessageError('Ocurrio un error al eliminar el archivo anterior!!');
       }
-      //showToastMessageError('ya existe un archivo!!');
     }
   }
 
@@ -114,14 +98,13 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
   }
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 flex flex-col h-full">
       {urlFile && (
         <iframe src={urlFile} 
-          //className="w-full h-80"
-          className="w-full h-96"
+          className="w-full flex-grow overflow-auto"
         ></iframe>
       )}
-      {isHistory? <></> : (
+      {isHistory || !updatePermission? <></> : (
         <>
           <UploadFileDropZone label="Subir PDF o imagen" setFile={handleFile} 
               Validation={validationType} getData={handle} />

@@ -1,45 +1,41 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import { useState, useEffect, useRef } from "react";
-import { ExpensesTable, Expense } from "@/interfaces/Expenses";
+import { Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
-// import { useNewExpense } from "@/app/store/newExpense";
-// import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
-// import { showToastMessage, showToastMessageError } from "../Alert";
-// import Filtering from "./ExpensesFiltered";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
-import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
 import { HistoryExpensesTable } from "@/interfaces/Providers";
-//import Filtering from "../expenses/ExpensesFiltered";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
+import ContainerSideNav from "../ContainerSideNav";
+import { Tooltip } from "@nextui-org/react";
+import { IoIosLink } from "react-icons/io";
+import { propsTooltip } from "@/libs/animations";
+import { useState } from "react";
+
+type Props = {
+  data:HistoryExpensesTable[], 
+  token:string, 
+  expenses:Expense[], 
+  user: string, 
+  isFilter:boolean, 
+  setIsFilter:Function, 
+  handleExpensesSelected: (value: HistoryExpensesTable[]) => void, 
+  idProv:string, 
+  isViewReports: boolean, 
+  filterData: Function, 
+  minAmount: number, 
+  maxAmount: number
+}
 
 export default function TableHistoryCosts({data, token, expenses, 
-                            handleExpensesSelected, user, isFilter, setIsFilter, 
-                        isViewReports, idProv, filterData, maxAmount, minAmount }:
-                        {data:HistoryExpensesTable[], token:string, expenses:Expense[], 
-                        user: string, isFilter:boolean, setIsFilter:Function, 
-                        handleExpensesSelected:Function, idProv:string, 
-                        isViewReports: boolean, filterData: Function, minAmount: number, maxAmount: number}){
+  handleExpensesSelected, user, isFilter, setIsFilter, isViewReports, idProv, 
+  filterData, maxAmount, minAmount }: Props){
   
   const columnHelper = createColumnHelper<HistoryExpensesTable>();
-  const refExpenses = useRef(expenses);
-  const refFilter = useRef(false);
-
-  // const [dataExpenses, setDataExpenses] = useState(data);
-  // const [expensesFiltered, setExpensesFiltered] = useState<Expense[]>(expenses);
   
   const handleIsFilter = (value: boolean) => {
-    // if(value){
-    //   if(!refFilter.current){
-    //     refFilter.current = true;
-    //     setDataExpenses(ExpenseDataToTableData(refExpenses.current));
-    //   }
-    // }else{
-    //   refFilter.current = false;
-    // }
     setIsFilter(value);
   }
 
@@ -48,7 +44,10 @@ export default function TableHistoryCosts({data, token, expenses,
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2 justify-center">
-          {row.original.Estatus._id !== '67318a51ceaf47ece0d3aa72' && (
+          {row.original.Estatus._id !== '67318a51ceaf47ece0d3aa72' && 
+            row.original.Estatus._id !== '661eade6f642112488c85fad' &&
+            row.original.Estatus._id !== '661eaa71f642112488c85f59' &&
+            row.original.Estatus._id !== '661eaa4af642112488c85f56' && (
             <input type="checkbox" 
               checked={row.getIsSelected()}
               onChange={row.getToggleSelectedHandler()}
@@ -80,6 +79,14 @@ export default function TableHistoryCosts({data, token, expenses,
             {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
             {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
             <div className={`${row.original.isPaid? 'bg-green-500': 'bg-red-500'} w-3 h-3 rounded-full`}></div>
+            {row.original.isCfdisRelations && (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI relacionado' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <span>
+                  <IoIosLink className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+                </span>
+              </Tooltip>
+            )}
           </div>
         </div>
       ),
@@ -124,23 +131,23 @@ export default function TableHistoryCosts({data, token, expenses,
         )
       ),
     }),
-    // columnHelper.accessor('isPaid', {
-    //   header: 'Pagado',
-    //   id: 'pagado',
-    //   cell: ({row}) => (
-    //     <div className="cursor-pointer" 
-    //       onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}>
-    //         <Chip label={row.original.isPaid? 'Pagado': 'No pagado'} color={row.original.isPaid? '#0f0': '#f00'} />
-    //     </div>
-    //   ),
-    // }),
+    columnHelper.accessor('code', {
+      header: 'Codigo',
+      id: 'codigo',
+      cell: ({row}) => (
+        <div> 
+          <p>{row.original.code}</p>
+        </div>
+      ),
+    }),
     columnHelper.accessor('Estatus', {
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
         <div className="cursor-pointer" 
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}>
-            <Chip label={row.original.Estatus.name} color={row.original.Estatus.color} />
+            <Chip label={row.original.Estatus.name} color={row.original.Estatus.color}
+                darktext={row.original?.Estatus?.darktext?? false} />
         </div>
       ),
     }),
@@ -151,6 +158,15 @@ export default function TableHistoryCosts({data, token, expenses,
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
         >{row.original.Fecha?.substring(0, 10) || ''}</p>
+      ),
+    }),
+    columnHelper.accessor('daysExpired', {
+      header: 'Dias vigentes',
+      id: 'dias',
+      cell: ({row}) => (
+        <p className={`cursor-pointer ${row.original.daysExpired! < 0 ? 'text-red-500' : 'text-green-500'}`}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
+        >{row.original.daysExpired}</p>
       ),
     }),
     columnHelper.accessor('Importe', {
@@ -208,22 +224,127 @@ export default function TableHistoryCosts({data, token, expenses,
 
   const view = <Table columns={columns} data={data} selectFunction={handleExpensesSelected}
                 placeH="Buscar gasto.." typeTable="costProvider" initialColumns={initialVisibilityColumns} />
-  // const [maxAmount, setMaxAmount] = useState<number>(0);
-  // const [minAmount, setMinAmount] = useState<number>(0);
-
+  
   return(
     <>
       <div className="flex justify-end my-5">
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-        {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
-          className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-        /> */}
-          {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
+          {/* {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
-                          minAmount={minAmount} token={token} />}
+                          minAmount={minAmount} token={token} />} */}
+          {isFilter && (
+            <ContainerSideNav width="w-full max-w-md" open={isFilter}>
+              <FilteringExpensesProvider showForm={handleIsFilter}  
+                            FilterData={filterData} maxAmount={maxAmount} 
+                            minAmount={minAmount} token={token} />
+            </ContainerSideNav>
+          )}
       </div>
-      {/* <Button onClick={changeConditionInCost}>Validar</Button> */}
-      {view}
+      
+      <div className="hidden xl:block w-full">
+        {view}
+      </div>
+      <div className="block xl:hidden w-full">
+        <ListData data={data} idProv={idProv} handleExpensesSelected={handleExpensesSelected} />
+      </div>
     </>
+  )
+}
+
+const ListData = ({data, idProv, handleExpensesSelected}: 
+  {data: HistoryExpensesTable[], idProv:string, handleExpensesSelected: (value: HistoryExpensesTable[]) => void}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  const [expensesSelected, setExpensesSelected] = useState<HistoryExpensesTable[]>([]);
+
+  const selectCard = (expense: HistoryExpensesTable) => {
+    // if(expensesSelected.some((exp) => exp.id === expense.id)){
+    //   const exp = expensesSelected.filter((exp) => exp.id !== expense.id);
+    //   setExpensesSelected(exp);
+    //   handleExpensesSelected(exp);
+    // }else{
+    //   const exp = [...expensesSelected, expense];
+    //   setExpensesSelected(exp);
+    //   handleExpensesSelected(exp);
+    // }
+  }
+
+  // const {search} = useTableStates();
+
+  // const filterData = useMemo(() => {
+  //   if(search.trim() === ''){
+  //     return data;
+  //   }else{
+  //     const d = data.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
+  //     return d;
+  //   }
+  // }, [search]);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full max-w-2xl rounded-xl bg-clip-border] h-[calc(100vh-264px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {data.map((e) => (
+            <CardInvoices expense={e} key={e.id} idProv={idProv} expensesSelected={expensesSelected} selectCard={selectCard} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardInvoices = ({expense, idProv, expensesSelected, selectCard }: 
+  {expense:HistoryExpensesTable, idProv:string, expensesSelected: HistoryExpensesTable[], selectCard: (expense: HistoryExpensesTable) => void }) => {
+
+  return(
+    <div role="button"
+      key={expense.id}
+      // onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
+      className={`flex flex-col w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        ${expensesSelected.some((exp) => exp.id === expense.id)? 'bg-blue-400': 'bg-white'} `}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ expense.Responsable?.photo ?? '/img/users/default.jpg'}
+            // onClick={() => selectCard(expense)}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+          {/* <DeleteElement id={expense.id} name={expense.name} remove={RemoveCompany} token={token} /> */}
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3"
+            onClick={() => window.location.replace(`/expenses/${expense.id}/profile?prov=${idProv}`)}
+          >
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {expense.Proyecto}
+              </h6>
+              {/* <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {expense.Descripcion}
+              </p> */}
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {expense.Importe}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                <Chip label={expense.Estatus.name} color={expense.Estatus.color}
+                    darktext={expense?.Estatus?.darktext?? false} />
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+        {expense.Descripcion}
+      </p>
+
+    </div>
   )
 }

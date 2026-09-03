@@ -1,17 +1,20 @@
-import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRegFormContext } from "./StepperProvider";
 import SaveProvider from "@/app/functions/SaveProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import BasicBarStepper from "./BasicBarStepper";
 import { useProviderStore } from "@/app/store/providerStore";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
+import { getCatalogsByNameAndType, getCatalogsByNameAndCondition, getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
 
-export default function DataBasicStepper({token, id, user}: {token:string, id:string, user: string}){
+export default function DataBasicStepper({token, id, user, company}: 
+  {token:string, id:string, user: string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -31,6 +34,15 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
   const [suppliercredit, setSuppliercredit] = useState<boolean>(supplier);
 
   const {providerStore, updateProviderStore, updateHaveNewProvider} = useProviderStore();
+
+  const [type, setType]=useState<Options>();
+  const [optTypes, setOptTypes] = useState<Options[]>([]);
+
+  // const [category, setCategory]=useState<Options>();
+  // const [optCategories, setOptCategories] = useState<Options[]>([]);
+
+  // const [category, setCategory]=useState<Options>();
+  // const [optCategories, setOptCategories] = useState<Options[]>([]);
 
   const formik = useFormik({
     initialValues: {
@@ -52,7 +64,8 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
         name, 
         tradename,
         rfc,
-        "suppliercredit": suppliercredit
+        "suppliercredit": suppliercredit,
+        type
       }
 
       dispatch({ type: 'SET_BASIC_DATA', data: data });
@@ -63,6 +76,35 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
       }
     },       
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [res] = await Promise.all([
+        getCatalogsByNameAndType(token, 'Providers'),
+        // // getCatalogsByNameAndCondition(token, 'Providers')
+        // getCatalogsByNameAndCategory(token, 'Providers'),
+      ]) 
+      
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        if(Array.isArray(res) && res.length>0){
+          setOptTypes(res);
+          if(Array.isArray(res) && res.length>0){
+            setType(res[0].value);
+          }
+        }
+      }
+
+      // if(typeof(resc)==='string'){
+      //   showToastMessageError(resc);
+      // }else{
+      //   setOptCategories(resc);
+      //   setCategory(resc[0].value);
+      // }
+    }
+    fetch();
+  }, [])
   
   const onClickSave = async () => {
     if(refRequest.current){
@@ -71,8 +113,11 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
     
       let tradeline = {};
 
+      let cat;
+
       if(suppliercredit && state.creditline){
-        const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
+        const {creditdays, creditlimit, currentbalance, percentoverduedebt, category} = state.creditline;
+        cat=category;
         tradeline = {
           creditdays: parseInt(creditdays),
           creditlimit: parseInt(creditlimit),
@@ -93,23 +138,34 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
           rfc,
           tradename,
           suppliercredit,
-          user: id,
+          user: user,
+          company,
           tradeline,
           contact,
+          type,
+          category:cat,
           condition: [{
             glossary: '663d2fe61d1c43ae98d77bc3',
             user
-          }]
+          }, 
+            ...(suppliercredit
+                ? [{
+                    glossary: "6746442a734d5ab78ab98ddd",
+                    user
+                  }]
+                : [])],
         }
+        
         const res = await SaveProvider(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           updateProviderStore([...providerStore, res.prov]);
           updateHaveNewProvider(true);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
+          dispatch({ type: 'SET_BASIC_DATA', data: null });
+          dispatch({ type: 'SET_CREDIT_DATA', data: null });
+          dispatch({ type: 'SET_CONTACTS', data: [] });
+          dispatch({type: 'INDEX_STEPPER', data: 0})
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -123,11 +179,20 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
     }
   }
 
+  const handleType=(value:Options) => {
+    setType(value);
+  }
+
+  // const handleCategory=(value:Options) => {
+  //   setCategory(value);
+  // }
+
+  useEffect(() => {
+    console.log('suppliercredit:', suppliercredit);
+  }, [suppliercredit]);
+
   return(
     <div className="w-full">
-      {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos esenciales del proveedor" 
-        title="Información basica"
-      /> */}
       <div className="my-5">
         <BasicBarStepper index={0} />
       </div>
@@ -171,32 +236,43 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
             </div>
           ) : null}
         </div>
-        <div className="inline-flex items-center">
-          {/* <p className="mr-3">Linea de credito</p> */}
-          <Label>Linea de credito</Label>
-          <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-            <input checked={suppliercredit} 
-              onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
-              onChange={() => console.log('')}
-              className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-                appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-                peer-checked:border-green-500 peer-checked:before:bg-green-500
-                border border-slate-300" />
-            <label htmlFor="switch-3"
-              className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-              <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-                data-ripple-dark="true"></div>
-            </label>
-          </div>
+        <div>
+          <Label>Tipo</Label>
+          {optTypes.length>0 && (
+            <SelectReact index={0} opts={optTypes} setValue={handleType} />
+          )}
         </div>
-        <div className="flex justify-end mt-8 space-x-5">
-          {/* <button type="button" 
-            onClick={onClickSave}
-            className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
-                hover:bg-slate-600"
+        {/* <div>
+          <Label>Categoria</Label>
+          {optCategories.length>0 && (
+            <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
+          )}
+        </div> */}
+
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium">
+            Línea de crédito
+          </span>
+
+          <div
+            onClick={() => setSuppliercredit(!suppliercredit)}
+            className={`
+              relative w-10 h-6 rounded-full cursor-pointer transition-colors
+              ${suppliercredit ? 'bg-green-500' : 'bg-gray-300'}
+            `}
           >
-            Guardar
-          </button> */}
+            <div
+              className={`
+                absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow
+                transition-transform
+                ${suppliercredit ? 'translate-x-4' : ''}
+              `}
+            />
+          </div>
+
+        </div>
+
+        <div className="flex justify-end mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
           <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
@@ -204,7 +280,6 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
           >
             Siguiente
           </button>
-          {/* <Button type="submit">Siguiente</Button> */}
         </div>
       </form>  
     </div>

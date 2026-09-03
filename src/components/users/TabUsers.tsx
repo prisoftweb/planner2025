@@ -1,68 +1,53 @@
-import { cookies } from "next/headers"
-//import { getUser } from "@/app/api/routeUser";
+'use client'
+// import { cookies } from "next/headers"
 import UserClient from "./UserClient";
 import { getDepartmentsLV } from "@/app/api/routeDepartments";
 import { getRolesLV } from "@/app/api/routeRoles";
-//import { Role } from "@/interfaces/Roles";
-import { Options } from "@/interfaces/Common";
-//import { Department } from "@/interfaces/Departments";
 import { UsrBack } from "@/interfaces/User";
+// import NavTab from "@/components/users/NavTab";
+import { useState, useEffect } from "react";
+import { Options } from "@/interfaces/Common";
+import { showToastMessageError } from "../Alert";
+import { IPermissionsAndComponents } from "@/interfaces/Roles"
 
-export default async function TabUser({user, opt}: {user:UsrBack, opt: number}){
+export default function TabUser({user, opt, token, permissions}: 
+  {user:UsrBack, opt: number, token:string, permissions:IPermissionsAndComponents}){
   
-  const cookieStore = cookies();
-  const token: string = cookieStore.get('token')?.value || '';
+  // const cookieStore = cookies();
+  // const token: string = cookieStore.get('token')?.value || '';
+  const [optionsDepartments, setOptionsDepartments] = useState<Options[]>([]);
+  const [optsRole, setOptsRole] = useState<Options[]>([]);
+  // const [error, setError] = useState<string>('');
 
-  // let user: UsrBack;
-
-  // try {
-  //   user = await getUser(id, token);
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>  
-  // }
-
-  // if(typeof(user) === "string")
-  //   return <h1 className="text-center text-red-500">{user}</h1>
-
-  let optionsDepartments:Options[] = [];
-  try {
-    optionsDepartments = await getDepartmentsLV(token);
-    if(typeof(optionsDepartments) === "string")
-      return <h1 className="text-center text-red-500">{optionsDepartments}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener los departamentos!!</h1>
-  }
-
-  // let optionsDepartments:Options[] = [];
-  // departments.map((dept:any) => {
-  //   optionsDepartments.push({
-  //     label: dept.name,
-  //     value: dept._id
-  //   });
-  // });
-
-  let optsRole:Options[] = [];
-
-  try {
-    optsRole = await getRolesLV(token);
-    if(typeof(optsRole)==='string')
-        return <h1 className="text-red-500 text-center text-lg">{optsRole}</h1>
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Ocurrio un error al obtener roles!!</h1>
-  }
-
-  // const optsRole:Options[] = [];
-  // roles.map((role) => {
-  //   optsRole.push({
-  //     label: role.name,
-  //     value: role._id
-  //   });
-  // });
+  // consulta intermedia para consultas las opciones de deptartamentos y roles
+  useEffect(() => {
+    const fetchData = async () => {
+      const [departments, roles] = await Promise.all([
+        getDepartmentsLV(token),
+        getRolesLV(token)
+      ]);
+      if(typeof(departments) === 'string'){
+        showToastMessageError(departments);
+      }else{
+        setOptionsDepartments(departments);
+      }
+      if(typeof(roles) === 'string'){
+        showToastMessageError(roles);
+      }else{
+        setOptsRole(roles);
+      } 
+    }
+    fetchData();
+  }, []);
 
   return(
     <>
+      {/* <div className="mt-3">
+        <NavTab idUser={params.id} tab={'1'} />
+        <NavTab idUser={''} tab={'1'} />
+      </div> */}
       <UserClient user={user} token={token} departments={optionsDepartments} 
-            optQuery={opt} optsRole={optsRole} />
+        optsRole={optsRole} optTab={opt} permissions={permissions} />
     </>
   )
 }

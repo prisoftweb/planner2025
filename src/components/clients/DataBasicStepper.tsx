@@ -3,7 +3,7 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRegFormContext } from "./StepperClientProvider";
 import SaveClient from "@/app/functions/SaveClient";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -15,30 +15,54 @@ import InputMask from 'react-input-mask';
 import { optionsSource } from "@/interfaces/Clients";
 import { SaveClientLogo } from "@/app/functions/SaveClient";
 import { useClientStore } from "@/app/store/clientStore";
+import SelectReact from '@/components/SelectReact';
+import { getSatCfdiUses, getSatTaxRegimes } from '@/app/api/routeSatInvoices';
 
-export default function DataBasicStepper({token, id, tags}: 
-                          {token:string, id:string, tags:Options[]}){
+export default function DataBasicStepper({token, id, tags, company}: 
+  {token:string, id:string, tags:Options[], company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
 
+  const [satTaxRegimes, setSatTaxRegimes] = useState<Options[]>([]);
+  const [satTaxRegime, setSatTaxRegime] = useState<string>();
+
+  // console.log('data basic stepper tags => ', tags);
+
   const {pushClient} = useClientStore();
+
+  useEffect(() => {
+    const fetchSatData = async () => {
+      const taxRegimes = await getSatTaxRegimes();
+      if(typeof(taxRegimes) === 'string'){
+        showToastMessageError(taxRegimes);
+      }else{
+        const aux:Options[] = taxRegimes.map((reg: any) => ({
+          value: reg.id,
+          label: reg.description
+        }));
+        setSatTaxRegimes(aux);
+        setSatTaxRegime(aux[0].value);
+      }
+    }
+    fetchSatData();
+  }, []);
 
   let tradenameI = '';
   let nameI = '';
   let rfcI = '';
-  //let supplier = false;
   let emailI= '';
+  // let taxregime='';
+  let capitalregime='';
 
   if(state.databasic){
     tradenameI = state.databasic.tradename;
     nameI = state.databasic.name;
     rfcI = state.databasic.rfc;
     emailI = state.databasic.email? state.databasic.email : '';
-    //supplier = state.databasic.suppliercredit;
+    // taxregime=state.databasic.taxregime? state.databasic.taxregime : '';
+    capitalregime= state.databasic.capitalregime? state.databasic.capitalregime : '';
   }
-
-  //const [suppliercredit, setSuppliercredit] = useState<boolean>(supplier);
 
   const formik = useFormik({
     initialValues: {
@@ -46,6 +70,8 @@ export default function DataBasicStepper({token, id, tags}:
       name:nameI,
       rfc: rfcI,
       email: emailI,
+      // taxregime:'',
+      capitalregime: ''
     }, 
     validationSchema: Yup.object({
       tradename: Yup.string()
@@ -55,20 +81,29 @@ export default function DataBasicStepper({token, id, tags}:
       rfc: Yup.string()
                   .required('El rfc no puede ir vacio'),
       email: Yup.string(),
+      // taxregime: Yup.string()
+      //             .required('El regimen fiscal no puede ir vacio'),
     }),
     onSubmit: async (valores) => {            
-      const {name, tradename, rfc, email} = valores;
+      const {name, tradename, rfc, email, capitalregime} = valores;
       
       let tagsSelected: string[] = [];
-        optsTags.map((optTag) => {
-          //tagsSelected.push(optTag.value);
-          tagsSelected.push(optTag.label);
+      optsTags.map((optTag) => {
+        tagsSelected.push(optTag.label);
       })
+
+      const opt = satTaxRegimes.find((v) => v.value===satTaxRegime);
+      const taxregime={
+        id: opt?.value?? '',
+        regime: opt?.label?? '',
+      }
       
       const data: any = {
         name,
         rfc,
         tradename,
+        taxregime,
+        ...(capitalregime && { capitalregime }),
         phone: phone? parseInt(phone): '',
         source,
         tags:tagsSelected,
@@ -77,8 +112,6 @@ export default function DataBasicStepper({token, id, tags}:
         regime: regime,
       }
 
-      //console.log('data basic', data);
-
       dispatch({ type: 'SET_BASIC_DATA', data: data });
       dispatch({type: 'INDEX_STEPPER', data: 1})
     },
@@ -86,23 +119,34 @@ export default function DataBasicStepper({token, id, tags}:
   
   const onClickSave = async () => {
     refRequest.current = false;
+    // console.log('save client');
     if(state.extradata && state.extradata.photo){
       const data = new FormData();
+
+      // console.log('entro aqui => ');
       
-      const {email, name, rfc, tradename} = formik.values;
+      const {email, name, rfc, tradename, capitalregime} = formik.values;
       
+      const opt = satTaxRegimes.find((v) => v.value===satTaxRegime);
+      const taxregime={
+        id: opt?.value?? '',
+        regime: opt?.label?? '',
+      }
+
       data.append('name', name);
       data.append('tradename', tradename);
+      data.append('taxregime', JSON.stringify(taxregime));
       if(email && email!==''){
         data.append('email', email);
       }
+      if(capitalregime && capitalregime!==''){
+        data.append('capitalregime', capitalregime);
+      }
       data.append('rfc', rfc);
       data.append('source', source);
-      //data.append('tags', tags);
       let arrTags: string[]= [];
       optsTags.map((optTag) => {
         arrTags.push(optTag.label);
-        //data.append('tags', optTag.label);
       })
       data.append('regime', regime);
       if(id && id!==''){
@@ -127,7 +171,8 @@ export default function DataBasicStepper({token, id, tags}:
       const location = {
         community,
         country,
-        cp: cp,
+        // cp: cp,
+        cp: parseInt(cp),
         municipy,
         state: stateS,
         stret
@@ -141,9 +186,6 @@ export default function DataBasicStepper({token, id, tags}:
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -153,8 +195,9 @@ export default function DataBasicStepper({token, id, tags}:
         showToastMessageError('Error al crear cliente!!');
       }
     }else{
-      const {name, rfc, tradename, email} = formik.values;
+      const {name, rfc, tradename, email, capitalregime} = formik.values;
     
+      // console.log('se fue para aca => ');
       let contact = [];
       if(state.contacts){
         contact = state.contacts;
@@ -162,7 +205,6 @@ export default function DataBasicStepper({token, id, tags}:
 
       let tagsSelected: string[] = [];
       optsTags.map((optTag) => {
-        //tagsSelected.push(optTag.value);
         tagsSelected.push(optTag.label);
       })
 
@@ -189,10 +231,18 @@ export default function DataBasicStepper({token, id, tags}:
           stateS = state.address.stateS? state.address.stateS: '';
         }
 
+        const opt = satTaxRegimes.find((v) => v.value===satTaxRegime);
+        const taxregime={
+          id: opt?.value?? '',
+          regime: opt?.label?? '',
+        }
+
         const data= {
           name,
           rfc,
           tradename,
+          taxregime,
+          ...(capitalregime && { capitalregime }),
           phone: phone? parseInt(phone): '',
           source,
           tags:tagsSelected,
@@ -203,23 +253,24 @@ export default function DataBasicStepper({token, id, tags}:
           photo,
           location: {
             stret,
-            cp,
+            // cp,
+            cp: parseInt(cp),
             municipy, 
             country,
             community,
             state:stateS,
           },
-          contact
+          contact,
+          company
         }
+
+        // console.log(data);
 
         const res = await SaveClient(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client)pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -232,14 +283,14 @@ export default function DataBasicStepper({token, id, tags}:
   }
 
   const [phone, setPhone] = useState<string>('');
-  //const [typePhone, setTypePhone] = useState<string>(optionsPhone[0].value);
-  //const [optionsType, setOptionsType] = useState(optionsPhone[0]);
   const [regime, setRegime] = useState<string>('Fisica');
   const [source, setSource] = useState<string>(optionsSource[0].value);
   const [optsSource, setOptsSource] = useState(optionsSource[0]);
-  //const [tagsSelected, setTagsSelected] = useState<string[]>([tags[0].value]);
   const [optsTags, setOptstags] = useState([tags[0]]);
 
+  const handleTaxRegimen = (value: string) => {
+    setSatTaxRegime(value);
+  }
 
   return(
     <div className="w-full h-full">
@@ -247,7 +298,7 @@ export default function DataBasicStepper({token, id, tags}:
         <NavClientsStepper index={0} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 w-full">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="">
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
             <Input type="text" name="name" autoFocus 
@@ -274,6 +325,23 @@ export default function DataBasicStepper({token, id, tags}:
                 </div>
             ) : null}
           </div>
+
+          <div className="">
+            <Label htmlFor="taxregime"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Regimen Fiscal</p></Label>
+            {satTaxRegimes.length > 0 && (
+              <SelectReact index={0} opts={satTaxRegimes} setValue={handleTaxRegimen} />
+            )}
+            {/* <Input type="text" name="taxregime" autoFocus 
+              value={formik.values.taxregime}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.taxregime && formik.errors.taxregime ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.taxregime}</p>
+              </div>
+            ) : null} */}
+          </div>
           
           <div>
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">RFC</p></Label>
@@ -288,6 +356,21 @@ export default function DataBasicStepper({token, id, tags}:
               </div>
             ) : null}
           </div>
+
+          <div className="">
+            <Label htmlFor="capitalregime"><p>Regimen Capital</p></Label>
+            <Input type="text" name="capitalregime" autoFocus 
+              value={formik.values.capitalregime}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.capitalregime && formik.errors.capitalregime ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.capitalregime}</p>
+              </div>
+            ) : null}
+          </div>
+
           <div>
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Origen</p></Label>
             <Select
