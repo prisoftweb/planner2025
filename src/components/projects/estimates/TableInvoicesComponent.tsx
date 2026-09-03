@@ -219,7 +219,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
         onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
                               `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: '',
           value: row.original.amount
         })}</p>
       ),
@@ -232,7 +232,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
         onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
                               `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: '',
           value: row.original.charged
         })}</p>
       ),
@@ -245,7 +245,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
         onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
                               `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: '',
           value: row.original.unchargedbalanceamount
         })}</p>
       ),
@@ -257,7 +257,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
   return (
     <>
       <div className="flex justify-end p-3">
-        {satCompany && permissions.permission.print && (
+        {satCompany && /*permissions.permission.print && */ (
           <PDFDownloadLink document={<DownloadInvoicesByProjectPDF invoices={invoices} project={project} satCompany={satCompany}
                                         resumenInvoice={resumenInvoice} token={token} />} fileName={'Estado de cuenta - ' + project.title} >
             {({loading, url, error, blob}) => 
@@ -420,13 +420,13 @@ const CardInvoice = ({invoice, token, delInvoice, pageQuery, project, permission
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: '',
                   value: invoice.amount
                 })}
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: '',
                   value: invoice.charged
                 })}
               </p>

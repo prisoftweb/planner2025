@@ -263,7 +263,8 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
                   className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
                 />
               )}
-              {expensesSelected.length>0 && permissions.components.includes('paymentsupplement') && (
+              {/* {expensesSelected.length>0 && permissions.components.includes('paymentsupplement') && ( */}
+              {(
                 <TbPaywall onClick={() => handlePaidExpenses(true)}
                   className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
                 />

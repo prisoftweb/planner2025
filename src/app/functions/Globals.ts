@@ -10,7 +10,7 @@ export function CurrencyFormatter({ currency, value}: {currency:string, value:nu
 export function MoneyFormatter(amount: number){
   if(amount > 1000000){
     const f = CurrencyFormatter({
-      currency: 'MXN',
+      currency: '',
       value: Number((amount/1000000).toFixed(2))
     });
     if(f.includes('.00')){
@@ -24,7 +24,7 @@ export function MoneyFormatter(amount: number){
   }else{
     if(amount > 1000){
       const f = CurrencyFormatter({
-        currency: 'MXN',
+        currency: '',
         value: Number((amount/1000).toFixed(2))
       });
       if(f.includes('.00')){
@@ -37,7 +37,7 @@ export function MoneyFormatter(amount: number){
       }
     }else{
       const f = CurrencyFormatter({
-        currency: 'MXN',
+        currency: '',
         value: amount
       });
       return f;
