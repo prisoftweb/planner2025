@@ -116,7 +116,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
                       {invoice.folio}
                     </h6>
                     <p className="text-slate-500 text-sm">{CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: invoice.total
                     })}</p>
                   </div>
@@ -157,7 +157,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
                       {invoice.folio}
                     </h6>
                     <p className="text-slate-500 text-sm">{CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: invoice.total
                     })}</p>
                   </div>

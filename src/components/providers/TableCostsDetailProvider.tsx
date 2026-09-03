@@ -134,7 +134,7 @@ export default function TableCostsDetailProvider({data, token, expenses,
         <p className="py-2 font-semibold cursor-pointer"
         >
           {CurrencyFormatter({
-            currency: "MXN",
+            currency: "USD",
             value: row.original.previoudbalanceamount
           })}
         </p>
@@ -147,7 +147,7 @@ export default function TableCostsDetailProvider({data, token, expenses,
         <p className="py-2 font-semibold cursor-pointer"
         >
           {CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: row.original.payout
           })}
         </p>
@@ -160,7 +160,7 @@ export default function TableCostsDetailProvider({data, token, expenses,
         <p className="py-2 font-semibold cursor-pointer"
         >
           {CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: row.original.unpaidbalanceamount
           })}
         </p>
@@ -317,13 +317,13 @@ const CardInvoices = ({expense }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: expense.payout
                 })}
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN', 
+                  currency: 'USD', 
                   value: expense.unpaidbalanceamount?? 0
                 })}
               </p>

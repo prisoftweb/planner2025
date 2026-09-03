@@ -127,7 +127,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
           setProvider(res2.elements[0].elements[0].attributes?.Nombre);
           try {
             const dollar = CurrencyFormatter({
-              currency: "MXN",
+              currency: "USD",
               value: Number(res2.elements[0].attributes.Total)
             })
             setTotal(dollar);

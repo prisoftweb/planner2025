@@ -71,7 +71,7 @@ export default function DownloadProvidersReportPDF({providers, satCompany}:
                 <View style={{textAlign:'center', border:'1px solid gray', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: resumenPayment?.totalPayments?.totalPayments || 0
                     })}
                   </Text>
@@ -85,14 +85,14 @@ export default function DownloadProvidersReportPDF({providers, satCompany}:
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de estimar/facturar: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: resumenPayment?.billedTotal?.pendingBillingTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de pago:</Text>
                 <Text style={{fontSize:'10px', color:'green'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: resumenPayment?.totalPayments?.pendingPaymentTotal || 0
                 })}</Text>
               </View>

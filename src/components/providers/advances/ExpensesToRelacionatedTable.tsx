@@ -113,7 +113,7 @@ export default function ExpensesToRelacionatedTable({costs, handleIndexStepper}:
   //       <p className="cursor-pointer"
   //         // onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
   //       >{CurrencyFormatter({
-  //         currency: 'MXN', 
+  //         currency: 'USD', 
   //         value: row.original.cost.total?? 0
   //       })}</p>
   //     ),
@@ -125,7 +125,7 @@ export default function ExpensesToRelacionatedTable({costs, handleIndexStepper}:
   //   //     <p className="cursor-pointer"
   //   //       // onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
   //   //     >{CurrencyFormatter({
-  //   //       currency: 'MXN',
+  //   //       currency: 'USD',
   //   //       value: row.original.cost.total?? 0
   //   //     })}</p>
   //   //   ),
@@ -179,7 +179,7 @@ export default function ExpensesToRelacionatedTable({costs, handleIndexStepper}:
         <p className="cursor-pointer"
           // onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
         >{CurrencyFormatter({
-          currency: 'MXN', 
+          currency: 'USD', 
           value: row.original.cost.total?? 0
         })}</p>
       ),

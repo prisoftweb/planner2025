@@ -193,7 +193,7 @@ const CardProjectResponsive = ({project }:
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: project.amount
                 })}
               </p>
@@ -239,7 +239,7 @@ return(
           </div>
           <div className="text-right flex flex-col justify-between">
             <p className="text-base">{CurrencyFormatter({
-                currency: "MXN",
+                currency: "USD",
                 value: project.amount
               })}
             </p>

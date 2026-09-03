@@ -74,7 +74,7 @@ export default function ProfileQuatation({quatation, token, user, company}:
               <div className="">
                 <p className="text-slate-500">Monto cotizado</p>
                 <p className="text-green-600">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: quatation.cost.total
                 })}</p>
               </div>

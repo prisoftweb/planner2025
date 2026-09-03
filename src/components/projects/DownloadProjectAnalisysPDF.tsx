@@ -65,7 +65,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 <View style={{textAlign:'center', border:'1px solid gray', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       // value: project.amount * 1.16
                       value: project.amountotal?? 0
                     })}
@@ -76,21 +76,21 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pagado: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: budgetedControl?.paymentInfo?.paymentTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Costo: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: budgetedControl?.spentInfo?.spentTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Utilidad neta: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: budgetedControl?.netprofitInfo?.netprofitTotal || 0
                 })}</Text>
               </View>
@@ -124,7 +124,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 <Text style={{marginBottom: '15px', fontSize:'11px', color:'gray'}}>CONTROL CONTRACTUAL</Text>
 
                 <Text>Contratado ({CurrencyFormatter({
-                  currency: 'MXN', 
+                  currency: 'USD', 
                   value: contractualControl?.estimateInfo?.amount || 0
                 })})</Text>
                 <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -135,7 +135,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 </View>
 
                 <Text style={{marginTop: '10px'}}>Anticipo ({CurrencyFormatter({
-                  currency: 'MXN', 
+                  currency: 'USD', 
                   value: contractualControl?.estimateInfo?.cashAdvance || 0
                 })})</Text>
                 <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -146,7 +146,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 </View>
 
                 <Text style={{marginTop: '10px'}}>Amortizado ({CurrencyFormatter({
-                  currency: 'MXN', 
+                  currency: 'USD', 
                   value: contractualControl?.estimateInfo?.amountChargeOff || 0
                 })})</Text>
                 <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -157,7 +157,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 </View>
 
                 <Text style={{marginTop: '10px'}}>Estimado ({CurrencyFormatter({
-                  currency: 'MXN', 
+                  currency: 'USD', 
                   value: contractualControl?.estimateInfo?.estimatedTotal || 0
                 })})</Text>
                 <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -168,7 +168,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 </View>
 
                 <Text style={{marginTop: '10px'}}>Garantia ({CurrencyFormatter({
-                  currency: 'MXN', 
+                  currency: 'USD', 
                   value: contractualControl?.estimateInfo?.amountGuaranteeFund || 0
                 })})</Text>
                 <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -185,7 +185,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
               <Text style={{marginBottom: '15px', fontSize:'11px', color:'gray'}}>CONTROL PRESUPUESTAL</Text>
 
               <Text>Monto ({CurrencyFormatter({
-                currency: 'MXN', 
+                currency: 'USD', 
                 value: budgetedControl?.amountInfo?.amountotal || 0
               })})</Text>
               <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -196,7 +196,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
               </View>
 
               <Text style={{marginTop: '10px'}}>Facturado ({CurrencyFormatter({
-                currency: 'MXN', 
+                currency: 'USD', 
                 value: budgetedControl?.billingInfo?.billedTotal || 0
               })})</Text>
               <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -207,7 +207,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
               </View>
 
               <Text style={{marginTop: '10px'}}>Pagado ({CurrencyFormatter({
-                currency: 'MXN', 
+                currency: 'USD', 
                 value: budgetedControl?.paymentInfo?.paymentTotal || 0
               })})</Text>
               <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -218,7 +218,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
               </View>
 
               <Text style={{marginTop: '10px'}}>Costo ({CurrencyFormatter({
-                currency: 'MXN', 
+                currency: 'USD', 
                 value: budgetedControl?.spentInfo?.spentTotal || 0
               })})</Text>
               <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -229,7 +229,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
               </View>
 
               <Text style={{marginTop: '10px'}}>Presupuestado ({CurrencyFormatter({
-                currency: 'MXN', 
+                currency: 'USD', 
                 value: budgetedControl?.budgetedInfo?.budgetedTotal || 0
               })})</Text>
               <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -257,12 +257,12 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} >
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>Presupuestado</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.budgetedInfo?.budgetedTotal || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{budgetedControl?.budgetedInfo?.porcentageTotal || 0}%</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.budgetedInfo?.pendingBugetedTotal || 0
               })} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{(100 - (budgetedControl?.budgetedInfo?.porcentageTotal || 0)).toFixed(2)}%</Text>
@@ -271,12 +271,12 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} >
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>Costo</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.spentInfo?.spentTotal || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{budgetedControl?.spentInfo?.porcentage || 0}%</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.spentInfo?.pendingSpentTotal || 0
               })} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{(100 - (budgetedControl?.spentInfo?.porcentage || 0)).toFixed(2)}%</Text>
@@ -285,12 +285,12 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} >
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>Facturado</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.billingInfo?.billedTotal || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{budgetedControl?.billingInfo?.porcentage || 0}%</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.billingInfo?.pendingBillingTotal || 0
               })} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{(100 - (budgetedControl?.billingInfo?.porcentage || 0)).toFixed(2)}%</Text>
@@ -299,12 +299,12 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} >
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>Pagado</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.paymentInfo?.paymentTotal || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{budgetedControl?.paymentInfo?.porcentage || 0}%</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.paymentInfo?.pendingPaymentTotal || 0
               })} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{(100 - (budgetedControl?.paymentInfo?.porcentage || 0)).toFixed(2)}%</Text>
@@ -313,7 +313,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} >
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>Utilidad neta </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.netprofitInfo?.netprofitTotal || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{budgetedControl?.netprofitInfo?.porcentage || 0}%</Text>
@@ -329,7 +329,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', padding: '2px', margin: '0px', border: '1px solid black'}}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>Costes totales </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.spentInfo?.spentTotal || 0
               })}</Text>
             </View>
@@ -337,7 +337,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', padding: '2px', margin: '0px', border: '1px solid black'}}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>Beneficios totales </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: budgetedControl?.paymentInfo?.paymentTotal || 0
               })}</Text>
             </View>
@@ -375,7 +375,7 @@ const BarWithLabel = ({ label, value, percentage, color }: {label:string, value:
         marginRight: -4, // Ajusta aquí para que se vea pegado
       }}
     >
-      {label} ({CurrencyFormatter({ currency: 'MXN', value })})
+      {label} ({CurrencyFormatter({ currency: 'USD', value })})
     </Text>
 
     {/* Barra vertical */}

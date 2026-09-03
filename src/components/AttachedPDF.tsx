@@ -77,7 +77,7 @@ export default function AttachedPDF({report, dates, satCompany} :{report:Report,
               <Text style={style.textBlue}>{report.company.name}</Text>
               <Text> ( EL IMPORTE TOTAL COMPROBADO DE MI FONDO FIJO ES DE </Text>
               <Text style={style.textRed}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: report.total
                 })} </Text>
               <Text> ) </Text>
@@ -88,7 +88,7 @@ export default function AttachedPDF({report, dates, satCompany} :{report:Report,
             <Text>INGRESE A PLANNER LOS COMPROBANTES POR LA CANTIDAD MENCIONADA Y AL MISMO 
                 TIEMPO SOLICITO ME SEA REPUESTO EL IMPORTE POR LA CANTIDAD DE: 
               <Text style={style.textBlue}> {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: report.total
                 })} </Text>
               <Text> QUE SE REFIERE A GASTOS REALIZADOS DURANTE EL PERIODO COMPRENDIDO DEL </Text>

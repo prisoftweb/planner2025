@@ -136,7 +136,7 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
                       <h6
                         className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
                         {CurrencyFormatter({
-                          currency: 'MXN',
+                          currency: 'USD',
                           value: price.cost
                         })}
                       </h6>

@@ -97,7 +97,7 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/estimates/${row.original.idProject}/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Estimacion
         })}</p>
       ),
@@ -109,7 +109,7 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/estimates/${row.original.idProject}/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Amortizacion
         })}</p>
       ),
@@ -121,7 +121,7 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/estimates/${row.original.idProject}/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Fondo
         })}</p>
       ),
@@ -133,7 +133,7 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.MontoPay
         })}</p>
       ),
@@ -145,7 +145,7 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.amountVat
         })}</p>
       ),
@@ -297,7 +297,7 @@ const CardEstimates = ({estimates, token, delEstimate }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: estimates.Estimacion
                 })}
               </p>

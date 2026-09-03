@@ -36,7 +36,7 @@ export default function DonutChartBudget({data, colors, categories, category}:
               {/* text-tremor-content-emphasis */}
                 {categoryPayload.value}%
                 {/* {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: categoryPayload.value
                 })} */}
               </p>

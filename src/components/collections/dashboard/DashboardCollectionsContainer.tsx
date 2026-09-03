@@ -389,7 +389,7 @@ export const Card = ({amount, title, children}: {title:string, amount:number, ch
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: amount
         })}</p>
       </div>

@@ -225,11 +225,11 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
                 <p className="text-black">{c?.quantity || 0}</p>
                 <p className="text-black col-span-3">{c.conceptEstimate.description}</p>
                 <p className="text-black text-right">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: c?.priceConcepEstimate?.cost || 0
                 })}</p>
                 <p className="text-black text-right">{CurrencyFormatter({
-                  currency: 'MXN', 
+                  currency: 'USD', 
                   value: c?.amount || 0
                 })}</p>
               </div>
@@ -243,7 +243,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           <div className="mt-6 py-3 flex justify-between items-center border-y-2 border-blue-200">
             <p className="font-extrabold text-slate-600">SUBTOTAL</p>
             <p className="text-blue-600 font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: invoice.cost.subtotal
             })}</p>
           </div>
@@ -251,7 +251,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           <div className="py-3 flex justify-between items-center">
             <p className="font-extrabold text-slate-600">(+)IVA</p>
             <p className="text-blue-600 font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: invoice.cost.iva
             })}</p>
           </div>
@@ -259,7 +259,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           <div className="py-3 flex justify-between items-center border-y-2 border-blue-500">
             <p className="font-extrabold text-slate-600">Total</p>
             <p className="text-blue-600 font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: invoice.cost.total
             })}</p>
           </div>
@@ -296,7 +296,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
                         {c.accountReceivable.reference}
                       </h6>
                       <p className="text-slate-500 text-sm">{CurrencyFormatter({
-                        currency: 'MXN',
+                        currency: 'USD',
                         value: c.charged
                       })}</p>
                     </div>
@@ -306,7 +306,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
                         {c.accountReceivable?.date?.substring(0, 10)}
                       </h6>
                       <p className="text-slate-500 text-sm">{CurrencyFormatter({
-                        currency: 'MXN',
+                        currency: 'USD',
                         value: c?.accountReceivable?.amount || 0
                       })}</p>
                     </div>
@@ -364,7 +364,7 @@ export function TableCollectionsInvoice({collections}: {collections: ICollectios
       id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.amount ?? 0
         })}</p>
       ),
@@ -374,7 +374,7 @@ export function TableCollectionsInvoice({collections}: {collections: ICollectios
       id: 'cobrado',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.charged ?? 0
         })}</p>
       ),
@@ -464,7 +464,7 @@ const CardInvoice = ({invoice }:
               <h6
                 className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: invoice.priceConcepEstimate?.cost || 0
                 })}
               </h6>
@@ -475,13 +475,13 @@ const CardInvoice = ({invoice }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: invoice.amount || 0
                 })}
               </p>
               {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: invoice.charged
                 })}
               </p> */}

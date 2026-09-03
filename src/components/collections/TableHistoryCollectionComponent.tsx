@@ -261,7 +261,7 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
                       <h6
                         className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
                         {CurrencyFormatter({
-                          currency: 'MXN',
+                          currency: 'USD',
                           value: col.amount
                         })}
                       </h6>
@@ -292,7 +292,7 @@ export const Card = ({amount, title}: {title:string, amount:number}) => {
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: amount
         })}</p>
       </div>

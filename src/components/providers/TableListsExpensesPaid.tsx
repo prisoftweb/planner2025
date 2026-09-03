@@ -106,7 +106,7 @@ export default function TableListExpensesPaid({data, nextPage, updateCostPartial
       id: 'importe pagado',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.paid
         })}</p>
       ),
@@ -116,7 +116,7 @@ export default function TableListExpensesPaid({data, nextPage, updateCostPartial
       id: 'importe insoluto',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.pending
         })}</p>
       ),
@@ -200,7 +200,7 @@ const CardInvoices = ({expense }:
               </h6>
               <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: expense.paid
                 })}
               </p>
@@ -208,7 +208,7 @@ const CardInvoices = ({expense }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: expense.pending
                 })}
               </p>

@@ -10,11 +10,11 @@ export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
   
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.cost?.subtotal || 0
         });
     const total = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.cost?.total || 0
     })
     const elements: string[] = [];
@@ -134,7 +134,7 @@ export function getTypeFiles(expense:Expense) {
   
 //   expenses.map((expense) => {
 //     const dollar = CurrencyFormatter({
-//           currency: "MXN",
+//           currency: "USD",
 //           value: expense.cost?.subtotal || 0
 //         })
 //     const elements: string[] = [];
@@ -209,11 +209,11 @@ export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvi
   const table: ExpensesTableProvider[] = [];
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.payout || 0
         })
     const pending = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.pending || 0
     })
     table.push({
@@ -250,7 +250,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
     let d=0;
     if(expense.costs.pay){
       dollar =CurrencyFormatter({
-        currency: "MXN",
+        currency: "USD",
         // value: expense.costs.cost.subtotal || 0
         // value: expense.costos.costito || 0
         value: expense.costs.pay[0]?.previousbalanceamount || 0
@@ -258,7 +258,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
       d = expense.costs.pay[0]?.previousbalanceamount || 0;
     }else{
       dollar=CurrencyFormatter({
-        currency: "MXN",
+        currency: "USD",
         // value: expense.costs.cost.subtotal || 0
         // value: expense.costos.costito || 0
         value: 0
@@ -266,7 +266,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
     }
     let t = expense.costs.pay? expense.costs.pay[0]?.payout : 0 || 0;
     const total = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       // value: expense.costs.cost.total || 0
       // value: expense.payout || 0
       value: expense.costs.pay? expense.costs.pay[0]?.payout : 0 || 0
@@ -274,7 +274,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
 
     const u = expense.costs.pay? expense.costs.pay[0]?.unpaidbalanceamount : 0 || 0;
     const unpaid = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       // value: expense.costs.cost.subtotal || 0
       // value: expense.costos.costito || 0
       value: expense.costs.pay? expense.costs.pay[0]?.unpaidbalanceamount : 0 || 0
@@ -325,7 +325,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
   
 //   expenses.map((expense) => {
 //     const dollar = CurrencyFormatter({
-//           currency: "MXN",
+//           currency: "USD",
 //           value: expense.payout || 0
 //         })
 //     const elements: string[] = [];

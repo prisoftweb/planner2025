@@ -90,7 +90,7 @@ export default function ConceptsReferralsStepperComponent({token, nextStep, save
       id: 'precio',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Price
         })}</p>
       ),
@@ -100,7 +100,7 @@ export default function ConceptsReferralsStepperComponent({token, nextStep, save
       id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Importe
         })}</p>
       ),
@@ -201,11 +201,11 @@ export default function ConceptsReferralsStepperComponent({token, nextStep, save
                   <p className="text-black">{c?.quantity || 0}</p>
                   <p className="text-black col-span-3">{c.conceptEstimate.description}</p>
                   <p className="text-black text-right">{CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: c?.priceConcepEstimate?.cost || 0
                   })}</p>
                   <p className="text-black text-right">{CurrencyFormatter({
-                    currency: 'MXN', 
+                    currency: 'USD', 
                     value: (c?.amount || 0) * (c?.quantity?? 0)
                   })}</p>
                 </div>
@@ -215,7 +215,7 @@ export default function ConceptsReferralsStepperComponent({token, nextStep, save
             <div className="mt-6 py-3 flex justify-between items-center border-y-2 border-blue-200">
               <p className="font-extrabold text-slate-600">SUBTOTAL</p>
               <p className="text-blue-600 font-bold">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: total
               })}</p>
             </div>
@@ -223,7 +223,7 @@ export default function ConceptsReferralsStepperComponent({token, nextStep, save
             <div className="py-3 flex justify-between items-center">
               <p className="font-extrabold text-slate-600">(+)IVA</p>
               <p className="text-blue-600 font-bold">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: 0
               })}</p>
             </div>
@@ -231,7 +231,7 @@ export default function ConceptsReferralsStepperComponent({token, nextStep, save
             <div className="py-3 flex justify-between items-center border-y-2 border-blue-500">
               <p className="font-extrabold text-slate-600">Total</p>
               <p className="text-blue-600 font-bold">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: total
               })}</p>
             </div>
@@ -343,7 +343,7 @@ const CardConcept = ({concept }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: concept.Importe
                 })}
               </p>

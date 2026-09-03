@@ -65,7 +65,7 @@ export default async function Page({ params }: { params: { id: string, idProv:st
     )
 
   const subTotal = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: cost.cost.subtotal
   });
 

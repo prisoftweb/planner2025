@@ -65,7 +65,7 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
               <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
                 <Text style={{color:'gray', margin: '2px'}}>Monto total del proyecto:</Text>
                 <Text style={{margin: '2px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: project.amountotal || 0
                 })}</Text>
               </View>
@@ -80,7 +80,7 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
                 <View style={{textAlign:'center', border:'1px solid gray', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: totalPaymentsResumen?.totalPayments?.totalPayments || 0
                     })}
                   </Text>
@@ -94,21 +94,21 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de estimar/facturar:</Text>
                 <Text style={{fontSize:'10px', fontWeight: 'bold'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: totalPaymentsResumen?.billedTotal?.pendingBillingTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de pago:</Text>
                 <Text style={{fontSize:'10px', color:'red', fontWeight: 'bold'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: totalPaymentsResumen?.totalPayments?.pendingPaymentTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de pago total:</Text>
                 <Text style={{fontSize:'10px', color:'red', fontWeight: 900}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: (totalPaymentsResumen?.billedTotal?.pendingBillingTotal || 0) + (totalPaymentsResumen?.totalPayments?.pendingPaymentTotal || 0)
                 })}</Text>
               </View>
@@ -134,17 +134,17 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.estimate.name} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.condition.name}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 // value: i.lastpayment?.previousbalanceamount || 0
                 value: i.cost.total
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 // value: i.lastpayment?.charged || 0
                 value: i.fullyCharged || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: i.lastpayment?.unchargedbalanceamount || 0
               })}</Text>
             </View>

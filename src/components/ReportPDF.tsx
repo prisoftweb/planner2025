@@ -103,7 +103,7 @@ export default function ReportPDF({report, costs, satCompany}:
           <View style={style.inLineText}>
             <Text style={style.textLeft}>Importe del informe:</Text>
             <Text style={style.textRight}>{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: totalAllCosts
             })}</Text>
           </View>
@@ -158,7 +158,7 @@ export default function ReportPDF({report, costs, satCompany}:
               <View style={[style.element, {flex: 5}]}><Text>{cost.description}</Text></View>
               <View style={[style.element, {flex: 3}]}>
                 <Text>{CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: (cost.costo.total) || 0
                   })}</Text>
               </View>

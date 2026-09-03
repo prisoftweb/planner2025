@@ -332,7 +332,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                   <div>
                     <p className=" text-sm mt-2">Contratado ({
                       CurrencyFormatter({
-                        currency:'MXN',
+                        currency: 'USD',
                         value: (showTotal? contractualControl?.estimateInfo?.amount : 
                           contractualControl?.estimateInfo?.amountPro) || 0
                       })}) 
@@ -344,7 +344,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                     
                     <p className=" text-sm mt-2">Anticipo ({
                       CurrencyFormatter({
-                        currency:'MXN',
+                        currency: 'USD',
                         value: contractualControl?.estimateInfo?.cashAdvance || 0
                       })}) 
                     </p>
@@ -354,7 +354,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                     
                     <p className=" text-sm mt-2">Amortizado ({
                       CurrencyFormatter({
-                        currency:'MXN',
+                        currency: 'USD',
                         value: contractualControl?.estimateInfo?.amountChargeOff || 0
                       })}) 
                     </p>
@@ -364,7 +364,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                     
                     <p className=" text-sm mt-2">Estimado ({
                       CurrencyFormatter({
-                        currency:'MXN',
+                        currency: 'USD',
                         value: contractualControl?.estimateInfo?.estimatedTotal || 0
                       })}) 
                     </p>
@@ -374,7 +374,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
 
                     <p className=" text-sm mt-2">Garantia ({
                       CurrencyFormatter({
-                        currency:'MXN',
+                        currency: 'USD',
                         value: contractualControl?.estimateInfo?.amountGuaranteeFund || 0
                       })}) 
                     </p>
@@ -395,7 +395,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                 <div>
                   <p className=" text-sm mt-2">Monto ({
                     CurrencyFormatter({
-                      currency:'MXN',
+                      currency: 'USD',
                       value: (showTotal? budgetedControl?.amountInfo?.amountotal: budgetedControl?.amountInfo?.amount) || 0
                     })}) 
                   </p>
@@ -407,7 +407,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                     <div>
                       <p className="text-xs text-slate-500">
                         {CurrencyFormatter({
-                          currency:'MXN',
+                          currency: 'USD',
                           value: budgetedControl.amountInfo.amountotal?? 0
                         })}
                       </p>
@@ -416,7 +416,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                     <div>
                       <p className="text-xs text-slate-500 text-right">
                         {CurrencyFormatter({
-                          currency:'MXN',
+                          currency: 'USD',
                           value: (budgetedControl.amountInfo.amountotal?? 0) - (budgetedControl.amountInfo.amount?? 0)
                         })}
                       </p>
@@ -426,7 +426,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                   
                   <p className=" text-sm mt-2">Presupuestado ({
                     CurrencyFormatter({
-                      currency:'MXN',
+                      currency: 'USD',
                       value: (showTotal? budgetedControl?.budgetedInfo?.budgetedTotal: 
                         (budgetedControl?.budgetedInfo?.budgetedTotal - (budgetedControl?.budgetedInfo?.budgetedTotal * 0.16) )) || 0
                     })}) 
@@ -439,7 +439,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                     <div>
                       <p className="text-xs text-slate-500">
                         {CurrencyFormatter({
-                          currency:'MXN',
+                          currency: 'USD',
                           value: budgetedControl.budgetedInfo.pendingBugetedTotal?? 0
                         })}
                       </p>
@@ -455,7 +455,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                   
                   <p className=" text-sm mt-2">Costo ({
                     CurrencyFormatter({
-                      currency:'MXN',
+                      currency: 'USD',
                       value: (showTotal? budgetedControl?.spentInfo?.spentTotal: 
                                 budgetedControl?.spentInfo?.spentSubTotal) || 0
                     })}) 
@@ -468,7 +468,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                     <div>
                       <p className="text-xs text-slate-500">
                         {CurrencyFormatter({
-                          currency:'MXN',
+                          currency: 'USD',
                           value: (showTotal? budgetedControl?.spentInfo?.pendingSpentTotal: 
                             budgetedControl?.spentInfo?.pendingSpentSubTotal) || 0
                         })}
@@ -486,7 +486,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
 
                   <p className=" text-sm mt-2">Facturado ({
                     CurrencyFormatter({
-                      currency:'MXN',
+                      currency: 'USD',
                       value: (showTotal? budgetedControl?.billingInfo?.billedTotal: 
                         budgetedControl?.billingInfo?.billedSubTotal) || 0
                     })}) 
@@ -501,7 +501,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                     <div>
                       <p className="text-xs text-slate-500">
                         {CurrencyFormatter({
-                          currency:'MXN',
+                          currency: 'USD',
                           value: (showTotal? budgetedControl?.billingInfo?.pendingBillingTotal: 
                             budgetedControl?.billingInfo?.pendingBillingSubTotal) || 0
                         })}
@@ -519,7 +519,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
 
                   <p className=" text-sm mt-2">Pagado ({
                     CurrencyFormatter({
-                      currency:'MXN',
+                      currency: 'USD',
                       value: (showTotal? budgetedControl?.paymentInfo?.paymentTotal: 
                         budgetedControl?.paymentInfo?.paymentSubTotal) || 0
                     })}) 
@@ -533,7 +533,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
                     <div>
                       <p className="text-xs text-slate-500">
                         {CurrencyFormatter({
-                          currency:'MXN',
+                          currency: 'USD',
                           value: (showTotal? budgetedControl?.paymentInfo?.pendingPaymentTotal: 
                               budgetedControl?.paymentInfo?.pendingPaymentSubTotal) || 0
                         })}
@@ -551,7 +551,7 @@ export default function DashboardAnalysisProject({token, id, project, company, p
 
                   <p className=" text-sm mt-2">Utilidades ({
                     CurrencyFormatter({
-                      currency:'MXN',
+                      currency: 'USD',
                       value: (showTotal? budgetedControl?.netprofitInfo?.netprofitTotal: 
                                 budgetedControl?.netprofitInfo?.netprofitSubTotal) || 0
                     })}) 
@@ -597,7 +597,7 @@ export const Card = ({amount, children, title}: {children:JSX.Element, title:str
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: amount
         })}</p>
       </div>

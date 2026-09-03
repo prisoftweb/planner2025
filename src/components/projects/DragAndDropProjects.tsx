@@ -108,7 +108,7 @@ function SortableItem(p : ProjectMin) {
         </div>
         {/* <div className="flex items-center justify-between gap-x-2 mt-2"></div> */}
         <p className="text-slate-500 text-sm">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: p.amount
         })}</p>
         <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content={p.title} 

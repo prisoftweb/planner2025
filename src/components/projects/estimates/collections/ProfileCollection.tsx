@@ -88,7 +88,7 @@ export default function ProfileCollection({collection, token, user, permissions}
               <div className="">
                 <p className="text-slate-500">Monto cobrado</p>
                 <p className="text-green-600">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: oneCollection.amount
                 })}</p>
               </div>

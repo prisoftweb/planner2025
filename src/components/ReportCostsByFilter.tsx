@@ -77,11 +77,11 @@ export default function ReportCostsByFilter({costs, satCompany}: {costs:Expense[
                 <View style={[style.element, {flex: 2}]}><Text>{cost.description ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.date?.substring(0, 10) ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: cost.cost.subtotal
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: cost.cost?.total || 0
                 })}</Text></View>
               </View>
@@ -92,7 +92,7 @@ export default function ReportCostsByFilter({costs, satCompany}: {costs:Expense[
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalCosts
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
@@ -104,7 +104,7 @@ export default function ReportCostsByFilter({costs, satCompany}: {costs:Expense[
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalIva
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
@@ -116,7 +116,7 @@ export default function ReportCostsByFilter({costs, satCompany}: {costs:Expense[
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalTypes
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>

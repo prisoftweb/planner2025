@@ -48,7 +48,7 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
       parciality: numPartial,
       pending: Number(pending.replace(/[$,",", M, X]/g, "")),
       Total: CurrencyFormatter({
-        currency: 'MXN',
+        currency: 'USD',
         value: Number(previousImport.replace(/[$,",", M, X]/g, ""))
       })
     }
@@ -91,14 +91,14 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
           <div>
             <Label htmlFor="discount">{'Descuento'}</Label>
             <p className="text-md text-red-500">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: cost.discount
             })}</p>
           </div>
           <div>
             <Label htmlFor="Iva">{'Iva'}</Label>
             <p className="text-md text-blue-500">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: cost.iva
             })}</p>
           </div>

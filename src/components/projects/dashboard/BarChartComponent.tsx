@@ -29,7 +29,7 @@ export function BarChartComponent({data, colors, categories}:
               <p className="text-tremor-content">{category.dataKey}</p>
               <p className="font-medium text-tremor-content-emphasis">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: category.value
                 })}
               </p>

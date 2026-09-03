@@ -9,7 +9,7 @@ export default function NuevoComponente({report, id, token}:
 
   const {oneReport} = useOneReportStore();
   const total = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: oneReport?.total || 0
   });
 
@@ -95,21 +95,21 @@ export default function NuevoComponente({report, id, token}:
             <div>
               <Label>Monto de caja chica</Label>
               <p className=" text-green-500 mt-2">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: oneReport?.ammount || 0
               })}</p>
             </div>
             <div>
               <Label>Gastado</Label>
               <p className="text-red-500 mt-2">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: oneReport?.total || 0
               })}</p>
             </div>
             <div>
               <Label>Saldo actual</Label>
               <p className="text-green-500 mt-2">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: gastado
               })}</p>
             </div>

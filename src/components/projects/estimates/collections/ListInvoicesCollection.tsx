@@ -45,7 +45,7 @@ export default function ListInvoicesCollection({collection, invoices, permission
                         {invoice.paymentInInvoice.folio}
                       </h6>
                       <p className="text-slate-500 text-sm">{CurrencyFormatter({
-                        currency: 'MXN',
+                        currency: 'USD',
                         value: invoice.paymentInInvoice.total
                       })}</p>
                     </div>

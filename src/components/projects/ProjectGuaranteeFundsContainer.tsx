@@ -162,7 +162,7 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
         <p className="cursor-pointer"
         // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.amount
         })}</p>
       ),
@@ -174,7 +174,7 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
         <p className="cursor-pointer"
         // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.amountVat
         })}</p>
       ),
@@ -309,7 +309,7 @@ const CardGuarantee = ({gurantee}:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: gurantee.amount
                 })}
               </p>

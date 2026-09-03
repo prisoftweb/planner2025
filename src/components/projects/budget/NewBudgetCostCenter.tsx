@@ -103,12 +103,12 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   }, []);
 
   const amount = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: oneBudget?.amount || 0
   });
 
   const budgeted = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: oneBudget?.budgeted || 0
   })
 

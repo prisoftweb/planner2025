@@ -23,12 +23,12 @@ export default function ProfileBudget({budget, token, id, user}: Params) {
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const amount = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: budget.amount
   });
 
   const budgeted = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: budget.budgeted
   });
 

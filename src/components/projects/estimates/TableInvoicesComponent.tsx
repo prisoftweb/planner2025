@@ -219,7 +219,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
         onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
                               `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: '',
+          currency: 'USD',
           value: row.original.amount
         })}</p>
       ),
@@ -232,7 +232,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
         onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
                               `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: '',
+          currency: 'USD',
           value: row.original.charged
         })}</p>
       ),
@@ -245,7 +245,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
         onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
                               `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: '',
+          currency: 'USD',
           value: row.original.unchargedbalanceamount
         })}</p>
       ),
@@ -420,13 +420,13 @@ const CardInvoice = ({invoice, token, delInvoice, pageQuery, project, permission
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: '',
+                  currency: 'USD',
                   value: invoice.amount
                 })}
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: '',
+                  currency: 'USD',
                   value: invoice.charged
                 })}
               </p>

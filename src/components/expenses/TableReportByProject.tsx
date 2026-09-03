@@ -93,7 +93,7 @@ export default function TableReportByProject({token, company}: {token:string, co
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <p>{CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: row.original.amount,
           })}</p>          
         </div>
@@ -108,7 +108,7 @@ export default function TableReportByProject({token, company}: {token:string, co
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <p>{CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: row.original.totalCost
           })}</p>          
         </div>
@@ -245,7 +245,7 @@ const CardData = ({data, token}:
               </h6>
               <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: data.amount,
                 })}
               </p>
@@ -253,7 +253,7 @@ const CardData = ({data, token}:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: data.totalCost,
                 })}  
               </p>

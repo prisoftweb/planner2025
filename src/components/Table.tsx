@@ -97,7 +97,7 @@ export default function Table({data, columns, placeH, typeTable='',
   if(typeTable === 'cost'){
     data.map((exp:ExpensesTable) => total += exp.Importe);
     const t = CurrencyFormatter({
-      currency: 'MXN',
+      currency: 'USD',
       value: total
     });
     
@@ -105,7 +105,7 @@ export default function Table({data, columns, placeH, typeTable='',
       let totalSeleccionados: number = 0;
       table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += exp.original.Importe);
       const tSeleccionados = CurrencyFormatter({
-        currency: 'MXN',
+        currency: 'USD',
         value: totalSeleccionados
       });
       labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
@@ -128,7 +128,7 @@ export default function Table({data, columns, placeH, typeTable='',
     if(typeTable === 'projects'){
       data.map((proj:ProjectsTable) => total += proj.amount);
       const t = CurrencyFormatter({
-        currency: 'MXN',
+        currency: 'USD',
         value: total
       });
       
@@ -136,7 +136,7 @@ export default function Table({data, columns, placeH, typeTable='',
         let totalSeleccionados: number = 0;
         table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += proj.original.amount);
         const tSeleccionados = CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: totalSeleccionados
         });
         labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
@@ -159,7 +159,7 @@ export default function Table({data, columns, placeH, typeTable='',
       if(typeTable === 'costProvider'){
         data.map((exp:HistoryExpensesTable) => total += Number(exp.Total.replace(/[$, M, X, N,]/g, "")));
         const t = CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: total
         });
         
@@ -177,7 +177,7 @@ export default function Table({data, columns, placeH, typeTable='',
                       exp.original.Estatus._id!=='661eaa4af642112488c85f56' )? 1: 0;
           });
           const tSeleccionados = CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: totalSeleccionados
           });
           labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
@@ -200,7 +200,7 @@ export default function Table({data, columns, placeH, typeTable='',
         if(typeTable === 'paymentDetails'){
           data.map((exp:DetailExpensesTableProvider) => total += exp.payout);
           const t = CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: total
           });
           
@@ -208,7 +208,7 @@ export default function Table({data, columns, placeH, typeTable='',
             let totalSeleccionados: number = 0;
             table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += exp.original.payout);
             const tSeleccionados = CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: totalSeleccionados
             });
             labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
@@ -231,7 +231,7 @@ export default function Table({data, columns, placeH, typeTable='',
           if(typeTable === 'payments'){
             data.map((exp:ExpensesTableProvider) => total += Number(exp.paid.replace(/[$, M, X, N,]/g, "")));
             const t = CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: total
             });
             
@@ -239,7 +239,7 @@ export default function Table({data, columns, placeH, typeTable='',
               let totalSeleccionados: number = 0;
               table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.paid.replace(/[$, M, X, N,]/g, "")));
               const tSeleccionados = CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalSeleccionados
               });
               labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
@@ -262,7 +262,7 @@ export default function Table({data, columns, placeH, typeTable='',
             if(typeTable === 'guaranteefunds'){
               data.map((guarantee:ProjectsTable) => total += guarantee.amount);
               const t = CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: total
               });
               
@@ -270,7 +270,7 @@ export default function Table({data, columns, placeH, typeTable='',
                 let totalSeleccionados: number = 0;
                 table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += proj.original.amount);
                 const tSeleccionados = CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: totalSeleccionados
                 });
                 labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
@@ -300,7 +300,7 @@ export default function Table({data, columns, placeH, typeTable='',
 
                 // data.map((invoice:IInvoiceTable) => total += invoice.amount);
                 const t = CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: total
                 });
 
@@ -314,17 +314,17 @@ export default function Table({data, columns, placeH, typeTable='',
                     vatInvSel+= inv.original.vat?? 0;
                   })
                   const tSeleccionados = CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: totalSeleccionados
                   });
                   
                   const sSel = CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: subtotSel
                   });
 
                   const vSel = CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: vatInvSel
                   });
 
@@ -354,7 +354,7 @@ export default function Table({data, columns, placeH, typeTable='',
                 if(typeTable === 'guarantee'){
                   data.map((invoice:ITableGuarantee) => total += invoice.amount);
                   const t = CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: total
                   });
                   
@@ -362,7 +362,7 @@ export default function Table({data, columns, placeH, typeTable='',
                     let totalSeleccionados: number = 0;
                     table.getSelectedRowModel().flatRows.map((inv:any) => totalSeleccionados += inv.original.amount);
                     const tSeleccionados = CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: totalSeleccionados
                     });
                     labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
@@ -385,7 +385,7 @@ export default function Table({data, columns, placeH, typeTable='',
                   if(typeTable==='costReport'){
                     data.map((invoice:CostsTable) => total += Number(invoice.Total.replace(/[$, M, X, N,]/g, "")));
                     const t = CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: total
                     });
                     
@@ -393,7 +393,7 @@ export default function Table({data, columns, placeH, typeTable='',
                       let totalSeleccionados: number = 0;
                       table.getSelectedRowModel().flatRows.map((inv:any) => totalSeleccionados += Number(inv.original.Total.replace(/[$, M, X, N,]/g, "")));
                       const tSeleccionados = CurrencyFormatter({
-                        currency: 'MXN',
+                        currency: 'USD',
                         value: totalSeleccionados
                       });
                       labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
@@ -420,7 +420,7 @@ export default function Table({data, columns, placeH, typeTable='',
                       // });
 
                       // const t = CurrencyFormatter({
-                      //   currency: 'MXN',
+                      //   currency: 'USD',
                       //   value: total
                       // });
 
@@ -430,7 +430,7 @@ export default function Table({data, columns, placeH, typeTable='',
                       //     totalSeleccionados += inv.original.cost.total>0?inv.original.cost.total:0;
                       //   })
                       //   const tSeleccionados = CurrencyFormatter({
-                      //     currency: 'MXN',
+                      //     currency: 'USD',
                       //     value: totalSeleccionados
                       //   });
                         

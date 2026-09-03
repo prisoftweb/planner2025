@@ -71,7 +71,7 @@ export default function DownloadCollectionByClientPDF({collections, client, rfc,
                 <View style={{textAlign:'center', border:'1px solid gray', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Text style={{textAlign:'center', color:'red', fontSize:'11px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: pendingTotal || 0
                     })}
                   </Text>
@@ -81,14 +81,14 @@ export default function DownloadCollectionByClientPDF({collections, client, rfc,
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Por cobrar: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: pendingCollection
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Por facturar: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: pendingBilling || 0
                 })}</Text>
               </View>
@@ -121,15 +121,15 @@ export default function DownloadCollectionByClientPDF({collections, client, rfc,
                 </View>
               </View>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c.pendingPayment
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c.pendingBilling
               })} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c.pendingTotal
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{'0 dias'}</Text>

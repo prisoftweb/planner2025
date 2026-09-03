@@ -351,7 +351,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
         <p className="cursor-pointer"
         onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.amount
         })}</p>
       ),
@@ -363,7 +363,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
         <p className="cursor-pointer"
         onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.charged
         })}</p>
       ),
@@ -375,7 +375,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
         <p className="cursor-pointer"
         onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.unchargedbalanceamount
         })}</p>
       ),
@@ -767,13 +767,13 @@ const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCance
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: invoice.amount
                 })}
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: invoice.charged
                 })}
               </p>
@@ -791,7 +791,7 @@ export const Card = ({amount, title, footer}: {title:string, amount:number, foot
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: amount
         })}</p>
         <p className="text-xs text-slate-400">{footer}</p>

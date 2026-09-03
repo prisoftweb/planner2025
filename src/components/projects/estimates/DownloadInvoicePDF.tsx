@@ -145,11 +145,11 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{c.quantity}</Text>
               <Text style={{flex: 4, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{c.conceptEstimate.description}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c.priceConcepEstimate.cost
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold', textAlign:'right'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c.priceConcepEstimate.cost * c.quantity
               })}</Text>
             </View>
@@ -158,7 +158,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid #0095E1', marginTop:'15px'}}>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>SUBTOTAL</Text>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: invoicemin.cost.subtotal
             })}</Text>
           </View>
@@ -166,7 +166,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid #0095E1', marginTop:'5px'}}>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>(+) IVA</Text>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: invoicemin.cost.iva
             })}</Text>
           </View>
@@ -174,7 +174,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid #0095E1', marginTop:'5px'}}>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>TOTAL</Text>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: invoicemin.cost.total
             })}</Text>
           </View>

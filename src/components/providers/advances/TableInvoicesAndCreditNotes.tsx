@@ -222,7 +222,7 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
         <p className="cursor-pointer"
           // onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
         >{CurrencyFormatter({
-          currency: 'MXN', 
+          currency: 'USD', 
           value: row.original.cost.total?? 0
         })}</p>
       ),
@@ -234,7 +234,7 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
     //     <p className="cursor-pointer"
     //       // onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
     //     >{CurrencyFormatter({
-    //       currency: 'MXN',
+    //       currency: 'USD',
     //       value: row.original.cost.total?? 0
     //     })}</p>
     //   ),
@@ -431,7 +431,7 @@ const CardInvoices = ({expense }:
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN', 
+                  currency: 'USD', 
                   value: expense.cost.total?? 0
                 })}
               </p>

@@ -10,12 +10,12 @@ export default function ProfileProject({project}:
   const {oneProjectStore} = useOneProjectsStore();
 
   const amount = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: oneProjectStore?.amount || 0
   });
 
   const amountGuarantee = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: oneProjectStore?.guaranteefund?.amount? parseFloat(oneProjectStore.guaranteefund.amount) : 0
   });
 
@@ -68,7 +68,7 @@ export default function ProfileProject({project}:
             <div className=" font-bold text-slate-600">
               <p className="text-slate-500">Monto de obra con IVA</p>
               <p className="text-red-600 font-bold">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 // value: (oneProjectStore?.amount || 0) * 1.16
                 value: oneProjectStore?.amountotal || 0
               })}</p>
@@ -101,7 +101,7 @@ export default function ProfileProject({project}:
               <div>
                 <p className="text-slate-500">Monto</p>
                 <p className="text-blue-600">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: oneProjectStore?.amountChargeOff?.amount? parseFloat(oneProjectStore.amountChargeOff?.amount.toString()) : 0
                 })}</p>
               </div>

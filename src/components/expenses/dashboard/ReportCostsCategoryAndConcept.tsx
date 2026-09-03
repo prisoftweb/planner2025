@@ -73,7 +73,7 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, endDate, s
               </Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>
               {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: totalCosts
                 })}
               </Text>
@@ -97,7 +97,7 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, endDate, s
                 }
                 <View style={[style.element, {flex: 1}]}><Text >{cost.costocenter.account}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: cost.totalCost
                   // value: cost.subtotalCost
                 })}</Text></View>                

@@ -268,7 +268,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
             <div>
               <p className="text-blue-500">{project.title}</p>
               <p className="text-blue-300">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: project.amount
               })}</p>
               <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
@@ -399,7 +399,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                 />
                 {!isdisabled && (
                   <p className="text-red-500 text-xs">No se puede agregar Amortizacion porque supero el anticipo de {CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: advange
                   })} !!!</p>
                 )}

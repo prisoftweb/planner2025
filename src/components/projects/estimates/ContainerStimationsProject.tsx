@@ -176,7 +176,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div>
               <p className="text-blue-500">{project?.title?? ''}</p>
               <p className="text-blue-300">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: project?.amount?? 0
               })}</p>
               <Chip label={project?.category?.name?? 'sin categoria'} color={project?.category?.color?? '#f00'} darktext={project?.category?.darktext?? false} />
@@ -194,7 +194,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div className="flex items-center border border-gray-700">
               <p className="bg-green-600 text-white p-2 w-52 text-center">Proyecto</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 // value: project.amount || 0
                 value: project.amountotal || 0
               })}</p>
@@ -203,7 +203,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Monto a pagar</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
               })}</p>
             </div>
@@ -211,7 +211,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Monto a pagar + IVA</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayableVAT || 0 : 0
               })}</p>
             </div>
@@ -219,7 +219,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Monto total</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value:  totalEstimatedProjectState.length> 0? (totalEstimatedProjectState[0]?.amountGuaranteeFund + (totalEstimatedProjectState[0]?.estimatedTotal || 0)) || 0 : 0
               })}</p>
             </div>
@@ -227,7 +227,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Pendiente de estimar</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value:  totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.pendingEstimated || 0 : 0
               })}</p>
             </div>
@@ -240,14 +240,14 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div className="flex items-center border border-gray-700">
               <p className="bg-green-600 text-white p-2 w-52 text-center">ESTIMADO</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountEstimated || 0 : 0
               })}</p>
             </div>
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Anticipo del {project.amountChargeOff?.porcentage || 0}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: advance
               })}</p>
             </div>
@@ -255,7 +255,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Estimado acumulado</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.estimatedTotal || 0 : 0
               })}</p>
             </div>
@@ -263,7 +263,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Amortizado</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountChargeOff || 0 : 0
               })}</p>
             </div>
@@ -271,7 +271,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Garantia del {project.guaranteefund.porcentage}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value:  totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountGuaranteeFund || 0 : 0
               })}</p>
             </div>

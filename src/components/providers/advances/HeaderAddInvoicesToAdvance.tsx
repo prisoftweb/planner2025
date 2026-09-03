@@ -42,7 +42,7 @@ export default function HeaderAddInvoicesToAdvance({provider, costs, pending}: H
         <div>
           <p>Monto a aplicar</p>
           <p className="text-green-500">{CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: total
           })}</p>
         </div>
@@ -50,7 +50,7 @@ export default function HeaderAddInvoicesToAdvance({provider, costs, pending}: H
         <div>
           <p>Pendiente de aplicar</p>
           <p className="text-red-500">{CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: pending
           })}</p>
         </div>

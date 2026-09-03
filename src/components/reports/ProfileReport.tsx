@@ -25,7 +25,7 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
   const [satCompany, setSatCompany]=useState<Company>();
 
   const total = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: oneReport?.total || 0
   });
 

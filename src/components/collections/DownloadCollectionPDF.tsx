@@ -36,7 +36,7 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, 
                 <View style={{textAlign:'center', border:'1px solid gray', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: totalCollections?.amountcharged?? 0
                     })}
                   </Text>
@@ -73,11 +73,11 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, 
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.invoices.project.title}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.invoices.invoices.folio}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c?.amount || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c?.invoices?.amountcharged?? 0
               })}</Text>
             </View>

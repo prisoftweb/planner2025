@@ -115,7 +115,7 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
       id: 'pu',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.PU
         })}</p>
       ),
@@ -125,7 +125,7 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
       id: 'importe',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Importe
         })}</p>
       ),
@@ -228,13 +228,13 @@ const CardConcepts = ({concepts, token, idEstimate, estimatedTotal, delConcept }
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: concepts.PU?? 0
                 })}
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: concepts.Importe?? 0
                 })}
               </p>

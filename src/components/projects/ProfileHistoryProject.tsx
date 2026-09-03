@@ -5,12 +5,12 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 export default function ProfileHistoryProject({project}: {project:OneProjectMin}){
   
   const amount = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: project?.amount || 0
   });
 
   const amountGuarantee = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: project?.guaranteefund?.amount? parseFloat(project.guaranteefund.amount) : 0
   });
 
@@ -57,7 +57,7 @@ export default function ProfileHistoryProject({project}: {project:OneProjectMin}
           <div className=" font-bold text-slate-600">
               <p className="text-slate-500">Monto de obra con IVA</p>
               <p className="text-red-600 font-bold">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: (project?.amount || 0) * 1.16
               })}</p>
             </div>
@@ -88,7 +88,7 @@ export default function ProfileHistoryProject({project}: {project:OneProjectMin}
               <div>
                 <p className="text-slate-500">Monto</p>
                 <p className="text-blue-600">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: project?.amountChargeOff?.amount? parseFloat(project.amountChargeOff?.amount.toString()) : 0
                 })}</p>
               </div>

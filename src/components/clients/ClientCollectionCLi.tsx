@@ -184,7 +184,7 @@ const CardCollection = ({collection }:
               </h6>
               <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: collection.pendingBilling
                 })}
               </p>
@@ -192,13 +192,13 @@ const CardCollection = ({collection }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: collection.total
                 })}  
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: collection.pendingCollection
                 })}
               </p>

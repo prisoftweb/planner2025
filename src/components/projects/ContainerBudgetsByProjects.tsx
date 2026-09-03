@@ -201,7 +201,7 @@ const CardBudget = ({budget, queryParam }:
               </h6>
               <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: budget.amountBudget
                 })}
               </p>
@@ -209,13 +209,13 @@ const CardBudget = ({budget, queryParam }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: budget.budgeted
                 })}
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: budget.pending
                 })}
               </p>

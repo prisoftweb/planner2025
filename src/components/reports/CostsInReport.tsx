@@ -17,7 +17,7 @@ export default function CostsInReport({report, id, token}:
 
   const {oneReport} = useOneReportStore();
   const total = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: oneReport?.total ?? 0
   });
   
@@ -219,7 +219,7 @@ const ListData = ({data}: {data: CostsTable[]}) => {
   return(
     <div>
       <p className="mt-2 text-center">Cantidad: <span className="text-blue-500 font-bold">{data.length}</span> Total gastos: <span className="text-green-600 font-bold">{CurrencyFormatter({
-        currency: 'MXN',
+        currency: 'USD',
         value: total
       })}</span></p>
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[450px]">

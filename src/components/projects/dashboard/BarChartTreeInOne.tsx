@@ -25,7 +25,7 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
   const data = payload.map((item:any) => ({
       status: item.dataKey,
       value: CurrencyFormatter({
-        currency: 'MXN',
+        currency: 'USD',
         value: item.value,
       }),
       percentage: (

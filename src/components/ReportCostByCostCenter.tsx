@@ -76,7 +76,7 @@ export default function ReportCostByCostCenter({costsCostCenter, dateFinal, date
                 <View style={[style.element, {flex: 1}]}><Text>{costCC.costocenter?.concept || ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{costCC.costocenter?.account || ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: costCC.totalCost
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{costCC.quantity}</Text></View>                
@@ -88,7 +88,7 @@ export default function ReportCostByCostCenter({costsCostCenter, dateFinal, date
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: total
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>                

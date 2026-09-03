@@ -99,7 +99,7 @@ export default function TableConceptsInvoice({project, concepts, isFilterTable}:
       id: 'pu',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.PU
         })}</p>
       ),
@@ -109,7 +109,7 @@ export default function TableConceptsInvoice({project, concepts, isFilterTable}:
       id: 'importe',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Importe
         })}</p>
       ),

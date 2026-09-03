@@ -64,7 +64,7 @@ export default function ContainerCollectionsProject({project, token, user, colle
             <div>
               <p className="text-blue-500">{project.title}</p>
               <p className="text-blue-300">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: project.amount
               })}</p>
               <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
@@ -82,14 +82,14 @@ export default function ContainerCollectionsProject({project, token, user, colle
             <div className="flex items-center border border-gray-700">
               <p className="bg-green-600 text-white p-2 w-40 text-center">COBRADO</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: resumenPayment?.totalPayments?.totalPayments || 0
               })}</p>
             </div>
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Monto de proyecto</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: resumenPayment?.billedTotal?.amountotal || 0
                 // value: project
               })}</p>
@@ -98,7 +98,7 @@ export default function ContainerCollectionsProject({project, token, user, colle
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Pendiente de cobrar</p>
               <p className="text-green-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: resumenPayment?.totalPayments?.pendingPaymentTotal || 0
               })}</p>
             </div>
@@ -106,7 +106,7 @@ export default function ContainerCollectionsProject({project, token, user, colle
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Pendiente de facturar</p>
               <p className="text-red-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: resumenPayment?.billedTotal?.pendingBillingTotal || 0
               })}</p>
             </div>

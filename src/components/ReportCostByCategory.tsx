@@ -74,7 +74,7 @@ export default function ReportCostByCategory({costsCostCenter, dateFinal, dateIn
                 <View style={[style.element, {flex: 1}]}><Text>{costCC.project}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{costCC.costocenter}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: costCC.totalCost
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{costCC.quantity}</Text></View>                
@@ -85,7 +85,7 @@ export default function ReportCostByCategory({costsCostCenter, dateFinal, dateIn
                 <View style={[style.element, {flex: 1}]}><Text></Text></View>
                 <View style={[style.element, {flex: 1}]}><Text></Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: total
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text></Text></View>                

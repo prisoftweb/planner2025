@@ -154,11 +154,11 @@ export default function Filtering({showForm, optCompanies,
           />
           <div className="flex justify-between">
             <p>{CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: minValue
                 })}</p>
             <p>{CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: maxValue
                 })}</p>
           </div>

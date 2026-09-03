@@ -58,7 +58,7 @@ export default function DownloadInvoicesReportPDF({invoices, fechaFin, fechaIni,
                 <View style={{textAlign:'center', border:'1px solid gray', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: total || 0
                     })}
                   </Text>
@@ -68,7 +68,7 @@ export default function DownloadInvoicesReportPDF({invoices, fechaFin, fechaIni,
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Subtotal: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: subtotal ?? 0
                 })}</Text>
               </View>
@@ -76,7 +76,7 @@ export default function DownloadInvoicesReportPDF({invoices, fechaFin, fechaIni,
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>IVA: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: vat ?? 0
                 })}</Text>
               </View>
@@ -84,7 +84,7 @@ export default function DownloadInvoicesReportPDF({invoices, fechaFin, fechaIni,
               {/* <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Total: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: 
                 })}</Text>
               </View> */}
@@ -112,18 +112,18 @@ export default function DownloadInvoicesReportPDF({invoices, fechaFin, fechaIni,
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.condition.name}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.typeInvoice}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 // value: i.lastpayment?.previousbalanceamount || 0
                 value: i.cost.total
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 // value: i.lastpayment?.charged || 0
                 // value: i.accountreceivables?.length > 0? i.accountreceivables[i.accountreceivables.length-1].charged: 0,
                 value: i.fullyCharged?? 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: i.accountreceivables?.length > 0 ? i.accountreceivables[i.accountreceivables.length-1].unchargedbalanceamount: 0
               })}</Text>
             </View>

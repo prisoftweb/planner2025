@@ -57,7 +57,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
                 <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                   <Text style={{fontSize:'10px', color:'gray'}}>Por pagar: </Text>
                   <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: pending[0]?.unpaidbalanceamount ?? 0
                   })}</Text>
                 </View>
@@ -92,7 +92,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
                   <Text style={{backgroundColor:'green', color:'white', width:'100%', textAlign:'center', fontSize:'13px', padding:'3px'}}>TOTAL</Text>
                   <Text style={{width:'100%', textAlign:'center', color:'black', fontSize:'13px', backgroundColor:'#D3D3D3', padding:'3px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: total
                     })}
                   </Text>
@@ -105,7 +105,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
                 <View style={{textAlign:'center', padding:'5px'}}>
                   <Text style={{textAlign:'center', color:'gray', fontSize:'14px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: total
                     })}
                   </Text>
@@ -147,11 +147,11 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{p.methodofpayment.name} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{p.date?.substring(0, 10)} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: p.payout
               })}</Text>
               {/* <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: p.pending
               })}</Text> */}
             </View>
@@ -168,7 +168,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
                 <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{c.Fecha?.substring(0, 10)} </Text>
                 <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{c.Costocenter}</Text>
                 <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: c.Total
                 })}</Text>
               </View>
@@ -209,7 +209,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
                 </Text>
                 <Text style={{ flex: 1, fontSize: 7, padding: 2, fontWeight: 'bold' }}>
                   {CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: c.Total,
                   })}
                 </Text>
@@ -220,7 +220,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
           {/* <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
             <Text style={{fontSize:'10px', color:'gray'}}>Aplicacion de anticipo: </Text>
             <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: appAdvance
             })}</Text>
           </View>
@@ -228,7 +228,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
           <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
             <Text style={{fontSize:'10px', color:'gray'}}>Total aplicado: </Text>
             <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: appAdvance
             })}</Text>
           </View>

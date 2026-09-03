@@ -76,11 +76,11 @@ export default function ReportCostsByProjectOnlyPDF({reports, dateFinal, dateIni
               <View style={[style.table, index > 0 && reports[index-1].project !== rep.project? {borderTop: '1px solid gray'}: {}]} key={index}>
                 <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep.project}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: rep.amountotal
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: rep.totalCost
                 })}</Text></View>
                 {/* <View style={[style.element, {flex: 1}]}><Text>{rep.porcentage} %</Text></View> */}
@@ -90,7 +90,7 @@ export default function ReportCostsByProjectOnlyPDF({reports, dateFinal, dateIni
             ) )}
           </View>
           <View> <Text style={{marginTop: '7px', fontSize: '14px'}}> Total acumulado:  {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: Number(total.toFixed(2))
                 })} </Text> </View>
         </View>

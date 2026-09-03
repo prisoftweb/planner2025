@@ -147,7 +147,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
             <div>
               <p className="text-blue-500">{project.title}</p>
               <p className="text-blue-300">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: project.amount
               })}</p>
               <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
@@ -159,35 +159,35 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
           <div className="flex justify-between ">
             <p className="text-slate-400">Acumulado estimado</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: totalEstimatedProjectState[0]?.estimatedTotal || 0
             })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Esta estimacion</p>
             <p className="text-lg text-green-600 text-right">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: estimate?.estimatedTotal || 0
             })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Pendiente por estimar</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: project.amount - (totalEstimatedProjectState[0]?.estimatedTotal || 0)
             })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Amortizado</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: totalEstimatedProjectState[0].amountChargeOff
             })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Fondo de garantia</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: totalEstimatedProjectState[0].amountGuaranteeFund
             })}</p>
           </div>
@@ -201,7 +201,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
             </div>
             <div className="text-center border border-slate-700 p-2">
               <p className="text-slate-600 text-center">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: estimate.amount
               })}</p>
             </div>

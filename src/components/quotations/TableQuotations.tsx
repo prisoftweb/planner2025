@@ -132,7 +132,7 @@ export default function TableQuotations({quotationsData, token, deleteQuatation,
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/quotations/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Monto
         })}</p>
       ),
@@ -207,7 +207,7 @@ const CardQuotations = ({quotations, token, deleteQuatation, permissions }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: quotations.Monto
                 })}
               </p>

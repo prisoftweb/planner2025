@@ -107,11 +107,11 @@ export default function FilteringEstimatesProject({showForm, optProjects, optCon
           />
           <div className="flex justify-between">
             <p>{CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: minValue
                 })}</p>
             <p>{CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: maxValue
                 })}</p>
           </div>

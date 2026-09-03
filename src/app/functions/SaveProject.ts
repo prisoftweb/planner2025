@@ -58,7 +58,7 @@ export default async function SaveProject(data:Object, token:string){
 //     }
 //     //La moneda mexicana lleva el mx antes del $
 //     const dollar = CurrencyFormatter({
-//       currency: "MXN",
+//       currency: "USD",
 //       value: project.amount
 //     })
 //     //se puede usar dolares si no se quiere el mx antes del $
@@ -104,12 +104,12 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
     }
     //La moneda mexicana lleva el mx antes del $
     // const dollar = CurrencyFormatter({
-    //   currency: "MXN",
+    //   currency: "USD",
     //   value: project.amount
     // })
 
     // const total = CurrencyFormatter({
-    //   currency: "MXN",
+    //   currency: "USD",
     //   value: project.amountotal
     // });
     const total = MoneyFormatter(project.amountotal);
@@ -307,13 +307,13 @@ export function BudgetDataToTableCostCenter(budget:FullBudget){
     //p='0%';
     //La moneda mexicana lleva el mx antes del $
     const dollar = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       //value: budget.amount
       value: newB.cost
     })
 
     // const amountBudget = CurrencyFormatter({
-    //   currency: "MXN",
+    //   currency: "USD",
     //   //value: budget.amount
     //   value: budget.amount
     // });
@@ -374,19 +374,19 @@ export function ExpenseDataProjectToTableDataProject(expenses:ICostsByProject[])
   
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.cost?.subtotal || 0
         })
     const discount = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.cost?.discount || 0
     })
     const vat = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.cost?.iva || 0
     })
     const total = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       //value: (expense.cost?.subtotal + expense.cost?.iva - expense.cost?.discount) || 0
       value: expense.cost?.total || 0,
     })

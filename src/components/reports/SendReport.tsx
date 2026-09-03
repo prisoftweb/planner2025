@@ -169,7 +169,7 @@ export default function SendReport({send, report, node, user, token, isClose}: P
   }
 
   const total = CurrencyFormatter({
-    currency: 'MXN',
+    currency: 'USD',
     value: oneReport?.total || 0
   });
 

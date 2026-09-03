@@ -322,7 +322,7 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
                           <div className="text-right">
                             <p className="block font-sans text-2xl antialiased font-normal leading-normal text-orange-600">
                               {CurrencyFormatter({
-                                currency: 'MXN',
+                                currency: 'USD',
                                 value: cost?.cost?.total?? 0
                               })}
                             </p>

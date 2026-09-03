@@ -75,7 +75,7 @@ export default function AddCostCenter({token, user, closeForm, company}:
   }
 
   const amount = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: project?.amount || 0
   });
 

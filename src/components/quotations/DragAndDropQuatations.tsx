@@ -114,7 +114,7 @@ function SortableItem(q : IQuotationMin) {
           </div>
         </div>
         <p className="text-slate-500 text-sm">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: q.cost.subtotal
         })}</p>
         <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content={q.title} 

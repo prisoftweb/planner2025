@@ -8,7 +8,7 @@ export function ReportDataToTableData(reports:Report[]){
   const table: ReportTable[] = [];
   reports.map((report) => {
     const dollar = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: report.total
     })
     
@@ -38,7 +38,7 @@ export function ReportParseDataToTableData(reports:ReportParse[], isHistory:bool
   const table: ReportTable[] = [];
   reports.map((report) => {
     const dollar = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: isHistory? report.total : report.totalok
     })
     
@@ -76,7 +76,7 @@ export function CostsDataToTableData(expenses:Expense[]){
   const table: CostsTable[] = [];
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.cost?.total || 0
         })
     table.push({
@@ -105,7 +105,7 @@ export function CostsDataToTableDataMin(expenses:CostReport[]){
   const table: CostsTable[] = [];
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.costo.total || 0
           //value: expense.cost.subtotal || 0
         })

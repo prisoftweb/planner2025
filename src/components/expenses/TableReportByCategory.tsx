@@ -104,7 +104,7 @@ export default function TableReportByCategory({token, company}: {token:string, c
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <p>{CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: row.original.totalCost
           })}</p>          
         </div>
@@ -243,7 +243,7 @@ const CardData = ({data, token}:
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: data.totalCost,
                 })}
               </p>

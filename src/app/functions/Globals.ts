@@ -1,5 +1,6 @@
 export function CurrencyFormatter({ currency, value}: {currency:string, value:number}) {
-  const formatter = new Intl.NumberFormat('en-US', {
+  // const formatter = new Intl.NumberFormat('en-US', {
+  const formatter = new Intl.NumberFormat('en-MX', {
     style: 'currency',
     minimumFractionDigits: 2,
     currency
@@ -10,7 +11,7 @@ export function CurrencyFormatter({ currency, value}: {currency:string, value:nu
 export function MoneyFormatter(amount: number){
   if(amount > 1000000){
     const f = CurrencyFormatter({
-      currency: '',
+      currency: 'USD',
       value: Number((amount/1000000).toFixed(2))
     });
     if(f.includes('.00')){
@@ -24,7 +25,7 @@ export function MoneyFormatter(amount: number){
   }else{
     if(amount > 1000){
       const f = CurrencyFormatter({
-        currency: '',
+        currency: 'USD',
         value: Number((amount/1000).toFixed(2))
       });
       if(f.includes('.00')){
@@ -37,7 +38,7 @@ export function MoneyFormatter(amount: number){
       }
     }else{
       const f = CurrencyFormatter({
-        currency: '',
+        currency: 'USD',
         value: amount
       });
       return f;

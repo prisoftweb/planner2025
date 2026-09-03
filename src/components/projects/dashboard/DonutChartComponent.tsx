@@ -173,7 +173,7 @@ export function DonutStatusChartComponent({data, colors, categories, category, s
   //             {/* text-tremor-content-emphasis */}
   //               {/* {categoryPayload.value} */}
   //               {CurrencyFormatter({
-  //                 currency: 'MXN',
+  //                 currency: 'USD',
   //                 value: categoryPayload.value
   //               })}
   //             </p>

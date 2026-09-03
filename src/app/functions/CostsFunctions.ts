@@ -11,19 +11,19 @@ export function ExpenseDataToTableData(expenses:Expense[]){
   
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
-          currency: "MXN",
+          currency: "USD",
           value: expense.cost?.subtotal || 0
         })
     const discount = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.cost?.discount || 0
     })
     const vat = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       value: expense.cost?.iva || 0
     })
     const total = CurrencyFormatter({
-      currency: "MXN",
+      currency: "USD",
       //value: (expense.cost?.subtotal + expense.cost?.iva - expense.cost?.discount) || 0
       value: expense.cost?.total || 0,
     })

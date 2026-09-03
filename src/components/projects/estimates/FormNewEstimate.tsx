@@ -153,7 +153,7 @@ export default function FormNewEstimate({project, saveEstimate, amortization, am
           <div>
             <p className="text-blue-500">{project.title}</p>
             <p className="text-blue-300">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: project.amount
             })}</p>
             <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />

@@ -268,7 +268,7 @@ export default function TableExpenses({data, token, expenses,
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >
           {CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: row.original.Importe
           })}
         </p>
@@ -282,7 +282,7 @@ export default function TableExpenses({data, token, expenses,
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >
           {CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: row.original.vat
           })}
         </p>
@@ -296,7 +296,7 @@ export default function TableExpenses({data, token, expenses,
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >
           {CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: row.original.discount
           })}
         </p>
@@ -310,7 +310,7 @@ export default function TableExpenses({data, token, expenses,
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >
           {CurrencyFormatter({
-            currency: "MXN",
+            currency: "USD",
             value: row.original.total
           })}
         </p>
@@ -657,7 +657,7 @@ const CardExpense = ({expense, token, delCost, queryParam, permissions}:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: expense.Importe
                 })}
               </p>

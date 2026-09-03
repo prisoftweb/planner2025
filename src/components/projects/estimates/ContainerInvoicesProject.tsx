@@ -75,7 +75,7 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <div>
                 <p className="text-blue-500">{project.title}</p>
                 <p className="text-blue-300">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: project.amount
                 })}</p>
                 <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
@@ -97,14 +97,14 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <div className="flex items-center border border-gray-700">
                 <p className="bg-green-600 text-white p-2 w-40 text-center">Facturado</p>
                 <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: resumenInvoice.billedTotal.billedTotal
                 })}</p>
               </div>
               <div className="flex justify-between items-center border border-slate-700 p-2">
                 <p className="text-xs text-slate-600">Monto de proyecto</p>
                 <p className="text-slate-600 text-right">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   // value: project.amount
                   value: project.amountotal || 0
                 })}</p>
@@ -113,7 +113,7 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <div className="flex justify-between items-center border border-slate-700 p-2">
                 <p className="text-xs text-slate-600">Estimado acumulado</p>
                 <p className="text-slate-600 text-right">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: resumenInvoice.totalAccumulated.estimatedTotal
                 })}</p>
               </div>
@@ -121,7 +121,7 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <div className="flex justify-between items-center border border-slate-700 p-2">
                 <p className="text-xs text-slate-600">Pendiente de facturar</p>
                 <p className="text-slate-600 text-right">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: resumenInvoice.totalAccumulated.estimatedTotal - resumenInvoice.billedTotal.billedTotal
                 })}</p>
               </div>
@@ -129,7 +129,7 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <div className="flex justify-between items-center border border-slate-700 p-2">
                 <p className="text-xs text-slate-600">Pendiente de estimar</p>
                 <p className="text-slate-600 text-right">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value:  project.amount - resumenInvoice.totalAccumulated.estimatedTotal
                 })}</p>
               </div>

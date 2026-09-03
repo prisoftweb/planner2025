@@ -83,7 +83,7 @@ export default function ConceptsInvoiceStepperComponent({token, nextStep, saveIn
       id: 'precio',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Price
         })}</p>
       ),
@@ -93,7 +93,7 @@ export default function ConceptsInvoiceStepperComponent({token, nextStep, saveIn
       id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Importe
         })}</p>
       ),
@@ -196,7 +196,7 @@ const CardConcept = ({concept }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: concept.Importe
                 })}
               </p>

@@ -40,7 +40,7 @@ export default function CardProject({project, token, deleteIcon=true, url=`/proj
           </div>
           <div className="text-right flex flex-col justify-between">
             <p className="text-base">{CurrencyFormatter({
-                  currency: "MXN",
+                  currency: "USD",
                   value: project.amount
                 })}
             </p>

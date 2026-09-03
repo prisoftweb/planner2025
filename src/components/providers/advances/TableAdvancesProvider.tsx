@@ -134,7 +134,7 @@ export default function TableAdvancesProvider({data, token, expenses, idProv }: 
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
         >{CurrencyFormatter({
-          currency: 'MXN', 
+          currency: 'USD', 
           value: row.original.cost.subtotal?? 0
         })}</p>
       ),
@@ -146,7 +146,7 @@ export default function TableAdvancesProvider({data, token, expenses, idProv }: 
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.cost.total?? 0
         })}</p>
       ),
@@ -306,7 +306,7 @@ const CardAdvances = ({advance, idProv }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: advance.cost.total?? 0
                 })}
               </p>

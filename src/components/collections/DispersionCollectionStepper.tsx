@@ -77,12 +77,12 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
         <div className="border border-slate-600 grid grid-cols-2 gap-x-2 gap-y-2 p-3" key={inv.id}>
           <p className="text-xs text-slate-400">Factura No. {inv?.folio}</p>
           <p className="text-xs text-slate-600">Monto de factura: {CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: invoices?.find((i) => i?.id===inv?.id)?.total || 0
           })}</p>
           <p className="text-xs text-slate-400">Proyecto: {inv?.project?.title}</p>
           <p className="text-xs text-slate-600">Monto abonado: {CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: inv?.total || 0
           })} </p>
         </div>
@@ -90,7 +90,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
       <div className="border border-slate-600 grid grid-cols-2 gap-x-2 gap-y-2 p-3">
         <p className="text-xs text-slate-400">Factura No. {selected?.folio}</p>
         <p className="text-xs text-slate-600">Monto de factura: {CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: selected?.total || 0
         })}</p>
         <p className="text-xs text-slate-400">Proyecto: {selected?.project?.title}</p>
@@ -164,7 +164,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
                       {invoice.folio}
                     </h6>
                     <p className="text-slate-500 text-sm">{CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: invoice.total
                     })}</p>
                   </div>
@@ -206,7 +206,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
                       {invoice.folio}
                     </h6>
                     <p className="text-slate-500 text-sm">{CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: invoice.total
                     })}</p>
                   </div>

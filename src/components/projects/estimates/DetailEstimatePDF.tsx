@@ -51,7 +51,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
                 <View>
                   <Text style={{fontSize:'11px', color:'blue'}}>{project.title}</Text>
                   <Text style={{fontSize:'11px', color:'green'}}>{CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: project.amount
                     })}
                   </Text>
@@ -76,7 +76,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
                 <View style={{textAlign:'center', border:'1px solid gray', padding:'3px'}}>
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: estimate?.amount || 0
                     })}
                   </Text>
@@ -101,7 +101,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Monto de contrato</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: project.amount
                   })}
                 </Text>
@@ -109,7 +109,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Estimado anterior</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate.totalPrevious?.estimatedTotal || 0
                   })}
                 </Text>
@@ -117,7 +117,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Esta estimacion</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: estimate?.amount || 0
                     })}
                 </Text>
@@ -125,7 +125,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Acumulado estimado</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.totalAccumulated?.amountPayable || 0
                   })}
                 </Text>
@@ -133,7 +133,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Saldo pendiente por estimar</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: 0
                   })}
                 </Text>
@@ -148,7 +148,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Anticipo recibido</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: 0
                   })}
                 </Text>
@@ -156,7 +156,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Amortizado anterior</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.totalPrevious?.amountChargeOff || 0
                   })}
                 </Text>
@@ -164,7 +164,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Esta estimacion</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.totalActual?.amountChargeOff || 0
                   })}
                 </Text>
@@ -172,7 +172,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Acumulado amortizado</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.totalAccumulated?.amountChargeOff || 0
                   })}
                 </Text>
@@ -180,7 +180,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Saldo pendiente por amortizar</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: 0
                   })}
                 </Text>
@@ -195,7 +195,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Retenido anterior</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate.totalPrevious?.amountGuaranteeFund
                   })}
                 </Text>
@@ -203,7 +203,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Esta estimacion</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.totalActual?.amountGuaranteeFund || 0
                   })}
                 </Text>
@@ -211,7 +211,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Total retenido</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.totalAccumulated?.amountGuaranteeFund || 0
                   })}
                 </Text>
@@ -226,7 +226,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Importe esta estimacion</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.estimateResume?.amount || 0
                   })}
                 </Text>
@@ -234,7 +234,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Amortizacion de anticipo</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate.estimateResume?.amountChargeOff || 0
                   })}
                 </Text>
@@ -242,7 +242,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Fondo de garantia</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.estimateResume?.amountGuaranteeFund || 0
                   })}
                 </Text>
@@ -250,7 +250,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Acumulado Total sin impuestos</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.estimateResume?.amount || 0
                   })}
                 </Text>
@@ -258,7 +258,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Acumulado Total con impuestos</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
+                    currency: "USD",
                     value: resumenEstimate?.estimateResume?.estimatedTotalVAT || 0
                   })}
                 </Text>

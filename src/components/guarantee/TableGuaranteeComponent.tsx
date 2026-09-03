@@ -235,7 +235,7 @@ export default function TableGuaranteeComponent({token, user, permissions}: {tok
       cell: ({row}) => (
         <p className="cursor-pointer"
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.amount
         })}</p>
       ),
@@ -246,7 +246,7 @@ export default function TableGuaranteeComponent({token, user, permissions}: {tok
       cell: ({row}) => (
         <p className="cursor-pointer"
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.amountVat
         })}</p>
       ),
@@ -321,35 +321,35 @@ export default function TableGuaranteeComponent({token, user, permissions}: {tok
           <div>
             <p className="text-slate-600">Recuperado</p>
             <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: recuperar?.total || 0
             })}</p>
           </div>
           <div>
             <p className="text-slate-600">Por cobrar</p>
             <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: porCobrar?.total || 0
             })}</p>
           </div>
           <div>
             <p className="text-slate-600">Vencido</p>
             <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: vencido?.total || 0
             })}</p>
           </div>
           <div>
             <p className="text-slate-600">Retenido</p>
             <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: retenido?.total || 0
             })}</p>
           </div>
           <div>
             <p className="text-slate-600">Programado</p>
             <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: programado?.total || 0
             })}</p>
           </div>
@@ -394,7 +394,7 @@ export default function TableGuaranteeComponent({token, user, permissions}: {tok
                   </div>
                   <div className="text-right">
                     <Label>{CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: g.total
                     })}</Label>
                   </div>
@@ -416,11 +416,11 @@ export default function TableGuaranteeComponent({token, user, permissions}: {tok
             </div>
             <div className="flex justify-between items-center mb-2">
               <p className="text-lg">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: guaranteeByStatus?.recovered?.subtotalRecovered ?? 0
               })}</p>
               <p className="text-lg text-right">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: (guaranteeByStatus?.guarantee?.subtotal ?? 0) - (guaranteeByStatus?.recovered?.subtotalRecovered ?? 0)
               })}</p>
             </div>
@@ -522,13 +522,13 @@ const CardGuarantee = ({guarantee}:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: guarantee.amount
                 })}
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: guarantee.amountVat
                 })}
               </p>
@@ -547,7 +547,7 @@ export const Card = ({amount, title}: {title:string, amount:number}) => {
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: amount
         })}</p>
       </div>

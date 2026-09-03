@@ -161,7 +161,7 @@ export default function TableCollectionsComponent({token, project, pageQuery, co
         <p className="cursor-pointer"
         onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/collections/${row.original.id}?page=projects`: `/projects/estimates/${project._id}/collections/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Importe
         })}</p>
       ),
@@ -245,7 +245,7 @@ const ListData = ({data, pageQuery, project, token, delCollection}:
                     <h6
                       className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
                       {CurrencyFormatter({
-                        currency: 'MXN',
+                        currency: 'USD',
                         value: col.Importe?? 0
                       })}
                     </h6>

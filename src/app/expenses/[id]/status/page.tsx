@@ -63,7 +63,7 @@ export default async function Page({ params, searchParams }:
     )
 
   const subTotal = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: cost.cost?.subtotal || 0
   });
 

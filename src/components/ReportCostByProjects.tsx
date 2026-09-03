@@ -97,11 +97,11 @@ export default function ReportCostByProjects({reports, costsByTypes, dateFinal, 
                 <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep?.project?.title}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{rep.tipo ?? 'Sin tipo'}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: rep?.project?.amount?? 0
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: rep?.totalCost?? 0
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{rep?.quantity}</Text></View>
@@ -115,7 +115,7 @@ export default function ReportCostByProjects({reports, costsByTypes, dateFinal, 
                   <View style={[style.element, {flex: 1}]}><Text style={{fontWeight: 'semibold'}}>{costtype.tipo}</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text></Text></View>
                   <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '11px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: costtype.totalCost
                   })}</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text style={{fontWeight: 'semibold'}}>{costtype.quantity}</Text></View>
@@ -128,7 +128,7 @@ export default function ReportCostByProjects({reports, costsByTypes, dateFinal, 
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalTypes
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
@@ -147,11 +147,11 @@ export default function ReportCostByProjects({reports, costsByTypes, dateFinal, 
                   <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep?.project}</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text>{rep.type ?? 'Sin tipo'}</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: rep?.totalCost?? 0
                   })}</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: rep?.totalCost?? 0
                   })}</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text>{rep?.quantity}</Text></View>
@@ -164,7 +164,7 @@ export default function ReportCostByProjects({reports, costsByTypes, dateFinal, 
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: total
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>

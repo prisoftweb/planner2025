@@ -53,7 +53,7 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
         <div>
           <p>Monto a pagar</p>
           <p className="text-green-500">{CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: amount
           })}</p>
         </div>
@@ -61,7 +61,7 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
         <div>
           <p>Pendiente por pagar</p>
           <p className="text-red-500">{CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: pending
           })}</p>
         </div>

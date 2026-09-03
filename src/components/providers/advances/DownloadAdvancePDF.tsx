@@ -83,7 +83,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, 
                   <Text style={{backgroundColor:'green', color:'white', width:'110px', textAlign:'center', fontSize:'13px', padding:'3px'}}>Anticipo</Text>
                   <Text style={{width:'100%', textAlign:'center', color:'black', fontSize:'13px', backgroundColor:'#D3D3D3', padding:'3px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: advance.cost.total
                     })}
                   </Text>
@@ -91,7 +91,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, 
                 <View style={{textAlign:'center', padding:'5px'}}>
                   <Text style={{textAlign:'center', color:'gray', fontSize:'14px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: advance.advancesToSuppliers?.currentbalance?? 0
                     })}
                   </Text>
@@ -120,7 +120,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, 
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.Fecha?.substring(0, 10)} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.Costocenter}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c.Total
               })}</Text>
             </View>
@@ -137,7 +137,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, 
                 <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{c.Fecha?.substring(0, 10)} </Text>
                 <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{c.Costocenter}</Text>
                 <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: c.Total
                 })}</Text>
               </View>
@@ -178,7 +178,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, 
                 </Text>
                 <Text style={{ flex: 1, fontSize: 7, padding: 2, fontWeight: 'bold' }}>
                   {CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: c.Total,
                   })}
                 </Text>
@@ -192,7 +192,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, 
           <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
             <Text style={{fontSize:'10px', color:'gray'}}>Aplicacion de anticipo: </Text>
             <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: appAdvance
             })}</Text>
           </View>
@@ -200,7 +200,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, 
           <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
             <Text style={{fontSize:'10px', color:'gray'}}>Total aplicado: </Text>
             <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: appAdvance
             })}</Text>
           </View>

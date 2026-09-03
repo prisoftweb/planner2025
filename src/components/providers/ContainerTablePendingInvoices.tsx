@@ -290,7 +290,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
           )}
         </div>
       </div>
-      {permissions.permission.readfull && (
+      {/*permissions.permission.readfull &&*/ (
         <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}
           expenses={costsProvider} isFilter={filter} setIsFilter={handleFilter}
           user={user._id} isViewReports={false} data={dataTable} idProv={provider._id}

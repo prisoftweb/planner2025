@@ -280,7 +280,7 @@ export function ListCardPendingPaymentProviders({data}: {data: ITotalCostPending
                   </h6>
                   <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: prov.totalPendingPayment
                     })}
                   </p>

@@ -63,12 +63,12 @@ export default function ReportCostByCostCenterPDF({satCompany}: {satCompany:Comp
                 <View style={[style.element, {flex: 1}]}><Text>{cost.concept}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.account}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: cost.total
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}>
                   <Text>{CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: cost.accumulated
                     })}</Text>
                 </View>

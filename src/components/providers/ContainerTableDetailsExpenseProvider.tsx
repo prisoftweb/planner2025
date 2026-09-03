@@ -114,7 +114,7 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
             <div>
               <p className="text-sm text-slate-500">Monto pagado</p>
               <p className="text-sm text-green-500">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: payment.payout
               })}</p>
             </div>
@@ -122,7 +122,7 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
             <div>
               <p className="text-sm text-slate-500">Pendiente por pagar</p>
               <p className="text-sm text-red-500">{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: payment.pending
               })}</p>
             </div>

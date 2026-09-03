@@ -83,7 +83,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, com
           return {
             // label: p.cost.toString(),
             label: CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: p?.cost?? 0
             }),
             value: p._id
@@ -260,7 +260,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, com
       id: 'precio',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Price
         })}</p>
       ),
@@ -270,7 +270,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, com
       id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: row.original.Importe
         })}</p>
       ),
@@ -399,7 +399,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, com
           <div className="flex items-center justify-between gap-x-3">
             <p className="text-slate-500">Subtotal</p>
             <p className="text-slate-600">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               // value: Number(subtotalInvoice?.replace(/[$,%]/g, "")?? 0)
               value: subtotalInvoice
             })}</p>
@@ -407,14 +407,14 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, com
           <div className="flex items-center justify-between gap-x-3">
             <p className="text-slate-500">Descuento</p>
             <p className="text-green-500 mt-1">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: Number(discount?.replace(/[$,%]/g, "")?? 0)
             })}</p>
           </div>
           <div className="flex items-center justify-between gap-x-3">
             <p className="text-slate-500">IVA</p>
             <p className="text-slate-600 mt-1">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               // value: Number(vat?.replace(/[$,%]/g, "")?? 0)
               value: vatT
             })}</p>
@@ -422,7 +422,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, com
           <div className="flex items-center justify-between gap-x-3">
             <p className="text-slate-800 font-bold">Total</p>
             <p className="text-slate-800 font-bold mt-1">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               // value: Number(totalInvoice?.replace(/[$,%]/g, "")?? 0)
               value: totalInvoice
             })}</p>
@@ -509,7 +509,7 @@ const CardConcept = ({concept }:
               <div className="text-right">
                 <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                   {CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: concept.Importe
                   })}
                 </p>
@@ -558,7 +558,7 @@ const CardConcept = ({concept }:
               <div className="text-right">
                 <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                   {CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: concept.Importe
                   })}
                 </p>

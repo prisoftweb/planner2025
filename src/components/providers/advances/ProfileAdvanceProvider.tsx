@@ -17,22 +17,22 @@ export default function ProfileAdvanceProvider({token, user, permissions}: {toke
   const {currentExpense } = useNewExpense();
 
   const amount = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: currentExpense?.cost.subtotal || 0
   });
 
   const discount = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: Number(currentExpense?.cost.discount || 0)
   });
 
   const total = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: currentExpense?.cost.total || 0
   });
 
   const vat = CurrencyFormatter({
-    currency: "MXN",
+    currency: "USD",
     value: currentExpense?.cost.iva? currentExpense.cost.iva : 0
   });
 

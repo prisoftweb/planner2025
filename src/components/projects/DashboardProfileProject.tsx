@@ -262,7 +262,7 @@ export const Card = ({amount, children, title}: {children:JSX.Element, title:str
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({
-          currency: 'MXN',
+          currency: 'USD',
           value: amount
         })}</p>
       </div>

@@ -91,7 +91,7 @@ export default function DataConceptStepperComponent({previousStep, price, concep
         </div>
         <div className="border border-slate-500 flex w-full h-full justify-center items-center">
           {CurrencyFormatter({
-            currency: 'MXN',
+            currency: 'USD',
             value: price?.cost || 0
           })}
         </div>

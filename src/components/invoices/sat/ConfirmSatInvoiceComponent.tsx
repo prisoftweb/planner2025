@@ -140,11 +140,11 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
                 <p className="text-black">{c?.quantity || 0}</p>
                 <p className="text-black col-span-3">{c.conceptEstimate.description}</p>
                 <p className="text-black text-right">{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: c?.priceConcepEstimate?.cost || 0
                 })}</p>
                 <p className="text-black text-right">{CurrencyFormatter({
-                  currency: 'MXN', 
+                  currency: 'USD', 
                   value: c?.amount || 0
                 })}</p>
               </div>
@@ -158,7 +158,7 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
           <div className="mt-6 py-3 flex justify-between items-center border-y-2 border-blue-200">
             <p className="font-extrabold text-slate-600">SUBTOTAL</p>
             <p className="text-blue-600 font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: subtotal
             })}</p>
           </div>
@@ -166,7 +166,7 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
           <div className="py-3 flex justify-between items-center">
             <p className="font-extrabold text-slate-600">(+)IVA</p>
             <p className="text-blue-600 font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: iva
             })}</p>
           </div>
@@ -174,7 +174,7 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
           <div className="py-3 flex justify-between items-center border-y-2 border-blue-500">
             <p className="font-extrabold text-slate-600">Total</p>
             <p className="text-blue-600 font-bold">{CurrencyFormatter({
-              currency: 'MXN',
+              currency: 'USD',
               value: total
             })}</p>
           </div>

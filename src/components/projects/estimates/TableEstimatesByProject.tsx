@@ -141,7 +141,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
           onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
                                     : `/projects/estimates/${project._id}/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: '',
+          currency: 'USD',
           value: row.original.Estimacion
         })}</p>
       ),
@@ -154,7 +154,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
           onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
                                     : `/projects/estimates/${project._id}/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: '',
+          currency: 'USD',
           value: row.original.Amortizacion
         })}</p>
       ),
@@ -167,7 +167,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
           onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
                                     : `/projects/estimates/${project._id}/${row.original.id}`)}
         >{CurrencyFormatter({
-          currency: '',
+          currency: 'USD',
           value: row.original.Fondo
         })}</p>
       ),
@@ -179,7 +179,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
         >{CurrencyFormatter({
-          currency: '',
+          currency: 'USD',
           value: row.original.MontoPay
         })}</p>
       ),
@@ -191,7 +191,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
         >{CurrencyFormatter({
-          currency: '',
+          currency: 'USD',
           value: row.original.amountVat
         })}</p>
       ),
@@ -358,7 +358,7 @@ const CardEstimates = ({estimates, token, pageProject, project, delEstimate }:
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                 {CurrencyFormatter({
-                  currency: '',
+                  currency: 'USD',
                   value: estimates.Estimacion
                 })}
               </p>

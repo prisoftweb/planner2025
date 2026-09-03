@@ -115,7 +115,7 @@ export default function ReportPaymentPDF({costs, provider, payment, user, pendin
               <View style={{display:'flex', flexDirection: 'row', justifyContent: 'center',}} >
                 <Text style={{textAlign: 'center', fontSize: '12px'}}>
                   {CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: totalAllCosts
                   })}
                 </Text>
@@ -146,7 +146,7 @@ export default function ReportPaymentPDF({costs, provider, payment, user, pendin
               <Text style={style.textLeft}>Por pagar:</Text>
               <Text style={style.textRight}>
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: pending[0]?.unpaidbalanceamount ?? 0
                 })}
               </Text>
@@ -193,15 +193,15 @@ export default function ReportPaymentPDF({costs, provider, payment, user, pendin
               <View style={[style.element, {flex: 1}]}><Text>{cost.folio}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.date.substring(0, 10)}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: cost.previoudbalanceamount
               })}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: cost.payout
               })}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: cost.unpaidbalanceamount
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text>{cost.partitialnumber}</Text></View>

@@ -59,15 +59,15 @@ export default function DownloadCostsProjectPDF({costs, project, satCompany}:
               <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Resumen de costos {project.title} </Text>
               <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
               <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Costo: {CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalCosts
               })} </Text>
               <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Iva: {CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalIva
               })} </Text>
               <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Total: {CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalTypes
               })} </Text>
             </View>
@@ -91,11 +91,11 @@ export default function DownloadCostsProjectPDF({costs, project, satCompany}:
                 <View style={[style.element, {flex: 2}]}><Text>{cost.description ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.date?.substring(0, 10) ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: cost.cost.subtotal
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: cost.cost?.total || 0
                 })}</Text></View>
               </View>
@@ -106,7 +106,7 @@ export default function DownloadCostsProjectPDF({costs, project, satCompany}:
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalCosts
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
@@ -118,7 +118,7 @@ export default function DownloadCostsProjectPDF({costs, project, satCompany}:
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalIva
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
@@ -130,7 +130,7 @@ export default function DownloadCostsProjectPDF({costs, project, satCompany}:
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: totalTypes
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>

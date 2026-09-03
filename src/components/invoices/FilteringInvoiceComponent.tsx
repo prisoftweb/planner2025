@@ -124,11 +124,11 @@ export default function FilteringInvoiceComponent({showForm, FilterData, maxAmou
               />
               <div className="flex justify-between">
                 <p>{CurrencyFormatter({
-                      currency: "MXN",
+                      currency: "USD",
                       value: minValue
                     })}</p>
                 <p>{CurrencyFormatter({
-                      currency: "MXN",
+                      currency: "USD",
                       value: maxValue
                     })}</p>
               </div>

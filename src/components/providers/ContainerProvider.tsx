@@ -75,7 +75,7 @@ export default function ContainerProvider({providers, user, token, company}: Con
       if(prov.contact) nc = prov.contact.length;
       
       const dollar = CurrencyFormatter({
-        currency: "MXN",
+        currency: "USD",
         value: prov.tradeline.currentbalance || 0
       })
 

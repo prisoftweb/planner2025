@@ -38,7 +38,7 @@ export default function DonutChartProviderComponent({data, colors, categories, c
               {/* text-tremor-content-emphasis */}
                 {/* {categoryPayload.value} */}
                 {CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: categoryPayload.value
                 })}
               </p>

@@ -66,7 +66,7 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
                 <View style={{textAlign:'center', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Text style={{textAlign:'center', color:cosBen.rentabilidad>=0?'green':'red', fontSize:'11px', width:'100px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       value: cosBen.rentabilidad?? 0
                     })}
                   </Text>
@@ -79,14 +79,14 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px'}}>Costos totales: </Text>
                 <Text style={{fontSize:'10px', color:'red'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: costTot.totalCost?? 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px'}}>Beneficios totales: </Text>
                 <Text style={{fontSize:'10px', color:'green'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: benTot.fullyCharged?? 0
                 })}</Text>
               </View>
@@ -107,15 +107,15 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.project}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.date?.substring(0, 10)?? ''}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c.totalCost || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c.fullyCharged || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: c.rentabilidad || 0
               })} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold', color: c.costobeneficio>=1? 'green':'red'}}>{c.costobeneficio}</Text>

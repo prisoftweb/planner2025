@@ -80,7 +80,7 @@ export default function DownloadEstimatesByProjectPDF({estimates, project, token
                 <View style={{textAlign:'center', border:'1px solid gray', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
-                      currency: 'MXN',
+                      currency: 'USD',
                       // value: totalEstimatedProjectState?.length> 0? (totalEstimatedProjectState[0]?.amountGuaranteeFund + (totalEstimatedProjectState[0]?.estimatedTotal || 0)) || 0 : 0
                       // value: totalEstimatedProjectState?.length> 0? (totalEstimatedProjectState[0]?.estimatedTotal || 0) : 0
                       value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountEstimated || 0 : 0
@@ -92,21 +92,21 @@ export default function DownloadEstimatesByProjectPDF({estimates, project, token
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Estimado acumulado: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: totalEstimatedProjectState?.length> 0? (totalEstimatedProjectState[0]?.estimatedTotal || 0) : 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Anticipo {project.amountChargeOff?.porcentage || 0}%: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: anticipo
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Amortizado: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountChargeOff || 0 : 0
                 })}</Text>
               </View>
@@ -114,7 +114,7 @@ export default function DownloadEstimatesByProjectPDF({estimates, project, token
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Fondo garantia {project.guaranteefund.porcentage}%:  </Text>
                 <Text style={{fontSize:'10px', color:'black'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value:  totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountGuaranteeFund || 0 : 0
                 })}</Text>
               </View>
@@ -122,7 +122,7 @@ export default function DownloadEstimatesByProjectPDF({estimates, project, token
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de estimar: </Text>
                 <Text style={{fontSize:'10px', color:'red'}}>{CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value:  totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.pendingEstimated || 0 : 0
                 })}</Text>
               </View>
@@ -146,23 +146,23 @@ export default function DownloadEstimatesByProjectPDF({estimates, project, token
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={e._id}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{e.name}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: e.amount || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: e.amountChargeOff || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: e.amountGuaranteeFund || 0
               })} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: e.amountPayable || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
+                currency: 'USD',
                 value: e.amountPayableVAT || 0
               })}</Text>
               <View style={{flex: 1}}>
